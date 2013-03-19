@@ -18,7 +18,4 @@ public class MindmapGson {
 		}
 		return gson.fromJson(json, name);
 	}
-	
-	
-
 }

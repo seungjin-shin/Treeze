@@ -78,9 +78,6 @@ public class AllMindmap extends HttpServlet {
 		mindmap.setCnt(cnt + "");
 		jsonString = myGson.toJson(mindmap);
 		resp.getWriter().print(jsonString);
-		resp.getWriter().print("하이");
-		resp.getWriter().print("하이");
-		resp.getWriter().print("하이");
 		return;
 	}
 }
