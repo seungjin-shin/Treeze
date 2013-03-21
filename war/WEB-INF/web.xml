@@ -16,6 +16,30 @@
 		<servlet-name>AllMindmap</servlet-name>
 		<url-pattern>/allmindmap</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>Feedback</servlet-name>
+		<servlet-class>mindmap.Feedback</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Feedback</servlet-name>
+		<url-pattern>/feedback</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>FeedbackUsers</servlet-name>
+		<servlet-class>mindmap.FeedbackUsers</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FeedbackUsers</servlet-name>
+		<url-pattern>/feedbackusers</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>FeedbackVersion</servlet-name>
+		<servlet-class>mindmap.FeedbackVersion</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FeedbackVersion</servlet-name>
+		<url-pattern>/feedbackversion</url-pattern>
+	</servlet-mapping>
 	
 	<welcome-file-list>
 		<welcome-file>main.jsp</welcome-file>

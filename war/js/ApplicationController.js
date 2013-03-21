@@ -66,6 +66,15 @@ mindmaps.ApplicationController = function() {
     presenter.go();
   }
 
+  /*
+  Treeze Send a Feedback
+  */
+
+  function doSendFeedback(){
+    var presenter = new mindmaps.SendFeedback(mindmapModel);
+    presenter.go();
+  }
+
   /**
    * Initializes the controller, registers for all commands and subscribes to
    * event bus.
@@ -91,15 +100,23 @@ mindmaps.ApplicationController = function() {
 
     var exportCommand = commandRegistry.get(mindmaps.ExportCommand);
     exportCommand.setHandler(doExportDocument);
-
+    
+    /*Treeze*/
+    var sendFeedbackCommand = commandRegistry.get(mindmaps.SendFeedbackCommand);
+    sendFeedbackCommand.setHandler(doSendFeedback);
+    /*Treeze*/
     eventBus.subscribe(mindmaps.Event.DOCUMENT_CLOSED, function() {
       saveDocumentCommand.setEnabled(false);
       closeDocumentCommand.setEnabled(false);
       exportCommand.setEnabled(false);
+      sendFeedbackCommand.setEnabled(false);
     });
 
     eventBus.subscribe(mindmaps.Event.DOCUMENT_OPENED, function() {
-      saveDocumentCommand.setEnabled(true);
+      if(mindmaps.chk != 2)
+        saveDocumentCommand.setEnabled(true);
+      
+      sendFeedbackCommand.setEnabled(true);
       closeDocumentCommand.setEnabled(true);
       exportCommand.setEnabled(true);
     });

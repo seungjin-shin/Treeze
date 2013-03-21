@@ -176,34 +176,34 @@ mindmaps.SaveDocumentPresenter = function(eventBus, mindmapModel, view, autosave
     if (xmlhttp != null) {
     	
     	var con = doc.prepareSave().serialize();
-        
-        var len = String(con).length;
-        
-        var index = len / 500;
-        var params = "";
+      
+      var len = String(con).length;
+      
+      var index = len / 500;
+      var params = "";
 
-        for(i = 0; i < index ; i++){
-        	var tmp = con.substring(500 * i , 500 * (i+1));
-        	params += "mindmap" + i + "=" + tmp + "&";
-        }
-        params += "cnt=" + i;
-    	params += "&id=" + doc.id;
-    	params += "&title=" + doc.title;
-    
-      var url = "mindmap";
-      xmlhttp.onreadystatechange = callBackTEST;
-      xmlhttp.open("POST",url,true);
-      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xmlhttp.setRequestHeader("Content-length", params.length);
-      xmlhttp.setRequestHeader("Connection", "close");
-      xmlhttp.send(params);
-    }
-    else {
-      alert("Your browser does not support XMLHTTP. so impossible to save your mindmap. please you use Chrome browser or so.");
-    }
-    
-    return doc.prepareSave().serialize();
-  };
+      for(i = 0; i < index ; i++){
+       var tmp = con.substring(500 * i , 500 * (i+1));
+       params += "mindmap" + i + "=" + tmp + "&";
+     }
+     params += "cnt=" + i;
+     params += "&id=" + doc.id;
+     params += "&title=" + doc.title;
+     
+     var url = "mindmap";
+     xmlhttp.onreadystatechange = callBackTEST;
+     xmlhttp.open("POST",url,true);
+     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+     xmlhttp.setRequestHeader("Content-length", params.length);
+     xmlhttp.setRequestHeader("Connection", "close");
+     xmlhttp.send(params);
+   }
+   else {
+    alert("Your browser does not support XMLHTTP. so impossible to save your mindmap. please you use Chrome browser or so.");
+  }
+  
+  return doc.prepareSave().serialize();
+};
 
   /**
   * View callback: Saving to the hard drive was sucessful.
@@ -229,8 +229,8 @@ mindmaps.SaveDocumentPresenter = function(eventBus, mindmapModel, view, autosave
 	      
 	    }
 	    else {
-	      alert("Problem retrieving XML data");
-	    }
-	  }
-	}
+       alert("Problem retrieving XML data");
+     }
+   }
+ }
 };

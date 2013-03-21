@@ -1,9 +1,9 @@
+<script>
 /**
  * Unused for now.
  * 
  * @constructor
  */
-<script>
 mindmaps.NewDocumentView = function() {
 
 };
@@ -17,26 +17,31 @@ mindmaps.NewDocumentView = function() {
  * @constructor
  */
 mindmaps.NewDocumentPresenter = function(eventBus, mindmapModel, view) {
-
+	  	<%@ page import = "java.io.*" %>
+	  	<%@ page import = "java.net.*" %>
+	<%
+	  String id;
+	  String mindmap;
+	  String allmindmap;
+	  String tmp;
+	  BufferedReader br;
+	%>
   this.go = function() {
 	  var chk = mindmaps.chk;
 	  
 	  if(chk == 1){
-			  <%@ page import = "java.io.*" %>
-  			<%@ page import = "java.net.*" %>
- 			 <%
- 			 String id = request.getParameter("id");
-  			String mindmap = ""; 
+	  	<%
+	  	id = request.getParameter("id");
+	  	mindmap = ""; 
 
-  String allmindmap = "http://dewliteyez.appspot.com/mindmap?id="+ id;
-  BufferedReader br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
-  String tmp;
-  
-  while((tmp = br.readLine()) != null)
-    mindmap += tmp;
-   %>
-		    var doc = mindmaps.Document.fromJSON('<%=mindmap%>');
-			mindmapModel.setDocument(doc);
+	  	allmindmap = "http://dewliteyez.appspot.com/mindmap?id="+ id;
+	  	br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
+
+	  	while((tmp = br.readLine()) != null)
+	  		mindmap += tmp;
+	  	%>
+	  	var doc = mindmaps.Document.fromJSON('<%=mindmap%>');
+	  	mindmapModel.setDocument(doc);
 		  
 //		  $.ajax({
 //				url : "http://dewliteyez.appspot.com/mindmap?id=" + mindmaps.id,
@@ -48,9 +53,27 @@ mindmaps.NewDocumentPresenter = function(eventBus, mindmapModel, view) {
 //			});
 	  
 	  }
-	  else{
+	  else if(chk == 0){
 		  var doc = new mindmaps.Document();
 		  mindmapModel.setDocument(doc);
+	  }
+	  else{
+	  	<%@ page import = "java.io.*" %>
+	  	<%@ page import = "java.net.*" %>
+	  	<%
+	  	id = request.getParameter("id");
+	  	mindmap = ""; 
+	  	String user = request.getParameter("user");
+	  	String version = request.getParameter("version");
+
+	  	allmindmap = "http://dewliteyez.appspot.com/feedback?id=" + id + "&user=" + user + "&version=" + version;
+	  	br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
+
+	  	while((tmp = br.readLine()) != null)
+	  		mindmap += tmp;
+	  	%>
+	  	var doc = mindmaps.Document.fromJSON('<%=mindmap%>');
+	  	mindmapModel.setDocument(doc);
 	  }
   };
 };

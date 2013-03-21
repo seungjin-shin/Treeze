@@ -227,15 +227,16 @@
 
 	<%
 	String id = request.getParameter("id");
-    String chk = request.getParameter("chk");
-    %>
+  String chk = request.getParameter("chk");
+  String user = request.getParameter("user");
+  String version = request.getParameter("version");
+  %>
 
   <!-- DEBUG -->
   <!-- set debug flag for all scripts. Will be removed in production -->
   <script type="text/javascript">
     var mindmaps = mindmaps || {};
     mindmaps.DEBUG = true;
-    //mindmaps.id = ""+"<%=id%>";
     mindmaps.chk = <%=chk%>;
   </script>
   <!-- /DEBUG -->
@@ -280,8 +281,12 @@
   
   <!--<script src="js/NewDocument.js"></script>-->
   <jsp:include page="js/NewDocument.jsp">
-  	<jsp:param name="id" value="<%=id%>" />
+    <jsp:param name="id" value="<%=id%>" />
+    <jsp:param name="user" value="<%=user%>" />
+  	<jsp:param name="version" value="<%=version%>" />
+
   </jsp:include>
+  <script src="js/SendFeedback.js"></script>
   
   <script src="js/OpenDocument.js"></script>
   

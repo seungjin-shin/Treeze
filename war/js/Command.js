@@ -349,3 +349,15 @@ mindmaps.ExportCommand = function() {
   this.description = "Export the mind map";
 };
 mindmaps.ExportCommand.prototype = new mindmaps.Command();
+
+/*
+  In Treeze, Send a feedback map.
+*/
+mindmaps.SendFeedbackCommand = function() {
+  this.id = "SENDFEEDBACK_COMMAND";
+  this.icon = "ui-icon-star";
+  this.label = "Send a feedback";
+  this.description = "Send the mind map as feedback";
+};
+mindmaps.SendFeedbackCommand.prototype = new mindmaps.Command();
+

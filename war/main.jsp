@@ -86,40 +86,40 @@ function showProject(id, chk){
               
               
               <%@ page import="org.json.*"%>
-			  <%@ page import = "java.io.*" %>
-  			<%@ page import = "java.net.*" %>
- 			 <%
-  			String mindmap = ""; 
-   			JSONObject jsonObject = null;
-   			String json = null;
+              <%@ page import = "java.io.*" %>
+              <%@ page import = "java.net.*" %>
+              <%
+              String mindmap = ""; 
+              JSONObject jsonObject = null;
+              String json = null;
 
-  String allmindmap = "http://dewliteyez.appspot.com/allmindmap";
-  BufferedReader br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
-  String tmp;
-  
-  while((tmp = br.readLine()) != null)
-    mindmap += tmp;
+              String allmindmap = "http://dewliteyez.appspot.com/allmindmap";
+              BufferedReader br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
+              String tmp;
+              
+              while((tmp = br.readLine()) != null)
+                mindmap += tmp;
 
-  jsonObject = new JSONObject ( mindmap );
-  JSONArray idArray = new JSONArray();
-  JSONArray titleArray = new JSONArray();
-  idArray = jsonObject.getJSONArray ( "id" );
-  titleArray = jsonObject.getJSONArray ( "title" );
-  String strCnt = jsonObject.getString("cnt");
-  int cnt = Integer.parseInt(strCnt);
-  %>
-   
-  
+              jsonObject = new JSONObject ( mindmap );
+              JSONArray idArray = new JSONArray();
+              JSONArray titleArray = new JSONArray();
+              idArray = jsonObject.getJSONArray ( "id" );
+              titleArray = jsonObject.getJSONArray ( "title" );
+              String strCnt = jsonObject.getString("cnt");
+              int cnt = Integer.parseInt(strCnt);
+              %>
+              
+              
 
-			<%
-			for (int i = 0 ; i < cnt ; i++) {
-		     String id = idArray.get(i).toString();
-     		String title = titleArray.get(i).toString();
-     		%>
+              <%
+              for (int i = 0 ; i < cnt ; i++) {
+              String id = idArray.get(i).toString();
+              String title = titleArray.get(i).toString();
+              %>
               <li><a href="#" onclick="showProject('<%=id%>', '1')"><%=title%></a></li>
-     		<%
-   			}
-  			%>
+              <%
+            }
+            %>
               
               
               <p><a class="btn" href="#" onclick="showProject('', '0')">¾²±â &raquo;</a></p>
@@ -127,6 +127,11 @@ function showProject(id, chk){
           </div><!--/.well -->  
         </div><!--/span-->
         <form name="writeM" method="post" action="mindmap.jsp">
+		</form>
+		
+		<form method="post" action="showFeedbackUsers.jsp">
+		<input type="text" name="id">
+		<input type="submit">
 		</form>
         
 
