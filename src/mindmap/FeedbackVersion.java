@@ -77,7 +77,7 @@ public class FeedbackVersion extends HttpServlet {
 
 					for(int i = 0; i < cnt; i++){
 						String para = req.getParameter("mindmap" + i);
-						entity.setProperty("mindmap" + i, para);
+						tmp.setProperty("mindmap" + i, para);
 					}
 					datastore.put(tmp);
 					break;

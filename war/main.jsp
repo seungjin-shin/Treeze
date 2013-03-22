@@ -74,7 +74,6 @@ function showProject(id, chk){
 
   <body>
 
-
 <div class="container-fluid">
       <div class="row-fluid">
         <div class="span2">
@@ -219,7 +218,6 @@ function showProject(id, chk){
     <script src="js/bootstrap/bootstrap-collapse.js"></script>
     <script src="js/bootstrap/bootstrap-carousel.js"></script>
     <script src="js/bootstrap/bootstrap-typeahead.js"></script>
-    <script src="js/libs/json2.js"></script>
 
   </body>
 </html>

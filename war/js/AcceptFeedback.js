@@ -28,7 +28,6 @@ mindmaps.AcceptFeedback = function(mindmapModel) {
     		}
     		params += "cnt=" + i;
     		params += "&id=" + doc.id;
-    		params += "&title=" + doc.title;
 
     		var url = "feedbackversion";
     		xmlhttp.onreadystatechange = callBackTEST;

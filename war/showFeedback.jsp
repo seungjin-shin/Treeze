@@ -173,7 +173,6 @@
     <script src="js/bootstrap/bootstrap-collapse.js"></script>
     <script src="js/bootstrap/bootstrap-carousel.js"></script>
     <script src="js/bootstrap/bootstrap-typeahead.js"></script>
-    <script src="js/libs/json2.js"></script>
 
   </body>
   </html>
