@@ -127,7 +127,7 @@ mindmaps.ApplicationController = function() {
         sendFeedbackCommand.setEnabled(false);  
         acceptFeedbackCommand.setEnabled(false);
       }
-      if(mindmaps.chk == 1){
+      else if(mindmaps.chk == 1){
         saveDocumentCommand.setEnabled(false);
         sendFeedbackCommand.setEnabled(true);
         acceptFeedbackCommand.setEnabled(false);
