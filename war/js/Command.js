@@ -361,3 +361,12 @@ mindmaps.SendFeedbackCommand = function() {
 };
 mindmaps.SendFeedbackCommand.prototype = new mindmaps.Command();
 
+mindmaps.AcceptFeedbackCommand = function() {
+  this.id = "ACCEPTFEEDBACK_COMMAND";
+  this.icon = "ui-icon-flag";
+  this.label = "Accept a feedback";
+  this.description = "Accept the mind map as feedback";
+};
+mindmaps.AcceptFeedbackCommand.prototype = new mindmaps.Command();
+
+

@@ -63,7 +63,8 @@ public class FeedbackVersion extends HttpServlet {
 				Query.SortDirection.DESCENDING);
 		List<Entity> entities = datastore.prepare(query).asList(
 				FetchOptions.Builder.withLimit(MAXNUM));
-
+		
+		// accept map
 		if (entities.isEmpty()) {
 			return;
 		} else {
@@ -79,7 +80,25 @@ public class FeedbackVersion extends HttpServlet {
 						entity.setProperty("mindmap" + i, para);
 					}
 					datastore.put(tmp);
-					return;
+					break;
+				}
+			}
+		}
+		// feedback n -> y
+		query = new Query("feedback").addSort("date",
+				Query.SortDirection.DESCENDING);
+		entities = datastore.prepare(query).asList(
+				FetchOptions.Builder.withLimit(MAXNUM));
+		if (entities.isEmpty()) {
+			return;
+		} else {
+			for (Entity entity : entities) {
+				if (id.equals(entity.getProperty("id").toString())) {
+
+					Entity tmp = entity.clone();
+					tmp.setProperty("confirmChk", "y");
+
+					datastore.put(tmp);
 				}
 			}
 		}

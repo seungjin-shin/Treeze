@@ -287,6 +287,7 @@
 
   </jsp:include>
   <script src="js/SendFeedback.js"></script>
+  <script src="js/AcceptFeedback.js"></script>
   
   <script src="js/OpenDocument.js"></script>
   
