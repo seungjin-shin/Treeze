@@ -107,10 +107,38 @@ public class Feedback extends HttpServlet {
 		entity.setProperty("version", version);
 		//get version value
 		//end
-
+		datastore.put(entity);
+		
+		//feedback count save to mindmap table
 		DatastoreService datastore2 = DatastoreServiceFactory
 				.getDatastoreService();
-		datastore2.put(entity);
+		
+		Query query2 = new Query("mindmap").addSort("date",
+				Query.SortDirection.DESCENDING);
+		List<Entity> entities2 = datastore2.prepare(query2).asList(
+				FetchOptions.Builder.withLimit(MAXNUM));
+		String feedbackCnt = "1";
+		if (entities2.isEmpty()) {
+			feedbackCnt = "1";
+		} else {
+			for (Entity entry : entities2) {
+				if(id.equals(entry.getProperty("id"))){
+					String tmpStr;
+					int tmpInt;
+					tmpStr = entry.getProperty("feedbackCnt").toString();
+					tmpInt = Integer.parseInt(tmpStr) + 1;
+					feedbackCnt = tmpInt + "";
+					
+					Entity tmp = entry.clone();
+					tmp.setProperty("feedbackCnt", feedbackCnt);
+					
+					datastore2.put(tmp);
+
+					break;
+				}
+			}
+		}
+		
 		return;
 	}
 

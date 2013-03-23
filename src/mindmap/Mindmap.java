@@ -67,6 +67,7 @@ public class Mindmap extends HttpServlet {
 		entity.setProperty("id", id);
 		entity.setProperty("title", title);
 		entity.setProperty("cnt", strCnt);
+		entity.setProperty("feedbackCnt", "0");
 
 		for(int i = 0; i < cnt; i++){
 			String para = req.getParameter("mindmap" + i);

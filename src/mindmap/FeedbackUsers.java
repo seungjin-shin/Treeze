@@ -90,7 +90,8 @@ public class FeedbackUsers extends HttpServlet {
 		for (Entity entity : entities) {
 			for(int i = 0; i < userCnt; i++){
 				if(id.equals(entity.getProperty("id").toString()) &&
-					userList.get(i).equals(entity.getProperty("user").toString()))
+					userList.get(i).equals(entity.getProperty("user").toString()) &&
+					"n".equals(entity.getProperty("confirmChk").toString()))
 					userCount[i]++;
 			}
 		}

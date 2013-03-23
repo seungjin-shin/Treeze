@@ -73,6 +73,7 @@ public class FeedbackVersion extends HttpServlet {
 
 					Entity tmp = entity.clone();
 					tmp.setProperty("cnt", strCnt);
+					tmp.setProperty("feedbackCnt", "0");
 					int cnt = Integer.parseInt(strCnt);
 
 					for(int i = 0; i < cnt; i++){
@@ -85,9 +86,11 @@ public class FeedbackVersion extends HttpServlet {
 			}
 		}
 		// feedback n -> y
+		DatastoreService datastore2 = DatastoreServiceFactory
+				.getDatastoreService();
 		query = new Query("feedback").addSort("date",
 				Query.SortDirection.DESCENDING);
-		entities = datastore.prepare(query).asList(
+		entities = datastore2.prepare(query).asList(
 				FetchOptions.Builder.withLimit(MAXNUM));
 		if (entities.isEmpty()) {
 			return;
@@ -98,7 +101,7 @@ public class FeedbackVersion extends HttpServlet {
 					Entity tmp = entity.clone();
 					tmp.setProperty("confirmChk", "y");
 
-					datastore.put(tmp);
+					datastore2.put(tmp);
 				}
 			}
 		}

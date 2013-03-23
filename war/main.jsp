@@ -102,8 +102,10 @@ function showProject(id, chk){
               jsonObject = new JSONObject ( mindmap );
               JSONArray idArray = new JSONArray();
               JSONArray titleArray = new JSONArray();
+              JSONArray cntArray = new JSONArray();
               idArray = jsonObject.getJSONArray ( "id" );
               titleArray = jsonObject.getJSONArray ( "title" );
+              cntArray = jsonObject.getJSONArray ( "feedbackCnt" );
               String strCnt = jsonObject.getString("cnt");
               int cnt = Integer.parseInt(strCnt);
               %>
@@ -114,8 +116,18 @@ function showProject(id, chk){
               for (int i = 0 ; i < cnt ; i++) {
               String id = idArray.get(i).toString();
               String title = titleArray.get(i).toString();
+              String count = cntArray.get(i).toString();
               %>
-              <li><a href="#" onclick="showProject('<%=id%>', '1')"><%=title%></a></li>
+              <li><a href="#" onclick="showProject('<%=id%>', '1')"><%=title%></a>
+                <%
+                if(!count.equals("0")){
+                %>
+                <span class="badge badge-important" style="position:relative;bottom:10px;"><%=count%></span>
+                <%
+              }
+              %>
+
+              </li>
               <%
             }
             %>

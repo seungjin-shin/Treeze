@@ -69,10 +69,12 @@ public class AllMindmap extends HttpServlet {
 		MindmapJson mindmap = new MindmapJson();
 		ArrayList<String> tempid = mindmap.getId();
 		ArrayList<String> temptitle = mindmap.getTitle();
+		ArrayList<String> tmpfdCnt = mindmap.getFeedbackCnt();
 		int cnt = 0;
 		for (Entity entity : entities) {
 			tempid.add(entity.getProperty("id").toString());
 			temptitle.add(entity.getProperty("title").toString());
+			tmpfdCnt.add(entity.getProperty("feedbackCnt").toString());
 			cnt++;
 		}
 		mindmap.setCnt(cnt + "");
