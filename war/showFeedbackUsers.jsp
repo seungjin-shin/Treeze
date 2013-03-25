@@ -94,19 +94,22 @@
         <h3 class="muted">Treeze!</h3>
       </div>
 
-      <hr>
-      <span class="label label-important" style="font-size:10pt;">spain trip</span>
-      <ul class="pager">
         <%@ page import="org.json.*"%>
 			  <%@ page import = "java.io.*" %>
   			<%@ page import = "java.net.*" %>
  			 <%
-        
         String id = request.getParameter("id");
+        String title = request.getParameter("title");
         String users = ""; 
         JSONObject jsonObject = null;
         String json = null;
+        %>
 
+      <hr>
+      <span class="label label-important" style="font-size:10pt;"><%=title%></span>
+      <ul class="pager">
+
+        <%
         String allusers = "http://dewliteyez.appspot.com/feedbackusers?id=" + id;
         BufferedReader br = new BufferedReader(new InputStreamReader((new URL(allusers)).openConnection().getInputStream(),"EUC-KR"));
         String tmp;
