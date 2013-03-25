@@ -83,7 +83,7 @@
           <div class="masthead">
             <ul class="nav nav-pills pull-right">
              <li class="active"><a href="#">Home</a></li>
-             <li><a href="#">About</a></li>
+             <li><a href="playing.jsp">My Page</a></li>
           <!--<form class="navbar-form pull-right">
           <input class="span2" type="text" placeholder="Email">
           <input class="span2" type="password" placeholder="Password">-->

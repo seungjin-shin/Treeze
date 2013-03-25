@@ -87,14 +87,14 @@
           <div class="masthead">
             <ul class="nav nav-pills pull-right">
              <li class="active"><a href="#">Home</a></li>
-             <li><a href="#">About</a></li>
+             <li><a href="playing.jsp">My Page</a></li>
           <!--<form class="navbar-form pull-right">
           <input class="span2" type="text" placeholder="Email">
           <input class="span2" type="password" placeholder="Password">-->
           <li><a href="signin.html">Sign In</a></li>
           <!--</form>-->
         </ul>
-        
+  
         <h3 class="muted">Treeze!</h3>
       </div>
 
@@ -156,7 +156,6 @@
     </div> <!-- /container -->
     
     
-
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

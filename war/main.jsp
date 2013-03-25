@@ -79,6 +79,7 @@
         <ul class="nav nav-list">
           <li class="nav-header"><strong style="font-size:50px">사람들 Mind-Map 정보</strong></li>
           <p><a class="btn btn-success" href="#" onclick="showProject('', '0')">새로운 Mind-Map 생성하기 &raquo;</a></p>
+          <p><a class="btn btn-success" href="playing.jsp" onclick="showProject('', '0')">My Page &raquo;</a></p>
           <%@ page import="org.json.*"%>
           <%@ page import = "java.io.*" %>
           <%@ page import = "java.net.*" %>
