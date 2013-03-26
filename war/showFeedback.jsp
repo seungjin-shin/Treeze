@@ -135,7 +135,7 @@
       String version = versionArray.get(i).toString();
       %>
           <li class="span3">
-            <a href="#" class="thumbnail" onclick="showFeedback('<%=id%>','<%=user%>','<%=version%>')">
+            <a href="#" class="thumbnail" onclick="showFeedback('<%=직>')">
               <img src="img/260x180.png" alt="<%=version%>">
             </a>
           </li>

@@ -116,14 +116,6 @@
           String count = cntArray.get(i).toString();
           %>
           <li><a href="#" onclick="showProject('<%=id%>', '1')"><%=title%></a>
-            <%
-            if(!count.equals("0")){
-            %>
-            <span class="badge badge-important" style="position:relative;bottom:10px;"><%=count%></span>
-            <%
-          }
-          %>
-
         </li>
         <%
       }
@@ -135,11 +127,6 @@
   </div><!--/.well -->  
   
   <form name="writeM" method="post" action="mindmap.jsp">
-  </form>
-  
-  <form method="post" action="showFeedbackUsers.jsp">
-    <input type="text" name="id">
-    <input type="submit">
   </form>
   
   <hr>

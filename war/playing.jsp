@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <%@ page pageEncoding="EUC-KR" %>
+    <!--<meta charset="utf-8">-->
     <title>Sticky footer &middot; Twitter Bootstrap</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -82,7 +83,14 @@
   </head>
 
   <body>
-
+    <script>
+    function showProject(id, title){
+     document.writeM.innerHTML = "<input type='hidden' name='id' value='" +
+     id +"'>" + 
+     "<input type='hidden' name='title' value='" + title + "'>";
+     document.writeM.submit();
+   }
+   </script>
 
     <!-- Part 1: Wrap all page content here -->
     <div id="wrap"> 
@@ -120,43 +128,7 @@
       
 
  <!-- list -->
-      <div class="container-fluid">
-       <div class="row-fluid">
-        <div class="span8">
-          <div class="well sidebar-nav" style="margin-left:500px;"><!--  style="margin-left:600px;"-->
-            <ul class="nav nav-list">
-              <li class="nav-header">Sidebar</li>
-              <li class="active"><a href="#">Adopted MindMap List</a></li>
-              
-              
-              
-              <%@ page import="org.json.*"%>
-			  <%@ page import = "java.io.*" %>
-  			<%@ page import = "java.net.*" %>
- 			 <%
-  			String mindmap = ""; 
-   			JSONObject jsonObject = null;
-   			String json = null;
 
-  String allmindmap = "http://dewliteyez.appspot.com/allmindmap";
-  BufferedReader br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
-  String tmp;
-  
-  while((tmp = br.readLine()) != null)
-    mindmap += tmp;
-
-  jsonObject = new JSONObject ( mindmap );
-  JSONArray idArray = new JSONArray();
-  JSONArray titleArray = new JSONArray();
-  JSONArray fbCntArray = new JSONArray();
-  idArray = jsonObject.getJSONArray ( "id" );
-  titleArray = jsonObject.getJSONArray ( "title" );
-  fbCntArray = jsonObject.getJSONArray ("feedbackCnt");
-  String strCnt = jsonObject.getString("cnt");
-  int cnt = Integer.parseInt(strCnt);
-  %>
-   
-  
 
 			<%
 			for (int i = 0 ; i < cnt ; i++) { // 게시글에 있는 
@@ -177,61 +149,57 @@
         </div>
         </div>
         <form name="writeM" method="post" action="mindmap.jsp">
+
+
+
+        <form name="writeM" method="post" action="showFeedbackUsers.jsp">
+
 		</form>
 <!-- list -->
-<div class="container-fluid">
-       <div class="row-fluid">
-<ul class="pager">
-        <li><a href="#" style="margin-left:20px;margin-right:20px;font-size:20pt;">Song <span class="badge badge-important" style="margin-bottom:20px;">4</span></a></li>
-        <li><a href="#" style="margin-left:20px;margin-right:20px">dew <span class="badge badge-important">2</span></a></li>
-        <li><a href="#" style="margin-left:20px;margin-right:20px">mn99</a></li>
-        <li><a href="#" style="margin-left:20px;margin-right:20px">mrkim <span class="badge badge-important">3</span></a></li>
-      </ul>
-      </div>
-      
-      </div>
         
       <!-- Begin page content -->
 <div class="container">
       <div class="well sidebar-nav">
         <ul class="nav nav-list">
-          <li class="nav-header"><strong style="font-size:20px">내게 Feedback 준 Users</strong></li>
+          <li class="nav-header"><strong style="font-size:20px">Project Status</strong></li>
           <%@ page import="org.json.*"%>
           <%@ page import = "java.io.*" %>
           <%@ page import = "java.net.*" %>
           <%
-          //String mindmap = ""; 
-          //JSONObject jsonObject = null;
-         // String json = null;
+          String mindmap = ""; 
+          JSONObject jsonObject = null;
+         String json = null;
 
-          //String allmindmap = "http://dewliteyez.appspot.com/allmindmap";
-         // BufferedReader br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
-         // String tmp;
+          String allmindmap = "http://dewliteyez.appspot.com/allmindmap";
+          BufferedReader br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
+          String tmp;
           
           while((tmp = br.readLine()) != null)
             mindmap += tmp;
 
           jsonObject = new JSONObject ( mindmap );
-          //JSONArray idArray = new JSONArray();
-          //JSONArray titleArray = new JSONArray();
+          JSONArray idArray = new JSONArray();
+          JSONArray titleArray = new JSONArray();
           JSONArray cntArray = new JSONArray();
           idArray = jsonObject.getJSONArray ( "id" );
           titleArray = jsonObject.getJSONArray ( "title" );
           cntArray = jsonObject.getJSONArray ( "feedbackCnt" );
-          //String strCnt = jsonObject.getString("cnt");
-          //int cnt = Integer.parseInt(strCnt);
+          String strCnt = jsonObject.getString("cnt");
+          int cnt = Integer.parseInt(strCnt);
           %>
           
           
 
           <%
-          for (int i = 0 ; i < cnt ; i++) {
+          for (int i = 0 ; i < cnt ; i++) { // 게시될 마인드맵들 리스트 전부 출력하기 위한 for문
           String id = idArray.get(i).toString();
           String title = titleArray.get(i).toString();
           String count = cntArray.get(i).toString();
           %>
+
           <!--프로젝트 아이디를 넘겨엇  -->
-          <li><a href="#" onclick="showProject('<%=id%>', '1')"><%=title%></a>
+          <li><a href="#" onclick="showProject('<%=id%>', '<%=title%>')"><%=title%></a>
+
             <%
             if(!count.equals("0")){
             %>
