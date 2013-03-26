@@ -87,7 +87,7 @@
   <span class="cloud-error error"></span>
   <div class="seperator"></div>
   <h1>Local Storage</h1>
-  <p>You can save your mind map in your browser's local storage. Be aware that this is still experimental: the space is limited and there is no guarantee that the browser will keep this document forever. Useful for frequent backups in combination with cloud storage.</p>
+  <p>"You can save your mind map in your browser's local storage. Be aware that this is still experimental: the space is limited and there is no guarantee that the browser will keep this document forever. Useful for frequent backups in combination with cloud storage."</p>
   <button id="button-save-localstorage">Save</button>
   <input type="checkbox" class="autosave" id="checkbox-autosave-localstorage">
   <label for="checkbox-autosave-localstorage">Save automatically every minute.</label>

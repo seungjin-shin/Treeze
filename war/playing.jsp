@@ -159,7 +159,7 @@
   
 
 			<%
-			for (int i = 0 ; i < cnt ; i++) {
+			for (int i = 0 ; i < cnt ; i++) { // 게시글에 있는 
 		     String id = idArray.get(i).toString();
      		String title = titleArray.get(i).toString();
      		String fbCnt = fbCntArray.get(i).toString(); 
@@ -230,6 +230,7 @@
           String title = titleArray.get(i).toString();
           String count = cntArray.get(i).toString();
           %>
+          <!--프로젝트 아이디를 넘겨엇  -->
           <li><a href="#" onclick="showProject('<%=id%>', '1')"><%=title%></a>
             <%
             if(!count.equals("0")){
