@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Template &middot; Bootstrap</title>
+  <title>Edu-Hub &middot; Social Collaborating PT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
@@ -18,142 +18,375 @@
   /* Custom container */
   .container {
     margin: 0 auto;
-    max-width: 1000px;
+
   }
   .container > hr {
     margin: 60px 0;
   }
 
   /* Main marketing message and sign up button */
-  .jumbotron {
+  /*.jumbotron {
     margin: 80px 0;
     text-align: center;
-  }
-  .jumbotron h1 {
-    font-size: 100px;
-    line-height: 1;
-  }
-  .jumbotron .lead {
-    font-size: 24px;
-    line-height: 1.25;
-  }
-  .jumbotron .btn {
-    font-size: 21px;
-    padding: 14px 24px;
-  }
+    }*/
+    .jumbotron h1 {
+      font-size: 100px;
+      line-height: 1;
+    }
+    .jumbotron .lead {
+      font-size: 24px;
+      line-height: 1.25;
+    }
+    .jumbotron .btn {
+      font-size: 21px;
+      padding: 14px 24px;
+    }
 
-  /* Supporting marketing content */
-  .marketing {
-    margin: 60px 0;
-  }
-  .marketing p + h4 {
-    margin-top: 28px;
-  }
+    /* Supporting marketing content */
+    .marketing {
+      margin: 60px 0;
+    }
+    .marketing p + h4 {
+      margin-top: 28px;
+    }
+    .download{
+      margin-top: 0px;
+    }
 
+    .jumbotron {
+      position: relative;
+      padding: 40px 0;
+      color: #fff;
+      text-align: center;
+      text-shadow: 0 1px 3px rgba(0,0,0,.4), 0 0 30px rgba(0,0,0,.075);
+      background: #020031; /* Old browsers */
+      background: -moz-linear-gradient(45deg,  #020031 0%, #6d3353 100%); /* FF3.6+ */
+      background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#020031), color-stop(100%,#6d3353)); /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(45deg,  #020031 0%,#6d3353 100%); /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(45deg,  #020031 0%,#6d3353 100%); /* Opera 11.10+ */
+      background: -ms-linear-gradient(45deg,  #020031 0%,#6d3353 100%); /* IE10+ */
+      background: linear-gradient(45deg, rgb(216, 216, 82) 0%,rgb(48, 48, 24) 100%); /* W3C */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#020031', endColorstr='#6d3353',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+      -webkit-box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+      -moz-box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+      box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+    }
+    .jumbotron:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: url(../img/bs-docs-masthead-pattern.png) repeat center center;
+      opacity: .4;
+    }
+/* Subhead (other pages)
+------------------------- */
+.subhead {
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.subhead h1 {
+  font-size: 60px;
+}
+.subhead p {
+  margin-bottom: 20px;
+}
+.subhead .navbar {
+  display: none;
+}
 
-  /* Customize the navbar links to be fill the entire space of the .navbar */
-      /*.navbar .navbar-inner {
+    /* CUSTOMIZE THE CAROUSEL
+    -------------------------------------------------- */
+
+    /* Carousel base class */
+    .carousel {
+      margin-bottom: 0px;
+      margin-top: 00px;
+    }
+
+    .carousel .container {
+      position: relative;
+      z-index: 0;
+    }
+
+    .carousel-control {
+      height: 80px;
+      margin-top: 0;
+      font-size: 120px;
+      text-shadow: 0 1px 1px rgba(0,0,0,.4);
+      background-color: transparent;
+      border: 0;
+      z-index: 10;
+    }
+
+    .carousel .item {
+      height: 360px;
+    }
+    .carousel img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      height: 360px;
+    }
+
+    .carousel-caption {
+      background-color: transparent;
+      position: static;
+      max-width: 550px;
+      padding: 100px 20px 20px 100px;
+      
+    }
+    .carousel-caption h1,
+    .carousel-caption .lead {
+      margin: 0;
+      line-height: 1.25;
+      color: #fff;
+      text-shadow: 0 1px 1px rgba(0,0,0,.4);
+    }
+    .carousel-caption .btn {
+      margin-top: 10px;
+    }
+      /* Featurettes
+      ------------------------- */
+
+      .featurette-divider {
+        margin: 40px 0; /* Space out the Bootstrap <hr> more */
+      }
+      .featurette {
+        padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
+        overflow: hidden; /* Vertically center images part 2: clear their floats. */
+      }
+      .featurette-image {
+        margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
+      }
+
+      /* Give some space on the sides of the floated elements so text doesn't run right into it. */
+      .featurette-image.pull-left {
+        margin-right: 40px;
+      }
+      .featurette-image.pull-right {
+        margin-left: 40px;
+      }
+
+      /* Thin out the marketing headings */
+      .featurette-heading {
+        font-size: 50px;
+        font-weight: 300;
+        line-height: 1;
+        letter-spacing: -1px;
+      }
+
+      /* Sidenav for Docs
+      -------------------------------------------------- */
+
+      .bs-docs-sidenav {
+        width: 228px;
+        margin: 30px 0 0;
         padding: 0;
+        background-color: #fff;
+        -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+        border-radius: 6px;
+        -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+        -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+        box-shadow: 0 1px 4px rgba(0,0,0,.065);
       }
-      .navbar .nav {
-        margin: 0;
-        display: table;
-        width: 100%;
+      .bs-docs-sidenav > li > a {
+        display: block;
+        width: 190px \9;
+        margin: 0 0 -1px;
+        padding: 8px 14px;
+        border: 1px solid #e5e5e5;
       }
-      .navbar .nav li {
-        display: table-cell;
-        width: 1%;
-        float: none;
+      .bs-docs-sidenav > li:first-child > a {
+        -webkit-border-radius: 6px 6px 0 0;
+        -moz-border-radius: 6px 6px 0 0;
+        border-radius: 6px 6px 0 0;
       }
-      .navbar .nav li a {
-        font-weight: bold;
-        text-align: center;
-        border-left: 1px solid rgba(255,255,255,.75);
-        border-right: 1px solid rgba(0,0,0,.1);
+      .bs-docs-sidenav > li:last-child > a {
+        -webkit-border-radius: 0 0 6px 6px;
+        -moz-border-radius: 0 0 6px 6px;
+        border-radius: 0 0 6px 6px;
       }
-      .navbar .nav li:first-child a {
-        border-left: 0;
-        border-radius: 3px 0 0 3px;
+      .bs-docs-sidenav > .active > a {
+        position: relative;
+        z-index: 2;
+        padding: 9px 15px;
+        border: 0;
+        text-shadow: 0 1px 0 rgba(0,0,0,.15);
+        -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+        -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+        box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
       }
-      .navbar .nav li:last-child a {
-        border-right: 0;
-        border-radius: 0 3px 3px 0;
-        }*/
-        </style>
-        <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet">
+      /* Chevrons */
+      .bs-docs-sidenav .icon-chevron-right {
+        float: right;
+        margin-top: 2px;
+        margin-right: -6px;
+        opacity: .25;
+      }
+      .bs-docs-sidenav > li > a:hover {
+        background-color: #f5f5f5;
+      }
+      .bs-docs-sidenav a:hover .icon-chevron-right {
+        opacity: .5;
+      }
+      .bs-docs-sidenav .active .icon-chevron-right,
+      .bs-docs-sidenav .active a:hover .icon-chevron-right {
+        background-image: url(../img/glyphicons-halflings-white.png);
+        opacity: 1;
+      }
+      .bs-docs-sidenav.affix {
+        top: 40px;
+      }
+      .bs-docs-sidenav.affix-bottom {
+        position: absolute;
+        top: auto;
+        bottom: 270px;
+      }
 
-        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="./assets/js/html5shiv.js"></script>
-      <![endif]-->
 
-      <!-- Fav and touch icons -->
-      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./assets/ico/apple-touch-icon-144-precomposed.png">
-      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./assets/ico/apple-touch-icon-114-precomposed.png">
-      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./assets/ico/apple-touch-icon-72-precomposed.png">
-      <link rel="apple-touch-icon-precomposed" href="./assets/ico/apple-touch-icon-57-precomposed.png">
-      <link rel="shortcut icon" href="./assets/ico/favicon.png">
-    </head>
 
-    <body>
 
-     <!-- Fixed navbar -->
-     <div class="navbar navbar-static-top">
-      <div class="navbar-inner">
+/* Responsive
+-------------------------------------------------- */
 
-        <div class="container">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <div class="span12" style=" margin-top:20px">
-            <div class="row-fluid">
-              <div class="span2"> 
-                <a class="brand" href="#"><strong style="font-size:35px">Edu-Hub</strong><p style="font-size:15px">Social Collaborating PT</p></a>
-          </div>
-              <div class="span3"> 
-                <form class="navbar-search">
-                  <input type="text" class="search-query" placeholder="Search">
-                </form>
-              </div>
-              <div class="span7"> 
-                <form class="navbar-form" >
+/* Desktop large
+------------------------- */
+@media (min-width: 1200px) {
+  .bs-docs-container {
+    max-width: 970px;
+  }
+  .bs-docs-sidenav {
+    width: 258px;
+  }
+  .bs-docs-sidenav > li > a {
+    width: 230px \9; /* Override the previous IE8-9 hack */
+  }
+}
+
+
+</style>
+<link href="./assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+<!-- Fav and touch icons -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="./assets/ico/apple-touch-icon-144-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="./assets/ico/apple-touch-icon-114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="./assets/ico/apple-touch-icon-72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" href="./assets/ico/apple-touch-icon-57-precomposed.png">
+<link rel="shortcut icon" href="./assets/ico/favicon.png">
+</head>
+
+<body>
+  <!-- Fixed navbar -->
+  <div class="navbar navbar-static-top">
+    <div class="navbar-inner">
+
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <div class="span12" style=" margin-top:20px">
+          <div class="row-fluid">
+            <div class="span2"> 
+              <a class="brand" href="#"><strong style="font-size:35px">Edu-Hub</strong><p style="font-size:15px">Social Collaborating PT</p></a>
+            </div>
+            <div class="span3"> 
+              <form class="navbar-search">
+                <input type="text" class="search-query" placeholder="Search">
+              </form>
+            </div>
+            <div class="span7"> 
+              <form class="navbar-form" >
                 <input class="span2" type="text" placeholder="Email">
                 <input class="span2" type="password" placeholder="Password">
                 <button class="btn"><a href="developer.html">Sign in</a></button> <!--type="submit"-->
               </form>
-              </div>
             </div>
           </div>
-          <hr style="margin-bottom:15px; margin-top:100px">
-          <div class="nav-collapse collapse">
-
-            <ul class="nav">
-              <li><a href="index.html"><strong>Home</strong></a></li>
-              <li class="active"><a href="tutorials.html"><strong>Tutorials</strong></a></li>
-              <li><a href="lecture.html"><strong>Lectures</strong></a></li>
-              <li><a href="download.html"><strong>Download</strong></a></li>
-              <li><a href="about us.html"><strong>About us</strong></a></li>
-
-            </ul>
-          </div><!--/.nav-collapse -->
         </div>
+        <hr style="margin-bottom:15px; margin-top:100px; border-top:1px solid rgb(218, 72, 26); border-bottom:1px solid rgb(204, 99, 28);">
+        <div class="nav-collapse collapse">
+
+          <ul class="nav">
+            <li><a href="index.html"><strong>Home</strong></a></li>
+            <li class="active"><a href="tutorials.html"><strong>Tutorials</strong></a></li>
+            <li><a href="lecture.html"><strong>Lectures</strong></a></li>
+            <li><a href="download.html"><strong>Download</strong></a></li>
+            <li><a href="about us.html"><strong>About us</strong></a></li>
+            <li><a href="mypage.html"><strong>My Page</strong></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
       </div>
     </div>
-
-
-    <div class="container">
-
-
-  
-      <hr>
-
-      <div class="footer">
-        <p>&copy; Company 2013 made in Mirim-Kim</p>
+  </div>
+  <div class="download">
+    <div class="jumbotron subhead" id="overview">
+      <div class="container">
+        <h1 style="color:#01056B">Teaching Assist 튜토리얼</h1>
+        <p class="lead" style="color:#1E25EC">PC, Phone, Pad에서 어떻게 사용하나요 ?</p>
       </div>
+    </div>
+  </div>
+  <div class="container">
 
-    </div> <!-- /container -->
+    <!-- Docs nav
+    ================================================== -->
+    <div class="row">
+      <div class="span3 bs-docs-sidebar">
+        <ul class="nav nav-list bs-docs-sidenav">
+          <li><a href="#download-bootstrap"><i class="icon-chevron-right"></i>Professor(교수) Tutorial</a></li>
+          <li><a href="#file-structure"><i class="icon-chevron-right"></i>Student(학생) Tutorial</a></li>
+
+        </ul>
+      </div>
+      <div class="span9">
+
+
+
+        <!-- Download
+        ================================================== -->
+        <section id="download-bootstrap">
+          <div class="page-header">
+            <h1> 1. Professor(교수용) Tutorial</h1>
+          </div>
+          <div class="hero-unit" style="padding:10px">
+            <p class="lead"  style="color:#078E1E">1.  </p>
+          </div>
+
+     
+      </section>
+
+
+
+        <!-- File structure
+        ================================================== -->
+        <section id="file-structure">
+          <div class="page-header">
+            <h1>2. Student(학생용) Tutorial</h1>
+             </div>
+          <div class="hero-unit" style="padding:10px">
+            <p class="lead"  style="color:#078E1E">1.</p>
+          </div>
+
+      
+      </section>
+
+    <hr class="featurette-divider">
+
+
+
+    <div class="footer">
+      <p>&copy; Company 2013 Social Collaborating PT 'Edu-Hub'</p>
+    </div>
+
+  </div> <!-- /container -->
 
     <!-- Le javascript
     ================================================== -->
