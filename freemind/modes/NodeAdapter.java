@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -137,27 +136,16 @@ public abstract class NodeAdapter implements MindMapNode {
 	private String xmlNoteText;
 	private static FreemindPropertyListener sSaveIdPropertyChangeListener;
 	private static boolean sSaveOnlyIntrinsicallyNeededIds = false;
-	
-	private ArrayList<String> imgPath = new ArrayList<String>();
 
     //
     // Constructors
     //
 
-
-	protected NodeAdapter(FreeMindMain frame, MindMap map) {
+    protected NodeAdapter(FreeMindMain frame, MindMap map) {
 		this(null, frame, map);
     }
 
-    public ArrayList<String> getImgPath() {
-		return imgPath;
-	}
-
-	public void setImgPath(ArrayList<String> imgPath) {
-		this.imgPath = imgPath;
-	}
-
-	protected NodeAdapter(Object userObject, FreeMindMain frame, MindMap map) {
+    protected NodeAdapter(Object userObject, FreeMindMain frame, MindMap map) {
         this.frame = frame;
         setText((String) userObject);
 		hooks = null; // lazy, fc, 30.6.2005.

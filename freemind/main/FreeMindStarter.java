@@ -61,7 +61,7 @@ public class FreeMindStarter {
 			Class mainClass = Class.forName("freemind.main.FreeMind");
 			Method mainMethod = mainClass.getMethod("main", new Class[]{String[].class, Properties.class, Properties.class, File.class});
 			mainMethod.invoke(null, new Object[]{args, defaultPreferences, userPreferences, starter.getUserPreferencesFile(defaultPreferences)});
-			
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "freemind.main.FreeMind can't be started", "Startup problem", JOptionPane.ERROR_MESSAGE);

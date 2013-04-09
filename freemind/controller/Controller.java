@@ -182,8 +182,6 @@ public class Controller  implements MapModuleChangeObserver {
 
     public Action zoomIn;
     public Action zoomOut;
-    
-    public Action slideShow;
 
     public Action showSelectionAsRectangle;
     public PropertyAction propertyAction;
@@ -262,8 +260,7 @@ public class Controller  implements MapModuleChangeObserver {
         optionAntialiasAction = new OptionAntialiasAction(this);
         optionHTMLExportFoldingAction = new OptionHTMLExportFoldingAction(this);
         optionSelectionMechanismAction = new OptionSelectionMechanismAction(this);
-        
-        slideShow = new SlideShowAction(this);
+
         zoomIn = new ZoomInAction(this);
         zoomOut = new ZoomOutAction(this);
         propertyAction = new PropertyAction(this);
@@ -275,9 +272,6 @@ public class Controller  implements MapModuleChangeObserver {
         //Create the ToolBar
         northToolbarPanel = new JPanel(new BorderLayout());
         toolbar = new MainToolBar(this);
-        
-        // ¿©±â¼­ MAIn
-        
         mFilterController = new FilterController(this);
         filterToolbar = mFilterController.getFilterToolbar();
         getFrame().getContentPane().add( northToolbarPanel, BorderLayout.NORTH );
@@ -1335,13 +1329,6 @@ public class Controller  implements MapModuleChangeObserver {
 			return leftToolbarVisible;
 		}
     }
-    
-    protected class SlideShowAction extends AbstractAction {
-        public SlideShowAction(Controller controller) {
-           super("SlideShow"); }
-        public void actionPerformed(ActionEvent e) {
-//            logger.info("ZoomInAction actionPerformed");
-           ((MainToolBar)toolbar).SlideShow(); }}
 
     protected class ZoomInAction extends AbstractAction {
         public ZoomInAction(Controller controller) {
