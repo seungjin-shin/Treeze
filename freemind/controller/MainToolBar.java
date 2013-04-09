@@ -34,6 +34,7 @@ public class MainToolBar extends FreeMindToolBar {
     Controller controller;
     String userDefinedZoom;
     private static Logger logger= null;
+    private SlideShow slist;
 	
     public MainToolBar(final Controller controller) {
     	super();
@@ -110,6 +111,10 @@ public class MainToolBar extends FreeMindToolBar {
 			}
 		}
 		return itemCount - 0.5f;
+	}
+	
+	public void SlideShow(){
+		System.out.println("dd");
 	}
 
 	public void zoomIn() {

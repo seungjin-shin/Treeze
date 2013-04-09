@@ -35,9 +35,13 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -72,10 +76,14 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.filechooser.FileFilter;
 
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+
 import freemind.controller.Controller;
 import freemind.controller.MapModuleManager;
 import freemind.controller.MindMapNodesSelection;
 import freemind.controller.StructuredMenuHolder;
+import freemind.controller.TableData;
 import freemind.extensions.PermanentNodeHook;
 import freemind.main.FreeMindMain;
 import freemind.main.Resources;
@@ -361,6 +369,7 @@ public abstract class ControllerAdapter implements ModeController {
     	final MapAdapter model = newModel(newModeController);
     	model.load(file);
     	logger.info("Start loading " + file);
+    	System.out.println(file.toString());
         newMap(model);
 //    	EventQueue.invokeLater(new Runnable(){
 //    		public void run() {
@@ -611,6 +620,8 @@ public abstract class ControllerAdapter implements ModeController {
         // fc, 24.4.2008: multi selection has problems as setTitle in Controller doesn't works
 //        chooser.setMultiSelectionEnabled(true);
         int returnVal = chooser.showOpenDialog(getView());
+        String filePath = "";
+        String mmFilePath;
         if (returnVal==JFileChooser.APPROVE_OPTION) {
         	File[] selectedFiles;
 			if (chooser.isMultiSelectionEnabled()) {
@@ -620,6 +631,19 @@ public abstract class ControllerAdapter implements ModeController {
 			}
 			for (int i = 0; i < selectedFiles.length; i++) {
 				File theFile = selectedFiles[i];
+				try {
+					filePath = theFile.getCanonicalPath();
+					// 이미지화 하고 이미지 이름 만들어
+					//pdf2img(filePath, theFile.getName());
+					//pdf2img 텍스트 뽑고 이미지화
+					pdf2mm(filePath, theFile.getName());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				mmFilePath = filePath.substring(0, filePath.length() - 4);
+				theFile = new File(mmFilePath + ".mm");
+				
 	            try {
 	                lastCurrentDir = theFile.getParentFile();
 	                load(theFile);
@@ -631,7 +655,130 @@ public abstract class ControllerAdapter implements ModeController {
         }
         getController().setTitle();
     }
+    // dewlit
+    public void pdf2img(String filePath, String fileName) throws IOException{
+    	PdfReader reader = new PdfReader(filePath);
+		int page = reader.getNumberOfPages();
+		String tmp[];
+		ArrayList<String> title = new ArrayList<String>();
+		String tmpStr;
+		
+		tmpStr = filePath.substring(0, filePath.indexOf(fileName.toString()));
+		
+		//제목이랑 페이지 번호 알 수 있어
+		//파일 이름
+		for (int i = 1; i <= page; i++) {
+			String str = PdfTextExtractor.getTextFromPage(reader, i);
+			System.out.flush();
+			
+			tmp = str.split("\n");
+			
+			
+		}
+    }
+    
+    public void pdf2mm(String filePath, String fileName) throws IOException{
+    	int depth = 0;
+		String tmp[];
+		String newLine[];
+		String direction = "left";
+		ArrayList<TableData> root = new ArrayList<TableData>();
+		TableData oldTableData = new TableData();
+		String mmFilePath = filePath.substring(0, filePath.length() - 4);
+		fileName = fileName.substring(0, fileName.length() - 4);
+		mmFilePath += ".mm";
+		File mmFile = new File(mmFilePath);
+		OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(mmFile), "UTF-8");
+		try {
+			PdfReader reader = new PdfReader(filePath);
+			int page = reader.getNumberOfPages();
 
+			for (int i = 1; i <= page; i++) {
+				String str = PdfTextExtractor.getTextFromPage(reader, i);
+				System.out.flush();
+
+				if (str.indexOf("<<table of contents>>") >= 0) {
+					out.write("<map version=\"0.9.0\">\n");
+
+					newLine = str.split("\n");
+					for (int j = 1; j < newLine.length - 1; j++) {
+						String data = "";
+						String hData = "";
+						TableData childTable = new TableData();
+
+						if (j > (newLine.length  / 2))
+							direction = "right";
+						
+						tmp = newLine[j].split("\\.");
+
+						if (tmp[1].substring(0, 1).equals(" ")) {
+							depth = 0;
+							data = tmp[1].substring(tmp[1].indexOf(" "),
+									tmp[1].length());
+							childTable.setDirection(direction);
+							childTable.setHeadline(tmp[0]);
+							childTable.setDepth(depth);
+						} else {
+							depth = tmp.length - 1;
+							childTable.setDepth(depth);
+							
+							tmp = newLine[j].split(" ");
+							hData = tmp[0];
+							for (int k = 1; k < tmp.length; k++)
+								data += tmp[k] + " ";
+							childTable.setHeadline(hData);
+							data = data.substring(0, data.length() - 1);
+						}
+						childTable.setData(data);
+
+						String tmpStr = childTable.getHeadline().toString();
+						if (tmpStr.length() > 2) {
+							if (tmpStr.substring(0, tmpStr.length() - 2)
+									.equals(oldTableData.getHeadline()))
+								oldTableData.setHaveChild(true);
+						}
+
+						if (j > 1)
+							root.add(oldTableData);
+						
+						oldTableData = childTable;
+
+						if (j == newLine.length - 2){
+							childTable.setHaveChild(false);
+							root.add(childTable);
+						}
+					}
+				break;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		out.write("<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"" + fileName + "\">\n");
+		TableData showTable;
+		int dif;
+		for(int i = 0; i < root.size(); i++){
+			out.write("<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" ");
+			showTable = root.get(i);
+			if(!showTable.getDirection().equals("null"))
+				out.write("POSITION=\"" + showTable.getDirection() + "\" ");
+			out.write("TEXT=\"" + showTable.getData() + "\"");
+			if(showTable.isHaveChild())
+				out.write(">\n");
+			else
+				out.write("/>\n");
+			if(i == root.size() - 1)
+				dif = showTable.getDepth();
+			else
+				dif = showTable.getDepth() - root.get(i + 1).getDepth();
+			for(int j = 0; j < dif; j++)
+				out.write("</node>\n");
+		}
+		out.write("</node>\n</map>\n");
+		out.close();
+    }
+    //dewlit
     /** Creates a file chooser with the last selected directory as default.
      */
     public JFileChooser getFileChooser(FileFilter filter) {
