@@ -23,7 +23,10 @@ package freemind.modes;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.KeyboardFocusManager;
+import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -35,6 +38,7 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,10 +46,13 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -59,11 +66,13 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.logging.Level;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -78,10 +87,13 @@ import javax.swing.filechooser.FileFilter;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+import com.sun.pdfview.PDFFile;
+import com.sun.pdfview.PDFPage;
 
 import freemind.controller.Controller;
 import freemind.controller.MapModuleManager;
 import freemind.controller.MindMapNodesSelection;
+import freemind.controller.SlideData;
 import freemind.controller.StructuredMenuHolder;
 import freemind.controller.TableData;
 import freemind.extensions.PermanentNodeHook;
@@ -109,6 +121,8 @@ public abstract class ControllerAdapter implements ModeController {
 	private static java.util.logging.Logger logger;
 
 	private Mode mode;
+	
+	private boolean templateChk = false;
 
     private Color selectionColor = new Color(200,220,200);
 	/**
@@ -632,27 +646,42 @@ public abstract class ControllerAdapter implements ModeController {
 			for (int i = 0; i < selectedFiles.length; i++) {
 				File theFile = selectedFiles[i];
 				try {
+					JFrame tmp = getController().getJFrame();
+					TableOfContents tmpTable;
+					
 					filePath = theFile.getCanonicalPath();
 					// 이미지화 하고 이미지 이름 만들어
-					//pdf2img(filePath, theFile.getName());
+					pdf2img(filePath, theFile.getName());
+					
+					if(!templateChk){
+						tmpTable = new TableOfContents();
+						//tmp.add(tmpTable);
+						
+						templateChk = false;
+						return;
+					}
 					//pdf2img 텍스트 뽑고 이미지화
-					pdf2mm(filePath, theFile.getName());
+					if(templateChk)
+						pdf2mm(filePath, theFile.getName());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				mmFilePath = filePath.substring(0, filePath.length() - 4);
-				theFile = new File(mmFilePath + ".mm");
-				
-	            try {
-	                lastCurrentDir = theFile.getParentFile();
-	                load(theFile);
-	            } catch (Exception ex) {
-	               handleLoadingException (ex); 
-	               break;
-	            } 
+				if (templateChk) {
+					mmFilePath = filePath.substring(0, filePath.length() - 4);
+					theFile = new File(mmFilePath + ".mm");
+
+					try {
+						lastCurrentDir = theFile.getParentFile();
+						load(theFile);
+					} catch (Exception ex) {
+						handleLoadingException(ex);
+						break;
+					}
+				}
 			}
         }
+        templateChk = false;
         getController().setTitle();
     }
     // dewlit
@@ -660,20 +689,167 @@ public abstract class ControllerAdapter implements ModeController {
     	PdfReader reader = new PdfReader(filePath);
 		int page = reader.getNumberOfPages();
 		String tmp[];
-		ArrayList<String> title = new ArrayList<String>();
-		String tmpStr;
+		ArrayList<SlideData> slideList;
+		String newLine[];
+		slideList = getController().getSlideList();
+		SlideData sData = null;
+		String tmpStr = "";
+		String data = "";
+		String oldStr = "";
+		String mkDirPath;
+		int noTitle = 0;
+		int imgNum = 0;
+		int tmpNum = 0;
 		
-		tmpStr = filePath.substring(0, filePath.indexOf(fileName.toString()));
+		mkDirPath = filePath.substring(0, filePath.indexOf(fileName.toString()));
+		mkDirPath = mkDirPath + fileName.substring(0, fileName.indexOf(".pdf"));
+		File mkDirFile = new File(mkDirPath);
+		 
+		if(!mkDirFile.exists())
+			mkDirFile.mkdir();
 		
-		//제목이랑 페이지 번호 알 수 있어
-		//파일 이름
+		mkDirPath += "\\";
+
+		File file = new File(filePath);
+        
+        RandomAccessFile raf = new RandomAccessFile(file, "r");
+        FileChannel channel = raf.getChannel();
+        ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+		
 		for (int i = 1; i <= page; i++) {
 			String str = PdfTextExtractor.getTextFromPage(reader, i);
 			System.out.flush();
 			
-			tmp = str.split("\n");
+			if(i == 1){
+				newLine = str.split("\n");
+				sData = new SlideData();
+
+				sData.setData(newLine[0]);
+				sData.setImgPath(mkDirPath);
+				slideList.add(sData);
+			}
 			
+			if (str.indexOf("<<table of contents>>") >= 0) {
+				templateChk = true;
+
+				newLine = str.split("\n");
+				for (int j = 1; j < newLine.length - 1; j++) {
+					data = "";
+					sData = new SlideData();
+
+					tmp = newLine[j].split(" ");
+					sData.setImgIdx(tmp[0]);
+					
+					for(int k = 1; k < tmp.length; k++){
+						data += tmp[k];
+						if(k != tmp.length - 1 && !tmp[k].equals(""))
+							data += " ";
+					}
+					sData.setData(data);
+					slideList.add(sData);
+				}
+			break;
+			}
+		}
+		
+		for (int i = 1; i <= page; i++) {
+			String str = PdfTextExtractor.getTextFromPage(reader, i);
+			System.out.flush();
+			data = "";
+			newLine = str.split("\n");
 			
+			tmp = newLine[0].split(" ");
+			
+			for(int k = 0; k < tmp.length; k++)
+				data += tmp[k];
+			
+			data = data.replace(" ", "");
+			
+			for(int j = 0; j < slideList.size(); j++){
+				sData = slideList.get(j);
+				tmpStr = sData.getData().replace(" ", "");
+				if(data.equals(tmpStr)){
+					sData.setImgNum(sData.getImgNum() + 1);
+					break;
+				}
+			}
+		}
+		
+		for(int i = 1; i <= page; i++){
+			data = "";
+		 PDFFile pdffile = new PDFFile(buf);
+		 String str = PdfTextExtractor.getTextFromPage(reader, i);
+			System.out.flush();
+			
+			newLine = str.split("\n");
+			if(newLine[0].equals("<<table of contents>>"))
+				continue;
+			
+			if(newLine[0].equals("")){
+				data += "undefined" + noTitle;
+				imgNum = 1;
+				noTitle++;
+			}
+			else{
+				tmp = newLine[0].split(" ");
+				
+				for (int k = 0; k < tmp.length; k++) 
+					data += tmp[k];
+				
+				data = data.replace(" ", "");
+				
+				for (int j = 0; j < slideList.size(); j++) {
+					sData = slideList.get(j);
+					
+					tmpStr = sData.getData().replace(" ", "");
+					if (data.equals(tmpStr)) {
+						if (oldStr.equals(tmpStr))
+							break;
+						oldStr = data;
+						tmpNum = imgNum = sData.getImgNum();
+						break;
+					}
+				}
+			}
+
+	        // draw the first page to an image
+	        PDFPage pdfPage = pdffile.getPage(i);
+	        
+	        //get the width and height for the doc at the default zoom 
+	        Rectangle rect = new Rectangle(0,0,
+	                (int)pdfPage.getBBox().getWidth(),
+	                (int)pdfPage.getBBox().getHeight());
+	        
+	        //generate the image
+	        
+	        Image image = pdfPage.getImage(
+	                rect.width, rect.height, //width & height
+	                rect, // clip rect
+	                null, // null for the ImageObserver
+	                true, // fill background with white
+	                true  // block until drawing is done
+	                );
+	        
+	        int w = image.getWidth(null);
+	        int h = image.getHeight(null);
+	        BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+	        Graphics2D g2 = bi.createGraphics();
+	        g2.drawImage(image, 0, 0, null);
+	        g2.dispose();
+	        try
+	        {
+	        	if(imgNum == 1)
+	        		ImageIO.write(bi, "jpg", new File(mkDirPath + sData.getData() + ".jpg"));
+	        	else{
+	        		ImageIO.write(bi, "jpg", new File(mkDirPath + sData.getData() + (imgNum - tmpNum) + ".jpg"));
+	        		tmpNum--;
+	        	}
+	        }
+	        catch(IOException ioe)
+	        {
+	            System.out.println("write: " + ioe.getMessage());
+	        }
+	        data = "";
 		}
     }
     

@@ -50,6 +50,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.AccessControlException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -182,10 +183,17 @@ public class Controller  implements MapModuleChangeObserver {
 
     public Action zoomIn;
     public Action zoomOut;
-    
+    //dewlit
     public Action slideShow;
+    public ArrayList<SlideData> slideList = new ArrayList<SlideData>();
 
-    public Action showSelectionAsRectangle;
+    public ArrayList<SlideData> getSlideList() {
+		return slideList;
+	}
+    
+    //dewlit
+
+	public Action showSelectionAsRectangle;
     public PropertyAction propertyAction;
 	public OpenURLAction freemindUrl;
 
@@ -1341,7 +1349,7 @@ public class Controller  implements MapModuleChangeObserver {
            super("SlideShow"); }
         public void actionPerformed(ActionEvent e) {
 //            logger.info("ZoomInAction actionPerformed");
-           ((MainToolBar)toolbar).SlideShow(); }}
+           ((MainToolBar)toolbar).SlideShow(slideList); }}
 
     protected class ZoomInAction extends AbstractAction {
         public ZoomInAction(Controller controller) {

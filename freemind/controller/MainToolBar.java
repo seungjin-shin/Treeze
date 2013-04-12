@@ -23,6 +23,7 @@ package freemind.controller;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
@@ -34,7 +35,7 @@ public class MainToolBar extends FreeMindToolBar {
     Controller controller;
     String userDefinedZoom;
     private static Logger logger= null;
-    private SlideShow slist;
+    private SlideData slist;
 	
     public MainToolBar(final Controller controller) {
     	super();
@@ -113,7 +114,8 @@ public class MainToolBar extends FreeMindToolBar {
 		return itemCount - 0.5f;
 	}
 	
-	public void SlideShow(){
+	public void SlideShow(ArrayList<SlideData> slideList){
+		System.out.println(slideList.get(0).getImgNum());
 		System.out.println("dd");
 	}
 
