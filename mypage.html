@@ -18,7 +18,7 @@
 
     body {
       padding-bottom: 40px;
-      color: #5a5a5a;
+      color: #ffffff;
     }
 
 
@@ -320,7 +320,7 @@
           <img src="./assets/img/examples/slide-01.jpg" alt="">
           <div class="container">
             <div class="carousel-caption" style="padding:85px">
-              <h1>Treeze & Teaching Assist 를 소개합니다.</h1>
+              <h1>마이페이지 Treeze</h1>
             </div>
           </div>
         </div>
@@ -330,18 +330,180 @@
       <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
     </div><!-- /.carousel -->
 
-    <div class="row-fluid" style="margin-bottom: 2px;" >
+
+    <div class="row-fluid" style="background-color:rgb(77,117,31)">
       <div class="span12">
+        <div class="container">
+      <div class="container-fluid" style="margin-top:30px">
         <div class="row-fluid">
-          <div class="span6" style="padding-top:500px;background-image: linear-gradient(to left, rgb(138, 195, 62),  rgb(77, 117, 31)); width:50%;"></div>
-          <div class="span6" style="padding-top:500px;background-image: linear-gradient(to right, rgb(138, 195, 62),  rgb(77, 117, 31)); margin-left:0px;width:50%;">
+          <div class="span2" >
+            <!--Sidebar content-->
+            <div class="row-fluid">
+              <div class="span15">
+                <ul class="thumbnails">
+
+
+                  <a href="#" class="thumbnail">
+                    <img src="./assets/img/이민석교수님.jpg" alt="164x190" style="width: 170px; height: 190px;" >
+                  </a>
+
+                </ul>
+              </div>   
+
+              <div class="row-fluid">
+                <div class="span10">
+                  <hr>
+                  <strong style="font-size:30px">이민석</strong>
+                </div>
+                <div class="span10">
+                  <hr>
+                  Hansung University /
+                  Computer engineering Professor
+
+                </div>
+                <div class="span10">
+                  <hr>
+                  
+                  <strong style="font-size:40px">4</strong>
+                </br>등록된 Lecture 
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="row-fluid" style="padding-top:500px;background-color:rgb(77,117,31)">
-      <div class="span12">
-       
+
+
+
+        <div class="span10">
+          <!--Body content-->
+
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a href="#">  <img src="./assets/img/book.png">&nbsp;&nbsp;&nbsp;&nbsp;  <strong> My Lectures</strong>  &nbsp;&nbsp;&nbsp;&nbsp;  </a>
+            </li>
+          </ul>
+          <div class="row-fluid">
+            <!--style=" background-color:#A3D401 "-->
+            <div class="span6">
+              <ul class="nav nav-tabs nav-stacked" >
+                <li><a href="#" style=" background-color:rgb(1, 128, 212); color:rgb(241, 232, 232);"><strong>Lecture</strong></a></li>
+                <li>
+                  <a href="app-home.html" style="background-color:#ffffff"><img src="./assets/img/논리회로.png" style="margin-right:30px"><strong style="overflow-x:hidden;display:inline-block;max-width: 271px; min-width:271px">논리회로</strong><span style="color:#333333; "><strong></strong></span></a>
+                </li>
+
+                <li>
+                  <a href="#" style="background-color:#ffffff"><img src="./assets/img/임베디드.jpg" style="margin-right:30px"><strong style="overflow-x:hidden;display:inline-block;max-width: 271px; min-width:271px">임베디드 시스템</strong><span style="color:#333333; "><strong></strong></span></a>
+                </li>
+              </ul>
+            </div>
+            <div class="span6">
+             <ul class="nav nav-tabs nav-stacked">
+              <li><a href="#" style=" background-color:rgb(1, 128, 212); color:rgb(241, 232, 232) "><strong>Lecture</strong></a></li>
+
+              <li>
+                <a href="#" style="background-color:#ffffff"><img src="./assets/img/닌텐도.jpg" style="margin-right:30px"><strong style="overflow-x:hidden;display:inline-block;max-width: 271px; min-width:271px">마이크로프로세서 응용설계</strong><span style="color:#333333; "><strong></strong></span></a>
+              </li>
+
+              <li>
+                <a href="#" style="background-color:#ffffff"><img src="./assets/img/book.png" style="margin-right:30px"><strong style="overflow-x:hidden;display:inline-block;max-width: 271px; min-width:271px">시스템 프로그래밍</strong><span style="color:#333333; "><strong></strong></span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="span10">
+
+
+          <script type="text/javascript" src="./assets/js/jquery.js"></script>
+          <script type="text/javascript">
+          $(function () {
+            var chart;
+            $(document).ready(function() {
+              chart = new Highcharts.Chart({
+                chart: {
+                  renderTo: 'container',
+                  type: 'area',
+                  spacingBottom: 30
+                },
+                title: {
+                  text: "Week's Feedback"
+                },
+                subtitle: {
+                  text: '일주일 동안의 Feedback 숫자 그래',
+                  floating: true,
+                  align: 'right',
+                  verticalAlign: 'bottom',
+                  y: 15
+                },
+                legend: {
+                  layout: 'vertical',
+                  align: 'left',
+                  verticalAlign: 'top',
+                  x: 150,
+                  y: 100,
+                  floating: true,
+                  borderWidth: 1,
+                  backgroundColor: '#FFFFFF'
+                },
+                xAxis: {
+                  categories: ['3/19', '3/20', '3/21', '3/22', '3/23', '3/24']
+                },
+                yAxis: {
+                  title: {
+                    text: 'Count'
+                  },
+                  categories: ['0','25','50','75','100','200'],
+                /*labels: {
+                    formatter: function() {
+                        return this.value;
+                    }
+                  }*/
+                },
+                tooltip: {
+                  formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    this.x +': '+ this.y;
+                  }
+                },
+                plotOptions: {
+                  area: {
+                    fillOpacity: 0.5
+                  }
+                },
+                credits: {
+                  enabled: false
+                },
+                series: [{
+                  name: 'Feedback',
+                  data: [0, 1, 4, 4, 5, 2]
+                }]
+              });
+});
+
+});
+</script>
+</head>
+<body>
+  <script src="./assets/js/highcharts.js"></script>
+  <script src="./assets/js/modules/exporting.js"></script>
+
+  <div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+</body>
+
+
+
+</div>
+</div>
+</div>
+</div>
+
+
+<hr>
+
+<div class="footer">
+  <p>&copy; Company 2013 Social Collaborating PT 'Edu-Hub'</p>
+</div>
+
+</div> <!-- /container -->
       </div>
     </div>
 
