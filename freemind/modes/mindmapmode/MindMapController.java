@@ -1933,7 +1933,7 @@ freemind.main.Resources.getInstance().logException(					e1);
         boolean range = e.isShiftDown();
         boolean branch = e.isAltGraphDown() || e.isAltDown(); /* windows alt, linux altgraph .... */
         boolean retValue = false;
-
+        
         if (extend || range || branch
                 || !getView().isSelected(newlySelectedNodeView)) {
             if (!range) {
