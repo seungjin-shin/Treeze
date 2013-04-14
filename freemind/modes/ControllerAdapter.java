@@ -689,6 +689,7 @@ public abstract class ControllerAdapter implements ModeController {
     	PdfReader reader = new PdfReader(filePath);
 		int page = reader.getNumberOfPages();
 		String tmp[];
+		String temp[];
 		ArrayList<SlideData> slideList;
 		String newLine[];
 		slideList = getController().getSlideList();
@@ -740,7 +741,12 @@ public abstract class ControllerAdapter implements ModeController {
 					sData = new SlideData();
 
 					tmp = newLine[j].split(" ");
-					sData.setImgIdx(tmp[0]);
+					//sData.setImgIdx(tmp[0]);
+					temp = tmp[0].split("\\.");
+					
+					for(int l = 0; l < temp.length; l++)
+						sData.getIdxList().add(Integer.parseInt(temp[l]));
+					
 					
 					for(int k = 1; k < tmp.length; k++){
 						data += tmp[k];

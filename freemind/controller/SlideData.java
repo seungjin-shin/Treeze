@@ -4,12 +4,18 @@ import java.util.ArrayList;
 
 public class SlideData {
 
-	String imgIdx;
+	ArrayList<Integer> idxList = new ArrayList<Integer>();
 	int imgNum = 0;
 	String imgPath;
 	String data;
 	int sCnt;
 	
+	public ArrayList<Integer> getIdxList() {
+		return idxList;
+	}
+	public void setIdxList(ArrayList<Integer> idxList) {
+		this.idxList = idxList;
+	}
 	public int getsCnt() {
 		return sCnt;
 	}
@@ -21,12 +27,6 @@ public class SlideData {
 	}
 	public void setData(String data) {
 		this.data = data;
-	}
-	public String getImgIdx() {
-		return imgIdx;
-	}
-	public void setImgIdx(String imgIdx) {
-		this.imgIdx = imgIdx;
 	}
 	public int getImgNum() {
 		return imgNum;
