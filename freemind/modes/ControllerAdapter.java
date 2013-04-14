@@ -755,7 +755,7 @@ public abstract class ControllerAdapter implements ModeController {
 						if(k != tmp.length - 1 && !tmp[k].equals(""))
 							data += " ";
 					}
-					
+					sData.setImgPath(prev.getImgPath());
 					sData.setNodeName(data);
 					sData.setPrev(prev);
 					prev.setNext(sData);

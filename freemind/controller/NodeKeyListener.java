@@ -57,10 +57,14 @@ public class NodeKeyListener implements KeyListener {
     		c.getSlideShow().setfocusnext();
     		c.getSlideShow().show();
     	}
+
     	else if(e.getKeyCode() == KeyEvent.VK_TAB){
     	c.getSlideShow().setfocus(c.getSlideList().get(0));
     	c.getSlideShow().show();
     	}
+    	else if(e.getKeyCode() == KeyEvent.VK_SPACE){
+        	c.getSlideShow().show();
+        	}
         if (mListener != null)
             mListener.keyPressed(e);
     }
