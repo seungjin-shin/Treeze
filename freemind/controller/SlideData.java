@@ -8,7 +8,14 @@ public class SlideData {
 	int imgNum = 0;
 	String imgPath;
 	String data;
-
+	int sCnt;
+	
+	public int getsCnt() {
+		return sCnt;
+	}
+	public void setsCnt(int sCnt) {
+		this.sCnt = sCnt;
+	}
 	public String getData() {
 		return data;
 	}

@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import freemind.controller.SlideData;
+
 public class TableOfContents extends JFrame {
 	private Container ct;
 	private int depth = 1;
@@ -32,10 +34,7 @@ public class TableOfContents extends JFrame {
 	private JPanel nPanel;
 	private ImgPanel iPanel;
 	
-	private String filePath = "c:\\test\\수학의 정석\\";
-	int count = 4;
-	String imgName[] = {"수학의 정석", "지수", "거듭제곱근의 계산", "a 의 n 제곱근"};
-	int imgCnt[] = {1, 1, 2, 2};
+	private String filePath;
 	
 	JLabel nLabel = null;
 	JTextField jText = null;
@@ -55,8 +54,12 @@ public class TableOfContents extends JFrame {
 	JButton nextBtn;
 	JButton prevBtn;
 	JScrollPane sPanel;
+	ArrayList<SlideData> sList;
 	
-	public TableOfContents() {
+	public TableOfContents(ArrayList<SlideData> sList) {
+		
+		this.sList = sList;
+		filePath = sList.get(0).getImgPath();
 		ct = getContentPane();
 		btnListener = new BtnListener();
 		setSize(800, 800);
@@ -161,32 +164,43 @@ public class TableOfContents extends JFrame {
 		int i;
 		Image img[];
 		int cnt = 0;
+		SlideData sData;
+		
 		public ImgPanel() {
-			img = new Image[6];
+			img = new Image[sList.get(0).getsCnt()];
 		}
 
 		public void paint(Graphics g){
 			super.paintComponents(g);
 			cnt = 0;
-			for(i = 0; i < count; i++){
+			int undefinedCnt = 0;
+			
+			for(i = 0; i < sList.size(); i++){
+				sData = sList.get(i);
 				
-				if(imgCnt[i] == 1){
-					img[cnt] = new ImageIcon(filePath + imgName[i] + ".jpg").getImage();
+				if(sData.getImgNum() == 1){
+					if(sData.getData().equals(""))
+						img[cnt] = new ImageIcon(filePath + "undefined" + undefinedCnt++ + ".jpg").getImage();
+					else
+						img[cnt] = new ImageIcon(filePath + sData.getData() + ".jpg").getImage();
 					g.drawImage(img[cnt], 10, IMGHEIGHT * cnt + 10, 100, 100, null);
 					g.drawString(cnt + 1 + "", 10, IMGHEIGHT * cnt + 8);
 					cnt++;
 				}
 				else{
-					int j = imgCnt[i];
+					int j = sData.getImgNum();
 					for(int k = 0; k < j; k++){
-						img[cnt] = new ImageIcon(filePath + imgName[i] + k + ".jpg").getImage();
+						if(sData.getData().equals(""))
+							img[cnt] = new ImageIcon(filePath + "undefined" + k + ".jpg").getImage();
+						else
+							img[cnt] = new ImageIcon(filePath + sData.getData() + k + ".jpg").getImage();
 						g.drawImage(img[cnt], 10, IMGHEIGHT * cnt + 10, 100, 100, null);
 						g.drawString(cnt + 1 + "", 10, IMGHEIGHT * cnt + 8);
 						cnt++;
 					}
 				}
 			}
-			setPreferredSize(new Dimension(180, 800));
+			setPreferredSize(new Dimension(180, 100 * cnt + cnt * 30));
 			sPanel.updateUI();
 		}
 	}

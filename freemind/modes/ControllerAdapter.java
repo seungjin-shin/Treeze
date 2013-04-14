@@ -654,7 +654,7 @@ public abstract class ControllerAdapter implements ModeController {
 					pdf2img(filePath, theFile.getName());
 					
 					if(!templateChk){
-						tmpTable = new TableOfContents();
+						tmpTable = new TableOfContents(getController().getSlideList());
 						//tmp.add(tmpTable);
 						
 						templateChk = false;
@@ -700,7 +700,9 @@ public abstract class ControllerAdapter implements ModeController {
 		int noTitle = 0;
 		int imgNum = 0;
 		int tmpNum = 0;
-		
+		boolean dupChk;
+		boolean noTitleChk;
+
 		mkDirPath = filePath.substring(0, filePath.indexOf(fileName.toString()));
 		mkDirPath = mkDirPath + fileName.substring(0, fileName.indexOf(".pdf"));
 		File mkDirFile = new File(mkDirPath);
@@ -752,55 +754,107 @@ public abstract class ControllerAdapter implements ModeController {
 			}
 		}
 		
-		for (int i = 1; i <= page; i++) {
-			String str = PdfTextExtractor.getTextFromPage(reader, i);
-			System.out.flush();
-			data = "";
-			newLine = str.split("\n");
+		//템플릿 없으면 다시 돌아서 sList 셋팅해야돼
+		if(!templateChk){
+			slideList.clear();
+			for (int i = 1; i <= page; i++) {
+				String str = PdfTextExtractor.getTextFromPage(reader, i);
+				System.out.flush();
+				
+				if(i == 1){
+					newLine = str.split("\n");
+					sData = new SlideData();
+
+					sData.setData(newLine[0]);
+					sData.setImgPath(mkDirPath);
+					slideList.add(sData);
+				}
+				else{
+					newLine = str.split("\n");
+					dupChk = false;
+					for(int j = 0; j < slideList.size(); j++){
+						sData = slideList.get(j);
+						if(newLine[0].equals(sData.getData())){
+							dupChk = true;
+							break;
+						}
+					}
+					if(!dupChk){
+						sData = new SlideData();
+						sData.setData(newLine[0]);
+						slideList.add(sData);
+					}
+				}
+			}
 			
-			tmp = newLine[0].split(" ");
-			
-			for(int k = 0; k < tmp.length; k++)
-				data += tmp[k];
-			
-			data = data.replace(" ", "");
-			
-			for(int j = 0; j < slideList.size(); j++){
-				sData = slideList.get(j);
-				tmpStr = sData.getData().replace(" ", "");
-				if(data.equals(tmpStr)){
-					sData.setImgNum(sData.getImgNum() + 1);
-					break;
+			//이미지 수 셋팅해
+			for (int i = 1; i <= page; i++) {
+				String str = PdfTextExtractor.getTextFromPage(reader, i);
+				System.out.flush();
+				data = "";
+				newLine = str.split("\n");
+
+				data = newLine[0].replace(" ", "");
+
+				for (int j = 0; j < slideList.size(); j++) {
+					sData = slideList.get(j);
+					tmpStr = sData.getData().replace(" ", "");
+					if (data.equals(tmpStr)) {
+						sData.setImgNum(sData.getImgNum() + 1);
+						break;
+					}
 				}
 			}
 		}
-		
-		for(int i = 1; i <= page; i++){
+		else {
+
+			for (int i = 1; i <= page; i++) {
+				String str = PdfTextExtractor.getTextFromPage(reader, i);
+				System.out.flush();
+				data = "";
+				newLine = str.split("\n");
+
+				tmp = newLine[0].split(" ");
+
+				for (int k = 0; k < tmp.length; k++)
+					data += tmp[k];
+
+				data = data.replace(" ", "");
+
+				for (int j = 0; j < slideList.size(); j++) {
+					sData = slideList.get(j);
+					tmpStr = sData.getData().replace(" ", "");
+					if (data.equals(tmpStr)) {
+						sData.setImgNum(sData.getImgNum() + 1);
+						break;
+					}
+				}
+			}
+		}
+
+		for (int i = 1; i <= page; i++) {
 			data = "";
-		 PDFFile pdffile = new PDFFile(buf);
-		 String str = PdfTextExtractor.getTextFromPage(reader, i);
+			noTitleChk = false;
+			PDFFile pdffile = new PDFFile(buf);
+			String str = PdfTextExtractor.getTextFromPage(reader, i);
 			System.out.flush();
-			
+
 			newLine = str.split("\n");
-			if(newLine[0].equals("<<table of contents>>"))
+			if (newLine[0].equals("<<table of contents>>"))
 				continue;
-			
-			if(newLine[0].equals("")){
+
+			if (newLine[0].equals("")) {
 				data += "undefined" + noTitle;
 				imgNum = 1;
 				noTitle++;
-			}
-			else{
-				tmp = newLine[0].split(" ");
-				
-				for (int k = 0; k < tmp.length; k++) 
-					data += tmp[k];
-				
-				data = data.replace(" ", "");
-				
+				noTitleChk = true;
+			} else {
+
+				data = newLine[0].replace(" ", "");
+
 				for (int j = 0; j < slideList.size(); j++) {
 					sData = slideList.get(j);
-					
+
 					tmpStr = sData.getData().replace(" ", "");
 					if (data.equals(tmpStr)) {
 						if (oldStr.equals(tmpStr))
@@ -812,45 +866,55 @@ public abstract class ControllerAdapter implements ModeController {
 				}
 			}
 
-	        // draw the first page to an image
-	        PDFPage pdfPage = pdffile.getPage(i);
-	        
-	        //get the width and height for the doc at the default zoom 
-	        Rectangle rect = new Rectangle(0,0,
-	                (int)pdfPage.getBBox().getWidth(),
-	                (int)pdfPage.getBBox().getHeight());
-	        
-	        //generate the image
-	        
-	        Image image = pdfPage.getImage(
-	                rect.width, rect.height, //width & height
-	                rect, // clip rect
-	                null, // null for the ImageObserver
-	                true, // fill background with white
-	                true  // block until drawing is done
-	                );
-	        
-	        int w = image.getWidth(null);
-	        int h = image.getHeight(null);
-	        BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-	        Graphics2D g2 = bi.createGraphics();
-	        g2.drawImage(image, 0, 0, null);
-	        g2.dispose();
-	        try
-	        {
-	        	if(imgNum == 1)
-	        		ImageIO.write(bi, "jpg", new File(mkDirPath + sData.getData() + ".jpg"));
-	        	else{
-	        		ImageIO.write(bi, "jpg", new File(mkDirPath + sData.getData() + (imgNum - tmpNum) + ".jpg"));
-	        		tmpNum--;
-	        	}
-	        }
-	        catch(IOException ioe)
-	        {
-	            System.out.println("write: " + ioe.getMessage());
-	        }
-	        data = "";
+			// draw the first page to an image
+			PDFPage pdfPage = pdffile.getPage(i);
+
+			// get the width and height for the doc at the default zoom
+			Rectangle rect = new Rectangle(0, 0, (int) pdfPage.getBBox()
+					.getWidth(), (int) pdfPage.getBBox().getHeight());
+
+			// generate the image
+
+			Image image = pdfPage.getImage(rect.width, rect.height, // width
+																	// &
+																	// height
+					rect, // clip rect
+					null, // null for the ImageObserver
+					true, // fill background with white
+					true // block until drawing is done
+					);
+
+			int w = image.getWidth(null);
+			int h = image.getHeight(null);
+			BufferedImage bi = new BufferedImage(w, h,
+					BufferedImage.TYPE_INT_RGB);
+			Graphics2D g2 = bi.createGraphics();
+			g2.drawImage(image, 0, 0, null);
+			g2.dispose();
+			try {
+				if (imgNum == 1){
+					if(noTitleChk)
+						ImageIO.write(bi, "jpg",
+								new File(mkDirPath + data + ".jpg"));
+					else
+						ImageIO.write(bi, "jpg",
+							new File(mkDirPath + sData.getData() + ".jpg"));
+					
+				}
+				else {
+					ImageIO.write(bi, "jpg",
+							new File(mkDirPath + sData.getData()
+									+ (imgNum - tmpNum) + ".jpg"));
+					tmpNum--;
+				}
+			} catch (IOException ioe) {
+				System.out.println("write: " + ioe.getMessage());
+			}
+			data = "";
 		}
+		sData = slideList.get(0);
+		sData.setsCnt(page);
+		reader.close();
     }
     
     public void pdf2mm(String filePath, String fileName) throws IOException{
