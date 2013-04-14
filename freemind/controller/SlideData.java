@@ -10,6 +10,7 @@ public class SlideData {
 	String data;
 	int sCnt;
 	int t;
+	int tt;
 	
 	public ArrayList<Integer> getIdxList() {
 		return idxList;
