@@ -9,6 +9,7 @@ public class SlideData {
 	String imgPath;
 	String data;
 	int sCnt;
+	int t;
 	
 	public ArrayList<Integer> getIdxList() {
 		return idxList;
