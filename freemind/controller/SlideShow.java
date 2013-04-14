@@ -4,6 +4,7 @@ public class SlideShow {
 	SlideData focus;
 	void setfocus(SlideData focus){
 		this.focus = focus;
+		System.out.println(focus.nodeName);
 	}
 	 SlideData getfocus(){
 		return focus;
@@ -13,6 +14,11 @@ public class SlideShow {
 	 }
 	public void setfocusnext() {
 		// TODO Auto-generated method stub
-		this.focus = focus.getNext();
+		if(focus.getNext()!=null)
+		 this.setfocus(focus.getNext());
+	}
+	public void show() {
+		// TODO Auto-generated method stub
+	
 	}
 }

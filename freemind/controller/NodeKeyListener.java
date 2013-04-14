@@ -53,6 +53,14 @@ public class NodeKeyListener implements KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
+    	if(e.getKeyCode() ==KeyEvent.VK_SHIFT){
+    		c.getSlideShow().setfocusnext();
+    		c.getSlideShow().show();
+    	}
+    	else if(e.getKeyCode() == KeyEvent.VK_TAB){
+    	c.getSlideShow().setfocus(c.getSlideList().get(0));
+    	c.getSlideShow().show();
+    	}
         if (mListener != null)
             mListener.keyPressed(e);
     }
