@@ -184,14 +184,21 @@ public class Controller  implements MapModuleChangeObserver {
     public Action zoomIn;
     public Action zoomOut;
     //dewlit
-    public Action slideShow;
     public ArrayList<SlideData> slideList = new ArrayList<SlideData>();
-
+    public SlideShow slideShow = new SlideShow();
+    
+    
+    public SlideShow getSlideShow() {
+    	return slideShow;
+    }
+    
+    public void setSlideShow(SlideShow slideShow) {
+    	this.slideShow = slideShow;
+    }
     
     public ArrayList<SlideData> getSlideList() {
-		return slideList;
-	}
-    
+    	return slideList;
+    }
     //dewlit
 
 	public Action showSelectionAsRectangle;
@@ -272,7 +279,6 @@ public class Controller  implements MapModuleChangeObserver {
         optionHTMLExportFoldingAction = new OptionHTMLExportFoldingAction(this);
         optionSelectionMechanismAction = new OptionSelectionMechanismAction(this);
         
-        slideShow = new SlideShowAction(this);
         zoomIn = new ZoomInAction(this);
         zoomOut = new ZoomOutAction(this);
         propertyAction = new PropertyAction(this);

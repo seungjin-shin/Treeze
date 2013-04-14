@@ -3,13 +3,26 @@ package freemind.controller;
 import java.util.ArrayList;
 
 public class SlideData {
-
+	SlideData next;
+	SlideData prev;
 	ArrayList<Integer> idxList = new ArrayList<Integer>();
 	int imgCnt = 0;
 	String imgPath;
 	String nodeName;
 	int sCnt;
 	
+	public SlideData getNext() {
+		return next;
+	}
+	public void setNext(SlideData next) {
+		this.next = next;
+	}
+	public SlideData getPrev() {
+		return prev;
+	}
+	public void setPrev(SlideData prev) {
+		this.prev = prev;
+	}
 	public int getsCnt() {
 		return sCnt;
 	}
@@ -22,7 +35,6 @@ public class SlideData {
 	public void setIdxList(ArrayList<Integer> idxList) {
 		this.idxList = idxList;
 	}
-	
 	public int getImgCnt() {
 		return imgCnt;
 	}

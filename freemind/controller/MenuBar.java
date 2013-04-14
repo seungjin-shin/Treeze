@@ -338,7 +338,7 @@ public class MenuBar extends JMenuBar {
 		zoomIn.setAccelerator(KeyStroke.getKeyStroke(c.getFrame().getAdjustableProperty("keystroke_zoom_in")));
 		
 		//dewlit
-		JMenuItem slideShow = menuHolder.addAction(c.slideShow, VIEW_MENU+"slideShow");
+		//JMenuItem slideShow = menuHolder.addAction(c.slideShow, VIEW_MENU+"slideShow");
 		//slideShow.setAccelerator(KeyStroke.getKeyStroke(c.getFrame().getAdjustableProperty("keystroke_zoom_in")));
 		//dewlit
 		

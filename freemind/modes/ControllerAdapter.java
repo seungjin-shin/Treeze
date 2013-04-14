@@ -703,6 +703,7 @@ public abstract class ControllerAdapter implements ModeController {
 		int tmpNum = 0;
 		boolean dupChk;
 		boolean noTitleChk;
+		SlideData prev = null;
 
 		mkDirPath = filePath.substring(0, filePath.indexOf(fileName.toString()));
 		mkDirPath = mkDirPath + fileName.substring(0, fileName.indexOf(".pdf"));
@@ -730,6 +731,7 @@ public abstract class ControllerAdapter implements ModeController {
 				sData.setNodeName(newLine[0]);
 				sData.setImgPath(mkDirPath);
 				slideList.add(sData);
+				prev = sData;
 			}
 			
 			if (str.indexOf("<<table of contents>>") >= 0) {
@@ -753,7 +755,11 @@ public abstract class ControllerAdapter implements ModeController {
 						if(k != tmp.length - 1 && !tmp[k].equals(""))
 							data += " ";
 					}
+					
 					sData.setNodeName(data);
+					sData.setPrev(prev);
+					prev.setNext(sData);
+					prev = prev.getNext();
 					slideList.add(sData);
 				}
 			break;
