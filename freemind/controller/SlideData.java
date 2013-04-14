@@ -5,36 +5,35 @@ import java.util.ArrayList;
 public class SlideData {
 
 	ArrayList<Integer> idxList = new ArrayList<Integer>();
-	int imgNum = 0;
+	int imgCnt = 0;
 	String imgPath;
-	String data;
+	String nodeName;
 	int sCnt;
-	int t;
-	int tt;
 	
-	public ArrayList<Integer> getIdxList() {
-		return idxList;
-	}
-	public void setIdxList(ArrayList<Integer> idxList) {
-		this.idxList = idxList;
-	}
 	public int getsCnt() {
 		return sCnt;
 	}
 	public void setsCnt(int sCnt) {
 		this.sCnt = sCnt;
 	}
-	public String getData() {
-		return data;
+	public ArrayList<Integer> getIdxList() {
+		return idxList;
 	}
-	public void setData(String data) {
-		this.data = data;
+	public void setIdxList(ArrayList<Integer> idxList) {
+		this.idxList = idxList;
 	}
-	public int getImgNum() {
-		return imgNum;
+	
+	public int getImgCnt() {
+		return imgCnt;
 	}
-	public void setImgNum(int imgNum) {
-		this.imgNum = imgNum;
+	public void setImgCnt(int imgCnt) {
+		this.imgCnt = imgCnt;
+	}
+	public String getNodeName() {
+		return nodeName;
+	}
+	public void setNodeName(String nodeName) {
+		this.nodeName = nodeName;
 	}
 	public String getImgPath() {
 		return imgPath;

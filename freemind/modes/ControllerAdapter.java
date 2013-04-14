@@ -727,7 +727,7 @@ public abstract class ControllerAdapter implements ModeController {
 				newLine = str.split("\n");
 				sData = new SlideData();
 
-				sData.setData(newLine[0]);
+				sData.setNodeName(newLine[0]);
 				sData.setImgPath(mkDirPath);
 				slideList.add(sData);
 			}
@@ -753,7 +753,7 @@ public abstract class ControllerAdapter implements ModeController {
 						if(k != tmp.length - 1 && !tmp[k].equals(""))
 							data += " ";
 					}
-					sData.setData(data);
+					sData.setNodeName(data);
 					slideList.add(sData);
 				}
 			break;
@@ -771,7 +771,7 @@ public abstract class ControllerAdapter implements ModeController {
 					newLine = str.split("\n");
 					sData = new SlideData();
 
-					sData.setData(newLine[0]);
+					sData.setNodeName(newLine[0]);
 					sData.setImgPath(mkDirPath);
 					slideList.add(sData);
 				}
@@ -780,14 +780,14 @@ public abstract class ControllerAdapter implements ModeController {
 					dupChk = false;
 					for(int j = 0; j < slideList.size(); j++){
 						sData = slideList.get(j);
-						if(newLine[0].equals(sData.getData())){
+						if(newLine[0].equals(sData.getNodeName())){
 							dupChk = true;
 							break;
 						}
 					}
 					if(!dupChk){
 						sData = new SlideData();
-						sData.setData(newLine[0]);
+						sData.setNodeName(newLine[0]);
 						slideList.add(sData);
 					}
 				}
@@ -804,9 +804,9 @@ public abstract class ControllerAdapter implements ModeController {
 
 				for (int j = 0; j < slideList.size(); j++) {
 					sData = slideList.get(j);
-					tmpStr = sData.getData().replace(" ", "");
+					tmpStr = sData.getNodeName().replace(" ", "");
 					if (data.equals(tmpStr)) {
-						sData.setImgNum(sData.getImgNum() + 1);
+						sData.setImgCnt(sData.getImgCnt() + 1);
 						break;
 					}
 				}
@@ -829,9 +829,9 @@ public abstract class ControllerAdapter implements ModeController {
 
 				for (int j = 0; j < slideList.size(); j++) {
 					sData = slideList.get(j);
-					tmpStr = sData.getData().replace(" ", "");
+					tmpStr = sData.getNodeName().replace(" ", "");
 					if (data.equals(tmpStr)) {
-						sData.setImgNum(sData.getImgNum() + 1);
+						sData.setImgCnt(sData.getImgCnt() + 1);
 						break;
 					}
 				}
@@ -861,12 +861,12 @@ public abstract class ControllerAdapter implements ModeController {
 				for (int j = 0; j < slideList.size(); j++) {
 					sData = slideList.get(j);
 
-					tmpStr = sData.getData().replace(" ", "");
+					tmpStr = sData.getNodeName().replace(" ", "");
 					if (data.equals(tmpStr)) {
 						if (oldStr.equals(tmpStr))
 							break;
 						oldStr = data;
-						tmpNum = imgNum = sData.getImgNum();
+						tmpNum = imgNum = sData.getImgCnt();
 						break;
 					}
 				}
@@ -904,12 +904,12 @@ public abstract class ControllerAdapter implements ModeController {
 								new File(mkDirPath + data + ".jpg"));
 					else
 						ImageIO.write(bi, "jpg",
-							new File(mkDirPath + sData.getData() + ".jpg"));
+							new File(mkDirPath + sData.getNodeName() + ".jpg"));
 					
 				}
 				else {
 					ImageIO.write(bi, "jpg",
-							new File(mkDirPath + sData.getData()
+							new File(mkDirPath + sData.getNodeName()
 									+ (imgNum - tmpNum) + ".jpg"));
 					tmpNum--;
 				}

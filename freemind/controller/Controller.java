@@ -187,6 +187,7 @@ public class Controller  implements MapModuleChangeObserver {
     public Action slideShow;
     public ArrayList<SlideData> slideList = new ArrayList<SlideData>();
 
+    
     public ArrayList<SlideData> getSlideList() {
 		return slideList;
 	}

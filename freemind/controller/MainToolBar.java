@@ -115,7 +115,7 @@ public class MainToolBar extends FreeMindToolBar {
 	}
 	
 	public void SlideShow(ArrayList<SlideData> slideList){
-		System.out.println(slideList.get(0).getImgNum());
+		System.out.println(slideList.get(0).getImgCnt());
 		System.out.println("dd");
 	}
 

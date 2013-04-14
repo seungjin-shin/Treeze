@@ -178,22 +178,22 @@ public class TableOfContents extends JFrame {
 			for(i = 0; i < sList.size(); i++){
 				sData = sList.get(i);
 				
-				if(sData.getImgNum() == 1){
-					if(sData.getData().equals(""))
+				if(sData.getImgCnt() == 1){
+					if(sData.getNodeName().equals(""))
 						img[cnt] = new ImageIcon(filePath + "undefined" + undefinedCnt++ + ".jpg").getImage();
 					else
-						img[cnt] = new ImageIcon(filePath + sData.getData() + ".jpg").getImage();
+						img[cnt] = new ImageIcon(filePath + sData.getNodeName() + ".jpg").getImage();
 					g.drawImage(img[cnt], 10, IMGHEIGHT * cnt + 10, 100, 100, null);
 					g.drawString(cnt + 1 + "", 10, IMGHEIGHT * cnt + 8);
 					cnt++;
 				}
 				else{
-					int j = sData.getImgNum();
+					int j = sData.getImgCnt();
 					for(int k = 0; k < j; k++){
-						if(sData.getData().equals(""))
+						if(sData.getNodeName().equals(""))
 							img[cnt] = new ImageIcon(filePath + "undefined" + k + ".jpg").getImage();
 						else
-							img[cnt] = new ImageIcon(filePath + sData.getData() + k + ".jpg").getImage();
+							img[cnt] = new ImageIcon(filePath + sData.getNodeName() + k + ".jpg").getImage();
 						g.drawImage(img[cnt], 10, IMGHEIGHT * cnt + 10, 100, 100, null);
 						g.drawString(cnt + 1 + "", 10, IMGHEIGHT * cnt + 8);
 						cnt++;
