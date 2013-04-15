@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	
+	<context:property-placeholder properties-ref="defaultProperties" />
+		
+	<util:properties id="defaultProperties">
+		<prop key="jdbc.driverClassName">com.mysql.jdbc.Driver</prop>
+		<prop key="jdbc.url">jdbc:mysql://localhost:3306/treeze?useUnicode=true&amp;characterEncoding=utf8</prop>
+<!-- 		<prop key="jdbc.url"><![CDATA[jdbc:mysql://localhost:3306/etbike?useUnicode=true&characterEncoding=utf8]]></prop> -->
+		<prop key="jdbc.user">root</prop>
+		<prop key="jdbc.password">treeze</prop>
+			
+		<prop key="file.upload.path">C:/work/temp/</prop>
+		<prop key="file.img.path">C:/work/temp/img/</prop>
+		<prop key="file.img.size.maximum">5242880</prop> <!-- 1024 * 1024 * 5 : 5M -->
+		<prop key="file.img.type.allowed">image/jpeg,image/pjpeg,image/png,image/tiff,image/bmp,image/gif</prop>
+		<prop key="file.img.extension.allowed"></prop>
+		
+		<prop key="facebook.clientId">300527660061973</prop>
+		<prop key="facebook.clientSecret">a89b9cc3a52c49f25d837f9115daa6bc</prop>
+	</util:properties>
+</beans>
