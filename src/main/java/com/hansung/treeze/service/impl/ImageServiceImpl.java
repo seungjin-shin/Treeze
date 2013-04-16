@@ -27,9 +27,9 @@ public class ImageServiceImpl implements ImageService {
 	@Autowired private FileRepository fileRepository;
 	
 	@Override
-	public Map<String, String> uploadImage(MultipartFile multipartFile) {
+	public Map<String, String> uploadImage(MultipartFile multipartFile, String lectureName) {
 		String uploadPath = defaultProperties.getProperty("file.img.path");
-		Map<String, String> fileInfo = upload(multipartFile, uploadPath);	
+		Map<String, String> fileInfo = upload(multipartFile, uploadPath, lectureName);	
 
 		String uploadedFileFullPath = fileInfo.remove("path");
 		int dotIndex = uploadedFileFullPath.lastIndexOf(".");
@@ -44,7 +44,7 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
-	private Map<String, String> upload(MultipartFile multipartFile, String uploadPath) {
+	private Map<String, String> upload(MultipartFile multipartFile, String uploadPath, String lectureName) {
 		String fileUniqueName = String.valueOf(System.nanoTime());
 
 		String originFileName = multipartFile.getOriginalFilename();		
@@ -64,11 +64,12 @@ public class ImageServiceImpl implements ImageService {
 		}
 	    
 	    UploadedFile uploadedFileBean = new UploadedFile();
+	    uploadedFileBean.setLectureName(lectureName);
 	    uploadedFileBean.setFileName(originFileName);
 	    uploadedFileBean.setFilePath(uploadedFileFullPath);
 	    uploadedFileBean.setFileSize(String.valueOf(multipartFile.getSize()));
 	    fileRepository.save(uploadedFileBean);
-	    fileRepository.findOne(uploadedFileBean.getId()).setFileDownloadUrl("http://125.209.193.11:8080/etbike/img/"+uploadedFileBean.getId()+"/");
+	    fileRepository.findOne(uploadedFileBean.getId()).setFileDownloadUrl("http://113.198.84.74:8080/treeze/img/"+uploadedFileBean.getId()+"/");
 	    fileRepository.save(uploadedFileBean);
 	    
 		Map<String, String> fileInfo = new HashMap<String, String>();

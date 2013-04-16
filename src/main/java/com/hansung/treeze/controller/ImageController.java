@@ -2,6 +2,8 @@ package com.hansung.treeze.controller;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,7 +18,7 @@ import com.hansung.treeze.service.ImageService;
 
 @Controller
 public class ImageController {
-	
+	private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
     @Autowired
 	private ImageService imageService;
 
@@ -28,8 +30,9 @@ public class ImageController {
 	private View thumbnailView;
 
 	@RequestMapping(value="/upload/img")
-	public String uploadImg(@RequestParam("upload") MultipartFile multipartFile, ModelMap map) {
-		map.put("file", imageService.uploadImage(multipartFile));
+	public String uploadImg(@RequestParam("lectureName") String lectureName,@RequestParam("upload") MultipartFile multipartFile, ModelMap map) {
+		logger.info("uploadImg" + lectureName);
+		map.put("file", imageService.uploadImage(multipartFile, lectureName));
 		return "uploadImage";
 	}
 	
