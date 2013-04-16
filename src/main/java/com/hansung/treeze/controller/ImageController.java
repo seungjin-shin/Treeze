@@ -21,7 +21,7 @@ public class ImageController {
 	private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
     @Autowired
 	private ImageService imageService;
-
+  
 	@Resource(name="jsonView")
 	private View jsonView;
 	@Resource(name="imageView")

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hansung.treeze.model.Mindmap;
+import com.hansung.treeze.model.MindmapFile;
 import com.hansung.treeze.service.MindmapService;
 
 @Controller
@@ -21,9 +21,9 @@ public class MindmapController {
 	@RequestMapping(value="/Mindmap/getMindmap", method=RequestMethod.GET)
 	public String getMindmapList(@RequestParam("ptId") Long ptId ,ModelMap map){
 		
-		Mindmap mindmap = mindmapService.findByPTId(ptId);
+		//MindmapFile mindmap = mindmapService.findByPTId(ptId);
 		
-		map.put("mindmap", mindmap);
+		//map.put("mindmap", mindmap);
 		return "jsonView";
 	}
 	
@@ -37,4 +37,6 @@ public class MindmapController {
 		map.put("result", "success");
 		return "jsonView";
 	}
+	
+	
 }

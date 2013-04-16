@@ -1,11 +1,13 @@
 package com.hansung.treeze.service;
 
-import com.hansung.treeze.model.Mindmap;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.hansung.treeze.model.MindmapFile;
 
 
 public interface MindmapService {
 
-	Mindmap save(Mindmap mindmap);
-	Mindmap findByPTId(Long ptId);
+	Object uploadMindmapXML(MultipartFile multipartFile, String lectureName);
+	Object getUploadedMindmapXML(Long ptId);
 	
 }
