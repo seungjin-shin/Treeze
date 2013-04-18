@@ -19,6 +19,11 @@ public class SlideShow {
 	String str = new String();
 
 	void setfocus(SlideData focus) {
+		if(focus.getPrev() ==null){
+			this.focus = focus;
+			show();
+		}
+		else{
 		if (this.focus != null && this.focus.imgCnt > 1
 				&& this.focus.imgCnt > pagenum + 1) {
 			pagenum++;
@@ -31,6 +36,7 @@ public class SlideShow {
 		str = focus.imgPath + focus.nodeName + ".jpg";
 		System.out.println(focus.imgPath + focus.nodeName + ".jpg");
 		show();
+		}
 	}
 
 	SlideData getfocus() {

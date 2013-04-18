@@ -322,6 +322,7 @@ public class Controller  implements MapModuleChangeObserver {
     public void setProperty(String property, String value) {
 		String oldValue = getProperty(property);
 		firePropertyChanged(property, value, oldValue);
+		
 
     }
 

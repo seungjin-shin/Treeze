@@ -35,48 +35,47 @@ import freemind.main.Tools;
  */
 public class NodeKeyListener implements KeyListener {
 
-    private Controller c;
+	private Controller c;
 
-    private KeyListener mListener;
+	private KeyListener mListener;
 
-    public NodeKeyListener(Controller controller) {
-        c = controller;
-    }
+	public NodeKeyListener(Controller controller) {
+		c = controller;
+	}
 
-    public void register(KeyListener listener) {
-        this.mListener = listener;
+	public void register(KeyListener listener) {
+		this.mListener = listener;
 
-    }
+	}
 
-    public void deregister() {
-        mListener = null;
-    }
+	public void deregister() {
+		mListener = null;
+	}
 
-    public void keyPressed(KeyEvent e) {
-    	if(e.getKeyCode() ==KeyEvent.VK_SHIFT){
-    		c.getSlideShow().setfocusnext();
-    		c.getSlideShow().show();
-    	}
+	public void keyPressed(KeyEvent e) {
+//		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+//			c.getSlideShow().setfocusnext();
+//			c.getSlideShow().show();
+//		}
 
-    	else if(e.getKeyCode() == KeyEvent.VK_TAB){
-    	c.getSlideShow().setfocus(c.getSlideList().get(0));
-    	c.getSlideShow().show();
-    	}
-    	else if(e.getKeyCode() == KeyEvent.VK_SPACE){
-        	c.getSlideShow().show();
-        	}
-        if (mListener != null)
-            mListener.keyPressed(e);
-    }
+		if (e.getKeyCode() == KeyEvent.VK_TAB) {
+			c.getSlideShow().setfocus(c.getSlideList().get(0));
+			c.getSlideShow().show();
+		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			c.getSlideShow().show();
+		}
+		if (mListener != null)
+			mListener.keyPressed(e);
+	}
 
-    public void keyReleased(KeyEvent e) {
-        if (mListener != null)
-            mListener.keyReleased(e);
-    }
+	public void keyReleased(KeyEvent e) {
+		if (mListener != null)
+			mListener.keyReleased(e);
+	}
 
-    public void keyTyped(KeyEvent e) {
-        if (mListener != null)
-            mListener.keyTyped(e);
-    }
+	public void keyTyped(KeyEvent e) {
+		if (mListener != null)
+			mListener.keyTyped(e);
+	}
 
 }
