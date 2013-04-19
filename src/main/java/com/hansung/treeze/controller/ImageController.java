@@ -21,7 +21,7 @@ public class ImageController {
 	private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
     @Autowired
 	private ImageService imageService;
-  
+
 	@Resource(name="jsonView")
 	private View jsonView;
 	@Resource(name="imageView")
@@ -30,8 +30,8 @@ public class ImageController {
 	private View thumbnailView;
 
 	@RequestMapping(value="/upload/img")
-	public String uploadImg(@RequestParam("lectureName") String lectureName,@RequestParam("upload") MultipartFile multipartFile, ModelMap map) {
-		logger.info("uploadImg" + lectureName);
+	public String uploadImg(@RequestParam("lectureName") String lectureName,@RequestParam("upload") MultipartFile multipartFile,@RequestParam("xml") String xml, ModelMap map) {
+		logger.info("uploadImg" + lectureName + xml);
 		map.put("file", imageService.uploadImage(multipartFile, lectureName));
 		return "uploadImage";
 	}
