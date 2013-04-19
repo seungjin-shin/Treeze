@@ -20,11 +20,12 @@
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
+		 <beans:property name="contentType" value="text/html; charset=UTF-8"/>
 	</beans:bean>
 	
 	<context:component-scan base-package="com.hansung.treeze" />
 	
 <beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0" />
 	<beans:bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
-	
+
 </beans:beans>
