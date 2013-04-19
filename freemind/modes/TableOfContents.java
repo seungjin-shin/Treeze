@@ -177,7 +177,6 @@ public class TableOfContents extends JFrame {
 			
 			for(i = 0; i < sList.size(); i++){
 				sData = sList.get(i);
-				
 				if(sData.getImgCnt() == 1){
 					if(sData.getNodeName().equals(""))
 						img[cnt] = new ImageIcon(filePath + "undefined" + undefinedCnt++ + ".jpg").getImage();

@@ -635,7 +635,7 @@ public abstract class ControllerAdapter implements ModeController {
 //        chooser.setMultiSelectionEnabled(true);
         int returnVal = chooser.showOpenDialog(getView());
         String filePath = "";
-        String mmFilePath;
+        String mmFilePath = null;
         if (returnVal==JFileChooser.APPROVE_OPTION) {
         	File[] selectedFiles;
 			if (chooser.isMultiSelectionEnabled()) {
@@ -661,19 +661,26 @@ public abstract class ControllerAdapter implements ModeController {
 						return;
 					}
 					//pdf2img 텍스트 뽑고 이미지화
-					if(templateChk)
+					if(templateChk){
 						pdf2mm(filePath, theFile.getName());
+						UploadToServer	UTS = new UploadToServer();
+						//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
+						//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
+					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				if (templateChk) {
 					mmFilePath = filePath.substring(0, filePath.length() - 4);
-					theFile = new File(mmFilePath + ".mm");
-
+					//theFile = new File(mmFilePath + ".mm");
+					
+					theFile = new File("C:\\test\\remove attr");
+					
 					try {
 						lastCurrentDir = theFile.getParentFile();
 						load(theFile);
+						new UploadMM();
 					} catch (Exception ex) {
 						handleLoadingException(ex);
 						break;
