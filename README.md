@@ -6,7 +6,8 @@ tomcat : 환경설정에서 open config 해서 encoding방식을 utf-8로 바꿔
 spring : properties.xml 에 jdbc url설정부분에 jdbc:mysql://localhost:3306/etbike?useUnicode=true&amp;characterEncoding=utf8 로한다.
          web.xml에서도
 
-
+<pre>
+<code>
 <filter>
     <filter-name>CharacterEncodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -23,6 +24,8 @@ spring : properties.xml 에 jdbc url설정부분에 jdbc:mysql://localhost:3306/
     <filter-name>CharacterEncodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
 </filter-mapping>
+</code>
+</pre>
 
    를 해주고
 
