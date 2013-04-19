@@ -680,7 +680,7 @@ public abstract class ControllerAdapter implements ModeController {
 					try {
 						lastCurrentDir = theFile.getParentFile();
 						load(theFile);
-						new UploadMM();
+						//new UploadMM();
 					} catch (Exception ex) {
 						handleLoadingException(ex);
 						break;
@@ -688,8 +688,8 @@ public abstract class ControllerAdapter implements ModeController {
 				}
 			}
         }
-        templateChk = false;
-        getController().setTitle();
+//        templateChk = false;
+//        getController().setTitle();
     }
     // dewlit
     public void pdf2img(String filePath, String fileName) throws IOException{
