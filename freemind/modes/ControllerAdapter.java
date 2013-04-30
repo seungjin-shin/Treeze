@@ -645,51 +645,62 @@ public abstract class ControllerAdapter implements ModeController {
 			}
 			for (int i = 0; i < selectedFiles.length; i++) {
 				File theFile = selectedFiles[i];
-				try {
-					JFrame tmp = getController().getJFrame();
-					TableOfContents tmpTable;
-					
-					filePath = theFile.getCanonicalPath();
-					// 이미지화 하고 이미지 이름 만들어
-					pdf2img(filePath, theFile.getName());
-					
-					if(!templateChk){
-						tmpTable = new TableOfContents(getController().getSlideList());
-						//tmp.add(tmpTable);
-						
-						templateChk = false;
-						return;
-					}
-					//pdf2img 텍스트 뽑고 이미지화
-					if(templateChk){
-						pdf2mm(filePath, theFile.getName());
-						UploadToServer	UTS = new UploadToServer();
-						//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
-						//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if (templateChk) {
-					mmFilePath = filePath.substring(0, filePath.length() - 4);
-					//theFile = new File(mmFilePath + ".mm");
-					
-					theFile = new File("C:\\test\\remove attr");
-					
+				String fileName;
+				fileName = theFile.getName();
+				if (fileName.substring(fileName.length() - 4,
+						fileName.length()).equals(".pdf")) {
+
 					try {
-						lastCurrentDir = theFile.getParentFile();
-						load(theFile);
-						//new UploadMM();
-					} catch (Exception ex) {
-						handleLoadingException(ex);
-						break;
+						// JFrame tmp = getController().getJFrame();
+						TableOfContents tmpTable;
+
+						filePath = theFile.getCanonicalPath();
+						// 이미지화 하고 이미지 이름 만들어
+						pdf2img(filePath, theFile.getName());
+
+						if (!templateChk) {
+							tmpTable = new TableOfContents(getController()
+									.getSlideList());
+							// tmp.add(tmpTable);
+
+							templateChk = false;
+							return;
+						}
+						// pdf2img 텍스트 뽑고 이미지화
+						if (templateChk) {
+							pdf2mm(filePath, theFile.getName());
+							UploadToServer UTS = new UploadToServer();
+							// UTS.doFileUpload(mmFilePath +
+							// ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
+							// UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+					if (templateChk) {
+						mmFilePath = filePath.substring(0,
+								filePath.length() - 4);
+						theFile = new File(mmFilePath + ".mm");
+						// theFile = new File("C:\\test\\remove attr");
+					}
+
+				}
+				
+				
+				try {
+					lastCurrentDir = theFile.getParentFile();
+					load(theFile);
+					//new UploadMM();
+				} catch (Exception ex) {
+					handleLoadingException(ex);
+					break;
 				}
 			}
+			
         }
 //        templateChk = false;
-//        getController().setTitle();
+        getController().setTitle();
     }
     // dewlit
     public void pdf2img(String filePath, String fileName) throws IOException{
