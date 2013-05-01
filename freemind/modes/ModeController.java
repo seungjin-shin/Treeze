@@ -46,6 +46,7 @@ import freemind.extensions.HookFactory;
 import freemind.main.FreeMindMain;
 import freemind.main.XMLParseException;
 import freemind.modes.attributes.AttributeController;
+import freemind.modes.mindmapmode.MindMapController;
 import freemind.view.mindmapview.MapView;
 import freemind.view.mindmapview.NodeView;
 
@@ -81,7 +82,7 @@ public interface ModeController extends TextTranslator  {
      */
     boolean save();
     boolean saveAs();
-    void open();
+    void open(MindMapController mc);
     boolean close(boolean force, MapModuleManager mapModuleManager);
     /** Given a valid Xml parameterization of a node (tree),
      * this method returns freshly created nodes.

@@ -52,6 +52,7 @@ import freemind.modes.Mode;
 import freemind.modes.ModeController;
 import freemind.modes.NodeAdapter;
 import freemind.modes.attributes.AttributeController;
+import freemind.modes.mindmapmode.MindMapController;
 import freemind.view.mindmapview.MapView;
 import freemind.view.mindmapview.NodeView;
 
@@ -598,5 +599,10 @@ public class MindMapControllerMock implements ModeController {
 			IOException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void open(MindMapController mc) {
+		// TODO Auto-generated method stub
 	}
 }

@@ -53,7 +53,6 @@ public class NewChildAction extends AbstractAction implements ActorXml {
 		if(logger == null) {
 		    logger = c.getFrame().getLogger(NewChildAction.class.getName());
 		}
-
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -63,11 +62,18 @@ public class NewChildAction extends AbstractAction implements ActorXml {
      * @see freemind.controller.actions.ActorXml#act(freemind.controller.actions.generated.instance.XmlAction)
      */
     public void act(XmlAction action) {
-		NewNodeAction addNodeAction = (NewNodeAction) action;
+    	String childName = c.getChildName();
+    	if(childName.equals(null))
+    		childName = "";
+		
+    	NewNodeAction addNodeAction = (NewNodeAction) action;
 		NodeAdapter parent = this.c.getNodeFromID(addNodeAction.getNode());
 		int index = addNodeAction.getIndex();
-		MindMapNode newNode = c.newNode("", parent.getMap());
-        newNode.setLeft(addNodeAction.getPosition().equals("left"));
+		MindMapNode newNode = c.newNode(childName, parent.getMap());
+		
+		c.setChildName(null);
+        
+		newNode.setLeft(addNodeAction.getPosition().equals("left"));
 		String newId = addNodeAction.getNewId();
 		String givenId = c.getModel().getLinkRegistry().registerLinkTarget(newNode,newId);
 		if(!givenId.equals(newId)) {

@@ -104,6 +104,7 @@ import freemind.main.XMLElement;
 import freemind.main.XMLParseException;
 import freemind.modes.attributes.AttributeController;
 import freemind.modes.common.listeners.MindMapMouseWheelEventHandler;
+import freemind.modes.mindmapmode.MindMapController;
 import freemind.view.mindmapview.MapView;
 import freemind.view.mindmapview.NodeView;
 import freemind.view.mindmapview.attributeview.AttributeTable;
@@ -629,7 +630,9 @@ public abstract class ControllerAdapter implements ModeController {
     // Dialogs with user
     //
 
-    public void open() {
+    public void open(MindMapController mc) {
+    	TableOfContents tmpTable;
+    	TOCClickVersion toc;
         JFileChooser chooser = getFileChooser();
         // fc, 24.4.2008: multi selection has problems as setTitle in Controller doesn't works
 //        chooser.setMultiSelectionEnabled(true);
@@ -652,15 +655,18 @@ public abstract class ControllerAdapter implements ModeController {
 
 					try {
 						// JFrame tmp = getController().getJFrame();
-						TableOfContents tmpTable;
+						
 
 						filePath = theFile.getCanonicalPath();
 						// 이미지화 하고 이미지 이름 만들어
 						pdf2img(filePath, theFile.getName());
 
 						if (!templateChk) {
-							tmpTable = new TableOfContents(getController()
-									.getSlideList());
+							toc = new TOCClickVersion(getController()
+									.getSlideList(), mc);
+							
+							//getController().
+							
 							// tmp.add(tmpTable);
 
 							templateChk = false;
@@ -1364,17 +1370,17 @@ public abstract class ControllerAdapter implements ModeController {
 
 
 
-    public class OpenAction extends AbstractAction {
-        ControllerAdapter mc;
-        public OpenAction(ControllerAdapter modeController) {
-            super(getText("open"), new ImageIcon(getResource("images/fileopen.png")));
-            mc = modeController;
-        }
-        public void actionPerformed(ActionEvent e) {
-            mc.open();
-			getController().setTitle(); // Possible update of read-only
-        }
-    }
+//    public class OpenAction extends AbstractAction {
+//        ControllerAdapter mc;
+//        public OpenAction(ControllerAdapter modeController) {
+//            super(getText("open"), new ImageIcon(getResource("images/fileopen.png")));
+//            mc = modeController;
+//        }
+//        public void actionPerformed(ActionEvent e) {
+//            mc.open();
+//			getController().setTitle(); // Possible update of read-only
+//        }
+//    }
 
     public class SaveAction extends AbstractAction {
         ControllerAdapter mc;

@@ -182,6 +182,7 @@ import freemind.modes.mindmapmode.actions.NodeGeneralAction;
 import freemind.modes.mindmapmode.actions.NodeHookAction;
 import freemind.modes.mindmapmode.actions.NodeStyleAction;
 import freemind.modes.mindmapmode.actions.NodeUpAction;
+import freemind.modes.mindmapmode.actions.OpenAction;
 import freemind.modes.mindmapmode.actions.PasteAction;
 import freemind.modes.mindmapmode.actions.RedoAction;
 import freemind.modes.mindmapmode.actions.RemoveAllIconsAction;
@@ -360,10 +361,18 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
     public RevertAction revertAction = null;
     public SelectBranchAction selectBranchAction = null;
     public SelectAllAction selectAllAction = null;
+    
+    private String childName = null;
 
+    public String getChildName() {
+		return childName;
+	}
 
+	public void setChildName(String childName) {
+		this.childName = childName;
+	}
 
-    // Extension Actions
+	// Extension Actions
     public Vector iconActions = new Vector(); //fc
     public NodeHookUndoableContentActor undoableHookContentActor = null;
 
