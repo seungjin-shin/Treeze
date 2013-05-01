@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -58,6 +59,8 @@ public class TOCClickVersion extends JFrame {
 	ArrayList<SlideData> sList;
 	MindMapController mc;
 	TOCMouseEvent mouseEvent = new TOCMouseEvent();
+	TOCMouseMotionEvent mouseMotionEvent = new TOCMouseMotionEvent();
+	int mouseLoc = 0;
 	public TOCClickVersion(ArrayList<SlideData> sList, MindMapController mc) {
 		this.mc = mc;
 		
@@ -88,6 +91,7 @@ public class TOCClickVersion extends JFrame {
 		
 		iPanel.setBorder(b1);
 		iPanel.addMouseListener(mouseEvent);
+		iPanel.addMouseMotionListener(mouseMotionEvent);
 		
 		//iPanel.setLayout(new FlowLayout());
 //		iPanel.setSize(200, 600);
@@ -145,12 +149,14 @@ public class TOCClickVersion extends JFrame {
 				}
 				cnt++;
 			}
+			g.drawRect(10, mouseLoc * 130, 110, 120); 
 			setPreferredSize(new Dimension(180, 100 * cnt + cnt * 30));
 			sPanel.updateUI();
 		}
 	}
 	
 	class BtnListener implements ActionListener{
+		@Override
 		public void actionPerformed(ActionEvent e){
 			String chk = e.getActionCommand();
 			String tmp[];
@@ -165,7 +171,23 @@ public class TOCClickVersion extends JFrame {
 	
 	class TOCMouseEvent extends MouseAdapter{
 		public void mouseClicked(MouseEvent e){
-			System.out.println("dd");
+			System.out.println("x : " + e.getX() + ", y : " + e.getY());
 		}
 	}
+	
+	class TOCMouseMotionEvent extends MouseMotionAdapter{
+		@Override
+		public void mouseMoved(MouseEvent e){
+			int x = e.getX();
+			int y = e.getY();
+			
+			System.out.println("motion -- x : " + e.getX() + ", y : " + e.getY() + "mouseLoc : " + mouseLoc);
+			
+			if(x > 10 && x < 100)
+				mouseLoc = y / 130;
+			else
+				mouseLoc = 0;
+		}
+	}
+	
 }
