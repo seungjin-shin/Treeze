@@ -34,7 +34,6 @@ public class TOCClickVersion extends JFrame {
 	
 	private final int HEIGHT = 20;
 	private final int WIDTH = 20;
-	private BtnListener btnListener;
 	private JPanel nPanel;
 	private ImgPanel iPanel;
 	
@@ -43,10 +42,6 @@ public class TOCClickVersion extends JFrame {
 	JLabel nLabel = null;
 	JTextField jText = null;
 	
-	private JLabel prevLb;
-	private JTextField prevTf;
-	private JTextField pageTf;
-	private String prevStr;
 	int tmpInt;
 	String tmpStr = "1.";
 	int oldDepth;
@@ -56,37 +51,44 @@ public class TOCClickVersion extends JFrame {
 	JButton nextBtn;
 	JButton prevBtn;
 	JScrollPane sPanel;
-	ArrayList<SlideData> sList;
+	ArrayList<SlideData> sList = new ArrayList<SlideData>();
+	SlideData sData;
 	MindMapController mc;
 	TOCMouseEvent mouseEvent = new TOCMouseEvent();
 	TOCMouseMotionEvent mouseMotionEvent = new TOCMouseMotionEvent();
 	int mouseLoc = 0;
+	int i;
+	ArrayList<IndexRange> iList = new ArrayList<IndexRange>();
+	IndexRange iData;
+	int iCnt = 0;
 	public TOCClickVersion(ArrayList<SlideData> sList, MindMapController mc) {
 		this.mc = mc;
 		
-		this.sList = sList;
+		this.sList = (ArrayList<SlideData>) sList.clone();
+		
+		for(i = 0; i < sList.size(); i++){
+			sData = sList.get(i);
+			if(sData.getImgCnt() == 1){
+				iData = new IndexRange(iCnt, iCnt);
+				iCnt++;
+			}
+			else{
+				iData = new IndexRange(iCnt, iCnt + sData.getImgCnt() - 1);
+				iCnt = iCnt + sData.getImgCnt();
+			}
+			iList.add(iData);
+		}
+		
 		filePath = sList.get(0).getImgPath();
 		ct = getContentPane();
-		btnListener = new BtnListener();
-		setSize(800, 800);
+		setSize(300, 600);
 		setLayout(null);
 
-		JLabel title = new JLabel("table of contents");
-		//JLabel title = new JLabel(new ImageIcon("c:\\test\\수학의 정석\\지수.jpg"));
-		title.setSize(100, 40);
-		title.setLocation(150, 20);
-		add(title);
-		//C:\\test\\Treeze\\Social Drawing Mind Map 0.jpg
-		//Ico
-		enterBtn = new JButton(new ImageIcon("C:\\test\\Treeze\\Social Drawing Mind Map 0.jpg"));
-		//enterBtn = new JButton("enter");
-		//new JLabel(//new ImageIcon(), horizontalAlignment)
-		//enterBtn.addActionListener(btnListener);
-		enterBtn.addActionListener(btnListener);
-		enterBtn.setSize(80, 50);
-		enterBtn.setLocation(250, 30);
+//		JLabel title = new JLabel("마인드맵에 과목명을 넣고 포커스를 노드에 잡은 후 이미지를 클릭하면 ");
+//		title.setSize(100, 40);
+//		title.setLocation(80, 20);
+//		add(title);
 		
-		add(enterBtn);
 		
 		Border b1 = BorderFactory.createLineBorder( Color.black );
 
@@ -102,14 +104,14 @@ public class TOCClickVersion extends JFrame {
 
 		sPanel = new JScrollPane(iPanel);
 //		sPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);  
-		sPanel.setBounds(500, 50, 200, 400);
+		sPanel.setBounds(50, 50, 200, 400);
 		add(sPanel);
 
 		//add(iPanel);
 
 		setTitle("textarea");
 		setVisible(true);
-		setLocation(600, 200);
+		setLocation(300, 200);
 		//setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
@@ -127,7 +129,7 @@ public class TOCClickVersion extends JFrame {
 		public void paint(Graphics g){
 			super.paintComponents(g);
 			cnt = 0;
-			int undefinedCnt = 0;
+			int undefinedCnt = 0; 
 			
 			for(i = 0; i < sList.size(); i++){
 				sData = sList.get(i);
@@ -138,6 +140,7 @@ public class TOCClickVersion extends JFrame {
 						img[cnt] = new ImageIcon(filePath + sData.getNodeName() + ".jpg").getImage();
 					g.drawImage(img[cnt], 10, IMGHEIGHT * cnt + 10, 100, 100, null);
 					g.drawString(cnt + 1 + "", 10, IMGHEIGHT * cnt + 8);
+					cnt++;
 				}
 				else{
 					int j = sData.getImgCnt();
@@ -148,34 +151,59 @@ public class TOCClickVersion extends JFrame {
 							img[cnt] = new ImageIcon(filePath + sData.getNodeName() + k + ".jpg").getImage();
 						g.drawImage(img[cnt], 10, IMGHEIGHT * cnt + 10, 100, 100, null);
 						g.drawString(cnt + 1 + "", 10, IMGHEIGHT * cnt + 8);
+						cnt++;
 					}
 				}
-				cnt++;
+				
 			}
-			g.drawRect(10, mouseLoc * 130, 110, 120); 
+			if(mouseLoc < cnt)
+				g.drawRect(10, mouseLoc * 130, 100, 120);
 			setPreferredSize(new Dimension(180, 100 * cnt + cnt * 30));
 			sPanel.updateUI();
-		}
-	}
-	
-	class BtnListener implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent e){
-			String chk = e.getActionCommand();
-			String tmp[];
-			
-			if(chk.equals("enter")){
-				mc.setChildName("dd");
-				mc.addNew(mc.getSelected(), MindMapController.NEW_CHILD, null);
-				}
-			ct.repaint();
 		}
 	}
 	
 	class TOCMouseEvent extends MouseAdapter{
 		@Override
 		public void mouseClicked(MouseEvent e){
-			System.out.println("x : " + e.getX() + ", y : " + e.getY());
+			int x = e.getX();
+			int y = e.getY();
+			
+			if(x > 10 && x < 100){
+				int rIdx = 0;
+				for(int i = 0; i < iList.size(); i++){
+					if(mouseLoc >= iList.get(i).getStart() && mouseLoc <= iList.get(i).getEnd()){
+						rIdx = i;
+						break;
+					}
+				}
+				if(!sList.get(rIdx).getNodeName().equals(""))
+					mc.setChildName(sList.get(rIdx).getNodeName());
+				else
+					mc.setChildName("undefined");
+				mc.addNew(mc.getSelected(), MindMapController.NEW_CHILD, null);
+				
+				sList.remove(rIdx);
+				iList.clear();
+				iCnt = 0;
+				
+//				if(sList.size() == 0)
+//				     System.exit(0);
+				
+				for(i = 0; i < sList.size(); i++){
+					sData = sList.get(i);
+					if(sData.getImgCnt() == 1){
+						iData = new IndexRange(iCnt, iCnt);
+						iCnt++;
+					}
+					else{
+						iData = new IndexRange(iCnt, iCnt + sData.getImgCnt() - 1);
+						iCnt = iCnt + sData.getImgCnt();
+					}
+					iList.add(iData);
+				}
+				System.out.println("x : " + e.getX() + ", y : " + e.getY());
+			}
 		}
 	}
 	
@@ -184,14 +212,26 @@ public class TOCClickVersion extends JFrame {
 		public void mouseMoved(MouseEvent e){
 			int x = e.getX();
 			int y = e.getY();
-			
-			System.out.println("motion -- x : " + e.getX() + ", y : " + e.getY() + "mouseLoc : " + mouseLoc);
-			
+			//System.out.println("motion -- x : " + e.getX() + ", y : " + e.getY() + "mouseLoc : " + mouseLoc);
 			if(x > 10 && x < 100)
 				mouseLoc = y / 130;
 			else
 				mouseLoc = 0;
 		}
 	}
-	
+}
+
+class IndexRange{
+	int start;
+	int end;
+	public IndexRange(int s, int e){
+		start = s;
+		end = e;
+	}
+	public int getStart() {
+		return start;
+	}
+	public int getEnd() {
+		return end;
+	}
 }

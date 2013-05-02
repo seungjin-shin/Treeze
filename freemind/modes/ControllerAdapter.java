@@ -660,7 +660,9 @@ public abstract class ControllerAdapter implements ModeController {
 						filePath = theFile.getCanonicalPath();
 						// 이미지화 하고 이미지 이름 만들어
 						pdf2img(filePath, theFile.getName());
-
+						
+						//tempateChk == true pdf에 양식 있는거
+						
 						if (!templateChk) {
 							toc = new TOCClickVersion(getController()
 									.getSlideList(), mc);
@@ -674,23 +676,19 @@ public abstract class ControllerAdapter implements ModeController {
 						}
 						// pdf2img 텍스트 뽑고 이미지화
 						if (templateChk) {
+							mmFilePath = filePath.substring(0,
+									filePath.length() - 4);
 							pdf2mm(filePath, theFile.getName());
 							UploadToServer UTS = new UploadToServer();
-							// UTS.doFileUpload(mmFilePath +
-							// ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
-							// UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
+							UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
+							//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
+
+							theFile = new File(mmFilePath + ".mm");
 						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					if (templateChk) {
-						mmFilePath = filePath.substring(0,
-								filePath.length() - 4);
-						theFile = new File(mmFilePath + ".mm");
-						// theFile = new File("C:\\test\\remove attr");
-					}
-
 				}
 				
 				
