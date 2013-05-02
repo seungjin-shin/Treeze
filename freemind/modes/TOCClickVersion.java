@@ -76,8 +76,11 @@ public class TOCClickVersion extends JFrame {
 		title.setSize(100, 40);
 		title.setLocation(150, 20);
 		add(title);
-		
-		enterBtn = new JButton("enter");
+		//C:\\test\\Treeze\\Social Drawing Mind Map 0.jpg
+		//Ico
+		enterBtn = new JButton(new ImageIcon("C:\\test\\Treeze\\Social Drawing Mind Map 0.jpg"));
+		//enterBtn = new JButton("enter");
+		//new JLabel(//new ImageIcon(), horizontalAlignment)
 		//enterBtn.addActionListener(btnListener);
 		enterBtn.addActionListener(btnListener);
 		enterBtn.setSize(80, 50);
@@ -170,6 +173,7 @@ public class TOCClickVersion extends JFrame {
 	}
 	
 	class TOCMouseEvent extends MouseAdapter{
+		@Override
 		public void mouseClicked(MouseEvent e){
 			System.out.println("x : " + e.getX() + ", y : " + e.getY());
 		}
