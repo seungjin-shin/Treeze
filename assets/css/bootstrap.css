@@ -3188,12 +3188,12 @@ button.close {
 .btn {
   display: inline-block;
   *display: inline;
-  padding: 4px 12px;
+  padding: 0px;
   margin-bottom: 0;
   *margin-left: .3em;
   font-size: 14px;
   line-height: 20px;
-  color: #333333;
+  color: rgb(255,255,255);
   text-align: center;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
   vertical-align: middle;
@@ -3280,7 +3280,7 @@ button.close {
 }
 
 .btn-large {
-  padding: 11px 19px;
+  padding: 0px;
   font-size: 17.5px;
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
@@ -5622,10 +5622,10 @@ a.thumbnail:focus {
 .badge {
   display: inline-block;
   padding: 2px 4px;
-  font-size: 11.844px;
+  font-size: 20px;
   font-weight: bold;
   line-height: 14px;
-  color: #ffffff;
+  color: rgb(5,5,5);
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   white-space: nowrap;
   vertical-align: baseline;
