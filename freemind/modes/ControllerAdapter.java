@@ -22,6 +22,7 @@ package freemind.modes;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.EventQueue;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -71,6 +72,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -135,6 +137,10 @@ public abstract class ControllerAdapter implements ModeController {
     private HashSet mNodeLifetimeListeners=new HashSet();
     private static File lastCurrentDir =  null;
 
+    //dewlit
+    private TOCClickVersion toc;
+    private UploadMM upload;
+    private MindMapController mc;
     /** Instantiation order: first me and then the model.
      */
     public ControllerAdapter(Mode mode) {
@@ -629,16 +635,26 @@ public abstract class ControllerAdapter implements ModeController {
     //
     // Dialogs with user
     //
-
+	public void removeTOC(){
+		toc.setVisible(false);
+//		JDialog dlg = new JDialog(getController().getJFrame(),"대화상자",true);
+//		 dlg.setBounds(150,200,200,100);
+//		 dlg.setVisible(true);
+		upload = new UploadMM(getController()
+				.getSlideList(), mc);
+	}
+	public void removeUploadMM(){
+		upload.setVisible(false);
+	}
+	
     public void open(MindMapController mc) {
-    	TableOfContents tmpTable;
-    	TOCClickVersion toc;
         JFileChooser chooser = getFileChooser();
         // fc, 24.4.2008: multi selection has problems as setTitle in Controller doesn't works
 //        chooser.setMultiSelectionEnabled(true);
         int returnVal = chooser.showOpenDialog(getView());
         String filePath = "";
         String mmFilePath = null;
+        this.mc = mc;
         if (returnVal==JFileChooser.APPROVE_OPTION) {
         	File[] selectedFiles;
 			if (chooser.isMultiSelectionEnabled()) {
@@ -666,10 +682,6 @@ public abstract class ControllerAdapter implements ModeController {
 						if (!templateChk) {
 							toc = new TOCClickVersion(getController()
 									.getSlideList(), mc);
-							
-							//getController().
-							
-							// tmp.add(tmpTable);
 
 							templateChk = false;
 							return;
@@ -679,9 +691,9 @@ public abstract class ControllerAdapter implements ModeController {
 							mmFilePath = filePath.substring(0,
 									filePath.length() - 4);
 							pdf2mm(filePath, theFile.getName());
-							UploadToServer UTS = new UploadToServer();
-							UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
-							//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
+//							UploadToServer UTS = new UploadToServer();
+//							//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
+//							//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
 
 							theFile = new File(mmFilePath + ".mm");
 						}
@@ -695,7 +707,10 @@ public abstract class ControllerAdapter implements ModeController {
 				try {
 					lastCurrentDir = theFile.getParentFile();
 					load(theFile);
-					//new UploadMM();
+					
+					if(templateChk)
+						upload = new UploadMM(getController()
+								.getSlideList(), mc);
 				} catch (Exception ex) {
 					handleLoadingException(ex);
 					break;

@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.help.plaf.basic.BasicFavoritesNavigatorUI.AddAction;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,40 +22,38 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import freemind.controller.SlideData;
+import freemind.modes.mindmapmode.MindMapController;
+
 
 public class UploadMM extends JFrame {
 	private Container ct;
-	private int depth = 1;
-	private String idx = "1.";
-	private int cnt = 1;
-	
-	private final int HEIGHT = 20;
-	private final int WIDTH = 20;
-	private JPanel nPanel;
 	
 	private String filePath;
 	
 	JLabel nLabel = null;
 	JTextField jText = null;
 	
-	private JLabel prevLb;
 	private JTextField IDTf;
 	private JTextField passwdTf;
-	private String prevStr;
-	int tmpInt;
-	String tmpStr = "1.";
-	int oldDepth;
-	boolean nextAv = false;
-	boolean prevAv = false;
+
 	JButton enterBtn;
 	JButton nextBtn;
 	JButton prevBtn;
 	JScrollPane sPanel;
 	
-	public UploadMM() {
+	UploadListner btnListner;
+	
+	ArrayList<SlideData> sList = new ArrayList<SlideData>();
+	MindMapController mc;
+	public UploadMM(ArrayList<SlideData> sList, MindMapController mc) {
 		
 		setSize(300, 150);
 		setLayout(null);
+		
+		this.sList = (ArrayList<SlideData>) sList.clone();
+		this.mc = mc;
+		btnListner = new UploadListner();
 
 		JLabel ID = new JLabel("ID : ");
 		JLabel passwd = new JLabel("Password : ");
@@ -69,6 +68,7 @@ public class UploadMM extends JFrame {
 		JButton upBtn = new JButton("Upload");
 		upBtn.setSize(90, 30);
 		upBtn.setLocation(140, 75);
+		upBtn.addActionListener(btnListner);
 		add(upBtn);
 		
 		IDTf = new JTextField();
@@ -83,7 +83,17 @@ public class UploadMM extends JFrame {
 		setTitle("Login for upload");
 		setVisible(true);
 		setLocation(400, 400);
-		//setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	class UploadListner implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			UploadToServer UTS = new UploadToServer();
+			//UTS.doFileUpload(sList);
+			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
+			mc.removeUploadMM();
+		}
+		
 	}
 	
 }

@@ -3,6 +3,7 @@ package freemind.modes;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -14,14 +15,18 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import freemind.controller.SlideData;
+
 
 public class UploadToServer {
 
-	  public void doFileUpload(String path,String serverUrl) {
+	  public void doFileUpload(ArrayList<SlideData> sList) {
           try {
            HttpClient httpClient = new DefaultHttpClient();  
-           String url = serverUrl;
+           //String url = serverUrl;
            HttpPost post = new HttpPost("http://113.198.84.74:8080/treeze/upload/img"); 
+           String path = "";
+           // 파일 path 잡아주고 for 돌며면서 이미지 보내
            File saveFile = new File(path);
            if(saveFile.exists())
         	   System.out.println("파일있");

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -65,7 +66,6 @@ public class TOCClickVersion extends JFrame {
 		this.mc = mc;
 		
 		this.sList = (ArrayList<SlideData>) sList.clone();
-		
 		for(i = 0; i < sList.size(); i++){
 			sData = sList.get(i);
 			if(sData.getImgCnt() == 1){
@@ -187,8 +187,8 @@ public class TOCClickVersion extends JFrame {
 				iList.clear();
 				iCnt = 0;
 				
-//				if(sList.size() == 0)
-//				     System.exit(0);
+				if(sList.size() == 0)
+				     mc.removeTOC();
 				
 				for(i = 0; i < sList.size(); i++){
 					sData = sList.get(i);
@@ -202,7 +202,6 @@ public class TOCClickVersion extends JFrame {
 					}
 					iList.add(iData);
 				}
-				System.out.println("x : " + e.getX() + ", y : " + e.getY());
 			}
 		}
 	}
@@ -212,7 +211,7 @@ public class TOCClickVersion extends JFrame {
 		public void mouseMoved(MouseEvent e){
 			int x = e.getX();
 			int y = e.getY();
-			//System.out.println("motion -- x : " + e.getX() + ", y : " + e.getY() + "mouseLoc : " + mouseLoc);
+
 			if(x > 10 && x < 100)
 				mouseLoc = y / 130;
 			else
