@@ -783,12 +783,12 @@ public abstract class ControllerAdapter implements ModeController {
 					//sData.setImgIdx(tmp[0]);
 					temp = tmp[0].split("\\.");
 					
-					for(int l = 0; l < temp.length; l++)
+					for(int l = 0; l < temp.length; l++) // idx 정보 = depth 넣어
 						sData.getIdxList().add(Integer.parseInt(temp[l]));
 					
 					
 					for(int k = 1; k < tmp.length; k++){
-						data += tmp[k];
+						data += tmp[k]; // 1부터니까 1. 리눅스 강의 // 리눅스, 강의 데이터에 넣어
 						if(k != tmp.length - 1 && !tmp[k].equals(""))
 							data += " ";
 					}
@@ -805,7 +805,7 @@ public abstract class ControllerAdapter implements ModeController {
 		
 		//템플릿 없으면 다시 돌아서 sList 셋팅해야돼
 		if(!templateChk){
-			slideList.clear();
+			slideList.clear(); // template 없으면 클리어해
 			for (int i = 1; i <= page; i++) {
 				String str = PdfTextExtractor.getTextFromPage(reader, i);
 				System.out.flush();
@@ -823,13 +823,13 @@ public abstract class ControllerAdapter implements ModeController {
 					dupChk = false;
 					for(int j = 0; j < slideList.size(); j++){
 						sData = slideList.get(j);
-						if(newLine[0].equals(sData.getNodeName())){
+						if(newLine[0].equals(sData.getNodeName())){ // 한 슬라이드에 이미지 여러개면 안만들고
 							dupChk = true;
 							break;
 						}
 					}
 					if(!dupChk){
-						sData = new SlideData();
+						sData = new SlideData(); // 없으면 새로 만들어
 						sData.setNodeName(newLine[0]);
 						slideList.add(sData);
 					}
@@ -847,7 +847,7 @@ public abstract class ControllerAdapter implements ModeController {
 
 				for (int j = 0; j < slideList.size(); j++) {
 					sData = slideList.get(j);
-					tmpStr = sData.getNodeName().replace(" ", "");
+					tmpStr = sData.getNodeName().replace(" ", ""); 
 					if (data.equals(tmpStr)) {
 						sData.setImgCnt(sData.getImgCnt() + 1);
 						break;
@@ -855,7 +855,7 @@ public abstract class ControllerAdapter implements ModeController {
 				}
 			}
 		}
-		else {
+		else { // template 있으면
 
 			for (int i = 1; i <= page; i++) {
 				String str = PdfTextExtractor.getTextFromPage(reader, i);
