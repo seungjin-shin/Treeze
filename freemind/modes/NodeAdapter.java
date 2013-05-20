@@ -70,6 +70,9 @@ import freemind.view.mindmapview.NodeViewVisitor;
  * to its parent and children and to its view.
  */
 public abstract class NodeAdapter implements MindMapNode {
+	
+	//private String dewlit = "dd";
+	
 
     final static int SHIFT = -2;//height of the vertical shift between node and its closest child
     public final static int HGAP = 20;//width of the horizontal gap that contains the edges
