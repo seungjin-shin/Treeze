@@ -62,16 +62,16 @@ public class NewChildAction extends AbstractAction implements ActorXml {
      * @see freemind.controller.actions.ActorXml#act(freemind.controller.actions.generated.instance.XmlAction)
      */
     public void act(XmlAction action) {
-    	String childName = c.getChildName();
-    	if(childName.equals(null))
-    		childName = "";
+    	String childName = c.getChildName(); // 양식없는거 만들때 제목으로
+    	//if(childName.equals(""))
+    		//childName = "";
 		
     	NewNodeAction addNodeAction = (NewNodeAction) action;
 		NodeAdapter parent = this.c.getNodeFromID(addNodeAction.getNode());
 		int index = addNodeAction.getIndex();
 		MindMapNode newNode = c.newNode(childName, parent.getMap());
 		
-		c.setChildName(null);
+		c.setChildName("");
         
 		newNode.setLeft(addNodeAction.getPosition().equals("left"));
 		String newId = addNodeAction.getNewId();

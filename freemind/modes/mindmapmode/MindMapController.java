@@ -361,9 +361,10 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
     public RevertAction revertAction = null;
     public SelectBranchAction selectBranchAction = null;
     public SelectAllAction selectAllAction = null;
-    
-    private String childName = null;
-
+    //dewlit
+    private String childName = "";
+    //양식 없는거 노드 이름 때문에
+    //dewlit
     public String getChildName() {
 		return childName;
 	}

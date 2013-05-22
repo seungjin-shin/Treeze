@@ -389,7 +389,7 @@ public abstract class XMLElementAdapter extends XMLElement {
      else if(name.equals("IMGPATH")){
     	 //이미지 여러개이면 , 로 구분하고 계속 더해
     	 //for문 돌려 sValue로
-    	 node.getImgPath().add(sValue);
+    	 //node.getImgPath().add(sValue);
      }
 	 else if (name.equals(XML_NODE_ENCRYPTED_CONTENT)) {
 	     // we change the node implementation to EncryptedMindMapNode.

@@ -182,7 +182,7 @@ public class TOCClickVersion extends JFrame {
 				else
 					mc.setChildName("undefined");
 				mc.addNew(mc.getSelected(), MindMapController.NEW_CHILD, null);
-				
+				//mc.addnew
 				sList.remove(rIdx);
 				iList.clear();
 				iCnt = 0;

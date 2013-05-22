@@ -4,7 +4,7 @@ public class TableData {
 	String headline;
 	String data;
 	boolean haveChild = false;
-	String direction = "null";
+	String direction = "";
 	int depth;
 
 	public String getHeadline() {

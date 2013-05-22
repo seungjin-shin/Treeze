@@ -707,6 +707,8 @@ public abstract class ControllerAdapter implements ModeController {
 				try {
 					lastCurrentDir = theFile.getParentFile();
 					load(theFile);
+					//getRootNode().
+					//mc.addNew((MindMapNode)getRootNode().getChildAt(1), MindMapController.NEW_CHILD, null);
 					
 					if(templateChk)
 						upload = new UploadMM(getController()
@@ -978,6 +980,9 @@ public abstract class ControllerAdapter implements ModeController {
 		mmFilePath += ".mm";
 		File mmFile = new File(mmFilePath);
 		OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(mmFile), "UTF-8");
+		ArrayList<SlideData> slideList;
+		slideList = getController().getSlideList();
+		String imgPath = slideList.get(0).getImgPath();
 		try {
 			PdfReader reader = new PdfReader(filePath);
 			int page = reader.getNumberOfPages();
@@ -1032,7 +1037,7 @@ public abstract class ControllerAdapter implements ModeController {
 						
 						oldTableData = childTable;
 
-						if (j == newLine.length - 2){
+						if (j == newLine.length - 2){ // 마지막 노드는 자식 없음
 							childTable.setHaveChild(false);
 							root.add(childTable);
 						}
@@ -1044,13 +1049,16 @@ public abstract class ControllerAdapter implements ModeController {
 			e.printStackTrace();
 		}
 		
-		out.write("<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"" + fileName + "\">\n");
+		out.write("<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" " +
+				"MODIFIED=\"1365038132371\" IMGPATH=\"" + imgPath + slideList.get(0).getNodeName() + ".jpg" + "\" " +
+				"TEXT=\"" + fileName + "\">\n");
 		TableData showTable;
 		int dif;
 		for(int i = 0; i < root.size(); i++){
-			out.write("<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" ");
+			out.write("<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" " + 
+					"IMGPATH=\"" + imgPath + slideList.get(i + 1).getNodeName() + ".jpg" + "\" ");
 			showTable = root.get(i);
-			if(!showTable.getDirection().equals("null"))
+			if(!showTable.getDirection().equals(""))
 				out.write("POSITION=\"" + showTable.getDirection() + "\" ");
 			out.write("TEXT=\"" + showTable.getData() + "\"");
 			if(showTable.isHaveChild())

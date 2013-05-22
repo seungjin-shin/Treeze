@@ -71,7 +71,7 @@ import freemind.view.mindmapview.NodeViewVisitor;
  */
 public abstract class NodeAdapter implements MindMapNode {
 	
-	//private String dewlit = "dd";
+	private String dewlit = "dd";
 	
 
     final static int SHIFT = -2;//height of the vertical shift between node and its closest child
@@ -141,7 +141,7 @@ public abstract class NodeAdapter implements MindMapNode {
 	private static FreemindPropertyListener sSaveIdPropertyChangeListener;
 	private static boolean sSaveOnlyIntrinsicallyNeededIds = false;
 	
-	private ArrayList<String> imgPath = new ArrayList<String>();
+	private String imgPath = "";
 
     //
     // Constructors
@@ -152,11 +152,11 @@ public abstract class NodeAdapter implements MindMapNode {
 		this(null, frame, map);
     }
 
-    public ArrayList<String> getImgPath() {
+	public String getImgPath() {
 		return imgPath;
 	}
 
-	public void setImgPath(ArrayList<String> imgPath) {
+	public void setImgPath(String imgPath) {
 		this.imgPath = imgPath;
 	}
 
@@ -983,6 +983,10 @@ freemind.main.Resources.getInstance().logException(			e);
 //            node.setName(XMLElementAdapter.XML_NODE_CLASS_PREFIX
 //                    + this.getClass().getName());
 //        }
+    	
+    	//dewlit
+    	node.setAttribute("dewlit",	"dewlit");
+    	//dewlit
 
         /** fc, 12.6.2005: XML must not contain any zero characters. */
         String text = this.toString().replace('\0', ' ');
