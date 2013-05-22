@@ -466,4 +466,16 @@ final class TestMindMapNode implements MindMapNode {
 		return true;
 	}
 
+	@Override
+	public void setDid(boolean did) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean getDid() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

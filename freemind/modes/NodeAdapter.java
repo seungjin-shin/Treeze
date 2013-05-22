@@ -22,6 +22,8 @@ package freemind.modes;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.geom.CubicCurve2D;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -73,18 +75,27 @@ public abstract class NodeAdapter implements MindMapNode {
     final static int SHIFT = -2;//height of the vertical shift between node and its closest child
     public final static int HGAP = 20;//width of the horizontal gap that contains the edges
     public final static int VGAP = 3;//height of the vertical gap between nodes
-    
+    public Boolean Check = false;
     public final static int LEFT_POSITION = -1;
     public final static int RIGHT_POSITION = 1;
     public final static int UNKNOWN_POSITION = 0;
-
+    private Point NodePoint  ;
+    private Point ParentPoint;
+    private boolean did = false;
+    private CubicCurve2D.Float graph;
     private HashSet activatedHooks;
 	private List hooks;
 	protected Object userObject = "no text";
 	private String xmlText = "no text";
     private String link = null; //Change this to vector in future for full graph support
     private TreeMap toolTip = null; // lazy, fc, 30.6.2005
-
+    public void setDid(boolean did){
+    	this.did = did;
+    }
+    public boolean getDid()
+    {
+    	return did;
+    }
     //these Attributes have default values, so it can be useful to directly access them in
     //the save() method instead of using getXXX(). This way the stored file is smaller and looks better.
     //(if the default is used, it is not stored) Look at mindmapmode for an example.
@@ -137,16 +148,25 @@ public abstract class NodeAdapter implements MindMapNode {
 	private static FreemindPropertyListener sSaveIdPropertyChangeListener;
 	private static boolean sSaveOnlyIntrinsicallyNeededIds = false;
 
-    //
+    
     // Constructors
     //
-
+	public void setNodePoint(Point pt){
+		NodePoint = pt;
+	}
+	public void setCubicCurve2D(CubicCurve2D.Float graph){
+		 this.graph = graph;
+	 }
+	 public void setParentPoint(Point pPt){
+		 ParentPoint = pPt;
+	 }
     protected NodeAdapter(FreeMindMain frame, MindMap map) {
 		this(null, frame, map);
     }
 
     protected NodeAdapter(Object userObject, FreeMindMain frame, MindMap map) {
         this.frame = frame;
+        
         setText((String) userObject);
 		hooks = null; // lazy, fc, 30.6.2005.
 		activatedHooks = null; //lazy, fc, 30.6.2005

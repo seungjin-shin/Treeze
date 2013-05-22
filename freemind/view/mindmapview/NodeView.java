@@ -977,7 +977,7 @@ public class NodeView extends JComponent implements TreeModelListener{
     public void setIcon(MultipleImage image) {
         mainView.setIcon(image);
     }
-    void updateAll() {
+    public void updateAll() {
 	update();
 	invalidate();
 	for(ListIterator e = getChildrenViews().listIterator();e.hasNext();) {

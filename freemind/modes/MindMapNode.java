@@ -67,6 +67,10 @@ public interface MindMapNode extends MutableTreeNode {
      */
     void setText(String text);
     
+    void setDid(boolean did);
+    boolean getDid();
+    
+    
     /**
      * @return the text representation of the nodes content as valid XML. HTML is represented as <html>....</html>
      * with proper tags (like \<br/\> instead of \<br\> and so on).

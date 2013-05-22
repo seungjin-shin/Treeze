@@ -20,12 +20,17 @@
 
 package freemind.modes.common;
 
+
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.logging.Logger;
 
+import javax.swing.JFrame;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
+import freemind.controller.MainToolBar;
 import freemind.main.Resources;
 import freemind.main.Tools;
 import freemind.modes.ModeController;
@@ -34,13 +39,22 @@ import freemind.modes.ModeController;
  * The KeyListener which belongs to the node and cares for Events like C-D
  * (Delete Node). It forwards the requests to NodeController.
  */
+class ImgFrame extends JFrame {
+	public ImgFrame() {
+		// TODO Auto-generated constructor stub
+		
+	}
+}
 public class CommonNodeKeyListener implements KeyListener {
 
 	public interface EditHandler {
 		void edit(KeyEvent e, boolean addNew, boolean editLong);
 	}
-
+	 JFrame f = new ImgFrame(); 
+     
+     
     private ModeController c;
+    private JToolBar toolbar;
 
     private String up, down, left, right;
 
@@ -60,12 +74,14 @@ public class CommonNodeKeyListener implements KeyListener {
 
 	private static Logger logger;
 
-    public CommonNodeKeyListener(ModeController controller, EditHandler editHandler) {
+    public CommonNodeKeyListener(ModeController controller,EditHandler editHandler) {
         c = controller;
+        
 		this.editHandler = editHandler;
-		if (logger == null) {
+  		if (logger == null) {
 			logger = controller.getFrame().getLogger(this.getClass().getName());
 		}
+		this.toolbar =c.getController().getToolbar();
         up = c.getFrame().getAdjustableProperty("keystroke_move_up");
         down = c.getFrame().getAdjustableProperty("keystroke_move_down");
         left = c.getFrame().getAdjustableProperty("keystroke_move_left");
@@ -98,15 +114,24 @@ public class CommonNodeKeyListener implements KeyListener {
 
         switch (e.getKeyCode()) {
 
-        case KeyEvent.VK_ENTER:
-        case KeyEvent.VK_ESCAPE:
+        //case KeyEvent.VK_ENTER:
+       // case KeyEvent.VK_ESCAPE:
         case KeyEvent.VK_SHIFT:
-        case KeyEvent.VK_DELETE:
-        case KeyEvent.VK_SPACE:
-        case KeyEvent.VK_INSERT:
+        	((MainToolBar)toolbar).SlideShow();
+         	 c.getView().getRoot().updateAll();
+        	break;
+       // case KeyEvent.VK_DELETE:
+       // case KeyEvent.VK_SPACE:
+        	 
+        	//break;
+        //case KeyEvent.VK_INSERT:
         // fc, 20.6.2004: to enable tab for insert.
         case KeyEvent.VK_TAB:
-            // end change.
+        	((MainToolBar)toolbar).SlideShowStart();
+        	((MainToolBar)toolbar).SlideShow();
+        	 c.getView().getRoot().updateAll();
+      
+            // 
             return; // processed by Adapters ActionListener
         // explicitly what is not catched in e.isActionKey()
 
