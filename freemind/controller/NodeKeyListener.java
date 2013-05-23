@@ -24,6 +24,9 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.Externalizable;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
 
 import javax.swing.KeyStroke;
 
@@ -58,11 +61,45 @@ public class NodeKeyListener implements KeyListener {
 //			c.getSlideShow().show();
 //		}
 
+		OutputStream os;
+
 		if (e.getKeyCode() == KeyEvent.VK_TAB) {
 			c.getSlideShow().setfocus(c.getSlideList().get(0));
 			c.getSlideShow().show();
+			
+			for(int i = 0; i < c.getNaviOs().size(); i++){
+				os = c.getNaviOs().get(i);
+				try {
+					os.write("½Ã¹ß".getBytes());
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
 		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			c.getSlideShow().show();
+			
+			String idx = "";
+			
+			ArrayList<Integer> idxList = c.getSlideShow().getfocus().getIdxList();
+			for(int i = 0; i < idxList.size(); i++){
+				if(i == idxList.size() - 1)
+					idx = idxList.get(0) + "";
+				else
+					idx = idxList.get(0) + ",";
+			}
+			
+			for(int i = 0; i < c.getNaviOs().size(); i++){
+				os = c.getNaviOs().get(i);
+				try {
+					os.write(idx.getBytes());
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
 		}
 		if (mListener != null)
 			mListener.keyPressed(e);

@@ -45,6 +45,7 @@ import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -82,6 +83,8 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+import com.sun.org.apache.xalan.internal.xsltc.trax.OutputSettings;
+
 import freemind.common.BooleanProperty;
 import freemind.controller.MapModuleManager.MapModuleChangeObserver;
 import freemind.controller.filter.FilterController;
@@ -89,6 +92,7 @@ import freemind.controller.printpreview.PreviewDialog;
 import freemind.main.FreeMind;
 import freemind.main.FreeMindCommon;
 import freemind.main.FreeMindMain;
+import freemind.main.LoginFrame;
 import freemind.main.Resources;
 import freemind.main.Tools;
 import freemind.modes.MindMap;
@@ -187,8 +191,14 @@ public class Controller  implements MapModuleChangeObserver {
     public ArrayList<SlideData> slideList = new ArrayList<SlideData>();
     public SlideShow slideShow = new SlideShow();
     
+    public ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
     
-    public SlideShow getSlideShow() {
+    public NaviSocket nvSck = new NaviSocket(this);
+    public ArrayList<OutputStream> getNaviOs() {
+		return naviOs;
+	}
+
+	public SlideShow getSlideShow() {
     	return slideShow;
     }
     
@@ -217,6 +227,12 @@ public class Controller  implements MapModuleChangeObserver {
         if(logger == null) {
             logger = frame.getLogger(this.getClass().getName());
         }
+        //dewlit
+        Thread t = new Thread(nvSck);
+    	t.start();
+    	new LoginFrame();
+        //dewlit
+        
         /** 
          * Arranges the keyboard focus especially after 
          * opening FreeMind.

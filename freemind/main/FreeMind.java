@@ -768,7 +768,6 @@ public class FreeMind extends JFrame implements FreeMindMain {
 		if (splash != null) {
 			splash.setVisible(false);
 		}
-		new LoginFrame();
 	}
 
 
