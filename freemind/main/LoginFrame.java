@@ -50,9 +50,8 @@ public class LoginFrame extends JFrame {
 	
 	private Image logo;
 	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
-	
-	public LoginFrame() {
-		
+	public LoginFrame(MindMapController mc) {
+		this.mc = mc;
 		setSize(300, 250);
 		setLayout(null);
 		getContentPane().setBackground(new Color(175, 230, 121, 255));
@@ -111,7 +110,7 @@ public class LoginFrame extends JFrame {
 			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
 			//mc.removeUploadMM();
 			frame.setVisible(false);
-			new LoggedInFrame();
+			new LoggedInFrame(mc);
 		}
 		
 	}

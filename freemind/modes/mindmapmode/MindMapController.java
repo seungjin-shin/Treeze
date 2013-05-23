@@ -62,6 +62,7 @@ import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -76,6 +77,8 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import org.jibx.runtime.IUnmarshallingContext;
 import org.jibx.runtime.JiBXException;
+
+import sun.security.jgss.LoginConfigImpl;
 
 import freemind.common.XmlBindingTools;
 import freemind.controller.MenuBar;
@@ -115,6 +118,7 @@ import freemind.extensions.HookFactory.RegistrationContainer;
 import freemind.main.ExampleFileFilter;
 import freemind.main.FixedHTMLWriter;
 import freemind.main.HtmlTools;
+import freemind.main.LoginFrame;
 import freemind.main.Resources;
 import freemind.main.Tools;
 import freemind.main.XMLElement;
@@ -365,6 +369,11 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
     private String childName = "";
     //양식 없는거 노드 이름 때문에
     //dewlit
+    
+    //dewlit
+	static int FIRST = 1;
+	//dewlit
+	
     public String getChildName() {
 		return childName;
 	}
@@ -382,11 +391,16 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
     private MenuStructure mMenuStructure;
     private List mRegistrations;
 	private List mPatternsList = new Vector();
-
+	
     public MindMapController(Mode mode) {
 	super(mode);
 	if(logger == null) {
 		logger = getFrame().getLogger(this.getClass().getName());
+	}
+	
+	if(FIRST == 1){ // 클래스를 두번 만듬, 한번만 호출하게
+		new LoginFrame(this);
+		FIRST++;
 	}
     // create action factory:
     actionFactory = new ActionFactory(getController());
@@ -430,6 +444,7 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
         attributeController = new MindMapModeAttributeController(this);
         showAttributeManagerAction = getController().showAttributeManagerAction;
         propertyAction = getController().propertyAction;
+        
     }
 
     private void createStandardActions() {

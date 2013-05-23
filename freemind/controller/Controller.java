@@ -92,7 +92,6 @@ import freemind.controller.printpreview.PreviewDialog;
 import freemind.main.FreeMind;
 import freemind.main.FreeMindCommon;
 import freemind.main.FreeMindMain;
-import freemind.main.LoginFrame;
 import freemind.main.Resources;
 import freemind.main.Tools;
 import freemind.modes.MindMap;
@@ -230,7 +229,6 @@ public class Controller  implements MapModuleChangeObserver {
         //dewlit
         Thread t = new Thread(nvSck);
     	t.start();
-    	new LoginFrame();
         //dewlit
         
         /** 

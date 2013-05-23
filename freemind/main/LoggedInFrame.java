@@ -2,39 +2,37 @@ package freemind.main;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import freemind.modes.UploadToServer;
+import freemind.modes.mindmapmode.MindMapController;
 
 
 public class LoggedInFrame extends JFrame {
 	private Container ct;
 
-	JPanel lecturePanel = new LecturePanel(this);
+	JPanel lecturePanel;
 	private Image profileImg;
 	private URL profileImgURL = getClass().getClassLoader().getResource("minsuk.jpg");
 	private Image logo;
 	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
 	ActionListener btnListener = new BtnListener();
-	public LoggedInFrame() {
-		
+	MindMapController mc;
+	public LoggedInFrame(MindMapController mc) {
+		this.mc = mc;
+		lecturePanel = new LecturePanel(this, mc);
 		profileImg = new ImageIcon(profileImgURL).getImage();
 		logo = new ImageIcon(logoURL).getImage();
 		
@@ -110,8 +108,16 @@ public class LoggedInFrame extends JFrame {
 }
 class BtnListener implements ActionListener{
 	JFrame frame;
+	MindMapController mc;
 	public BtnListener(){}
+	public BtnListener(MindMapController mc){
+		this.mc = mc;
+	}
 	public BtnListener(JFrame f) {
+		frame = f;
+	}
+	public BtnListener(JFrame f, MindMapController mc) {
+		this.mc = mc;
 		frame = f;
 	}
 	@Override
@@ -126,10 +132,13 @@ class BtnListener implements ActionListener{
 			frame.setVisible(false);
 		}
 		else if(btn.equals("New Class")){
-			new InputClassFrame();
+			new InputClassFrame(mc);
 		}
 		else if(btn.equals("Create class")){
 			frame.setVisible(false);
+		}
+		else if(btn.equals("select PDF")){
+			mc.open(null);
 		}
 	}
 }
@@ -163,9 +172,12 @@ class InputLectureFrame extends JFrame{
 }
 
 class InputClassFrame extends JFrame{
-	ActionListener btnListener = new BtnListener(this);
-	
-	public InputClassFrame() {
+	ActionListener btnListener;
+	MindMapController mc;
+	public InputClassFrame(MindMapController mc) {
+		this.mc = mc;
+		
+		btnListener = new BtnListener(this, mc);
 		setSize(380, 120);
 		setLayout(null);
 		setTitle("Input your class title");
@@ -205,7 +217,9 @@ class LecturePanel extends JPanel implements ActionListener{
 	Image onState, offState;
 	//URL onBookMarkURL = getClass().getClassLoader().getResource("onBookMark.png");
 	JFrame frame;
-	public LecturePanel(JFrame frame) {
+	MindMapController mc;
+	public LecturePanel(JFrame frame, MindMapController mc) {
+		this.mc = mc;
 		this.frame = frame;
 		setSize(450, 500);
 		setLayout(null);
@@ -279,7 +293,7 @@ class LecturePanel extends JPanel implements ActionListener{
 		String event = e.getActionCommand();
 		System.out.println(event);
 		frame.setVisible(false);
-		new LecturePageFrame();
+		new LecturePageFrame(mc);
 	}
 }
 

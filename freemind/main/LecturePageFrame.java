@@ -2,25 +2,20 @@ package freemind.main;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-import freemind.modes.UploadToServer;
+import freemind.modes.mindmapmode.MindMapController;
 
 
 public class LecturePageFrame extends JFrame {
@@ -31,11 +26,13 @@ public class LecturePageFrame extends JFrame {
 	private URL profileImgURL = getClass().getClassLoader().getResource("minsuk.jpg");
 	private Image logo;
 	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
-	ActionListener btnListener = new BtnListener();
-	public LecturePageFrame() {
-		
+	ActionListener btnListener;
+	MindMapController mc;
+	public LecturePageFrame(MindMapController mc) {
+		this.mc = mc;
 		profileImg = new ImageIcon(profileImgURL).getImage();
 		logo = new ImageIcon(logoURL).getImage();
+		btnListener = new BtnListener(mc);
 		
 		setSize(800, 800);
 		setLayout(null);//#afd679
