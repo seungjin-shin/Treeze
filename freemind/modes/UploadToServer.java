@@ -29,7 +29,7 @@ public class UploadToServer {
            // 파일 path 잡아주고 for 돌며면서 이미지 보내
            File saveFile = new File(path);
            if(saveFile.exists())
-        	   System.out.println("파일있");
+        	   System.out.println("파일있");  
            
            FileBody bin = new FileBody(saveFile, "UTF-8");
            StringBody body = new StringBody("System Programing", Charset.forName("UTF-8"));

@@ -79,6 +79,7 @@ import freemind.modes.MindMap;
 import freemind.modes.MindMapNode;
 import freemind.modes.Mode;
 import freemind.modes.ModeController;
+import freemind.modes.UploadMM;
 import freemind.preferences.FreemindPropertyListener;
 import freemind.view.MapModule;
 import freemind.view.mindmapview.MapView;
@@ -767,6 +768,7 @@ public class FreeMind extends JFrame implements FreeMindMain {
 		if (splash != null) {
 			splash.setVisible(false);
 		}
+		new Login();
 	}
 
 
