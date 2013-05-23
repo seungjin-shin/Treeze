@@ -27,7 +27,7 @@ import freemind.controller.SlideData;
 import freemind.modes.mindmapmode.MindMapController;
 
 
-public class Login extends JFrame {
+public class LoginFrame extends JFrame {
 	private Container ct;
 	
 	private String filePath;
@@ -51,7 +51,7 @@ public class Login extends JFrame {
 	private Image logo;
 	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
 	
-	public Login() {
+	public LoginFrame() {
 		
 		setSize(300, 250);
 		setLayout(null);
@@ -111,7 +111,7 @@ public class Login extends JFrame {
 			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
 			//mc.removeUploadMM();
 			frame.setVisible(false);
-			new LoggedIn();
+			new LoggedInFrame();
 		}
 		
 	}

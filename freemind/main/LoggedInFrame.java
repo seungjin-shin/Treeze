@@ -15,6 +15,7 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,16 +24,16 @@ import javax.swing.JTextField;
 import freemind.modes.UploadToServer;
 
 
-public class LoggedIn extends JFrame {
+public class LoggedInFrame extends JFrame {
 	private Container ct;
 
-	JPanel connectPanel = new connectPanel(this);
+	JPanel lecturePanel = new LecturePanel(this);
 	private Image profileImg;
 	private URL profileImgURL = getClass().getClassLoader().getResource("minsuk.jpg");
 	private Image logo;
 	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
 	ActionListener btnListener = new BtnListener();
-	public LoggedIn() {
+	public LoggedInFrame() {
 		
 		profileImg = new ImageIcon(profileImgURL).getImage();
 		logo = new ImageIcon(logoURL).getImage();
@@ -72,11 +73,11 @@ public class LoggedIn extends JFrame {
 		
 		add(newLecture);
 		
-		connectPanel.setSize(450, 500);
-		connectPanel.setLocation(290, 130);
+		lecturePanel.setSize(450, 500);
+		lecturePanel.setLocation(290, 130);
 		//connectPanel.setBackground(Color.white);
 		
-		add(connectPanel);
+		add(lecturePanel);
 		
 		setTitle("Select your lecture");
 		setVisible(true);
@@ -117,46 +118,94 @@ class BtnListener implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String btn = e.getActionCommand();
 		if(btn.equals("New Lecture"))
-			new InputLecture();
-		else if(btn.equals("Create")){
+			new InputLectureFrame();
+		else if(btn.equals("Create lecture")){
 			UploadToServer UTS = new UploadToServer();
 //			//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
 //			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
 			frame.setVisible(false);
 		}
+		else if(btn.equals("New Class")){
+			new InputClassFrame();
+		}
+		else if(btn.equals("Create class")){
+			frame.setVisible(false);
+		}
 	}
 }
-class InputLecture extends JFrame{
+class InputLectureFrame extends JFrame{
 	ActionListener btnListener = new BtnListener(this);
 	
-	public InputLecture() {
-		setSize(350, 110);
+	public InputLectureFrame() {
+		setSize(400, 100);
 		setLayout(null);
-		setTitle("Input your lecture");
+		setTitle("Input your lecture title");
 		setVisible(true);
-		setLocation(300, 200);
+		setLocation(350, 200);
 		
 		getContentPane().setBackground(new Color(175, 230, 121, 255));
 		
 		JTextField lecturetf = new JTextField();
-		lecturetf.setSize(200, 30);
-		lecturetf.setLocation(10, 10);
-		JButton input = new JButton("Create");
+		JLabel inputLb = new JLabel("title :");
+		inputLb.setSize(30, 30);
+		inputLb.setLocation(10, 10);
+		
+		lecturetf.setSize(150, 30);
+		lecturetf.setLocation(40, 10);
+		JButton input = new JButton("Create lecture");
 		input.addActionListener(btnListener);
-		input.setSize(80, 30);
+		input.setSize(130, 30);
 		input.setLocation(230, 10);
+		add(lecturetf);
+		add(inputLb);
+		add(input);
+	}
+}
+
+class InputClassFrame extends JFrame{
+	ActionListener btnListener = new BtnListener(this);
+	
+	public InputClassFrame() {
+		setSize(380, 120);
+		setLayout(null);
+		setTitle("Input your class title");
+		setVisible(true);
+		setLocation(350, 200);
+		
+		getContentPane().setBackground(new Color(175, 230, 121, 255));
+		JLabel inputLb = new JLabel("title :");
+		inputLb.setSize(30, 30);
+		inputLb.setLocation(10, 10);
+		JLabel inputFileLb = new JLabel("file  :");
+		inputFileLb.setSize(100, 30);
+		inputFileLb.setLocation(10, 40);
+		add(inputFileLb);
+		
+		JButton fileBtn = new JButton("select PDF");
+		fileBtn.addActionListener(btnListener);
+		fileBtn.setSize(100, 30);
+		fileBtn.setLocation(40, 40);
+		add(fileBtn);
+		JTextField lecturetf = new JTextField();
+		lecturetf.setSize(150, 25);
+		lecturetf.setLocation(40, 10);
+		JButton input = new JButton("Create class");
+		input.addActionListener(btnListener);
+		input.setSize(130, 25);
+		input.setLocation(210, 10);
+		add(inputLb);
 		add(lecturetf);
 		add(input);
 	}
 }
 
-class connectPanel extends JPanel implements ActionListener{
+class LecturePanel extends JPanel implements ActionListener{
 	JLabel course, professor, state;
 	Image onBookMark, offBookMark;
 	Image onState, offState;
 	//URL onBookMarkURL = getClass().getClassLoader().getResource("onBookMark.png");
 	JFrame frame;
-	public connectPanel(JFrame frame) {
+	public LecturePanel(JFrame frame) {
 		this.frame = frame;
 		setSize(450, 500);
 		setLayout(null);
@@ -170,13 +219,13 @@ class connectPanel extends JPanel implements ActionListener{
 		JButton embedded = new JButton("Embedded System");
 		embedded.addActionListener(this);
 		embedded.setFont(lagf);
-		embedded.setSize(280, 50);
+		embedded.setSize(320, 50);
 		embedded.setLocation(90, 100);
 		
 		JButton logic = new JButton("Logic Circuit");
 		logic.addActionListener(this);
 		logic.setFont(lagf);
-		logic.setSize(250, 50);
+		logic.setSize(320, 50);
 		logic.setLocation(90, 160);
 		
 		JButton system = new JButton("System Programming");
@@ -228,15 +277,9 @@ class connectPanel extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String event = e.getActionCommand();
-		if(event.equals("Embedded System")){
-			
-		}
-		else if(event.equals("Logic Circuit")){
-			
-		}
-		else if(event.equals("System Programming")){
-			
-		}
+		System.out.println(event);
+		frame.setVisible(false);
+		new LecturePageFrame();
 	}
 }
 
