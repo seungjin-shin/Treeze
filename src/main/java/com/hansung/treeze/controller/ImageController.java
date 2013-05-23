@@ -14,14 +14,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
+import com.hansung.treeze.model.Mindmap;
 import com.hansung.treeze.service.ImageService;
+import com.hansung.treeze.service.MindmapService;
 
 @Controller
 public class ImageController {
 	private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
     @Autowired
 	private ImageService imageService;
-
+    @Autowired private MindmapService mindmapService;
 	@Resource(name="jsonView")
 	private View jsonView;
 	@Resource(name="imageView")
@@ -30,9 +32,12 @@ public class ImageController {
 	private View thumbnailView;
 
 	@RequestMapping(value="/upload/img")
-	public String uploadImg(@RequestParam("lectureName") String lectureName,@RequestParam("upload") MultipartFile multipartFile,@RequestParam("xml") String xml, ModelMap map) {
-		logger.info("uploadImg" + lectureName + xml);
+	public String uploadImg(@RequestParam("lectureName") String lectureName,@RequestParam("upload") MultipartFile multipartFile,@RequestParam("xml") String mindmapXML, ModelMap map) {
+		logger.info("uploadImg" + lectureName + mindmapXML);
+		Mindmap mindmap = new Mindmap(mindmapXML);
+		mindmapService.save(mindmap);
 		map.put("file", imageService.uploadImage(multipartFile, lectureName));
+		mindmap = mindmapService.findByXML(mindmapXML);
 		return "uploadImage";
 	}
 	
