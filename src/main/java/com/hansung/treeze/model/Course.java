@@ -1,0 +1,34 @@
+package com.hansung.treeze.model;
+
+import org.springframework.data.jpa.domain.AbstractPersistable;
+
+public class Course extends AbstractPersistable<Long> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4685366043349125403L;
+	private int lectureId;
+	private String lectureName;
+	private String userEmail;
+	
+	public int getLectureId() {
+		return lectureId;
+	}
+	public void setLectureId(int lectureId) {
+		this.lectureId = lectureId;
+	}
+	public String getLectureName() {
+		return lectureName;
+	}
+	public void setLectureName(String lectureName) {
+		this.lectureName = lectureName;
+	}
+	public String getUserEmail() {
+		return userEmail;
+	}
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+}
