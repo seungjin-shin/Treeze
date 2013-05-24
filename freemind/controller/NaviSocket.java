@@ -22,7 +22,7 @@ public class NaviSocket extends JFrame implements Runnable{
 	private JTextArea textArea;
 	private JScrollPane pane;
 	Controller c;
-	
+	Socket s;
 	public NaviSocket(Controller c) {
 		this.c = c;
 		setTitle("Navi Server");
@@ -46,7 +46,7 @@ public class NaviSocket extends JFrame implements Runnable{
 			pane.getVerticalScrollBar().setValue(
 					pane.getVerticalScrollBar().getMaximum());
 			while (true) {
-				Socket s = ss.accept();
+				s = ss.accept();
 				Start go = new Start(c, s, textArea, pane);
 				go.start();
 			}
@@ -113,6 +113,15 @@ class Start extends Thread {
 			write("------- A user is connect. --------");
 			while (true) {
 				cnt = is.read(b); // 받는 부분 // 프로토콜 정해서 해
+				System.out.println(cnt);
+				System.out.println(b.toString());
+				if(cnt == -1){
+					System.out.println("socket end");
+					write("socket end");
+					c.getNaviOs().remove(os);
+					return;
+				}
+				
 				String str = new String(b, 0, cnt);
 				userInfo = str.split(END);
 				write(str);

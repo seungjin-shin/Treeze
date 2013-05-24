@@ -710,9 +710,9 @@ public abstract class ControllerAdapter implements ModeController {
 					//getRootNode().
 					//mc.addNew((MindMapNode)getRootNode().getChildAt(1), MindMapController.NEW_CHILD, null);
 					
-					if(templateChk)
-						upload = new UploadMM(getController()
-								.getSlideList(), mc);
+//					if(templateChk)
+//						upload = new UploadMM(getController()
+//								.getSlideList(), mc);
 				} catch (Exception ex) {
 					handleLoadingException(ex);
 					break;

@@ -188,7 +188,7 @@ public class Controller  implements MapModuleChangeObserver {
     public Action zoomOut;
     //dewlit
     public ArrayList<SlideData> slideList = new ArrayList<SlideData>();
-    public SlideShow slideShow = new SlideShow();
+    public SlideShow slideShow = new SlideShow(this);
     
     public ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
     

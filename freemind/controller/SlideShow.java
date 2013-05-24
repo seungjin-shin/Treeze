@@ -8,16 +8,26 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+
+import org.json.simple.JSONObject;
 
 public class SlideShow {
 	SlideData focus;
 	int pagenum = 0;
 	ImgFrame imgFrame = new ImgFrame(this);
 	String str = new String();
-
+	Controller c;
+	
+	public SlideShow(Controller c){
+		this.c = c;
+	}
+	
+	
 	void setfocus(SlideData focus) {
 		if(focus.getPrev() ==null){
 			this.focus = focus;
@@ -92,8 +102,33 @@ public class SlideShow {
 				@Override
 				public void keyPressed(KeyEvent e) {
 					// TODO Auto-generated method stub
+					OutputStream os;
 					if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 						nextShow();
+						
+						ArrayList<Integer> idxList = focus.getIdxList();
+						
+						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
+						
+						String jsonString;
+						FreemindGson myGson = new FreemindGson();
+
+						sendPs.setPosition(idxList);
+
+						jsonString = myGson.toJson(sendPs);
+						System.out.println(jsonString);
+						
+						for(int i = 0; i < c.getNaviOs().size(); i++){
+							os = c.getNaviOs().get(i);
+							try {
+								os.write(jsonString.getBytes()); // 다 보내
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+						
+						 // 여기서도 소켓 보내야대
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						showpause();
 					} else

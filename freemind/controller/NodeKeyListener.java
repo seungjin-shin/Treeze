@@ -64,42 +64,65 @@ public class NodeKeyListener implements KeyListener {
 		OutputStream os;
 
 		if (e.getKeyCode() == KeyEvent.VK_TAB) {
+			if(c.getSlideList().size() == 0)
+				return;
+			
 			c.getSlideShow().setfocus(c.getSlideList().get(0));
 			c.getSlideShow().show();
 			
 			for(int i = 0; i < c.getNaviOs().size(); i++){
 				os = c.getNaviOs().get(i);
 				try {
-					os.write("시발".getBytes());
+					os.write("start".getBytes());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
+			System.out.println("start");
 			
 		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			if(c.getSlideList().size() == 0)
+				return;
+			
 			c.getSlideShow().show();
 			
-			String idx = "";
-			
 			ArrayList<Integer> idxList = c.getSlideShow().getfocus().getIdxList();
-			for(int i = 0; i < idxList.size(); i++){
-				if(i == idxList.size() - 1)
-					idx = idxList.get(0) + "";
-				else
-					idx = idxList.get(0) + ",";
-			}
+			
+			CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
+			
+			String jsonString;
+			FreemindGson myGson = new FreemindGson();
+
+			sendPs.setPosition(idxList);
+
+			jsonString = myGson.toJson(sendPs);
+			System.out.println(jsonString);
 			
 			for(int i = 0; i < c.getNaviOs().size(); i++){
 				os = c.getNaviOs().get(i);
 				try {
-					os.write(idx.getBytes());
+					os.write(jsonString.getBytes()); // 다 보내
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
 			
+			System.out.println(jsonString);
+			for(int i = 0; i < c.getNaviOs().size(); i++){
+				os = c.getNaviOs().get(i);
+				try {
+					os.write(jsonString.getBytes()); // 다 보내
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_F5){
+			new SurveyFrame(); // c 넘겨서 소켓 다 보내야대
 		}
 		if (mListener != null)
 			mListener.keyPressed(e);
