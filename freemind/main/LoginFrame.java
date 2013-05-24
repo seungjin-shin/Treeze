@@ -59,7 +59,7 @@ public class LoginFrame extends JFrame {
 		
 		btnListner = new UploadListner(this);
 
-		JLabel ID = new JLabel("ID : ");
+		JLabel ID = new JLabel("E-mail : ");
 		JLabel passwd = new JLabel("Password : ");
 		ID.setSize(100, 40);
 		ID.setLocation(60, 90);

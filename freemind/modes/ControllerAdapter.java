@@ -706,7 +706,10 @@ public abstract class ControllerAdapter implements ModeController {
 				
 				try {
 					lastCurrentDir = theFile.getParentFile();
-					load(theFile);
+					
+					File demoFile = new File("C:\\test\\리눅스 1강demo.mm");
+					//load(theFile);
+					load(demoFile);
 					//getRootNode().
 					//mc.addNew((MindMapNode)getRootNode().getChildAt(1), MindMapController.NEW_CHILD, null);
 					

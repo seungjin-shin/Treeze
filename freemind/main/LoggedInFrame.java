@@ -155,7 +155,7 @@ class InputLectureFrame extends JFrame{
 		getContentPane().setBackground(new Color(175, 230, 121, 255));
 		
 		JTextField lecturetf = new JTextField();
-		JLabel inputLb = new JLabel("title :");
+		JLabel inputLb = new JLabel("Title :");
 		inputLb.setSize(30, 30);
 		inputLb.setLocation(10, 10);
 		
@@ -185,10 +185,10 @@ class InputClassFrame extends JFrame{
 		setLocation(350, 200);
 		
 		getContentPane().setBackground(new Color(175, 230, 121, 255));
-		JLabel inputLb = new JLabel("title :");
+		JLabel inputLb = new JLabel("Title :");
 		inputLb.setSize(30, 30);
 		inputLb.setLocation(10, 10);
-		JLabel inputFileLb = new JLabel("file  :");
+		JLabel inputFileLb = new JLabel("File  :");
 		inputFileLb.setSize(100, 30);
 		inputFileLb.setLocation(10, 40);
 		add(inputFileLb);
