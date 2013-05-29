@@ -113,8 +113,6 @@ class Start extends Thread {
 			write("------- A user is connect. --------");
 			while (true) {
 				cnt = is.read(b); // 받는 부분 // 프로토콜 정해서 해
-				System.out.println(cnt);
-				System.out.println(b.toString());
 				if(cnt == -1){
 					System.out.println("socket end");
 					write("socket end");

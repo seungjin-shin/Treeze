@@ -1,6 +1,7 @@
 package freemind.main;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -9,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,8 +29,9 @@ public class LoggedInFrame extends JFrame {
 	private Image profileImg;
 	private URL profileImgURL = getClass().getClassLoader().getResource("minsuk.jpg");
 	private Image logo;
+	private URL tmp;// = getClass().getClassLoader().getResource("profile.png");
 	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
-	ActionListener btnListener = new BtnListener();
+	CreateBtn createLs = new CreateBtn();
 	MindMapController mc;
 	public LoggedInFrame(MindMapController mc) {
 		this.mc = mc;
@@ -36,11 +39,11 @@ public class LoggedInFrame extends JFrame {
 		profileImg = new ImageIcon(profileImgURL).getImage();
 		logo = new ImageIcon(logoURL).getImage();
 		
-		setSize(800, 800);
+		setSize(950, 800);
 		setLayout(null);//#afd679
 		
-		getContentPane().setBackground(new Color(175, 230, 121, 255));
-		
+		//getContentPane().setBackground(new Color(175, 230, 121, 255));142, 214, 63  
+		getContentPane().setBackground(new Color(141, 198, 63));
 		JLabel name = new JLabel("Minsuk Lee");
 		JLabel address = new JLabel("Department of Computer Engineering,");
 		JLabel address2 = new JLabel("Hansung University, Professor");
@@ -62,16 +65,42 @@ public class LoggedInFrame extends JFrame {
 		address2.setFont(midF);
 		address2.setLocation(50, 370);
 		add(address2);
+		tmp = getClass().getClassLoader().getResource("CreateLecture.png");
 		
-		JButton newLecture = new JButton("New Lecture");
-		newLecture.setSize(150, 40);
-		newLecture.setLocation(300, 85);
-		newLecture.setFont(midF);
-		newLecture.addActionListener(btnListener);
+		JButton tmpBtn = new JButton(new ImageIcon(tmp));
+		tmpBtn.setSize(132, 45);
+		tmpBtn.setLocation(450, 75);
+		tmpBtn.setFocusable(false);
+		tmpBtn.addActionListener(createLs);
+		add(tmpBtn);
 		
-		add(newLecture);
+		tmp = getClass().getClassLoader().getResource("profile.png");
 		
-		lecturePanel.setSize(450, 500);
+		tmpBtn = new JButton(new ImageIcon(tmp));
+		tmpBtn.setSize(130, 45);
+		tmpBtn.setLocation(300, 75);
+		tmpBtn.setFocusable(false);
+		add(tmpBtn);
+		
+		tmp = getClass().getClassLoader().getResource("deleteLecture.png");
+		
+		tmpBtn = new JButton(new ImageIcon(tmp));
+		tmpBtn.setSize(135, 42);
+		tmpBtn.setLocation(600, 75);
+		tmpBtn.setFocusable(false);
+		add(tmpBtn);
+		
+		tmp = getClass().getClassLoader().getResource("logout.png");
+		
+		tmpBtn = new JButton(new ImageIcon(tmp));
+		tmpBtn.setSize(132, 45);
+		tmpBtn.setLocation(750, 75);
+		tmpBtn.setFocusable(false);
+		add(tmpBtn);
+		
+		
+		
+		lecturePanel.setSize(600, 500);
 		lecturePanel.setLocation(290, 130);
 		//connectPanel.setBackground(Color.white);
 		
@@ -86,8 +115,8 @@ public class LoggedInFrame extends JFrame {
 	public void paint(Graphics g) {
 		super.paintComponents(g);
 		g.drawImage(profileImg, 85, 150, 130, 170, null);
-		g.drawImage(logo, 40, 50, 200, 50, null);
-		g.drawLine(30, 110, 850, 110);
+		g.drawImage(logo, 40, 50, 150, 30, null);
+		g.drawLine(30, 90, 900, 90);
 		
 		g.setColor(Color.white);
 
@@ -97,8 +126,8 @@ public class LoggedInFrame extends JFrame {
 //		g.setColor(Color.white);
 //		g.fillRoundRect(300, 150, 650, 500, 30, 30);
 		g.setColor(Color.black);
-		g.drawRect(298, 158, 450, 500);
-		g.drawRect(297, 157, 452, 502);
+		g.drawRect(298, 158, 600, 500);
+		g.drawRect(297, 157, 602, 502);
 		//g.drawRoundRect(299, 149, 652, 502, 30, 30);
 //		g.drawRoundRect(299, 149, 653, 503, 30, 30);
 //		g.drawRoundRect(298, 148, 654, 504, 30, 30);
@@ -106,42 +135,15 @@ public class LoggedInFrame extends JFrame {
 	}
 	
 }
-class BtnListener implements ActionListener{
-	JFrame frame;
-	MindMapController mc;
-	public BtnListener(){}
-	public BtnListener(MindMapController mc){
-		this.mc = mc;
-	}
-	public BtnListener(JFrame f) {
-		frame = f;
-	}
-	public BtnListener(JFrame f, MindMapController mc) {
-		this.mc = mc;
-		frame = f;
-	}
+
+class CreateBtn implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String btn = e.getActionCommand();
-		if(btn.equals("New Lecture"))
-			new InputLectureFrame();
-		else if(btn.equals("Create lecture")){
-			UploadToServer UTS = new UploadToServer();
-//			//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
-//			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
-			frame.setVisible(false);
-		}
-		else if(btn.equals("New Class")){
-			new InputClassFrame(mc);
-		}
-		else if(btn.equals("Create class")){
-			frame.setVisible(false);
-		}
-		else if(btn.equals("select PDF")){
-			mc.open(null);
-		}
+		new InputLectureFrame();
 	}
+	
 }
+
 class InputLectureFrame extends JFrame{
 	ActionListener btnListener = new BtnListener(this);
 	
@@ -156,11 +158,11 @@ class InputLectureFrame extends JFrame{
 		
 		JTextField lecturetf = new JTextField();
 		JLabel inputLb = new JLabel("Title :");
-		inputLb.setSize(30, 30);
+		inputLb.setSize(50, 30);
 		inputLb.setLocation(10, 10);
 		
 		lecturetf.setSize(150, 30);
-		lecturetf.setLocation(40, 10);
+		lecturetf.setLocation(60, 10);
 		JButton input = new JButton("Create lecture");
 		input.addActionListener(btnListener);
 		input.setSize(130, 30);
@@ -171,48 +173,8 @@ class InputLectureFrame extends JFrame{
 	}
 }
 
-class InputClassFrame extends JFrame{
-	ActionListener btnListener;
-	MindMapController mc;
-	public InputClassFrame(MindMapController mc) {
-		this.mc = mc;
-		
-		btnListener = new BtnListener(this, mc);
-		setSize(380, 120);
-		setLayout(null);
-		setTitle("Input your class title");
-		setVisible(true);
-		setLocation(350, 200);
-		
-		getContentPane().setBackground(new Color(175, 230, 121, 255));
-		JLabel inputLb = new JLabel("Title :");
-		inputLb.setSize(30, 30);
-		inputLb.setLocation(10, 10);
-		JLabel inputFileLb = new JLabel("File  :");
-		inputFileLb.setSize(100, 30);
-		inputFileLb.setLocation(10, 40);
-		add(inputFileLb);
-		
-		JButton fileBtn = new JButton("select PDF");
-		fileBtn.addActionListener(btnListener);
-		fileBtn.setSize(100, 30);
-		fileBtn.setLocation(40, 40);
-		add(fileBtn);
-		JTextField lecturetf = new JTextField();
-		lecturetf.setSize(150, 25);
-		lecturetf.setLocation(40, 10);
-		JButton input = new JButton("Create class");
-		input.addActionListener(btnListener);
-		input.setSize(130, 25);
-		input.setLocation(210, 10);
-		add(inputLb);
-		add(lecturetf);
-		add(input);
-	}
-}
-
 class LecturePanel extends JPanel implements ActionListener{
-	JLabel course, professor, state;
+	JLabel tmpLb;
 	Image onBookMark, offBookMark;
 	Image onState, offState;
 	//URL onBookMarkURL = getClass().getClassLoader().getResource("onBookMark.png");
@@ -224,29 +186,81 @@ class LecturePanel extends JPanel implements ActionListener{
 		setSize(450, 500);
 		setLayout(null);
 		
-		Font lagf = new Font("Serif", Font.BOLD, 30);
-		course = new JLabel("Lecture Title");
-		course.setSize(200, 50);
-		course.setFont(lagf);
-		course.setLocation(150, 20);
+		Font lagf = new Font("Serif", Font.BOLD, 25);
+		tmpLb = new JLabel("Lecture Title");
+		tmpLb.setSize(200, 50);
+		tmpLb.setFont(lagf);
+		tmpLb.setLocation(70, 20);
+		add(tmpLb);
+		
+		tmpLb = new JLabel("Registered");
+		tmpLb.setSize(200, 50);
+		tmpLb.setFont(lagf);
+		tmpLb.setLocation(290, 20);
+		add(tmpLb);
+		
+		tmpLb = new JLabel("Latest day");
+		tmpLb.setSize(250, 50);
+		tmpLb.setFont(lagf);
+		tmpLb.setLocation(440, 20);
+		add(tmpLb);
+		
+		lagf = new Font("Serif", Font.BOLD, 20);
 		
 		JButton embedded = new JButton("Embedded System");
 		embedded.addActionListener(this);
 		embedded.setFont(lagf);
-		embedded.setSize(320, 50);
-		embedded.setLocation(90, 100);
+		embedded.setSize(220, 50);
+		embedded.setLocation(25, 100);
 		
 		JButton logic = new JButton("Logic Circuit");
 		logic.addActionListener(this);
 		logic.setFont(lagf);
-		logic.setSize(320, 50);
-		logic.setLocation(90, 160);
+		logic.setSize(220, 50);
+		logic.setLocation(25, 160);
 		
 		JButton system = new JButton("System Programming");
 		system.addActionListener(this);
 		system.setFont(lagf);
-		system.setSize(320, 50);
-		system.setLocation(90, 220);
+		system.setSize(220, 50);
+		system.setLocation(25, 220);
+		
+		lagf = new Font("Serif", Font.BOLD, 30);
+		tmpLb = new JLabel("40");
+		tmpLb.setSize(100, 50);
+		tmpLb.setFont(lagf);
+		tmpLb.setLocation(325, 100);
+		add(tmpLb);
+		
+		tmpLb = new JLabel("38");
+		tmpLb.setSize(100, 50);
+		tmpLb.setFont(lagf);
+		tmpLb.setLocation(325, 160);
+		add(tmpLb);
+		
+		tmpLb = new JLabel("41");
+		tmpLb.setSize(100, 50);
+		tmpLb.setFont(lagf);
+		tmpLb.setLocation(325, 220);
+		add(tmpLb);
+		
+		tmpLb = new JLabel("2013.5.23");
+		tmpLb.setSize(140, 50);
+		tmpLb.setFont(lagf);
+		tmpLb.setLocation(440, 100);
+		add(tmpLb);
+		
+		tmpLb = new JLabel("2012.4.22");
+		tmpLb.setSize(160, 50);
+		tmpLb.setFont(lagf);
+		tmpLb.setLocation(440, 160);
+		add(tmpLb);
+		
+		tmpLb = new JLabel("2012.12.11");
+		tmpLb.setSize(180, 50);
+		tmpLb.setFont(lagf);
+		tmpLb.setLocation(440, 220);
+		add(tmpLb);
 		
 //		JLabel prof = new JLabel("이 민석");
 //		prof.setFont(lagf);
@@ -270,12 +284,13 @@ class LecturePanel extends JPanel implements ActionListener{
 		add(logic);
 		add(system);
 		
-		add(course);
 	}
 	public void paint(Graphics g) {
 		super.paint(g);
-		g.drawLine(20, 80, 430, 80);
+		g.drawLine(20, 80, 560, 80);
 		
+		g.drawLine(270, 100, 270, 460);
+		g.drawLine(420, 100, 420, 460);
 //		g.setColor(Color.white);
 //
 //		g.drawLine(40, 380, 250, 380);
