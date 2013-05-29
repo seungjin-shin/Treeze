@@ -12,16 +12,13 @@ public class Class extends AbstractPersistable<Long>{
 	 */
 	private static final long serialVersionUID = 2765987884015351541L;
 	private String className;
+	private String classIP;
+	private int port;
 	private String lectureName;
 	private String professorEmail;
 	
 	
-	public String getClassName() {
-		return className;
-	}
-	public void setClassName(String className) {
-		this.className = className;
-	}
+
 	public String getLectureName() {
 		return lectureName;
 	}
@@ -33,5 +30,23 @@ public class Class extends AbstractPersistable<Long>{
 	}
 	public void setProfessorEmail(String professorEmail) {
 		this.professorEmail = professorEmail;
+	}
+	public String getClassIP() {
+		return classIP;
+	}
+	public void setClassIP(String classIP) {
+		this.classIP = classIP;
+	}
+	public int getPort() {
+		return port;
+	}
+	public void setPort(int port) {
+		this.port = port;
+	}
+	public String getClassName() {
+		return className;
+	}
+	public void setClassName(String className) {
+		this.className = className;
 	}
 }
