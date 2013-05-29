@@ -54,7 +54,7 @@ public class LoginFrame extends JFrame {
 		this.mc = mc;
 		setSize(300, 250);
 		setLayout(null);
-		getContentPane().setBackground(new Color(175, 230, 121, 255));
+		getContentPane().setBackground(new Color(141, 198, 63));
 		logo = new ImageIcon(logoURL).getImage();
 		
 		btnListner = new UploadListner(this);

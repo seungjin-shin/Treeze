@@ -196,7 +196,7 @@ class InputClassFrame extends JFrame{
 		setVisible(true);
 		setLocation(350, 200);
 		
-		getContentPane().setBackground(new Color(175, 230, 121, 255));
+		getContentPane().setBackground(new Color(141, 198, 63));
 		JLabel inputLb = new JLabel("Title :");
 		inputLb.setSize(50, 30);
 		inputLb.setLocation(10, 10);
