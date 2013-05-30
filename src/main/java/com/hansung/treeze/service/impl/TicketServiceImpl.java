@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.hansung.treeze.model.Ticket;
 import com.hansung.treeze.persistence.TicketRepository;
-import com.hansung.treeze.persistence.TicketSpecitications;
+import com.hansung.treeze.persistence.TicketSpecifications;
 import com.hansung.treeze.service.TicketService;
 
 @Service
@@ -17,12 +17,12 @@ public class TicketServiceImpl implements TicketService{
 	@Override
 	public Ticket saveTicket(Ticket ticket) {
 		// TODO Auto-generated method stub
-		return ticketRepository.save(mindmap);
+		return ticketRepository.save(ticket);
 	}
 
 	@Override
 	public Object getTickets(int classId) {
 		// TODO Auto-generated method stub
-		return ticketRepository.findAll(Specifications.where(TicketSpecitications.isclassId(classId)));
+		return ticketRepository.findAll(Specifications.where(TicketSpecifications.isclassId(classId)));
 	}
 }

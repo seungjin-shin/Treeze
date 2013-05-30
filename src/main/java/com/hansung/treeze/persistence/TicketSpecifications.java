@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.hansung.treeze.model.Ticket;
 import com.hansung.treeze.model.Ticket_;
 
-public class TicketSpecitications {
+public class TicketSpecifications {
 	
 	public static Specification<Ticket> isclassId(final int classId){
 		return new Specification<Ticket>() {

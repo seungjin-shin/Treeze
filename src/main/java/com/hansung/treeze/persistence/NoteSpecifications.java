@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.hansung.treeze.model.Note;
 import com.hansung.treeze.model.Note_;
 
-public class NoteSpecitications {
+public class NoteSpecifications {
 	
 
 

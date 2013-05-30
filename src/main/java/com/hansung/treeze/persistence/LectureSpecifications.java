@@ -11,7 +11,7 @@ import com.hansung.treeze.model.Class_;
 import com.hansung.treeze.model.Lecture;
 import com.hansung.treeze.model.Lecture_;
 
-public class LectureSpecitications {
+public class LectureSpecifications {
 	
 	public static Specification<Lecture> islectureName(final String lectureName){
 		return new Specification<Lecture>() {

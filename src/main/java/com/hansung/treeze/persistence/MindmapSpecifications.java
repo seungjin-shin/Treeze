@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.hansung.treeze.model.Mindmap;
 import com.hansung.treeze.model.Mindmap_;
 
-public class MindmapSpecitications {
+public class MindmapSpecifications {
 	
 	public static Specification<Mindmap> isClassId(final int classId){
 		return new Specification<Mindmap>() {

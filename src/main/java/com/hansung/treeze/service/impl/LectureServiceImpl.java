@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.hansung.treeze.model.Lecture;
 import com.hansung.treeze.persistence.LectureRepository;
-import com.hansung.treeze.persistence.LectureMindmapSpecitications;
+import com.hansung.treeze.persistence.LectureSpecifications;
 import com.hansung.treeze.service.LectureService;
 
 @Service
@@ -18,7 +18,7 @@ public class LectureServiceImpl implements LectureService{
 	@Override
 	public Lecture saveLecture(Lecture lecture){
 		// TODO Auto-generated method stub
-		return lectureRepository.save(mindmap);
+		return lectureRepository.save(lecture);
 	}
 
 	@Override
@@ -30,14 +30,14 @@ public class LectureServiceImpl implements LectureService{
 	@Override
 	public Object findBylectureName(String lectureName) {
 		// TODO Auto-generated method stub
-		return lectureRepository.findAll(Specifications.where(LectureSpecitications.islectureName(lectureName)));
+		return lectureRepository.findAll(Specifications.where(LectureSpecifications.islectureName(lectureName)));
 	
 	}
 
 		@Override
 	public Object findMyLectures(String lectureName, String professorEmail) {
 		// TODO Auto-generated method stub
-		return lectureRepository.findAll(Specifications.where(LectureSpecitications.isMyLecture(lectureName, professorEmail)));
+		return lectureRepository.findAll(Specifications.where(LectureSpecifications.isMyLecture(lectureName, professorEmail)));
 		
 	}
 
