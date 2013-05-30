@@ -4,6 +4,7 @@ package freemind.modes;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -69,5 +70,75 @@ public class UploadToServer {
         HttpEntity resEntity = response.getEntity();   
        }catch(Exception e){e.printStackTrace();
        }
+	  }
+	  
+	  public void lecturePost(String lectureName, String profEmail, String state) {
+		  	String jsonStr;
+//			FreemindGson myGson = new FreemindGson();
+//			Lecture createLecture = new Lecture();
+//			createLecture.setLectureName(lectureTitle);
+//			createLecture.setProfessorEmail("minsuk@hansung.ac.kr");
+//			createLecture.setStateOfLecture(false);
+//			jsonStr = myGson.toJson(createLecture);
+          try {
+        	  HttpClient httpClient = new DefaultHttpClient();  
+        	  //String url = serverUrl;
+        	  HttpPost post = new HttpPost("http://113.198.84.74:8080/treeze/upload/img"); 
+        	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
+        	  //파일 path 잡아주고 for 돌며면서 이미지 보내
+        	  
+        	  StringBody lectureTitle = new StringBody(lectureName, Charset.forName("UTF-8"));
+        	  StringBody profEmailBody = new StringBody(profEmail, Charset.forName("UTF-8"));
+        	  StringBody lectureState = new StringBody(state, Charset.forName("UTF-8"));
+           
+        	  multipart.addPart("lectureName", lectureTitle);  
+        	  multipart.addPart("professorEmail", profEmailBody);
+        	  multipart.addPart("stateOfLecture", lectureState);
+
+        	  post.setEntity(multipart);  
+        	  HttpResponse response = httpClient.execute(post);  
+        	  HttpEntity resEntity = response.getEntity();
+          }catch(Exception e){e.printStackTrace();
+          }
+	  }
+	  
+	  public void classPost(String lectureName, String profEmail, String className) {
+		  	String jsonStr;
+//			FreemindGson myGson = new FreemindGson();
+//			Lecture createLecture = new Lecture();
+//			createLecture.setLectureName(lectureTitle);
+//			createLecture.setProfessorEmail("minsuk@hansung.ac.kr");
+//			createLecture.setStateOfLecture(false);
+//			jsonStr = myGson.toJson(createLecture);
+        try {
+      	  HttpClient httpClient = new DefaultHttpClient();  
+      	  //String url = serverUrl;
+      	  HttpPost post = new HttpPost("http://113.198.84.74:8080/treeze/upload/img"); 
+      	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
+      	  //파일 path 잡아주고 for 돌며면서 이미지 보내
+      	  Random random = new Random();
+      	  
+      	  StringBuffer str = new StringBuffer(); // 변수를 바꿨으면 의미 없는 주석 달기
+      	  for (int i = 1; i < 12; i++) {
+      		  str.append((random.nextInt(10)));
+      	  }
+      	  StringBody classId = new StringBody(str.toString(), Charset.forName("UTF-8"));
+      	  StringBody lectureTitle = new StringBody(lectureName, Charset.forName("UTF-8"));
+      	  StringBody profEmailBody = new StringBody(profEmail, Charset.forName("UTF-8"));
+      	  StringBody classNameBody = new StringBody(className, Charset.forName("UTF-8"));
+      	  StringBody tmp = new StringBody("tmp", Charset.forName("UTF-8"));
+      	  
+      	  multipart.addPart("classIp", tmp);
+      	  multipart.addPart("port", tmp);
+      	  multipart.addPart("classId", classId);
+      	  multipart.addPart("lectureName", lectureTitle);  
+      	  multipart.addPart("professorEmail", profEmailBody);
+      	  multipart.addPart("className", classNameBody);
+      	  
+      	  post.setEntity(multipart);  
+      	  HttpResponse response = httpClient.execute(post);  
+      	  HttpEntity resEntity = response.getEntity();
+        }catch(Exception e){e.printStackTrace();
+        }
 	  }
 }

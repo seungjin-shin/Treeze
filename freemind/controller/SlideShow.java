@@ -16,6 +16,9 @@ import javax.swing.JFrame;
 
 import org.json.simple.JSONObject;
 
+import freemind.json.CurrentPositionOfNav;
+import freemind.json.FreemindGson;
+
 public class SlideShow {
 	SlideData focus;
 	int pagenum = 0;
@@ -103,6 +106,8 @@ public class SlideShow {
 				public void keyPressed(KeyEvent e) {
 					// TODO Auto-generated method stub
 					OutputStream os;
+					final String NAVINUM = "0";
+					
 					if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 						nextShow();
 						
@@ -121,7 +126,7 @@ public class SlideShow {
 						for(int i = 0; i < c.getNaviOs().size(); i++){
 							os = c.getNaviOs().get(i);
 							try {
-								os.write(jsonString.getBytes()); // 다 보내
+								os.write((NAVINUM + jsonString).getBytes()); // 다 보내
 							} catch (IOException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();

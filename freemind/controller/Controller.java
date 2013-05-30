@@ -191,8 +191,36 @@ public class Controller  implements MapModuleChangeObserver {
     public SlideShow slideShow = new SlideShow(this);
     
     public ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
+    int yesCnt = 0;
+    int noCnt = 0;
+    int totalCnt = 0;
     
-    public NaviSocket nvSck = new NaviSocket(this);
+    public int getYesCnt() {
+		return yesCnt;
+	}
+
+	public void setYesCnt(int yesCnt) {
+		this.yesCnt = yesCnt;
+	}
+
+	public int getNoCnt() {
+		return noCnt;
+	}
+
+	public void setNoCnt(int noCnt) {
+		this.noCnt = noCnt;
+	}
+
+	public int getTotalCnt() {
+		return totalCnt;
+	}
+
+	public void setTotalCnt(int totalCnt) {
+		this.totalCnt = totalCnt;
+	}
+
+	public NaviSocket nvSck = new NaviSocket(this);
+    
     public ArrayList<OutputStream> getNaviOs() {
 		return naviOs;
 	}

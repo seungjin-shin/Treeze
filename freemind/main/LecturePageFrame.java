@@ -2,6 +2,7 @@ package freemind.main;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -11,11 +12,13 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
 
 
@@ -34,7 +37,7 @@ public class LecturePageFrame extends JFrame {
 		this.mc = mc;
 		profileImg = new ImageIcon(profileImgURL).getImage();
 		logo = new ImageIcon(logoURL).getImage();
-		btnListener = new BtnListener(mc);
+		btnListener = new BtnListener(this);
 		classPanel = new ClassPanel(this, mc);
 		
 		setSize(950, 800);
@@ -179,17 +182,17 @@ class ClassTopBarPanel extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new InputClassFrame(null);
+		new InputClassFrame(frame);
 	}
 }
 
-class InputClassFrame extends JFrame{
-	ActionListener btnListener;
-	MindMapController mc;
-	public InputClassFrame(MindMapController mc) {
-		this.mc = mc;
+class InputClassFrame extends JFrame implements ActionListener{
+	JFrame frame;
+	JTextField classtf;
+	
+	public InputClassFrame(JFrame frame) {
+		this.frame = frame;
 		
-		btnListener = new BtnListener(this, mc);
 		setSize(380, 100);
 		setLayout(null);
 		setTitle("Input your class title");
@@ -210,16 +213,50 @@ class InputClassFrame extends JFrame{
 //		fileBtn.setSize(100, 30);
 //		fileBtn.setLocation(40, 40);
 //		add(fileBtn);
-		JTextField lecturetf = new JTextField();
-		lecturetf.setSize(150, 25);
-		lecturetf.setLocation(60, 10);
+		classtf = new JTextField();
+		classtf.setSize(150, 25);
+		classtf.setLocation(60, 10);
 		JButton input = new JButton("Create class");
-		input.addActionListener(btnListener);
+		input.addActionListener(this);
 		input.setSize(110, 25);
 		input.setLocation(240, 10);
 		add(inputLb);
-		add(lecturetf);
+		add(classtf);
 		add(input);
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String classTitle = classtf.getText();
+		classTitle = classTitle.trim();
+		JDialog dlg;
+		
+		if(classTitle.equals("")){
+			dlg = new JDialog(this, "Error", true);
+			JLabel errLb = new JLabel("Input your class!");
+			dlg.setLayout(new FlowLayout());
+			dlg.add(errLb);
+			dlg.setBounds(150,200,200,100);
+			dlg.setVisible(true);
+			return;
+		}
+		else{
+//			String jsonStr;
+//			FreemindGson myGson = new FreemindGson();
+//			Lecture createLecture = new Lecture();
+//			createLecture.setLectureName(lectureTitle);
+//			createLecture.setProfessorEmail("minsuk@hansung.ac.kr");
+//			createLecture.setStateOfLecture(false);
+//			jsonStr = myGson.toJson(createLecture);
+			
+			UploadToServer UTS = new UploadToServer();
+			UTS.classPost("Embedded System", "minsuk@hansung.ac.kr", classTitle);
+			//UTS.lecturePost(classTitle, "minsuk@hansung.ac.kr", "false");
+			
+//			//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
+//			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
+			
+			this.setVisible(false);
+		}
 	}
 }
 

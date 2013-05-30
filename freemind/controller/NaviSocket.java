@@ -90,20 +90,25 @@ class Start extends Thread {
 	}
 
 	public void run() {
-		int slideNum = 0;
-		String fileName = "";
+		final String SURVEYYES = "0";
+		final String SURVEYNO = "1";
+		final String QUESTION = "2";
+		int yesCnt = 0;
+		int noCnt = 0;
+		
 		String folderName = "c://myweb//sPad/";// 기본 폴더 지정
-		String pptName = "";
 		int cnt = -1;
-
+		
+		String chkStr;
+		String rcvStr;
+		
 		try {
 			int i = 0;
-			int fileLen;
 			String OK = "OK";
 			String END = "E#N#D#";
 			String[] userInfo;
-			final String SUBSTR = ".ppt";
-			String[] pptNameSplit;
+			final String SUBSTR = "";
+			
 			
 			InputStream is = socket.getInputStream();
 			OutputStream os = socket.getOutputStream();
@@ -117,36 +122,33 @@ class Start extends Thread {
 					System.out.println("socket end");
 					write("socket end");
 					c.getNaviOs().remove(os);
-					return;
+					break;
+				}
+				else{
+					String str = new String(b, 0, cnt);
+					chkStr = str.substring(0, 1);
+					if(chkStr.equals(SURVEYYES)){
+						c.setYesCnt(c.getYesCnt() + 1);
+						c.setTotalCnt(c.getTotalCnt() + 1);
+					}
+					else if(chkStr.equals(SURVEYNO)){
+						c.setNoCnt(c.getNoCnt() + 1);
+						c.setTotalCnt(c.getTotalCnt() + 1);
+					}
+					else if(chkStr.equals(QUESTION)){
+						rcvStr = str.substring(1, str.length()); // 질문 처리
+					}
+					
+					if(c.getTotalCnt() == c.getNaviOs().size()){
+						new SurveyResultFrame(c.getYesCnt(), c.getNoCnt());
+						c.setYesCnt(0);
+						c.setNoCnt(0);
+						c.setTotalCnt(0);
+					}
 				}
 				
-				String str = new String(b, 0, cnt);
-				userInfo = str.split(END);
-				write(str);
-				write(userInfo[0]+","+userInfo[1]); // 0은 폰번호, 1은 ppt이름
-				if (str.indexOf(END) != -1) {
-					File folder = new File(folderName + userInfo[0]);
-					folder.mkdirs();
-					break;
-				}
-			}
-
-			// 이미지화
-			write("To make images is completed.");
-			//이미지 수 보내
-			os.write((slideNum+END).getBytes());
-			os.flush();
-
-			while (true) {
-				cnt = is.read(b);
-				String str = new String(b, 0, cnt);
-				write("User has to down slides number is : "+str.substring(0, str.indexOf(END)));
-				if (str.indexOf(END) != -1) {
-					break;
-				}
 			}
 			
-			write("------- A user is completed. --------");
 			is.close();
 			os.close();
 			socket.close();

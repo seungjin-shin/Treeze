@@ -1,8 +1,8 @@
 package freemind.main;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -10,14 +10,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import freemind.json.FreemindGson;
+import freemind.json.Lecture;
 import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
 
@@ -144,9 +146,8 @@ class CreateBtn implements ActionListener{
 	
 }
 
-class InputLectureFrame extends JFrame{
-	ActionListener btnListener = new BtnListener(this);
-	
+class InputLectureFrame extends JFrame implements ActionListener{
+	JTextField lecturetf;
 	public InputLectureFrame() {
 		setSize(400, 100);
 		setLayout(null);
@@ -156,7 +157,7 @@ class InputLectureFrame extends JFrame{
 		
 		getContentPane().setBackground(new Color(141, 198, 63));
 		
-		JTextField lecturetf = new JTextField();
+		lecturetf = new JTextField();
 		JLabel inputLb = new JLabel("Title :");
 		inputLb.setSize(50, 30);
 		inputLb.setLocation(10, 10);
@@ -164,12 +165,48 @@ class InputLectureFrame extends JFrame{
 		lecturetf.setSize(150, 30);
 		lecturetf.setLocation(60, 10);
 		JButton input = new JButton("Create lecture");
-		input.addActionListener(btnListener);
+		input.addActionListener(this);
 		input.setSize(130, 30);
 		input.setLocation(230, 10);
 		add(lecturetf);
 		add(inputLb);
 		add(input);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String lectureTitle = lecturetf.getText();
+		lectureTitle = lectureTitle.trim();
+		JDialog dlg;
+		
+		if(lectureTitle.equals("")){
+			dlg = new JDialog(this, "Error", true);
+			JLabel errLb = new JLabel("Input your lecture!");
+			dlg.setLayout(new FlowLayout());
+			dlg.add(errLb);
+			dlg.setBounds(150,200,200,100);
+			dlg.setVisible(true);
+			return;
+		}
+		else{
+//			String jsonStr;
+//			FreemindGson myGson = new FreemindGson();
+//			Lecture createLecture = new Lecture();
+//			createLecture.setLectureName(lectureTitle);
+//			createLecture.setProfessorEmail("minsuk@hansung.ac.kr");
+//			createLecture.setStateOfLecture(false);
+//			jsonStr = myGson.toJson(createLecture);
+			
+			UploadToServer UTS = new UploadToServer();
+			UTS.lecturePost(lectureTitle, "minsuk@hansung.ac.kr", "false");
+			
+//			//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
+//			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
+
+			
+			this.setVisible(false);
+		}
+			
 	}
 }
 

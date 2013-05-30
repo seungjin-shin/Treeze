@@ -1,4 +1,4 @@
-package freemind.controller;
+package freemind.json;
 
 import java.util.ArrayList;
 

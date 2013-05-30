@@ -58,7 +58,7 @@ public class NodeMouseMotionListener implements MouseMotionListener,
         if (mListener != null)
             mListener.mouseClicked(e);
         System.out.println("Click"); //¸·¾Æ¾ßµÅ
-        new QuestionFrame();
+        //new QuestionFrame();
     }
 
     public void mouseDragged(MouseEvent e) {

@@ -1,4 +1,4 @@
-package freemind.controller;
+package freemind.json;
 
 import com.google.gson.Gson;
 

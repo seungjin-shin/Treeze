@@ -1,6 +1,5 @@
 package freemind.controller;
 
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -12,10 +11,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import freemind.main.BtnListener;
+
 
 
 class QuestionFrame extends JFrame{
-	ActionListener btnListener = new BtnListener(this);
+	BtnListener btnListener = new BtnListener(this);
 	
 	public QuestionFrame() {
 		setSize(600, 400);

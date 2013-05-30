@@ -1,22 +1,36 @@
 package freemind.controller;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import freemind.json.FreemindGson;
+import freemind.json.Survey;
+import freemind.modes.UploadToServer;
 
-class SurveyFrame extends JFrame{
-	ActionListener btnListener = new BtnListener(this);
-	
-	public SurveyFrame() {
+
+class SurveyFrame extends JFrame implements ActionListener{
+	final String SURVEYPNUM = "1";
+	ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
+	JTextField surveyTf;
+	public SurveyFrame(ArrayList<OutputStream> naviOs) {
+		this.naviOs = naviOs;
+		
 		setSize(450, 100);
 		setLayout(null);
 		setTitle("Input your survey contents");
@@ -25,43 +39,100 @@ class SurveyFrame extends JFrame{
 		
 		getContentPane().setBackground(new Color(141, 198, 63));
 		
-		JTextField lecturetf = new JTextField();
+		surveyTf= new JTextField();
 		JLabel inputLb = new JLabel("survey :");
 		inputLb.setSize(50, 30);
 		inputLb.setLocation(10, 10);
 		
-		lecturetf.setSize(210, 30);
-		lecturetf.setLocation(60, 10);
+		surveyTf.setSize(210, 30);
+		surveyTf.setLocation(60, 10);
 		JButton input = new JButton("Send survey");
-		input.addActionListener(btnListener);
+		input.addActionListener(this);
 		input.setSize(130, 30);
 		input.setLocation(280, 10);
 		
-		add(lecturetf);
+		add(surveyTf);
 		add(inputLb);
 		add(input);
 	}
-}
-
-class BtnListener implements ActionListener{
-	JFrame frame;
-	public BtnListener(JFrame f) {
-		frame = f;
-		// TODO Auto-generated constructor stub
-	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		frame.setVisible(false);
-		new SurveyResultFrame();
-	}
-	
+		this.setVisible(false);
+		
+		String surveyStr = null;
+		
+		surveyStr = surveyTf.getText();
+		
+		System.out.println(surveyStr);
+//		try {
+//			surveyStr = new String(surveyTf.getText().getBytes(), "UTF-8");
+//			System.out.println(surveyStr);
+//		} catch (UnsupportedEncodingException e2) {
+//			// TODO Auto-generated catch block
+//			e2.printStackTrace();
+//		}
+		surveyStr = surveyStr.trim();
+		JDialog dlg;
+		
+		if(surveyStr.equals("")){
+			dlg = new JDialog(this, "Error", true);
+			JLabel errLb = new JLabel("Input survey contents!");
+			dlg.setLayout(new FlowLayout());
+			dlg.add(errLb);
+			dlg.setBounds(150,200,200,100);
+			dlg.setVisible(true);
+			return;
+		}
+		else{
+			String jsonStr;
+			FreemindGson myGson = new FreemindGson();
+			Survey survey = new Survey();
+			survey.setContents(surveyStr);
+			jsonStr = myGson.toJson(survey);
+			OutputStream os;
+			
+			
+			for(int i = 0; i < naviOs.size(); i++){
+				os = naviOs.get(i);
+				try {
+					os.write((SURVEYPNUM + jsonStr).getBytes()); // 다 보내
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
+//			String jsonStr;
+//			FreemindGson myGson = new FreemindGson();
+//			Lecture createLecture = new Lecture();
+//			createLecture.setLectureName(lectureTitle);
+//			createLecture.setProfessorEmail("minsuk@hansung.ac.kr");
+//			createLecture.setStateOfLecture(false);
+//			jsonStr = myGson.toJson(createLecture);
+			
+//			UploadToServer UTS = new UploadToServer();
+//			UTS.classPost("Embedded System", "minsuk@hansung.ac.kr", surveyStr);
+			//UTS.lecturePost(classTitle, "minsuk@hansung.ac.kr", "false");
+			
+//			//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
+//			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
+			
+			this.setVisible(false);
+		}
+	}		
 }
 
-
-class SurveyResultFrame extends JFrame{
-	ActionListener btnListener = new BtnListener(this);
-	
-	public SurveyResultFrame() {
+class SurveyResultFrame extends JFrame implements ActionListener{
+	int yesCnt;
+	int noCnt;
+	int yesPer;
+	int noPer;
+	public SurveyResultFrame(int y, int n) {
+		yesCnt = y;
+		noCnt = n;
+		yesPer = (int)(((double)y/(double)(y + n)) * 100);
+		noPer = (int)(((double)n/(double)(y + n)) * 100);
+		
 		setSize(600, 400);
 		setLayout(null);
 		setTitle("Survey result");
@@ -86,7 +157,7 @@ class SurveyResultFrame extends JFrame{
 		
 		JButton okBtn = new JButton("OK");
 		
-		okBtn.addActionListener(btnListener);
+		okBtn.addActionListener(this);
 		okBtn.setSize(130, 30);
 		okBtn.setLocation(300, 300);
 		add(okBtn);
@@ -111,77 +182,82 @@ class SurveyResultFrame extends JFrame{
 		g.drawLine(20, 87, 500, 87);
 		//g.fillRect(20, 150, 480, 200);
 	}
-}
-class ResultPanel extends JPanel{
-	public ResultPanel() {
-		setSize(480, 160);
-		setLayout(null);
-		setVisible(true);
-		setBackground(new Color(141, 198, 63));
-		JLabel allCnt = new JLabel("Registered count : 40");
-		allCnt.setSize(130, 40);
-		allCnt.setLocation(10, 0);
-		add(allCnt);
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		this.setVisible(false);
+	}
+	class ResultPanel extends JPanel{
+		public ResultPanel() {
+			setSize(480, 160);
+			setLayout(null);
+			setVisible(true);
+			setBackground(new Color(141, 198, 63));
+			JLabel allCnt = new JLabel("Registered count : " + (yesCnt + noCnt));
+			allCnt.setSize(130, 40);
+			allCnt.setLocation(10, 0);
+			add(allCnt);
+			
+			JLabel joinCnt = new JLabel("Join count for survey : " + (yesCnt + noCnt));
+			joinCnt.setSize(160, 40);
+			joinCnt.setLocation(150, 0);
+			add(joinCnt);
+			
+			
+		}
 		
-		JLabel joinCnt = new JLabel("Join count for quiz : 38");
-		joinCnt.setSize(160, 40);
-		joinCnt.setLocation(150, 0);
-		add(joinCnt);
-		
-		
+		public void paint(Graphics g){
+			super.paint(g);
+			g.setColor(Color.white);
+			
+			//g.drawRoundRect(10, 40, 460, 100, 30, 30);
+			
+		}
 	}
 	
-	public void paint(Graphics g){
-		super.paint(g);
-		g.setColor(Color.white);
+	class ResultPanel2 extends JPanel{
+		public ResultPanel2() {
+			setSize(460, 100);
+			setLayout(null);
+			setVisible(true);
+			setBackground(Color.white);
+			
+			JLabel yesLb = new JLabel("Yes");
+			yesLb.setSize(50, 30);
+			yesLb.setLocation(20, 20);
+			add(yesLb);
+			
+			JLabel noLb = new JLabel("No");
+			noLb.setSize(50, 30);
+			noLb.setLocation(20, 50);
+			add(noLb);
+			
+			JLabel yesPers = new JLabel(yesPer + "%");
+			yesPers.setSize(50, 30);
+			yesPers.setLocation(360, 25);
+			add(yesPers);
+			
+			JLabel noPers = new JLabel(noPer + "%");
+			noPers.setSize(50, 30);
+			noPers.setLocation(360, 50);
+			add(noPers);
+		}
 		
-		//g.drawRoundRect(10, 40, 460, 100, 30, 30);
-		
+		public void paint(Graphics g){
+			super.paint(g);
+			g.setColor(Color.blue);
+			g.drawLine(50, 34, 50 + yesPer * 3, 34);
+			g.drawLine(50, 35, 50 + yesPer * 3, 35);
+			g.drawLine(50, 36, 50 + yesPer * 3, 36);
+			
+			g.setColor(Color.red);
+			g.drawLine(50, 64, 50 + noPer * 3, 64);
+			g.drawLine(50, 65, 50 + noPer * 3, 65);
+			g.drawLine(50, 66, 50 + noPer * 3, 66);
+//		
+//		g.drawRoundRect(10, 40, 460, 100, 30, 30);
+			
+		}
 	}
 }
 
-class ResultPanel2 extends JPanel{
-	public ResultPanel2() {
-		setSize(460, 100);
-		setLayout(null);
-		setVisible(true);
-		setBackground(Color.white);
-		
-		JLabel yesLb = new JLabel("Yes");
-		yesLb.setSize(50, 30);
-		yesLb.setLocation(20, 20);
-		add(yesLb);
-		
-		JLabel noLb = new JLabel("No");
-		noLb.setSize(50, 30);
-		noLb.setLocation(20, 50);
-		add(noLb);
-		
-		JLabel yesPers = new JLabel("75%");
-		yesPers.setSize(50, 30);
-		yesPers.setLocation(360, 25);
-		add(yesPers);
-		
-		JLabel noPers = new JLabel("25%");
-		noPers.setSize(50, 30);
-		noPers.setLocation(360, 50);
-		add(noPers);
-	}
-	
-	public void paint(Graphics g){
-		super.paint(g);
-		g.setColor(Color.blue);
-		g.drawLine(50, 34, 150, 34);
-		g.drawLine(50, 35, 150, 35);
-		g.drawLine(50, 36, 150, 36);
-		
-		g.setColor(Color.red);
-		g.drawLine(50, 64, 100, 64);
-		g.drawLine(50, 65, 100, 65);
-		g.drawLine(50, 66, 100, 66);
-//		
-//		g.drawRoundRect(10, 40, 460, 100, 30, 30);
-		
-	}
-}
 

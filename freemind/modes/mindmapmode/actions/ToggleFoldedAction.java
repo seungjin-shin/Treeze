@@ -127,14 +127,17 @@ public class ToggleFoldedAction extends AbstractAction implements ActorXml {
 
 	public void act(XmlAction action) {
 		if (action instanceof FoldAction) {
-			FoldAction foldAction = (FoldAction) action;
-			MindMapNode node = modeController.getNodeFromID(foldAction
-					.getNode());
-			boolean fold = foldAction.getFolded();
-			modeController._setFolded(node, fold);
-			if(Resources.getInstance().getBoolProperty(FreeMind.RESOURCES_SAVE_FOLDING_STATE)){
-				modeController.nodeChanged(node);
-			}
+			System.out.println(modeController.getSelected().getText()); // Æú´õ Á¢Èû action remove
+			
+			
+//			FoldAction foldAction = (FoldAction) action;
+//			MindMapNode node = modeController.getNodeFromID(foldAction
+//					.getNode());
+//			boolean fold = foldAction.getFolded();
+//			modeController._setFolded(node, fold);
+//			if(Resources.getInstance().getBoolProperty(FreeMind.RESOURCES_SAVE_FOLDING_STATE)){
+//				modeController.nodeChanged(node);
+			//}
 		}
 	}
 
