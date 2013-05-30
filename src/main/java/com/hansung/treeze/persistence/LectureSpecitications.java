@@ -7,26 +7,31 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import com.hansung.treeze.model.Class_;
 import com.hansung.treeze.model.Lecture;
 import com.hansung.treeze.model.Lecture_;
 
 public class LectureSpecitications {
 	
-	public static Specification<Lecture> islectureName(String lectureName){
+	public static Specification<Lecture> islectureName(final String lectureName){
 		return new Specification<Lecture>() {
+
 			@Override
-			public Predicate toPredicate(Root<Class> root, CriteriaQuery<?> query, CriteriaBuilder cb){
+			public Predicate toPredicate(Root<Lecture> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				// TODO Auto-generated method stub
 				return cb.equal(root.<String>get(Lecture_.lectureName), lectureName);
 			}
 		};
 	}
 
 
-	public static Specification<Lecture> isMyLecture (String lectureName, String professorEmail){
+	public static Specification<Lecture> isMyLecture (final String lectureName,final String professorEmail){
 		return new Specification<Lecture>() {
 			@Override
 			public Predicate toPredicate(Root<Lecture> root, CriteriaQuery<?> query, CriteriaBuilder cb){
-				return cb.equal(root.<String>get(Lecture_.mindmapXML), mindmapXML);
+				return cb.and(cb.equal(root.<String>get(Lecture_.lectureName), lectureName),
+					      cb.equal(root.<String>get(Lecture_.professorEmail), professorEmail));
 			}
 		};
 	}

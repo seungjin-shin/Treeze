@@ -10,13 +10,14 @@ import org.springframework.data.jpa.domain.Specification;
 import com.hansung.treeze.model.Class;
 import com.hansung.treeze.model.Class_;
 
-public class ClassSpecitications {
+public class ClassSpecifications {
 	
-	public static Specification<Class> isMyClass(String lectureName, String professorEmail){
+	public static Specification<Class> isMyClass(final String lectureName,final String professorEmail){
 		return new Specification<Class>() {
 			@Override
 			public Predicate toPredicate(Root<Class> root, CriteriaQuery<?> query, CriteriaBuilder cb){
-				return cb.equal(root.<String>get(Class_.mindmapXML), mindmapXML);
+				return cb.and(cb.equal(root.<String>get(Class_.lectureName), lectureName),
+					      cb.equal(root.<String>get(Class_.professorEmail), professorEmail));
 			}
 		};
 	}

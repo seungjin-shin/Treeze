@@ -16,7 +16,7 @@ public class MindmapSpecitications {
 		return new Specification<Mindmap>() {
 			@Override
 			public Predicate toPredicate(Root<Mindmap> root, CriteriaQuery<?> query, CriteriaBuilder cb){
-				return cb.equal(root.<String>get(Mindmap_.classId), classId);
+				return cb.equal(root.<Integer>get(Mindmap_.classId), classId);
 			}
 		};
 	}

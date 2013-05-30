@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[2.5.0.201010141000-RC1]]></pluginVersion>
+	<pluginVersion><![CDATA[3.1.0.201210040510-RELEASE]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
 	<enableImports><![CDATA[true]]></enableImports>
 	<configs>
+		<config>src/main/resources/META-INF/spring/data.xml</config>
+		<config>src/main/resources/META-INF/spring/properties.xml</config>
 	</configs>
 	<configSets>
 	</configSets>
