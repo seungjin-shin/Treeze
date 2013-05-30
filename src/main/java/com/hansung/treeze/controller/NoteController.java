@@ -44,7 +44,7 @@ public class NoteController {
 	}
 
 	@RequestMapping(value="/getNotes/{classId}/{userEmail}/{position}", method=RequestMethod.GET)
-	public String getNotes(@PathVariable String classId, @PathVariable String userEmail, @PathVariable String position, ModelMap map) {
+	public String getNotes(@PathVariable Integer classId, @PathVariable String userEmail, @PathVariable String position, ModelMap map) {
 
 		map.put("Note", noteService.getNotes(classId, userEmail,position));
 		return "jsonView";	

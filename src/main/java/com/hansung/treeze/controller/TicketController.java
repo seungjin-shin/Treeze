@@ -33,7 +33,7 @@ import com.hansung.treeze.service.TicketService;
 @Controller
 public class TicketController {
 	private static final Logger logger = LoggerFactory.getLogger(TicketController.class);
-	@Autowired private TicketService mindmapService;
+	@Autowired private TicketService ticketService;
 	
 	@RequestMapping(value="/createTicket", method=RequestMethod.POST)
 	public String createTicket(Ticket model, ModelMap map) {
@@ -44,7 +44,7 @@ public class TicketController {
 	}
 
 		@RequestMapping(value="/getTickets/{classId}", method=RequestMethod.GET)
-	public String getTickets(@PathVariable String classId, ModelMap map) {
+	public String getTickets(@PathVariable Integer classId, ModelMap map) {
 
 		map.put("Ticket", ticketService.getTickets(classId));
 		return "jsonView";	

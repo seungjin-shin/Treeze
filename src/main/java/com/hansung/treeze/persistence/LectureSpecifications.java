@@ -7,7 +7,7 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.hansung.treeze.model.Class_;
+import com.hansung.treeze.model.ClassInfo_;
 import com.hansung.treeze.model.Lecture;
 import com.hansung.treeze.model.Lecture_;
 

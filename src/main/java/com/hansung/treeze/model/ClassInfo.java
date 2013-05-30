@@ -5,13 +5,13 @@ import javax.persistence.Entity;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
-public class Class extends AbstractPersistable<Long>{
+public class ClassInfo extends AbstractPersistable<Long>{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2765987884015351541L;
-	private int classId; /*²¨³»¼­ ´Ù½Ã ÀúÀåÇØ¾ßÇÔ */
+	private int classId; /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½ */
 	private String className;
 	private String classIP;
 	private int port;
