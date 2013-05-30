@@ -14,6 +14,7 @@ public class Lecture extends AbstractPersistable<Long>  {
 
 	private String professorEmail;
 	private String lectureName;
+	private Boolean stateOfLecture;
 	
 	public String getProfessorEmail() {
 		return professorEmail;
@@ -26,5 +27,11 @@ public class Lecture extends AbstractPersistable<Long>  {
 	}
 	public void setLectureName(String lectureName) {
 		this.lectureName = lectureName;
+	}
+	public Boolean getStateOfLecture() {
+		return stateOfLecture;
+	}
+	public void setStateOfLecture(Boolean stateOfLecture) {
+		this.stateOfLecture = stateOfLecture;
 	}
 }

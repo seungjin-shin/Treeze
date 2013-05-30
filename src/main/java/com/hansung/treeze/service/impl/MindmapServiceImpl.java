@@ -14,6 +14,7 @@ public class MindmapServiceImpl implements MindmapService{
 
 	@Autowired private MindmapRepository mindmapRepository;
 
+
 	@Override
 	public Mindmap save(Mindmap mindmap) {
 		// TODO Auto-generated method stub
@@ -21,16 +22,9 @@ public class MindmapServiceImpl implements MindmapService{
 	}
 
 	@Override
-	public Mindmap findByPTId(Long ptId) {
+	public Mindmap findByclassId(int classId) {
 		// TODO Auto-generated method stub
-		return mindmapRepository.findOne(ptId);
-	}
-
-	@Override
-	public Mindmap findByXML(String mindmapXML) {
-		// TODO Auto-generated method stub
-		return mindmapRepository.findOne(Specifications.where(MindmapSpecitications.isMindmapXML(mindmapXML)));
-		//return ptInfoRepository.findAll(Specifications.where(isPTId(ptId)));
+		return mindmapRepository.findOne(Specifications.where(MindmapSpecitications.isClassId(classId)));
 	}
 
 }

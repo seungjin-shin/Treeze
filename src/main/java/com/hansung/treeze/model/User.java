@@ -12,7 +12,7 @@ public class User extends AbstractPersistable<Long>  {
 	 */
 	private static final long serialVersionUID = 8670230733755158882L;
 
-	private int userImgId; //이미지 저장시킨후에 넣기
+	private int userImgId;  //이미지 저장시킨후에 넣기
 	private String userName;
 	private String userEmail;
 	

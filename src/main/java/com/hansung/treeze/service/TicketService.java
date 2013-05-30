@@ -1,0 +1,11 @@
+package com.hansung.treeze.service;
+
+import com.hansung.treeze.model.Ticket;
+
+
+public interface TicketService {
+
+	Ticket saveTicket(Ticket ticket);
+	Object getTickets(int classId);
+
+}

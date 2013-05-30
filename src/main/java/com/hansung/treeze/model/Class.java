@@ -11,6 +11,7 @@ public class Class extends AbstractPersistable<Long>{
 	 * 
 	 */
 	private static final long serialVersionUID = 2765987884015351541L;
+	private int classId; /*꺼내서 다시 저장해야함 */
 	private String className;
 	private String classIP;
 	private int port;
@@ -48,5 +49,11 @@ public class Class extends AbstractPersistable<Long>{
 	}
 	public void setClassName(String className) {
 		this.className = className;
+	}
+	public int getClassId() {
+		return classId;
+	}
+	public void setClassId(int classId) {
+		this.classId = classId;
 	}
 }

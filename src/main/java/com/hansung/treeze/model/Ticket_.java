@@ -10,5 +10,5 @@ public class Ticket_ {
 	public static volatile SingularAttribute<Ticket, String> position;
 	public static volatile SingularAttribute<Ticket, String> contents;
 	public static volatile SingularAttribute<Ticket, Integer> ticketNumber;
-	public static volatile SingularAttribute<Ticket, String> userEmail;
+	public static volatile SingularAttribute<Ticket, String> userName;
 }
