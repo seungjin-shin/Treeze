@@ -2,6 +2,7 @@ package freemind.main;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -16,6 +17,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import freemind.json.FreemindGson;
@@ -101,12 +103,14 @@ public class LoggedInFrame extends JFrame {
 		add(tmpBtn);
 		
 		
-		
-		lecturePanel.setSize(600, 500);
-		lecturePanel.setLocation(290, 130);
+		JScrollPane sPanel = new JScrollPane(lecturePanel);
+		sPanel.setBounds(290, 130, 600, 498);
+//		lecturePanel.setSize(600, 500);
+//		lecturePanel.setLocation(290, 130);
 		//connectPanel.setBackground(Color.white);
 		
-		add(lecturePanel);
+		//add(lecturePanel);
+		add(sPanel);
 		
 		setTitle("Select your lecture");
 		setVisible(true);
@@ -217,6 +221,15 @@ class LecturePanel extends JPanel implements ActionListener{
 	//URL onBookMarkURL = getClass().getClassLoader().getResource("onBookMark.png");
 	JFrame frame;
 	MindMapController mc;
+	final int TOPPADDING = 100;
+	final int LECTUREHGAP = 60;
+	int lectureCnt = 0;
+	String[] latestDay = {"2013.4.11", "2013.5.21", "2013.1.22", "2012.12.23", "2012.1.3", "2013.4.23", "2013.3.3", "2012.11.23", "2012.10.1"
+			, "2012.5.23", "2013.5.23", "2012.2.23", "2012.1.28", "2012.6.23", "2012.7.23", "2011.7.23", "2012.8.15", "2011.7.2"}; // 18∞≥
+	String[] registered = {"21","30","31","40","41","15","22","26","33","19",
+			               "24","22","41","42","35","37","41","22"}; 
+	
+	
 	public LecturePanel(JFrame frame, MindMapController mc) {
 		this.mc = mc;
 		this.frame = frame;
@@ -248,56 +261,70 @@ class LecturePanel extends JPanel implements ActionListener{
 		embedded.addActionListener(this);
 		embedded.setFont(lagf);
 		embedded.setSize(220, 50);
-		embedded.setLocation(25, 100);
+		embedded.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
+		lectureCnt++;
 		
 		JButton logic = new JButton("Logic Circuit");
 		logic.addActionListener(this);
 		logic.setFont(lagf);
 		logic.setSize(220, 50);
-		logic.setLocation(25, 160);
+		logic.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
+		lectureCnt++;
 		
 		JButton system = new JButton("System Programming");
 		system.addActionListener(this);
 		system.setFont(lagf);
 		system.setSize(220, 50);
-		system.setLocation(25, 220);
+		system.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
+		
+		lectureCnt = 0;
 		
 		lagf = new Font("Serif", Font.BOLD, 30);
-		tmpLb = new JLabel("40");
+		tmpLb = new JLabel(registered[0]);
 		tmpLb.setSize(100, 50);
 		tmpLb.setFont(lagf);
-		tmpLb.setLocation(325, 100);
+		tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
 		add(tmpLb);
+		lectureCnt++;
 		
-		tmpLb = new JLabel("38");
+		tmpLb = new JLabel(registered[1]);
 		tmpLb.setSize(100, 50);
 		tmpLb.setFont(lagf);
-		tmpLb.setLocation(325, 160);
+		tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
 		add(tmpLb);
+		lectureCnt++;
 		
-		tmpLb = new JLabel("41");
+		tmpLb = new JLabel(registered[2]);
 		tmpLb.setSize(100, 50);
 		tmpLb.setFont(lagf);
-		tmpLb.setLocation(325, 220);
+		tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
 		add(tmpLb);
 		
-		tmpLb = new JLabel("2013.5.23");
+		lectureCnt = 0;
+		
+		tmpLb = new JLabel(latestDay[0]);
 		tmpLb.setSize(140, 50);
 		tmpLb.setFont(lagf);
-		tmpLb.setLocation(440, 100);
+		tmpLb.setLocation(440, TOPPADDING + LECTUREHGAP * lectureCnt);
 		add(tmpLb);
+		lectureCnt++;
 		
-		tmpLb = new JLabel("2012.4.22");
+		tmpLb = new JLabel(latestDay[1]);
 		tmpLb.setSize(160, 50);
 		tmpLb.setFont(lagf);
-		tmpLb.setLocation(440, 160);
+		tmpLb.setLocation(440,  TOPPADDING + LECTUREHGAP * lectureCnt);
 		add(tmpLb);
+		lectureCnt++;
 		
-		tmpLb = new JLabel("2012.12.11");
+		tmpLb = new JLabel(latestDay[2]);
 		tmpLb.setSize(180, 50);
 		tmpLb.setFont(lagf);
-		tmpLb.setLocation(440, 220);
+		//tmpLb.setLocation(440, 220);
+		tmpLb.setLocation(440,  TOPPADDING + LECTUREHGAP * lectureCnt);
 		add(tmpLb);
+		lectureCnt++;
+		
+		setPreferredSize(new Dimension(550, 20 + TOPPADDING + LECTUREHGAP * lectureCnt));
 		
 //		JLabel prof = new JLabel("¿Ã πŒºÆ");
 //		prof.setFont(lagf);
@@ -326,8 +353,8 @@ class LecturePanel extends JPanel implements ActionListener{
 		super.paint(g);
 		g.drawLine(20, 80, 560, 80);
 		
-		g.drawLine(270, 100, 270, 460);
-		g.drawLine(420, 100, 420, 460);
+		g.drawLine(270, 100, 270, TOPPADDING + LECTUREHGAP * lectureCnt);
+		g.drawLine(420, 100, 420, TOPPADDING + LECTUREHGAP * lectureCnt);
 //		g.setColor(Color.white);
 //
 //		g.drawLine(40, 380, 250, 380);

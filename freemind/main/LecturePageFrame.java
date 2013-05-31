@@ -2,6 +2,7 @@ package freemind.main;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -16,6 +17,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import freemind.modes.UploadToServer;
@@ -115,12 +117,14 @@ public class LecturePageFrame extends JFrame {
 		add(tmpBtn);
 		
 		
+		JScrollPane sPanel = new JScrollPane(classPanel);
+		sPanel.setBounds(290, 130, 600, 498);
 		
-		classPanel.setSize(600, 500);
-		classPanel.setLocation(290, 130);
+//		classPanel.setSize(600, 500);
+//		classPanel.setLocation(290, 130);
 		//connectPanel.setBackground(Color.white);
 		
-		add(classPanel);
+		add(sPanel);
 		
 		setTitle("Select your Class");
 		setVisible(true);
@@ -269,6 +273,11 @@ class ClassPanel extends JPanel implements ActionListener{
 	JFrame frame;
 	URL slideShowURL, mindmapURL;
 	MindMapController mc;
+	final int TOPPADDING = 130;
+	final int CLASSHGAP = 60;
+	int classCnt = 0;
+	String[] latestDay = {"2013.4.11", "2013.5.21", "2013.1.22", "2012.12.23", "2012.1.3", "2013.4.23", "2013.3.3", "2012.11.23", "2012.10.1"
+			, "2012.5.23", "2013.5.23", "2012.2.23", "2012.1.28", "2012.6.23", "2012.7.23", "2011.7.23", "2012.8.15", "2011.7.2"}; // 18°³
 	public ClassPanel(JFrame frame, MindMapController mc) {
 		this.frame = frame;
 		this.mc = mc;
@@ -298,26 +307,33 @@ class ClassPanel extends JPanel implements ActionListener{
 		JLabel embedded = new JLabel("First Class");
 		embedded.setFont(lagf);
 		embedded.setSize(240, 50);
-		embedded.setLocation(40, 130);
+		embedded.setLocation(40, TOPPADDING + classCnt * CLASSHGAP);
+		classCnt++;
+		add(embedded);
 		
 		JLabel logic = new JLabel("Second Class");
 		logic.setFont(lagf);
 		logic.setSize(240, 50);
-		logic.setLocation(40, 190);
+		logic.setLocation(40, TOPPADDING + classCnt * CLASSHGAP);
+		
+		classCnt = 0;
 		
 		lagf = new Font("Serif", Font.BOLD, 20);
 		
-		JLabel tmpLb = new JLabel("2013.5.23");
+		JLabel tmpLb = new JLabel(latestDay[0]);
 		tmpLb.setFont(lagf);
 		tmpLb.setSize(240, 50);
-		tmpLb.setLocation(295, 130);
+		tmpLb.setLocation(295, TOPPADDING + classCnt * CLASSHGAP);
+		add(tmpLb);
+		classCnt++;
+		
+		tmpLb = new JLabel(latestDay[1]);
+		tmpLb.setFont(lagf);
+		tmpLb.setSize(240, 50);
+		tmpLb.setLocation(295, TOPPADDING + classCnt * CLASSHGAP);
 		add(tmpLb);
 		
-		tmpLb = new JLabel("2012.4.22");
-		tmpLb.setFont(lagf);
-		tmpLb.setSize(240, 50);
-		tmpLb.setLocation(295, 190);
-		add(tmpLb);
+		classCnt = 0;
 		
 		slideShowURL = getClass().getClassLoader().getResource("slideShow.png");
 		mindmapURL = getClass().getClassLoader().getResource("mindmap.png");
@@ -326,29 +342,34 @@ class ClassPanel extends JPanel implements ActionListener{
 		JButton mindmapBtn = new JButton(new ImageIcon(mindmapURL));
 		
 		slideBtn.setSize(100, 24);
-		slideBtn.setLocation(472, 130);
+		slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
 		slideBtn.setFocusable(false);
 		add(slideBtn);
 		
 		mindmapBtn.setSize(100, 24);
-		mindmapBtn.setLocation(472, 155);
+		mindmapBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP + 25);
 		mindmapBtn.setFocusable(false);
 		mindmapBtn.addActionListener(this);
 		add(mindmapBtn);
+		classCnt++;
+
 		
 		slideBtn = new JButton(new ImageIcon(slideShowURL));
 		mindmapBtn = new JButton(new ImageIcon(mindmapURL));
 		
 		slideBtn.setSize(100, 24);
-		slideBtn.setLocation(472, 190);
+		slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
 		slideBtn.setFocusable(false);
 		add(slideBtn);
 		
 		mindmapBtn.setSize(100, 24);
-		mindmapBtn.setLocation(472, 215);
+		mindmapBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP + 25);
 		mindmapBtn.setFocusable(false);
 		mindmapBtn.addActionListener(this);
 		add(mindmapBtn);
+		classCnt++;
+		
+		setPreferredSize(new Dimension(550, 20 + TOPPADDING + classCnt * CLASSHGAP));
 		
 		ClassTopBarPanel classToppn = new ClassTopBarPanel(null);
 		classToppn.setSize(580, 50);
@@ -373,7 +394,7 @@ class ClassPanel extends JPanel implements ActionListener{
 //		prof3.setLocation(360, 220);
 		//add(prof3);
 		
-		add(embedded);
+		
 		add(logic);
 		//add(system);
 		
@@ -382,8 +403,8 @@ class ClassPanel extends JPanel implements ActionListener{
 		super.paint(g);
 		g.drawLine(20, 120, 580, 120);
 		
-		g.drawLine(220, 140, 220, 460);
-		g.drawLine(450, 140, 450, 460);
+		g.drawLine(220, 140, 220, TOPPADDING + CLASSHGAP * classCnt);
+		g.drawLine(450, 140, 450, TOPPADDING + CLASSHGAP * classCnt);
 		
 //		g.setColor(Color.white);
 //
