@@ -281,7 +281,7 @@ class ClassPanel extends JPanel implements ActionListener{
 	public ClassPanel(JFrame frame, MindMapController mc) {
 		this.frame = frame;
 		this.mc = mc;
-		
+		setBackground(Color.white);
 		setSize(450, 500);
 		setLayout(null);
 		
@@ -339,7 +339,7 @@ class ClassPanel extends JPanel implements ActionListener{
 		mindmapURL = getClass().getClassLoader().getResource("mindmap.png");
 		
 		JButton slideBtn = new JButton(new ImageIcon(slideShowURL));
-		JButton mindmapBtn = new JButton(new ImageIcon(mindmapURL));
+		JButton mindmapBtn = new JButton("123412341234", new ImageIcon(mindmapURL));
 		
 		slideBtn.setSize(100, 24);
 		slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
@@ -355,7 +355,7 @@ class ClassPanel extends JPanel implements ActionListener{
 
 		
 		slideBtn = new JButton(new ImageIcon(slideShowURL));
-		mindmapBtn = new JButton(new ImageIcon(mindmapURL));
+		mindmapBtn = new JButton("456456456456", new ImageIcon(mindmapURL));
 		
 		slideBtn.setSize(100, 24);
 		slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
@@ -422,7 +422,7 @@ class ClassPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String event = e.getActionCommand();
 		System.out.println(event);
-		mc.open(mc);
+		mc.open(mc, event);
 		frame.setVisible(false);
 	}
 }

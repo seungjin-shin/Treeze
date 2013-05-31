@@ -602,7 +602,8 @@ public class MindMapControllerMock implements ModeController {
 	}
 
 	@Override
-	public void open(MindMapController mc) {
+	public void open(MindMapController mc, String classId) {
 		// TODO Auto-generated method stub
+		
 	}
 }

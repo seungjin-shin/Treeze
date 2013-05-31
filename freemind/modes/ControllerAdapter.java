@@ -647,7 +647,7 @@ public abstract class ControllerAdapter implements ModeController {
 		upload.setVisible(false);
 	}
 	
-    public void open(MindMapController mc) {
+    public void open(MindMapController mc, String classId) {
         JFileChooser chooser = getFileChooser();
         // fc, 24.4.2008: multi selection has problems as setTitle in Controller doesn't works
 //        chooser.setMultiSelectionEnabled(true);
@@ -691,8 +691,9 @@ public abstract class ControllerAdapter implements ModeController {
 							mmFilePath = filePath.substring(0,
 									filePath.length() - 4);
 							pdf2mm(filePath, theFile.getName());
-//							UploadToServer UTS = new UploadToServer();
-//							//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
+							UploadToServer UTS = new UploadToServer();
+							UTS.doFileUpload(getController()
+									.getSlideList(), filePath, theFile.getName(), classId);
 //							//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
 
 							theFile = new File(mmFilePath + ".mm");
