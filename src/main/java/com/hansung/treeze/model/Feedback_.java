@@ -7,7 +7,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public class Feedback_ {
 
 	public static volatile SingularAttribute<Feedback, Integer> classId;
-	public static volatile SingularAttribute<Feedback, Integer> position[];
+	public static volatile SingularAttribute<Feedback, String> position;
 	public static volatile SingularAttribute<Feedback, String> contents;
 	public static volatile SingularAttribute<Feedback, String> userEmail;
 }

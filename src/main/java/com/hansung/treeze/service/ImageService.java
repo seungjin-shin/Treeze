@@ -4,7 +4,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
 
-	Object uploadImage(MultipartFile multipartFile, String lectureName);
+	Object uploadImage(MultipartFile multipartFile, int classId);
 	Object getUploadedImage(Long id);
+	Object findByClassId(int classId);
 
 }

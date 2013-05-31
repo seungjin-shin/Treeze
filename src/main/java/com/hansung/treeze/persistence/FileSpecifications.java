@@ -22,6 +22,14 @@ public class FileSpecifications {
 		};
 	}
 
+	public static Specification<UploadedFile> isClassId(final int classId){
+		return new Specification<UploadedFile>(){
+			@Override
+			public Predicate toPredicate(Root<UploadedFile> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.equal(root.<Integer>get(UploadedFile_.classId), classId);
+			}
+		};
+	}
 
 	private static String getLikePattern(final String searchTerm) {
 		StringBuilder pattern = new StringBuilder();

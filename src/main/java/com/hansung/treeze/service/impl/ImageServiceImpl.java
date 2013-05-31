@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.hansung.treeze.model.UploadedFile;
 import com.hansung.treeze.persistence.FileRepository;
+import com.hansung.treeze.persistence.FileSpecifications;
 import com.hansung.treeze.service.ImageService;
 
 @Service
@@ -27,9 +29,9 @@ public class ImageServiceImpl implements ImageService {
 	@Autowired private FileRepository fileRepository;
 	
 	@Override
-	public Map<String, String> uploadImage(MultipartFile multipartFile, String lectureName) {
+	public Map<String, String> uploadImage(MultipartFile multipartFile, int classId) {
 		String uploadPath = defaultProperties.getProperty("file.img.path");
-		Map<String, String> fileInfo = upload(multipartFile, uploadPath, lectureName);	
+		Map<String, String> fileInfo = upload(multipartFile, uploadPath, classId);	
 
 		String uploadedFileFullPath = fileInfo.remove("path");
 		int dotIndex = uploadedFileFullPath.lastIndexOf(".");
@@ -44,7 +46,7 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
-	private Map<String, String> upload(MultipartFile multipartFile, String uploadPath, String lectureName) {
+	private Map<String, String> upload(MultipartFile multipartFile, String uploadPath, int classId) {
 		String fileUniqueName = String.valueOf(System.nanoTime());
 
 		String originFileName = multipartFile.getOriginalFilename();		
@@ -64,7 +66,7 @@ public class ImageServiceImpl implements ImageService {
 		}
 	    
 	    UploadedFile uploadedFileBean = new UploadedFile();
-	    uploadedFileBean.setLectureName(lectureName);
+	    uploadedFileBean.setClassId(classId);
 	    uploadedFileBean.setFileName(originFileName);
 	    uploadedFileBean.setFilePath(uploadedFileFullPath);
 	    uploadedFileBean.setFileSize(String.valueOf(multipartFile.getSize()));
@@ -78,5 +80,12 @@ public class ImageServiceImpl implements ImageService {
 		fileInfo.put("id", String.valueOf(uploadedFileBean.getId()));
 
 		return fileInfo;
+	}
+
+	@Override
+	public Object findByClassId(int classId) {
+		// TODO Auto-generated method stub
+	
+		return fileRepository.findAll(Specifications.where(FileSpecifications.isClassId(classId)));
 	}
 }

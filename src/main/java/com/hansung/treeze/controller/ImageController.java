@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,14 +30,21 @@ public class ImageController {
 	private View thumbnailView;
 
 	@RequestMapping(value="/upload/img")
-	public String uploadImg(@RequestParam("lectureName") String lectureName,@RequestParam("upload") MultipartFile multipartFile, ModelMap map) {
-		logger.info("uploadImg" + lectureName );
+	public String uploadImg(@RequestParam("classId") Integer classId,@RequestParam("upload") MultipartFile multipartFile, ModelMap map) {
+		logger.info("uploadImg" + classId );
 
-		map.put("file", imageService.uploadImage(multipartFile, lectureName));
+		map.put("file", imageService.uploadImage(multipartFile, classId));
 		
 		return "uploadImage";
 	}
 	
+	@RequestMapping(value = "/img/{classId}", method = RequestMethod.GET)
+	public String getLectures(@PathVariable Integer classId, ModelMap map) {
+		Object imgs = imageService.findByClassId(classId);
+		map.put("imgs", imgs);
+		return "jsonView";
+
+	}
 	
 	@RequestMapping(value="/img/{id}")
 	public ModelAndView image(@PathVariable Long id) {
