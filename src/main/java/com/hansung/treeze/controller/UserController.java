@@ -29,8 +29,8 @@ public class UserController {
 	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public String addUser(User model, ModelMap map) {
-		userService.saveUser(model);
-		map.put("result", "success");
+		User user = userService.saveUser(model);
+		map.put("user", user);
 
 		return "jsonView";
 	}

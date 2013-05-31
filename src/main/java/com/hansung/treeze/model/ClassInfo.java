@@ -10,7 +10,7 @@ public class ClassInfo extends AbstractPersistable<Long>{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2765987884015351541L;
+	
 	private int classId; /*������ �ٽ� �����ؾ��� */
 	private String className;
 	private String classIP;
