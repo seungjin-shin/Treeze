@@ -9,7 +9,12 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,6 +24,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import freemind.json.FreemindGson;
 import freemind.json.Lecture;
@@ -256,6 +265,54 @@ class LecturePanel extends JPanel implements ActionListener{
 		add(tmpLb);
 		
 		lagf = new Font("Serif", Font.BOLD, 20);
+		
+		String sHtml = "";
+		BufferedReader in = null;
+		String buf = "";
+//		try
+//		{
+//		    URL url = new URL("http://61.43.139.10:8080/treeze/getMyLectures?professorEmail=" + "minsuk@hansung.ac.kr");
+//		    URLConnection urlconn = url.openConnection();
+//		    in = new BufferedReader(new InputStreamReader(urlconn.getInputStream(),"UTF-8"));
+//
+//		    while((buf = in.readLine()) != null)
+//		    {
+//		        sHtml += buf;
+//		    }
+//		}
+//		catch(Exception e)
+//		{
+//		    System.out.println("연결 에러");
+//		}
+//		finally
+//		{
+//		    if(sHtml.equals("")) sHtml = "Data가 존재하지 않습니다";
+//		    try {
+//				in.close();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//		System.out.println(sHtml);
+
+//		ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
+//		
+//		FreemindGson myGson = new FreemindGson();
+//		//lectureList = (ArrayList<Lecture>) myGson.fromJson(sHtml, "Lecture");
+//		System.out.println("dd");
+//		
+//		JsonParser parser = new JsonParser();
+//
+//		JsonArray array = parser.parse(sHtml).getAsJsonArray();
+//
+//		for(JsonElement element : array)
+//		{
+//		  // ...
+//		}
+		
+		
+		
 		
 		JButton embedded = new JButton("Embedded System");
 		embedded.addActionListener(this);

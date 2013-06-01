@@ -15,7 +15,7 @@ public class OpenAction extends AbstractAction {
         mc = (MindMapController) modeController;
     }
     public void actionPerformed(ActionEvent e) {
-        mc.open(mc, "null");
+        mc.open(mc, "0");
         mc.getController().setTitle(); // Possible update of read-only
     }
 }

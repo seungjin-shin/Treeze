@@ -45,10 +45,34 @@ public class UploadToServer {
                 //System.out.println(s);
               }
               in.close(); // read xml
-        	  
+              xml = "dd";
+//              xml = "<map version=\"0.9.0\">" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"리눅스 강의\">" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" POSITION=\"left\" TEXT=\" 리눅스 소개\">" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"리눅스의 역사\"/>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Linux도 운영 체제\"/>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Linux 전에는 Unix…\"/>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Linux의 특징\"/>" +
+//				"</node>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" POSITION=\"left\" TEXT=\" 공개 소스 소프트웨어 (OSS or FOSS)\"/>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" POSITION=\"left\" TEXT=\" Linux 사용에 필요핚 기본 개념과 용어\">" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Linux 배포판 들\"/>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"그 중 가장 인기 많은… ubuntu\"/>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Linux의 구조\"/>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"인터페이스 부분\"/>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Linux 기본 개념들…\"/>" +
+//				"</node>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" POSITION=\"right\" TEXT=\" 시스템 호출 정리\">" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"프로세스 관련 명령\"/>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Top 명령\"/>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Windows 작업관리자\"/>" +
+//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"시스템 호출\"/>" +
+//				"</node>" +
+//				"</node>" +
+//				"</map>";
            HttpClient httpClient = new DefaultHttpClient();  
            //String url = serverUrl;
-           HttpPost post = new HttpPost("http://113.198.84.74:8080/treeze/upload/img"); 
+           HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/createMindMap"); 
            String path = "";
            //http://61.43.139.10:8080/treeze/upload/img
            // 파일 path 잡아주고 for 돌며면서 이미지 보내
@@ -63,31 +87,32 @@ public class UploadToServer {
 					Charset.forName("UTF-8"));  // xml, classId, LectureName 한번 보내
 			
 
-			multipart.addPart("XML", xmlBody);
-			multipart.addPart("ClassId", classBody);
+           multipart.addPart("classId", classBody);
+			multipart.addPart("mindmapXML", xmlBody);
 
 			post.setEntity(multipart);
-			HttpResponse response;// = httpClient.execute(post);
-			HttpEntity resEntity;// = response.getEntity();
+			HttpResponse response = httpClient.execute(post);
+			HttpEntity resEntity = response.getEntity();
 
 			FileBody imgBody;//
 			File saveFile;//
            for(int i = 0; i < sList.size(); i++){
         	   
         	 httpClient = new DefaultHttpClient();  
-             post = new HttpPost("http://61.43.139.10:8080/treeze/upload/img"); 
-             saveFile = new File(path);
+        	 tmp = sList.get(i);
+        	 imgFileName = dirPath + "\\" + tmp.getNodeName() + ".jpg"; 
+             saveFile = new File(imgFileName);
              if(saveFile.exists()){
             	 FileBody bin =  new FileBody(saveFile, "UTF-8");
-
+            	 post = new HttpPost("http://61.43.139.10:8080/treeze/upload/img"); 
 					StringBody body = new StringBody("4",
 							Charset.forName("UTF-8"));
 
-					multipart = new MultipartEntity(
-							HttpMultipartMode.BROWSER_COMPATIBLE);
 //					multipart = new MultipartEntity(
-//		  					HttpMultipartMode.BROWSER_COMPATIBLE, null,
-//		  					Charset.forName("UTF-8"));
+//							HttpMultipartMode.BROWSER_COMPATIBLE);
+					multipart = new MultipartEntity(
+		  					HttpMultipartMode.BROWSER_COMPATIBLE, null,
+		  					Charset.forName("UTF-8"));
 					
 					multipart.addPart("classId", body);
 					multipart.addPart("upload", bin);
