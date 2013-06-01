@@ -72,9 +72,13 @@ import freemind.view.mindmapview.NodeViewVisitor;
 public abstract class NodeAdapter implements MindMapNode {
 	
 	private String dewlit = "dd";
-	
+	private boolean isQuestion = false;
 
-    final static int SHIFT = -2;//height of the vertical shift between node and its closest child
+   
+
+
+
+	final static int SHIFT = -2;//height of the vertical shift between node and its closest child
     public final static int HGAP = 20;//width of the horizontal gap that contains the edges
     public final static int VGAP = 3;//height of the vertical gap between nodes
     
@@ -147,6 +151,14 @@ public abstract class NodeAdapter implements MindMapNode {
     // Constructors
     //
 
+	
+	 public boolean isQuestion() {
+			return isQuestion;
+		}
+
+		public void setQuestion(boolean isQuestion) {
+			this.isQuestion = isQuestion;
+		}
 
 	protected NodeAdapter(FreeMindMain frame, MindMap map) {
 		this(null, frame, map);

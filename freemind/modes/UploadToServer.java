@@ -50,6 +50,7 @@ public class UploadToServer {
            //String url = serverUrl;
            HttpPost post = new HttpPost("http://113.198.84.74:8080/treeze/upload/img"); 
            String path = "";
+           //http://61.43.139.10:8080/treeze/upload/img
            // 파일 path 잡아주고 for 돌며면서 이미지 보내
            
            
@@ -65,35 +66,63 @@ public class UploadToServer {
 			multipart.addPart("XML", xmlBody);
 			multipart.addPart("ClassId", classBody);
 
-//			post.setEntity(multipart);
-//			HttpResponse response = httpClient.execute(post);
-//			HttpEntity resEntity = response.getEntity();
+			post.setEntity(multipart);
+			HttpResponse response;// = httpClient.execute(post);
+			HttpEntity resEntity;// = response.getEntity();
 
-			
-			multipart = new MultipartEntity(
-					HttpMultipartMode.BROWSER_COMPATIBLE, null,
-					Charset.forName("UTF-8")); // classId에 맞는 img 다 보내
-			post = new HttpPost("http://113.198.84.74:8080/treeze/upload/img"); 
-			httpClient = new DefaultHttpClient();
-			
 			FileBody imgBody;//
 			File saveFile;//
            for(int i = 0; i < sList.size(); i++){
-        	   tmp = sList.get(i);
-        	   imgFileName = dirPath + "\\" + tmp.getNodeName() + ".jpg"; 
-        	   saveFile = new File(imgFileName);
-        	   saveFile.exists();
         	   
-        	   imgBody = new FileBody(saveFile, "UTF-8");
-        	   
-				multipart.addPart("ClassId", classBody);
-				multipart.addPart("Img", imgBody);
+        	 httpClient = new DefaultHttpClient();  
+             post = new HttpPost("http://61.43.139.10:8080/treeze/upload/img"); 
+             saveFile = new File(path);
+             if(saveFile.exists()){
+            	 FileBody bin =  new FileBody(saveFile, "UTF-8");
 
-//				post.setEntity(multipart);
-//				response = httpClient.execute(post);
-//				resEntity = response.getEntity();
+					StringBody body = new StringBody("4",
+							Charset.forName("UTF-8"));
+
+					multipart = new MultipartEntity(
+							HttpMultipartMode.BROWSER_COMPATIBLE);
+//					multipart = new MultipartEntity(
+//		  					HttpMultipartMode.BROWSER_COMPATIBLE, null,
+//		  					Charset.forName("UTF-8"));
+					
+					multipart.addPart("classId", body);
+					multipart.addPart("upload", bin);
+
+					post.setEntity(multipart);
+					response = httpClient.execute(post);
+					resEntity = response.getEntity(); // 태웅이형소스
+				}
+        	   
+        	   
+        	   
+        	   
+        	   
+//        	   httpClient = new DefaultHttpClient();
+//        	   post = new HttpPost("http://61.43.139.10:8080/treeze/upload/img"); 
+//        	   multipart = new MultipartEntity(
+//   					HttpMultipartMode.BROWSER_COMPATIBLE, null,
+//   					Charset.forName("UTF-8")); // classId에 맞는 img 다 보내
+//   			
+//        	   tmp = sList.get(i);
+//        	   imgFileName = dirPath + "\\" + tmp.getNodeName() + ".jpg"; 
+//        	   saveFile = new File(imgFileName);
+//				if (saveFile.exists()) {
+//
+//					imgBody = new FileBody(saveFile, "UTF-8");
+//
+//					multipart.addPart("classId", classBody);
+//					multipart.addPart("upload", imgBody);
+//
+//					post.setEntity(multipart);
+//					response = httpClient.execute(post);
+//					resEntity = response.getEntity();
+//				} 내가하던거
            }
-        
+           System.out.println("postXmlImg");
        }catch(Exception e){e.printStackTrace();
        }
 	  }
@@ -124,6 +153,7 @@ public class UploadToServer {
         	  post.setEntity(multipart);  
         	  HttpResponse response = httpClient.execute(post);  
         	  HttpEntity resEntity = response.getEntity();
+        	  System.out.println("postLecture");
           }catch(Exception e){e.printStackTrace();
           }
 	  }
@@ -139,7 +169,7 @@ public class UploadToServer {
         try {
       	  HttpClient httpClient = new DefaultHttpClient();  
       	  //String url = serverUrl;
-      	  HttpPost post = new HttpPost("http://113.198.84.74:8080/treeze/upload/img"); 
+      	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/createClass"); 
       	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
       	  //파일 path 잡아주고 for 돌며면서 이미지 보내
       	  Random random = new Random();
@@ -164,6 +194,7 @@ public class UploadToServer {
       	  post.setEntity(multipart);  
       	  HttpResponse response = httpClient.execute(post);  
       	  HttpEntity resEntity = response.getEntity();
+      	  System.out.println("postClass");
         }catch(Exception e){e.printStackTrace();
         }
 	  }

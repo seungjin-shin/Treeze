@@ -58,6 +58,11 @@ public interface MindMapNode extends MutableTreeNode {
 		STYLE_BUBBLE, STYLE_AS_PARENT,
 		STYLE_COMBINED };
 
+	
+	public boolean isQuestion();
+
+	public void setQuestion(boolean isQuestion);
+	
 	/**
 	 * @return the text representation of the nodes content. HTML is represented as <html>....</html>
      * see getXmlText

@@ -137,6 +137,10 @@ class Start extends Thread {
 					}
 					else if(chkStr.equals(QUESTION)){
 						rcvStr = str.substring(1, str.length()); // 질문 처리
+						
+						//c.getModeController().getSelected().getText()
+						
+						
 					}
 					
 					if(c.getTotalCnt() == c.getNaviOs().size()){

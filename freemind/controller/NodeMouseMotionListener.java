@@ -23,6 +23,9 @@ package freemind.controller;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+
+import freemind.modes.MindMapNode;
 
 /**
  * The MouseMotionListener which belongs to every NodeView
@@ -58,7 +61,31 @@ public class NodeMouseMotionListener implements MouseMotionListener,
         if (mListener != null)
             mListener.mouseClicked(e);
         System.out.println("Click"); //막아야돼
-        new QuestionFrame();
+        //System.out.println(c.getModeController().getSelected().getNodeLevel());
+        MindMapNode questionNode = c.getModeController().getSelected();
+        MindMapNode questionNodeParent;//
+        ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
+        int idx;
+        String idxStr = "root";
+        if(questionNode.isQuestion()){
+        	questionNode.removeIcon(0);
+        	questionNode.setQuestion(false);
+        }
+        c.getModeController().nodeChanged(questionNode); // 아이콘 지우기
+        
+        while(!questionNode.isRoot()){
+        	questionNodeParent = questionNode.getParentNode(); // 클릭하고 노드 idx 보내서 질문 리스트 받아와
+        	idx = questionNodeParent.getChildPosition(questionNode);
+        	idxReverseList.add(idx);
+        	questionNode = questionNodeParent;
+        }
+        
+        for(int i = idxReverseList.size(); i > 0; i--){
+        	idxStr = idxStr + idxReverseList.get(i - 1) + "/";
+        	System.out.print(idxReverseList.get(i - 1)); 
+        }
+
+        new QuestionFrame(idxStr);
     }
 
     public void mouseDragged(MouseEvent e) {

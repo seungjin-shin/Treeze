@@ -24,8 +24,7 @@ import freemind.modes.UploadToServer;
 
 class QuestionFrame extends JFrame{
 	BtnListener btnListener = new BtnListener(this);
-	
-	public QuestionFrame() {
+	public QuestionFrame(String idxStr) {
 		setSize(550, 400);
 		setLayout(null);
 		setTitle("Survey result");
@@ -43,7 +42,7 @@ class QuestionFrame extends JFrame{
 		titleLb.setLocation(20, 10);
 		add(titleLb);
 
-		QuestionPanel questPn = new QuestionPanel();
+		QuestionPanel questPn = new QuestionPanel(idxStr);
 		
 		JScrollPane sPanel = new JScrollPane(questPn);
 		sPanel.setBounds(20, 80, 460, 260);
@@ -69,8 +68,9 @@ class QuestionPanel extends JPanel implements ActionListener{
 	final int LINETOPPADDING = 85;
 	int questionCnt = 0;
 	int questionReverse = 3;
-	
-	public QuestionPanel() {
+	String idxStr;
+	public QuestionPanel(String idxStr) {
+		this.idxStr = idxStr;
 		setSize(480, 360);
 		setLayout(null);
 		setVisible(true);

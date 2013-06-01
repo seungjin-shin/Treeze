@@ -20,19 +20,16 @@
 
 package freemind.controller;
 
-import java.awt.dnd.DropTargetListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.Externalizable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-import javax.swing.KeyStroke;
-
 import freemind.json.CurrentPositionOfNav;
 import freemind.json.FreemindGson;
-import freemind.main.Tools;
+import freemind.modes.MindIcon;
+import freemind.modes.MindMapNode;
 
 /**
  * The KeyListener which belongs to the node and cares for Events like C-D
@@ -126,6 +123,45 @@ public class NodeKeyListener implements KeyListener {
 		else if(e.getKeyCode() == KeyEvent.VK_F5){
 			new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
 		}
+		else if(e.getKeyCode() == KeyEvent.VK_F6){
+			//new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
+			System.out.println(c.getModeController().getSelected().getText() + "dd");
+			//System.out.println(c.getModel().getRootNode().getText());
+			//System.out.println(c.getModel().getRootNode().getChildAt(0));
+			String idxStr = "root";
+			String[] splitStr;
+			splitStr = idxStr.split("/");
+			MindMapNode tmp = c.getModel().getRootNode(); // 소켓 받는 부분
+			// idxStr == "root" 면 root
+			//아니면 찾아
+			if(!idxStr.equals("root")){
+				for (int i = 0; i < splitStr.length; i++) {
+					tmp = (MindMapNode) tmp.getChildAt(Integer
+							.parseInt(splitStr[i]));
+				}
+			}
+			
+			MindMapNode questionNode = tmp;
+			System.out.println(questionNode.getText());
+			MindIcon icon = MindIcon.factory("help");
+			if(!questionNode.isQuestion()){
+				questionNode.addIcon(icon, -1); // ? 아이콘 한번만
+				questionNode.setQuestion(true);
+			}
+			c.getModeController().nodeChanged(questionNode);
+//			addQuestionNode.addIcon(icon, position)
+			/*
+			 * 완전 못해 와...
+			 * 이게 실력이냐
+			 * 이게 코딩이냐
+			 * ...키보드가 아깝다
+			 * ㅉㅉㅉ 반성해라
+			 * setIcon("ㅗ' ㅅ  'ㅗ ") 
+	
+			 */
+			
+		}
+		
 		if (mListener != null)
 			mListener.keyPressed(e);
 	}
