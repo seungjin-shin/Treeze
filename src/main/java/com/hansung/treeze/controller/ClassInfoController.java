@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hansung.treeze.model.ClassInfo;
 import com.hansung.treeze.service.ClassInfoService;
@@ -36,8 +37,8 @@ public class ClassInfoController {
 	}
 
 
-		@RequestMapping(value="/getClasses/{lectureName}/{professorEmail}", method=RequestMethod.GET)
-	public String getClasses(@PathVariable String lectureName, @PathVariable String professorEmail, ModelMap map) {
+		@RequestMapping(value="/getClasses", method=RequestMethod.GET)
+	public String getClasses(@RequestParam("lectureName") String lectureName, @RequestParam("professorEmail") String professorEmail, ModelMap map) {
 
 		map.put("page", classService.getClassInfoes(lectureName, professorEmail));
 		return "jsonView";	

@@ -35,9 +35,9 @@ public class LectureServiceImpl implements LectureService{
 	}
 
 		@Override
-	public Object findMyLectures(String lectureName, String professorEmail) {
+	public Object findMyLectures(String professorEmail) {
 		// TODO Auto-generated method stub
-		return lectureRepository.findAll(Specifications.where(LectureSpecifications.isMyLecture(lectureName, professorEmail)));
+		return lectureRepository.findAll(Specifications.where(LectureSpecifications.isMyLecture(professorEmail)));
 		
 	}
 

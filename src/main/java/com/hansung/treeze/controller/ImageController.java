@@ -31,28 +31,28 @@ public class ImageController {
 
 	@RequestMapping(value="/upload/img")
 	public String uploadImg(@RequestParam("classId") Integer classId,@RequestParam("upload") MultipartFile multipartFile, ModelMap map) {
-		logger.info("uploadImg" + classId );
+		logger.info("uploadImg" + classId +"::::"+ multipartFile.getOriginalFilename());
 
 		map.put("file", imageService.uploadImage(multipartFile, classId));
 		
 		return "uploadImage";
 	}
 	
-	@RequestMapping(value = "/img/{classId}", method = RequestMethod.GET)
-	public String getLectures(@PathVariable Integer classId, ModelMap map) {
+	@RequestMapping(value = "/img", method = RequestMethod.GET)
+	public String getLectures(@RequestParam("classId") Integer classId, ModelMap map) {
 		Object imgs = imageService.findByClassId(classId);
 		map.put("imgs", imgs);
 		return "jsonView";
 
 	}
 	
-	@RequestMapping(value="/img/{id}")
-	public ModelAndView image(@PathVariable Long id) {
+	@RequestMapping(value="/img")
+	public ModelAndView image(@RequestParam("id") Long id) {
 		return this.getFileModelAndView(imageView, id, null);	
 	}
 	
 	@RequestMapping(value="/thumb/{id}/{size}")
-	public ModelAndView thumbnail(@PathVariable Long id, @PathVariable Integer size) {
+	public ModelAndView thumbnail(@RequestParam("id") Long id, @RequestParam("size") Integer size) {
 		return this.getFileModelAndView(thumbnailView, id, size);	
 	}
 	

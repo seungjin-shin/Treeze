@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hansung.treeze.model.Lecture;
 import com.hansung.treeze.service.LectureService;
@@ -43,19 +44,18 @@ public class LectureController {
 
 	}
 
-	@RequestMapping(value = "/getLectures/{lectureName}", method = RequestMethod.GET)
-	public String getLectures(@PathVariable String lectureName, ModelMap map) {
+	@RequestMapping(value = "/getLectures", method = RequestMethod.GET)
+	public String getLectures(@RequestParam("lectureName") String lectureName, ModelMap map) {
 		Object lectures = lectureService.findBylectureName(lectureName);
+		logger.info(lectureName);
 		map.put("lectures", lectures);
 		return "jsonView";
 
 	}
 
-	@RequestMapping(value = "/getMyLectures/{lectureName}/{professorEmail}", method = RequestMethod.GET)
-	public String getLectures(@PathVariable String lectureName,
-			@PathVariable String professorEmail, ModelMap map) {
-		Object lectures = lectureService.findMyLectures(lectureName,
-				professorEmail);
+	@RequestMapping(value = "/getMyLectures", method = RequestMethod.GET)
+	public String getMyLectures(@RequestParam("professorEmail") String professorEmail, ModelMap map) {
+		Object lectures = lectureService.findMyLectures(professorEmail);
 		map.put("lectures", lectures);
 		return "jsonView";
 

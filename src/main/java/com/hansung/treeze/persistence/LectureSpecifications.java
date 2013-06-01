@@ -26,12 +26,11 @@ public class LectureSpecifications {
 	}
 
 
-	public static Specification<Lecture> isMyLecture (final String lectureName,final String professorEmail){
+	public static Specification<Lecture> isMyLecture (final String professorEmail){
 		return new Specification<Lecture>() {
 			@Override
 			public Predicate toPredicate(Root<Lecture> root, CriteriaQuery<?> query, CriteriaBuilder cb){
-				return cb.and(cb.equal(root.<String>get(Lecture_.lectureName), lectureName),
-					      cb.equal(root.<String>get(Lecture_.professorEmail), professorEmail));
+				return cb.equal(root.<String>get(Lecture_.professorEmail), professorEmail);
 			}
 		};
 	}

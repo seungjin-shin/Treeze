@@ -47,8 +47,8 @@ public class MindmapController {
 		return "jsonView";
 	}
 	
-@RequestMapping(value="/getMindMap/{classId}", method=RequestMethod.GET)
-	public String getMindMap(@PathVariable Integer classId, ModelMap map) {
+@RequestMapping(value="/getMindMap", method=RequestMethod.GET)
+	public String getMindMap(@RequestParam("classId") Integer classId, ModelMap map) {
 		Mindmap mindmap = mindmapService.findByclassId(classId);
 		map.put("mindmap", mindmap);
 		return "jsonView";

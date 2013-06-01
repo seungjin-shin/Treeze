@@ -7,6 +7,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public class Lecture_ {
 
 	public static volatile SingularAttribute<Lecture, String> professorEmail;
+	public static volatile SingularAttribute<Lecture, String> professorName;
 	public static volatile SingularAttribute<Lecture, String> lectureName;
 	public static volatile SingularAttribute<Lecture, Integer> stateOfLecture;
 }

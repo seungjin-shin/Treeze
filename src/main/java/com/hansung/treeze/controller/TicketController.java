@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hansung.treeze.model.Ticket;
 import com.hansung.treeze.service.TicketService;
@@ -43,8 +44,8 @@ public class TicketController {
 		return "jsonView";
 	}
 
-		@RequestMapping(value="/getTickets/{classId}", method=RequestMethod.GET)
-	public String getTickets(@PathVariable Integer classId, ModelMap map) {
+		@RequestMapping(value="/getTickets", method=RequestMethod.GET)
+	public String getTickets(@RequestParam("classId") Integer classId, ModelMap map) {
 
 		map.put("Ticket", ticketService.getTickets(classId));
 		return "jsonView";	

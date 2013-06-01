@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hansung.treeze.model.Note;
 import com.hansung.treeze.service.NoteService;
@@ -43,8 +44,8 @@ public class NoteController {
 		return "jsonView";
 	}
 
-	@RequestMapping(value="/getNotes/{classId}/{userEmail}/{position}", method=RequestMethod.GET)
-	public String getNotes(@PathVariable Integer classId, @PathVariable String userEmail, @PathVariable String position, ModelMap map) {
+	@RequestMapping(value="/getNotes", method=RequestMethod.GET)
+	public String getNotes(@RequestParam("classId") Integer classId, @RequestParam("userEmail") String userEmail, @RequestParam("position") String position, ModelMap map) {
 
 		map.put("Note", noteService.getNotes(classId, userEmail,position));
 		return "jsonView";	

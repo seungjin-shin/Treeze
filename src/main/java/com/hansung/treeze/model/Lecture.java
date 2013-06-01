@@ -13,6 +13,7 @@ public class Lecture extends AbstractPersistable<Long>  {
 	private static final long serialVersionUID = -6401514770595701938L;
 
 	private String professorEmail;
+	private String professorName;
 	private String lectureName;
 	private Boolean stateOfLecture;
 	
@@ -33,5 +34,11 @@ public class Lecture extends AbstractPersistable<Long>  {
 	}
 	public void setStateOfLecture(Boolean stateOfLecture) {
 		this.stateOfLecture = stateOfLecture;
+	}
+	public String getProfessorName() {
+		return professorName;
+	}
+	public void setProfessorName(String professorName) {
+		this.professorName = professorName;
 	}
 }
