@@ -1,5 +1,5 @@
 package freemind.json;
-
+import freemind.json.*;
 import com.google.gson.Gson;
 
 public class FreemindGson {

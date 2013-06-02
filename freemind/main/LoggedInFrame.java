@@ -25,15 +25,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
+import freemind.json.ArrayLecture;
 import freemind.json.FreemindGson;
 import freemind.json.Lecture;
 import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
-
+import java.lang.reflect.Type;
 
 public class LoggedInFrame extends JFrame {
 	private Container ct;
@@ -269,37 +272,44 @@ class LecturePanel extends JPanel implements ActionListener{
 		String sHtml = "";
 		BufferedReader in = null;
 		String buf = "";
-//		try
-//		{
-//		    URL url = new URL("http://61.43.139.10:8080/treeze/getMyLectures?professorEmail=" + "minsuk@hansung.ac.kr");
-//		    URLConnection urlconn = url.openConnection();
-//		    in = new BufferedReader(new InputStreamReader(urlconn.getInputStream(),"UTF-8"));
-//
-//		    while((buf = in.readLine()) != null)
-//		    {
-//		        sHtml += buf;
-//		    }
-//		}
-//		catch(Exception e)
-//		{
-//		    System.out.println("연결 에러");
-//		}
-//		finally
-//		{
-//		    if(sHtml.equals("")) sHtml = "Data가 존재하지 않습니다";
-//		    try {
-//				in.close();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//		System.out.println(sHtml);
+		try
+		{
+		    URL url = new URL("http://61.43.139.10:8080/treeze/getMyLectures?professorEmail=" + "minsuk@hansung.ac.kr");
+		    URLConnection urlconn = url.openConnection();
+		    in = new BufferedReader(new InputStreamReader(urlconn.getInputStream(),"UTF-8"));
 
-//		ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
-//		
-//		FreemindGson myGson = new FreemindGson();
-//		//lectureList = (ArrayList<Lecture>) myGson.fromJson(sHtml, "Lecture");
+		    while((buf = in.readLine()) != null)
+		    {
+		        sHtml += buf;
+		    }
+		}
+		catch(Exception e)
+		{
+		    System.out.println("연결 에러");
+		}
+		finally
+		{
+		    if(sHtml.equals("")) sHtml = "Data가 존재하지 않습니다";
+		    try {
+				in.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		System.out.println(sHtml);
+		ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
+		Lecture tmpLecture;
+		FreemindGson myGson = new FreemindGson();
+		//lectureList = (ArrayLecture) myGson.fromJson(sHtml, "ArrayLecture");
+		Gson gson = new Gson();
+		
+		Type type = new TypeToken<ArrayLecture>() {
+		}.getType();
+		ArrayLecture jonResultlecturelist = (ArrayLecture) gson
+				.fromJson(sHtml, type);
+		lectureList = jonResultlecturelist.getLectures();
+		//lectureList.get(0).get
 //		System.out.println("dd");
 //		
 //		JsonParser parser = new JsonParser();
@@ -312,74 +322,89 @@ class LecturePanel extends JPanel implements ActionListener{
 //		}
 		
 		
+		Font midF = new Font("Serif", Font.BOLD, 30);
+		JButton tmpBtn;
+		for(lectureCnt = 0; lectureCnt < lectureList.size(); lectureCnt++){
+			tmpLecture = lectureList.get(lectureCnt);
+			tmpBtn = new JButton(tmpLecture.getLectureName());
+			tmpBtn.addActionListener(this);
+			tmpBtn.setFont(lagf);
+			tmpBtn.setSize(220, 50);
+			tmpBtn.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
+			add(tmpBtn);
+			
+			tmpLb = new JLabel(registered[lectureCnt % 18]);
+			tmpLb.setSize(100, 50);
+			tmpLb.setFont(midF);
+			tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
+			add(tmpLb);
+			
+			tmpLb = new JLabel(latestDay[lectureCnt % 18]);
+			tmpLb.setSize(140, 50);
+			tmpLb.setFont(midF);
+			tmpLb.setLocation(440, TOPPADDING + LECTUREHGAP * lectureCnt);
+			add(tmpLb);
+		}
 		
-		
-		JButton embedded = new JButton("Embedded System");
-		embedded.addActionListener(this);
-		embedded.setFont(lagf);
-		embedded.setSize(220, 50);
-		embedded.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
-		lectureCnt++;
-		
-		JButton logic = new JButton("Logic Circuit");
-		logic.addActionListener(this);
-		logic.setFont(lagf);
-		logic.setSize(220, 50);
-		logic.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
-		lectureCnt++;
-		
-		JButton system = new JButton("System Programming");
-		system.addActionListener(this);
-		system.setFont(lagf);
-		system.setSize(220, 50);
-		system.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
-		
-		lectureCnt = 0;
-		
-		lagf = new Font("Serif", Font.BOLD, 30);
-		tmpLb = new JLabel(registered[0]);
-		tmpLb.setSize(100, 50);
-		tmpLb.setFont(lagf);
-		tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
-		add(tmpLb);
-		lectureCnt++;
-		
-		tmpLb = new JLabel(registered[1]);
-		tmpLb.setSize(100, 50);
-		tmpLb.setFont(lagf);
-		tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
-		add(tmpLb);
-		lectureCnt++;
-		
-		tmpLb = new JLabel(registered[2]);
-		tmpLb.setSize(100, 50);
-		tmpLb.setFont(lagf);
-		tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
-		add(tmpLb);
-		
-		lectureCnt = 0;
-		
-		tmpLb = new JLabel(latestDay[0]);
-		tmpLb.setSize(140, 50);
-		tmpLb.setFont(lagf);
-		tmpLb.setLocation(440, TOPPADDING + LECTUREHGAP * lectureCnt);
-		add(tmpLb);
-		lectureCnt++;
-		
-		tmpLb = new JLabel(latestDay[1]);
-		tmpLb.setSize(160, 50);
-		tmpLb.setFont(lagf);
-		tmpLb.setLocation(440,  TOPPADDING + LECTUREHGAP * lectureCnt);
-		add(tmpLb);
-		lectureCnt++;
-		
-		tmpLb = new JLabel(latestDay[2]);
-		tmpLb.setSize(180, 50);
-		tmpLb.setFont(lagf);
-		//tmpLb.setLocation(440, 220);
-		tmpLb.setLocation(440,  TOPPADDING + LECTUREHGAP * lectureCnt);
-		add(tmpLb);
-		lectureCnt++;
+//		JButton logic = new JButton("Logic Circuit");
+//		logic.addActionListener(this);
+//		logic.setFont(lagf);
+//		logic.setSize(220, 50);
+//		logic.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
+//		lectureCnt++;
+//		
+//		JButton system = new JButton("System Programming");
+//		system.addActionListener(this);
+//		system.setFont(lagf);
+//		system.setSize(220, 50);
+//		system.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
+//		
+//		lectureCnt = 0;
+//		
+//		lagf = new Font("Serif", Font.BOLD, 30);
+//		tmpLb = new JLabel(registered[0]);
+//		tmpLb.setSize(100, 50);
+//		tmpLb.setFont(lagf);
+//		tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
+//		add(tmpLb);
+//		lectureCnt++;
+//		
+//		tmpLb = new JLabel(registered[1]);
+//		tmpLb.setSize(100, 50);
+//		tmpLb.setFont(lagf);
+//		tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
+//		add(tmpLb);
+//		lectureCnt++;
+//		
+//		tmpLb = new JLabel(registered[2]);
+//		tmpLb.setSize(100, 50);
+//		tmpLb.setFont(lagf);
+//		tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
+//		add(tmpLb);
+//		
+//		lectureCnt = 0;
+//		
+//		tmpLb = new JLabel(latestDay[0]);
+//		tmpLb.setSize(140, 50);
+//		tmpLb.setFont(lagf);
+//		tmpLb.setLocation(440, TOPPADDING + LECTUREHGAP * lectureCnt);
+//		add(tmpLb);
+//		lectureCnt++;
+//		
+//		tmpLb = new JLabel(latestDay[1]);
+//		tmpLb.setSize(160, 50);
+//		tmpLb.setFont(lagf);
+//		tmpLb.setLocation(440,  TOPPADDING + LECTUREHGAP * lectureCnt);
+//		add(tmpLb);
+//		lectureCnt++;
+//		
+//		tmpLb = new JLabel(latestDay[2]);
+//		tmpLb.setSize(180, 50);
+//		tmpLb.setFont(lagf);
+//		//tmpLb.setLocation(440, 220);
+//		tmpLb.setLocation(440,  TOPPADDING + LECTUREHGAP * lectureCnt);
+//		add(tmpLb);
+//		lectureCnt++;
 		
 		setPreferredSize(new Dimension(550, 20 + TOPPADDING + LECTUREHGAP * lectureCnt));
 		
@@ -401,9 +426,9 @@ class LecturePanel extends JPanel implements ActionListener{
 //		prof3.setLocation(360, 220);
 		//add(prof3);
 		
-		add(embedded);
-		add(logic);
-		add(system);
+//		add(embedded);
+//		add(logic);
+//		add(system);
 		
 	}
 	public void paint(Graphics g) {
@@ -429,7 +454,7 @@ class LecturePanel extends JPanel implements ActionListener{
 		String event = e.getActionCommand();
 		System.out.println(event);
 		frame.setVisible(false);
-		new LecturePageFrame(mc);
+		new LecturePageFrame(mc, event);
 	}
 }
 

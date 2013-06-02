@@ -200,7 +200,7 @@ public class UploadToServer {
       	  Random random = new Random();
       	  
       	  StringBuffer str = new StringBuffer(); // 변수를 바꿨으면 의미 없는 주석 달기
-      	  for (int i = 1; i < 12; i++) {
+      	  for (int i = 1; i < 8; i++) {
       		  str.append((random.nextInt(10)));
       	  }
       	  StringBody classId = new StringBody(str.toString(), Charset.forName("UTF-8"));
