@@ -45,9 +45,9 @@ public class LectureController {
 	}
 
 	@RequestMapping(value = "/getLectures", method = RequestMethod.GET)
-	public String getLectures(@RequestParam("lectureName") String lectureName, ModelMap map) {
-		Object lectures = lectureService.findBylectureName(lectureName);
-		logger.info(lectureName);
+	public String getLectures(@RequestParam("lectureId") Long lectureId, ModelMap map) {
+		Object lectures = lectureService.findBylectureName(lectureId);
+		logger.info(""+lectureId);
 		map.put("lectures", lectures);
 		return "jsonView";
 

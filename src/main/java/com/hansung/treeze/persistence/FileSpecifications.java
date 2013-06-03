@@ -22,11 +22,11 @@ public class FileSpecifications {
 		};
 	}
 
-	public static Specification<UploadedFile> isClassId(final int classId){
+	public static Specification<UploadedFile> isClassId(final Long classId){
 		return new Specification<UploadedFile>(){
 			@Override
 			public Predicate toPredicate(Root<UploadedFile> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.equal(root.<Integer>get(UploadedFile_.classId), classId);
+				return cb.equal(root.<Long>get(UploadedFile_.classId), classId);
 			}
 		};
 	}

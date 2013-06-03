@@ -22,7 +22,7 @@ public class MindmapServiceImpl implements MindmapService{
 	}
 
 	@Override
-	public Mindmap findByclassId(int classId) {
+	public Mindmap findByclassId(Long classId) {
 		// TODO Auto-generated method stub
 		return mindmapRepository.findOne(Specifications.where(MindmapSpecifications.isClassId(classId)));
 	}

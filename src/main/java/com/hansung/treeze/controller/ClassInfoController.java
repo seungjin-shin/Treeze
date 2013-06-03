@@ -40,9 +40,9 @@ public class ClassInfoController {
 
 
 		@RequestMapping(value="/getClasses", method=RequestMethod.GET)
-	public String getClasses(@RequestParam("lectureName") String lectureName, @RequestParam("professorEmail") String professorEmail, ModelMap map) {
-logger.info(lectureName+professorEmail);
-		map.put("classes", classService.getClassInfoes(lectureName, professorEmail));
+	public String getClasses(@RequestParam("lectureId") Long lectureId, ModelMap map) {
+logger.info(""+lectureId);
+		map.put("classes", classService.getClassInfoes(lectureId));
 		return "jsonView";	
 	}
 }

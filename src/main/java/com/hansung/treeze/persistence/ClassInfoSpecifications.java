@@ -6,18 +6,17 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.domain.Specifications;
 
 import com.hansung.treeze.model.ClassInfo;
 import com.hansung.treeze.model.ClassInfo_;
 
 public class ClassInfoSpecifications {
 	
-	public static Specification<ClassInfo> isLectureName(final String lectureName){
+	public static Specification<ClassInfo> isLectureId(final Long lectureId){
 		return new Specification<ClassInfo>() {
 			@Override
 			public Predicate toPredicate(Root<ClassInfo> root, CriteriaQuery<?> query, CriteriaBuilder cb){
-				return cb.equal(root.<String>get(ClassInfo_.lectureName), lectureName);
+				return cb.equal(root.<Long>get(ClassInfo_.lectureId), lectureId);
 			}
 		};
 	}

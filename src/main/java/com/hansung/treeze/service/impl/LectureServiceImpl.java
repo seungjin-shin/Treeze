@@ -28,9 +28,9 @@ public class LectureServiceImpl implements LectureService{
 	}
 
 	@Override
-	public Object findBylectureName(String lectureName) {
+	public Object findBylectureName(Long lectureId) {
 		// TODO Auto-generated method stub
-		return lectureRepository.findAll(Specifications.where(LectureSpecifications.islectureName(lectureName)));
+		return lectureRepository.findAll(Specifications.where(LectureSpecifications.isLectureId(lectureId)));
 	
 	}
 

@@ -23,13 +23,11 @@ public class ClassInfoServiceImpl implements ClassInfoService {
 	}
 
 	@Override
-	public Object getClassInfoes(String lectureName, String professorEmail) {
+	public Object getClassInfoes(Long lectureId) {
 		// TODO Auto-generated method stub
 		
-		//return classRepository.findAll(Specifications.where(ClassInfoSpecifications.isLectureName(lectureName)));
-		Specifications<ClassInfo> spec = Specifications
-				.where(ClassInfoSpecifications.isLectureName(lectureName));
-		return classRepository.findAll(spec.and(ClassInfoSpecifications.isProfessorEmail(professorEmail)));
+		return classRepository.findAll(Specifications.where(ClassInfoSpecifications.isLectureId(lectureId)));
+
 	}
 
 }

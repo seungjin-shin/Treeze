@@ -30,7 +30,7 @@ public class ImageController {
 	private View thumbnailView;
 
 	@RequestMapping(value="/upload/img")
-	public String uploadImg(@RequestParam("classId") Integer classId,@RequestParam("upload") MultipartFile multipartFile, ModelMap map) {
+	public String uploadImg(@RequestParam("classId") Long classId,@RequestParam("upload") MultipartFile multipartFile, ModelMap map) {
 		logger.info("uploadImg" + classId +"::::"+ multipartFile.getOriginalFilename());
 
 		map.put("file", imageService.uploadImage(multipartFile, classId));
@@ -39,7 +39,7 @@ public class ImageController {
 	}
 	
 	@RequestMapping(value = "/img", method = RequestMethod.GET)
-	public String getLectures(@RequestParam("classId") Integer classId, ModelMap map) {
+	public String getLectures(@RequestParam("classId") Long classId, ModelMap map) {
 		Object imgs = imageService.findByClassId(classId);
 		map.put("imgs", imgs);
 		return "jsonView";

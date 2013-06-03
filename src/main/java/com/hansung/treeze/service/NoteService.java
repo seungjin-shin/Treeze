@@ -6,6 +6,6 @@ import com.hansung.treeze.model.Note;
 public interface NoteService {
 
 	Note saveNote(Note note);
-	Object getNotes(int classId,String userEmail,String position);
+	Object getNotes(Long classId,String userEmail,String position);
 
 }

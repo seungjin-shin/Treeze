@@ -21,7 +21,7 @@ public class TicketServiceImpl implements TicketService{
 	}
 
 	@Override
-	public Object getTickets(int classId) {
+	public Object getTickets(Long classId) {
 		// TODO Auto-generated method stub
 		return ticketRepository.findAll(Specifications.where(TicketSpecifications.isclassId(classId)));
 	}

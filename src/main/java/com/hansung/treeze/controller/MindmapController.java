@@ -49,7 +49,7 @@ public class MindmapController {
 	}
 	
 @RequestMapping(value="/getMindMap", method=RequestMethod.GET)
-	public String getMindMap(@RequestParam("classId") Integer classId, ModelMap map) {
+	public String getMindMap(@RequestParam("classId") Long classId, ModelMap map) {
 		Mindmap mindmap = mindmapService.findByclassId(classId);
 		logger.info("xml::::"+mindmap.getMindmapXML());
 		map.put("mindmap", mindmap);

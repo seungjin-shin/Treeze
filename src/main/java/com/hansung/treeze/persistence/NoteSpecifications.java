@@ -14,11 +14,11 @@ public class NoteSpecifications {
 	
 
 
-	public static Specification<Note> isMyNote (final int classId,final String userEmail,final String position){
+	public static Specification<Note> isMyNote (final Long classId,final String userEmail,final String position){
 		return new Specification<Note>() {
 			@Override
 			public Predicate toPredicate(Root<Note> root, CriteriaQuery<?> query, CriteriaBuilder cb){
-				return cb.and(cb.equal(root.<Integer>get(Note_.classId), classId),
+				return cb.and(cb.equal(root.<Long>get(Note_.classId), classId),
 					      cb.equal(root.<String>get(Note_.userEmail), userEmail),
 					      cb.equal(root.<String>get(Note_.position), position));
 			}

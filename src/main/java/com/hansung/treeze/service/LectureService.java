@@ -7,7 +7,7 @@ public interface LectureService {
 
 	Lecture saveLecture(Lecture lecture);
 	Object findAll();
-	Object findBylectureName(String lectureName);
+	Object findBylectureName(Long lectureId);
 	Object findMyLectures(String professorEmail);
 
 }

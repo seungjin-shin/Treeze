@@ -6,6 +6,6 @@ import com.hansung.treeze.model.ClassInfo;
 public interface ClassInfoService {
 
 	ClassInfo saveClass(ClassInfo classInfo);
-	Object getClassInfoes(String lectureName, String professorEmail);
+	Object getClassInfoes(Long lectureId);
 
 }

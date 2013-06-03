@@ -29,7 +29,7 @@ public class ImageServiceImpl implements ImageService {
 	@Autowired private FileRepository fileRepository;
 	
 	@Override
-	public Map<String, String> uploadImage(MultipartFile multipartFile, int classId) {
+	public Map<String, String> uploadImage(MultipartFile multipartFile, Long classId) {
 		String uploadPath = defaultProperties.getProperty("file.img.path");
 		Map<String, String> fileInfo = upload(multipartFile, uploadPath, classId);	
 
@@ -46,7 +46,7 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
-	private Map<String, String> upload(MultipartFile multipartFile, String uploadPath, int classId) {
+	private Map<String, String> upload(MultipartFile multipartFile, String uploadPath, Long classId) {
 		String fileUniqueName = String.valueOf(System.nanoTime());
 
 		String originFileName = multipartFile.getOriginalFilename();		
@@ -83,7 +83,7 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Override
-	public Object findByClassId(int classId) {
+	public Object findByClassId(Long classId) {
 		// TODO Auto-generated method stub
 	
 		return fileRepository.findAll(Specifications.where(FileSpecifications.isClassId(classId)));

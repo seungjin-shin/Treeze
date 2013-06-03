@@ -6,6 +6,6 @@ import com.hansung.treeze.model.Mindmap;
 public interface MindmapService {
 
 	Mindmap saveMindmap(Mindmap mindmap);
-	Mindmap findByclassId(int classId);
+	Mindmap findByclassId(Long classId);
 
 }

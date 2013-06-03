@@ -12,14 +12,14 @@ import com.hansung.treeze.model.Ticket_;
 
 public class TicketSpecifications {
 	
-	public static Specification<Ticket> isclassId(final int classId){
+	public static Specification<Ticket> isclassId(final Long classId){
 		return new Specification<Ticket>() {
 
 			@Override
 			public Predicate toPredicate(Root<Ticket> root,
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
 				// TODO Auto-generated method stub
-				return cb.equal(root.<Integer>get(Ticket_.classId), classId);
+				return cb.equal(root.<Long>get(Ticket_.classId), classId);
 			}
 		};
 	}

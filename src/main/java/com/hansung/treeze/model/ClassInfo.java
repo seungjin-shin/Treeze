@@ -19,17 +19,9 @@ public class ClassInfo extends AbstractPersistable<Long>{
 	private String className;
 	private String classIP;
 	private int port;
-	private String lectureName;
+	private Long lectureId;
 	private String professorEmail;
 	
-	
-
-	public String getLectureName() {
-		return lectureName;
-	}
-	public void setLectureName(String lectureName) {
-		this.lectureName = lectureName;
-	}
 	public String getProfessorEmail() {
 		return professorEmail;
 	}
@@ -59,5 +51,11 @@ public class ClassInfo extends AbstractPersistable<Long>{
 	}
 	public void setClassId(Long classId) {
 		this.classId = classId;
+	}
+	public Long getLectureId() {
+		return lectureId;
+	}
+	public void setLectureId(Long lectureId) {
+		this.lectureId = lectureId;
 	}
 }

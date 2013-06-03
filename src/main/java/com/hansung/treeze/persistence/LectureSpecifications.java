@@ -13,14 +13,14 @@ import com.hansung.treeze.model.Lecture_;
 
 public class LectureSpecifications {
 	
-	public static Specification<Lecture> islectureName(final String lectureName){
+	public static Specification<Lecture> isLectureId(final Long lectureId){
 		return new Specification<Lecture>() {
 
 			@Override
 			public Predicate toPredicate(Root<Lecture> root,
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
 				// TODO Auto-generated method stub
-				return cb.equal(root.<String>get(Lecture_.lectureName), lectureName);
+				return cb.equal(root.<Long>get(Lecture_.lectureId), lectureId);
 			}
 		};
 	}
