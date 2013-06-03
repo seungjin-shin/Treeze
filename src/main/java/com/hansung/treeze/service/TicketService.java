@@ -6,6 +6,6 @@ import com.hansung.treeze.model.Ticket;
 public interface TicketService {
 
 	Ticket saveTicket(Ticket ticket);
-	Object getTickets(Long classId);
+	Object getTickets(Long classId,String position);
 
 }

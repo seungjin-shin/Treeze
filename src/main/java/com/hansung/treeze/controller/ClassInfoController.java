@@ -25,7 +25,7 @@ public class ClassInfoController {
 		ClassInfo temp = classService.saveClass(model);
 		temp.setClassId(temp.getId());
 		classService.saveClass(temp);
-		map.put("temp", temp);
+		map.put("New Class", temp);
 
 		return "jsonView";
 	}

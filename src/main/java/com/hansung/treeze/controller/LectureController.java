@@ -22,8 +22,10 @@ public class LectureController {
 
 	@RequestMapping(value = "/createLecture", method = RequestMethod.POST)
 	public String createLecture(Lecture model, ModelMap map) {
-		lectureService.saveLecture(model);
-		map.put("result", "success");
+		Lecture temp = lectureService.saveLecture(model);
+		temp.setLectureId(temp.getId());
+		lectureService.saveLecture(temp);
+		map.put("New Lecture", temp);
 
 		return "jsonView";
 	}

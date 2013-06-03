@@ -45,9 +45,9 @@ public class TicketController {
 	}
 
 		@RequestMapping(value="/getTickets", method=RequestMethod.GET)
-	public String getTickets(@RequestParam("classId") Long classId, ModelMap map) {
+	public String getTickets(@RequestParam("classId") Long classId,@RequestParam("position") String position, ModelMap map) {
 
-		map.put("Ticket", ticketService.getTickets(classId));
+		map.put("Ticket", ticketService.getTickets(classId,position));
 		return "jsonView";	
 	}
 }

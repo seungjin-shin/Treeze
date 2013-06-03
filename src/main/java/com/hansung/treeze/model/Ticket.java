@@ -15,16 +15,9 @@ public class Ticket extends AbstractPersistable<Long>{
 	private Long classId;
 	private String position;
 	private String contents;
-	private int ticketNumber;
 	private String userName;
+	private String ticketTitle;
 	
-
-	public int getTicketNumber() {
-		return ticketNumber;
-	}
-	public void setTicketNumber(int ticketNumber) {
-		this.ticketNumber = ticketNumber;
-	}
 	public String getContents() {
 		return contents;
 	}
@@ -48,5 +41,11 @@ public class Ticket extends AbstractPersistable<Long>{
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+	public String getTicketTitle() {
+		return ticketTitle;
+	}
+	public void setTicketTitle(String ticketTitle) {
+		this.ticketTitle = ticketTitle;
 	}
 }

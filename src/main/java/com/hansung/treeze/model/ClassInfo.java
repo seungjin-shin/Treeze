@@ -15,7 +15,7 @@ public class ClassInfo extends AbstractPersistable<Long>{
 	 * 
 	 */
 	
-	private Long classId; /*������ �ٽ� �����ؾ��� */
+	private Long classId; 
 	private String className;
 	private String classIP;
 	private int port;

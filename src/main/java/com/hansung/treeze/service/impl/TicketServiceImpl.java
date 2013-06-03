@@ -1,7 +1,6 @@
 package com.hansung.treeze.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import com.hansung.treeze.model.Ticket;
@@ -21,8 +20,10 @@ public class TicketServiceImpl implements TicketService{
 	}
 
 	@Override
-	public Object getTickets(Long classId) {
+	public Object getTickets(Long classId, String position) {
 		// TODO Auto-generated method stub
-		return ticketRepository.findAll(Specifications.where(TicketSpecifications.isclassId(classId)));
+		//Specifications<Ticket> spec = Specifications.where(TicketSpecifications.isclassId(classId);
+		
+		return ticketRepository.findAll(TicketSpecifications.isTicketsOnPosition(classId,position));
 	}
 }

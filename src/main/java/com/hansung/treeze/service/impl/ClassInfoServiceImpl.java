@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.hansung.treeze.model.ClassInfo;
 import com.hansung.treeze.persistence.ClassInfoRepository;
 import com.hansung.treeze.persistence.ClassInfoSpecifications;
-import com.hansung.treeze.persistence.FileSpecifications;
 import com.hansung.treeze.service.ClassInfoService;
 
 @Service
