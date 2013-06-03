@@ -7,7 +7,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public class Note_ {
 	
 
-	public static volatile SingularAttribute<Note, Integer> classId;
+	public static volatile SingularAttribute<Note, Long> classId;
 	public static volatile SingularAttribute<Note, String> position;
 	public static volatile SingularAttribute<Note, Integer> locationX;
 	public static volatile SingularAttribute<Note, Integer>locationY;

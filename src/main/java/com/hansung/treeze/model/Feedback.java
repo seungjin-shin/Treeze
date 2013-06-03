@@ -12,15 +12,15 @@ public class Feedback extends AbstractPersistable<Long>  {
 	 */
 	private static final long serialVersionUID = -7454319885796951545L;
 
-	private int classId;
+	private Long classId;
 	private String position;
 	private String contents;
 	private String userEmail;
 	
-	public int getClassId() {
+	public Long getClassId() {
 		return classId;
 	}
-	public void setClassId(int classId) {
+	public void setClassId(Long classId) {
 		this.classId = classId;
 	}
 

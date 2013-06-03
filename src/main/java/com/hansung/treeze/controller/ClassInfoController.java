@@ -23,7 +23,7 @@ public class ClassInfoController {
 	@RequestMapping(value="/createClass", method=RequestMethod.POST)
 	public String createClass(ClassInfo model, ModelMap map) {
 		ClassInfo temp = classService.saveClass(model);
-		temp.setClassId(Integer.parseInt(temp.getId().toString()));
+		temp.setClassId(temp.getId());
 		classService.saveClass(temp);
 		map.put("temp", temp);
 

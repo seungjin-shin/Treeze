@@ -15,7 +15,7 @@ public class ClassInfo extends AbstractPersistable<Long>{
 	 * 
 	 */
 	
-	private int classId; /*������ �ٽ� �����ؾ��� */
+	private Long classId; /*������ �ٽ� �����ؾ��� */
 	private String className;
 	private String classIP;
 	private int port;
@@ -54,10 +54,10 @@ public class ClassInfo extends AbstractPersistable<Long>{
 	public void setClassName(String className) {
 		this.className = className;
 	}
-	public int getClassId() {
+	public Long getClassId() {
 		return classId;
 	}
-	public void setClassId(int classId) {
+	public void setClassId(Long classId) {
 		this.classId = classId;
 	}
 }

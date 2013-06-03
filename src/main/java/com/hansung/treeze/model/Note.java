@@ -12,17 +12,17 @@ public class Note extends AbstractPersistable<Long>  {
 	 */
 	private static final long serialVersionUID = -480520004539467590L;
 
-	private int classId;
+	private Long classId;
 	private String position;
 	private int locationX;
 	private int locationY;
 	private String contents;
 	private String userEmail;
 	
-	public int getClassId() {
+	public Long getClassId() {
 		return classId;
 	}
-	public void setClassId(int classId) {
+	public void setClassId(Long classId) {
 		this.classId = classId;
 	}
 	public int getLocationX() {

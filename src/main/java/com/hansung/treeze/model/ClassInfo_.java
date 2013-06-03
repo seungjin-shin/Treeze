@@ -6,7 +6,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(ClassInfo.class)
 public class ClassInfo_ {
 	
-	public static volatile SingularAttribute<ClassInfo, Integer> classId;
+	public static volatile SingularAttribute<ClassInfo, Long> classId;
 	public static volatile SingularAttribute<ClassInfo, String> className;
 	public static volatile SingularAttribute<ClassInfo, String>  classIP;
 	public static volatile SingularAttribute<ClassInfo, Integer> port;

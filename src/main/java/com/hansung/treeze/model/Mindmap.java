@@ -12,14 +12,14 @@ public class Mindmap extends AbstractPersistable<Long>  {
 	 * 
 	 */
 	private static final long serialVersionUID = -7894431277734556571L;
-	private int classId; 
+	private Long classId; 
 	//@Column(columnDefinition="LONGTEXT") 
 	private String mindmapXML;
 	
-	public int getClassId() {
+	public Long getClassId() {
 		return classId;
 	}
-	public void setClassId(int classId) {
+	public void setClassId(Long classId) {
 		this.classId = classId;
 	}
 	public String getMindmapXML() {

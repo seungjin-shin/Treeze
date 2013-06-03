@@ -7,7 +7,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(UploadedFile.class)
 public class UploadedFile_ {
     
-    public static volatile SingularAttribute<UploadedFile, Integer> classId;
+    public static volatile SingularAttribute<UploadedFile, Long> classId;
     public static volatile SingularAttribute<UploadedFile, String> fileName;
     public static volatile SingularAttribute<UploadedFile, String> filePath;
     public static volatile SingularAttribute<UploadedFile, String> fileSize;

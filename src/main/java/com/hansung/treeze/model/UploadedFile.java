@@ -12,7 +12,7 @@ public class UploadedFile extends AbstractPersistable<Long>{
 	 * 
 	 */
 	private static final long serialVersionUID = 4009916462472998615L;
-	private Integer classId;
+	private Long classId;
 	private String fileName;
 	private String filePath;
 	private String fileSize;
@@ -47,10 +47,10 @@ public class UploadedFile extends AbstractPersistable<Long>{
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
-	public Integer getClassId() {
+	public Long getClassId() {
 		return classId;
 	}
-	public void setClassId(Integer classId) {
+	public void setClassId(Long classId) {
 		this.classId = classId;
 	}
 
