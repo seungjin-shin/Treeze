@@ -15,6 +15,7 @@ public class Lecture extends AbstractPersistable<Long>  {
 	private String professorEmail;
 	private String professorName;
 	private String lectureName;
+	private Long lectureId;
 	private Boolean stateOfLecture;
 	
 	public String getProfessorEmail() {

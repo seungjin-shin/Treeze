@@ -43,11 +43,11 @@ public class ImageController {
 		Object imgs = imageService.findByClassId(classId);
 		map.put("imgs", imgs);
 		return "jsonView";
-
+ 
 	}
 	
-	@RequestMapping(value="/img")
-	public ModelAndView image(@RequestParam("id") Long id) {
+	@RequestMapping(value="/img/{id}")
+	public ModelAndView image(@PathVariable Long id) {
 		return this.getFileModelAndView(imageView, id, null);	
 	}
 	

@@ -22,8 +22,10 @@ public class ClassInfoController {
 
 	@RequestMapping(value="/createClass", method=RequestMethod.POST)
 	public String createClass(ClassInfo model, ModelMap map) {
-		classService.saveClass(model);
-		map.put("result", "success");
+		ClassInfo temp = classService.saveClass(model);
+		temp.setClassId(Integer.parseInt(temp.getId().toString()));
+		classService.saveClass(temp);
+		map.put("temp", temp);
 
 		return "jsonView";
 	}
@@ -39,8 +41,8 @@ public class ClassInfoController {
 
 		@RequestMapping(value="/getClasses", method=RequestMethod.GET)
 	public String getClasses(@RequestParam("lectureName") String lectureName, @RequestParam("professorEmail") String professorEmail, ModelMap map) {
-
-		map.put("page", classService.getClassInfoes(lectureName, professorEmail));
+logger.info(lectureName+professorEmail);
+		map.put("classes", classService.getClassInfoes(lectureName, professorEmail));
 		return "jsonView";	
 	}
 }
