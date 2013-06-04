@@ -138,7 +138,7 @@
    			JSONObject jsonObject = null;
    			String json = null;
 
-  String allmindmap = "http://dewliteyez.appspot.com/allmindmap";
+  String allmindmap = "http://treeze-map.appspot.com/allmindmap";
   BufferedReader br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
   String tmp;
   
@@ -170,7 +170,7 @@
   			%>
               
               
-              <p><a class="btn" href="#" onclick="showProject('', '0')">쓰기 &raquo;</a></p>
+              <p><a class="btn" href="#" onclick="showProject('', '0')">wating</a></p>
             </ul>
           </div><!--/.well -->  
         </div><!--/span-->

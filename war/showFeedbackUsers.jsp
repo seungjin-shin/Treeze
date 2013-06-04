@@ -110,7 +110,7 @@
       <ul class="pager">
 
         <%
-        String allusers = "http://dewliteyez.appspot.com/feedbackusers?id=" + id; //이 URl로 id값받아서 피드백준놈들 몽땅 글거오기
+        String allusers = "http://treeze-map.appspot.com/feedbackusers?id=" + id; 
         BufferedReader br = new BufferedReader(new InputStreamReader((new URL(allusers)).openConnection().getInputStream(),"EUC-KR"));
         String tmp;
 
@@ -133,7 +133,7 @@
         <%
         for (int i = 0 ; i < cnt ; i++) {
         String user = userArray.get(i).toString();
-        String count = cntArray.get(i).toString(); //피드백 준놈 리스트 출력하는 로직
+        String count = cntArray.get(i).toString(); 
         %>
         <li onclick="showFeedback('<%=id%>','<%=user%>')"><a href="#" style="margin-left:20px;margin-right:20px;font-size:20pt;"><%=user%><span class="badge badge-important" style="position:relative;bottom:10px;"><%=count%></span></a></li>
         <%

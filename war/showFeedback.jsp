@@ -110,7 +110,7 @@
       JSONObject jsonObject = null;
       String json = null;
 
-      String allmindmap = "http://dewliteyez.appspot.com/feedbackversion?id=" + id + "&user=" + user;
+      String allmindmap = "http://treeze-map.appspot.com/feedbackversion?id=" + id + "&user=" + user;
       BufferedReader br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"EUC-KR"));
       String tmp;
 
@@ -135,7 +135,7 @@
       String version = versionArray.get(i).toString();
       %>
           <li class="span3">
-            <a href="#" class="thumbnail" onclick="showFeedback('<%=직>')">
+            <a href="#" class="thumbnail" onclick="showFeedback('<%=id%>','<%=user%>','<%=version%>')">
               <img src="img/260x180.png" alt="<%=version%>">
             </a>
           </li>

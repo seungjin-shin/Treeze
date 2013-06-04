@@ -77,10 +77,10 @@
     <div class="container">
       <div class="well sidebar-nav">
         <ul class="nav nav-list">
-          <li class="nav-header"><strong style="font-size:50px">»ç¶÷µé Mind-Map Á¤º¸</strong></li>
-          <p><a class="btn btn-success" href="#" onclick="showProject('', '0')">»õ·Î¿î Mind-Map »ý¼ºÇÏ±â &raquo;</a></p>
+          <li class="nav-header"><strong style="font-size:50px">쨩챌쨋첨쨉챕 Mind-Map 횁짚쨘쨍</strong></li>
+          <p><a class="btn btn-success" href="#" onclick="showProject('', '0')">쨩천쨌횓쩔챤 Mind-Map 쨩첵쩌쨘횉횕짹창 &raquo;</a></p>
           <p><a class="btn btn-success" href="playing.jsp" onclick="showProject('', '0')">My Page &raquo;</a></p>
-          <!-- 서버에다가 마인드맵 요청 하는 로직 -->
+          <!-- �쒕쾭�먮떎媛�留덉씤�쒕㏊ �붿껌 �섎뒗 濡쒖쭅 -->
           <%@ page import="org.json.*"%>
           <%@ page import = "java.io.*" %>
           <%@ page import = "java.net.*" %>
@@ -89,7 +89,7 @@
           JSONObject jsonObject = null;
           String json = null;
 
-          String allmindmap = "http://dewliteyez.appspot.com/allmindmap"; //이 URL로 게시된 마인드맵 리스트 갖고올수있다.
+          String allmindmap = "http://treeze-map.appspot.com/allmindmap"; //��URL濡�寃뚯떆��留덉씤�쒕㏊ 由ъ뒪��媛뽮퀬�ъ닔�덈떎.
           BufferedReader br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
           String tmp;
           

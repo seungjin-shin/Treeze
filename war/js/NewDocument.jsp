@@ -34,7 +34,7 @@ mindmaps.NewDocumentPresenter = function(eventBus, mindmapModel, view) {
 	  	id = request.getParameter("id");
 	  	mindmap = ""; 
 
-	  	allmindmap = "http://dewliteyez.appspot.com/mindmap?id="+ id;
+	  	allmindmap = "http://treeze-map.appspot.com/mindmap?id="+ id;
 	  	br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
 
 	  	while((tmp = br.readLine()) != null)
@@ -66,7 +66,7 @@ mindmaps.NewDocumentPresenter = function(eventBus, mindmapModel, view) {
 	  	String user = request.getParameter("user");
 	  	String version = request.getParameter("version");
 
-	  	allmindmap = "http://dewliteyez.appspot.com/feedback?id=" + id + "&user=" + user + "&version=" + version;
+	  	allmindmap = "http://treeze-map.appspot.com/feedback?id=" + id + "&user=" + user + "&version=" + version;
 	  	br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
 
 	  	while((tmp = br.readLine()) != null)

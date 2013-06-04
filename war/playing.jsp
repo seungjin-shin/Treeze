@@ -130,25 +130,7 @@
  <!-- list -->
 
 
-			<%
-			for (int i = 0 ; i < cnt ; i++) { // 게시글에 있는 
-		     String id = idArray.get(i).toString();
-     		String title = titleArray.get(i).toString();
-     		String fbCnt = fbCntArray.get(i).toString(); 
-     		%>
-              <li><a href="#" onclick="showProject('<%=id%>', '1')"><%=title%><%=fbCnt%></a></li>
-     		<%
-   			}
-  			%>
-              
-              
-              <p><a class="btn" href="#" onclick="showProject('', '0')">ì°ê¸° &raquo;</a></p>
-            </ul>
-          </div><!--/.well -->  
-        </div><!--/span-->
-        </div>
-        </div>
-        <form name="writeM" method="post" action="mindmap.jsp">
+	
 
 
 
@@ -170,7 +152,7 @@
           JSONObject jsonObject = null;
          String json = null;
 
-          String allmindmap = "http://dewliteyez.appspot.com/allmindmap";
+          String allmindmap = "http://treeze-map.appspot.com/allmindmap";
           BufferedReader br = new BufferedReader(new InputStreamReader((new URL(allmindmap)).openConnection().getInputStream(),"UTF-8"));
           String tmp;
           
@@ -191,13 +173,13 @@
           
 
           <%
-          for (int i = 0 ; i < cnt ; i++) { // 게시될 마인드맵들 리스트 전부 출력하기 위한 for문
+          for (int i = 0 ; i < cnt ; i++) { // 寃뚯떆��留덉씤�쒕㏊��由ъ뒪���꾨� 異쒕젰�섍린 �꾪븳 for臾�
           String id = idArray.get(i).toString();
           String title = titleArray.get(i).toString();
           String count = cntArray.get(i).toString();
           %>
 
-          <!--프로젝트 아이디를 넘겨엇  -->
+          <!--�꾨줈�앺듃 �꾩씠�붾� �섍꺼�� -->
           <li><a href="#" onclick="showProject('<%=id%>', '<%=title%>')"><%=title%></a>
 
             <%
