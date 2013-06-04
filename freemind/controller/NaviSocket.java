@@ -93,6 +93,10 @@ class Start extends Thread {
 		final String QUESTION = "2";
 
 		int cnt = -1;
+		
+		//dewlit
+		String testStr;
+		//dewlit
 
 		String chkStr;
 		String rcvStr;
