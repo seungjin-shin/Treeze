@@ -65,7 +65,6 @@ public class LecturePageFrame extends JFrame {
 
 		Font lagF = new Font("Serif", Font.BOLD, 30);
 		Font midF = new Font("Serif", Font.BOLD, 16);
-		Font smaF = new Font("Serif", Font.BOLD, 10);
 		
 		JLabel name = new JLabel("Minsuk Lee");
 		JLabel address = new JLabel("Department of Computer Engineering,");
@@ -91,14 +90,6 @@ public class LecturePageFrame extends JFrame {
 		address2.setFont(midF);
 		address2.setLocation(50, 370);
 		add(address2);
-		
-//		JButton newLecture = new JButton("New Class");
-//		newLecture.setSize(150, 40);
-//		newLecture.setLocation(300, 85);
-//		newLecture.setFont(midF);
-//		newLecture.addActionListener(btnListener);
-		
-		//add(newLecture);
 		
 		tmp = getClass().getClassLoader().getResource("CreateLecture.png");
 		
@@ -135,11 +126,6 @@ public class LecturePageFrame extends JFrame {
 		
 		sPanel = new JScrollPane(classPanel);
 		sPanel.setBounds(290, 130, 600, 498);
-		
-//		classPanel.setSize(600, 500);
-//		classPanel.setLocation(290, 130);
-		//connectPanel.setBackground(Color.white);
-		
 		add(sPanel);
 		
 		setTitle("Select your Class");
@@ -155,18 +141,12 @@ public class LecturePageFrame extends JFrame {
 		g.drawLine(30, 90, 900, 90);
 		
 		g.setColor(Color.white);
-
 		g.drawLine(40, 380, 270, 380);
 		g.drawLine(40, 450, 270, 450);
-		//g.drawImage(logo, 20, 30, null);
-//		g.setColor(Color.white);
-//		g.fillRoundRect(300, 150, 650, 500, 30, 30);
+		
 		g.setColor(Color.black);
 		g.drawRect(298, 158, 600, 500);
 		g.drawRect(297, 157, 602, 502);
-		//g.drawRoundRect(299, 149, 652, 502, 30, 30);
-//		g.drawRoundRect(299, 149, 653, 503, 30, 30);
-//		g.drawRoundRect(298, 148, 654, 504, 30, 30);
 		
 	}
 	
@@ -193,8 +173,6 @@ public class LecturePageFrame extends JFrame {
 			tmpBtn.setLocation(460, 10);
 			tmpBtn.setFocusable(false);
 			add(tmpBtn);
-			
-			
 		}
 		
 		@Override
@@ -219,16 +197,7 @@ public class LecturePageFrame extends JFrame {
 			JLabel inputLb = new JLabel("Title :");
 			inputLb.setSize(50, 30);
 			inputLb.setLocation(10, 10);
-//		JLabel inputFileLb = new JLabel("File  :");
-//		inputFileLb.setSize(100, 30);
-//		inputFileLb.setLocation(10, 40);
-//		add(inputFileLb);
-			
-//		JButton fileBtn = new JButton("select PDF");
-//		fileBtn.addActionListener(btnListener);
-//		fileBtn.setSize(100, 30);
-//		fileBtn.setLocation(40, 40);
-//		add(fileBtn);
+
 			classtf = new JTextField();
 			classtf.setSize(150, 25);
 			classtf.setLocation(60, 10);
@@ -256,22 +225,12 @@ public class LecturePageFrame extends JFrame {
 				return;
 			}
 			else{
-//			String jsonStr;
-//			FreemindGson myGson = new FreemindGson();
-//			Lecture createLecture = new Lecture();
-//			createLecture.setLectureName(lectureTitle);
-//			createLecture.setProfessorEmail("minsuk@hansung.ac.kr");
-//			createLecture.setStateOfLecture(false);
-//			jsonStr = myGson.toJson(createLecture);
-				
 				UploadToServer UTS = new UploadToServer();
 				UTS.classPost(lectureId, "minsuk@hansung.ac.kr", classTitle);
-				//UTS.lecturePost(classTitle, "minsuk@hansung.ac.kr", "false");
+
 				frame.init();
 				frame.update(frame.getGraphics());
 				sPanel.updateUI();
-//			//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
-//			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
 				
 				this.setVisible(false);
 			}
@@ -281,7 +240,6 @@ public class LecturePageFrame extends JFrame {
 		JLabel tmpLb, professor, state;
 		Image onBookMark, offBookMark;
 		Image onState, offState;
-		//URL onBookMarkURL = getClass().getClassLoader().getResource("onBookMark.png");
 		JFrame frame;
 		URL slideShowURL, mindmapURL;
 		
@@ -319,7 +277,7 @@ public class LecturePageFrame extends JFrame {
 			tmpLb.setFont(lagf);
 			tmpLb.setLocation(240, 60);
 			add(tmpLb);
-			//init() 만들고 update
+			
 			ClassTopBarPanel classToppn = new ClassTopBarPanel(this);
 			classToppn.setSize(580, 50);
 			classToppn.setLocation(10, 10);
@@ -333,8 +291,7 @@ public class LecturePageFrame extends JFrame {
 			BufferedReader in = null;
 			String buf = "";
 			try
-			{//http://61.43.139.10:8080/treeze/getClasses/?lectureName=LogicCircuit&professorEmail=minsuk@hansung.ac.kr
-			    //URL url = new URL("http://61.43.139.10:8080/treeze/getMyLectures?professorEmail=" + "minsuk@hansung.ac.kr");
+			{
 				URL url = new URL("http://61.43.139.10:8080/treeze/getClasses?lectureId=" + lectureId);
 			    URLConnection urlconn = url.openConnection();
 			    in = new BufferedReader(new InputStreamReader(urlconn.getInputStream(),"UTF-8"));
@@ -362,7 +319,6 @@ public class LecturePageFrame extends JFrame {
 			ArrayList<freemind.json.ClassInfo> classList = new ArrayList<freemind.json.ClassInfo>();
 			freemind.json.ClassInfo tmpClass;
 			FreemindGson myGson = new FreemindGson();
-			//lectureList = (ArrayLecture) myGson.fromJson(sHtml, "ArrayLecture");
 			Gson gson = new Gson();
 			
 			Type type = new TypeToken<ArrayClass>() {
@@ -403,102 +359,9 @@ public class LecturePageFrame extends JFrame {
 				mindmapBtn.addActionListener(this);
 				add(mindmapBtn);
 			}
-			
-
 			setPreferredSize(new Dimension(550, 20 + TOPPADDING + classCnt * CLASSHGAP));
-			
 		}
-			
-			
-			
-			
-//			JLabel embedded = new JLabel("First Class");
-//			embedded.setFont(lagf);
-//			embedded.setSize(240, 50);
-//			embedded.setLocation(40, TOPPADDING + classCnt * CLASSHGAP);
-//			classCnt++;
-//			add(embedded);
-//			
-//			JLabel logic = new JLabel("Second Class");
-//			logic.setFont(lagf);
-//			logic.setSize(240, 50);
-//			logic.setLocation(40, TOPPADDING + classCnt * CLASSHGAP);
-//			
-//			classCnt = 0;
-//			
-//			lagf = new Font("Serif", Font.BOLD, 20);
-//			
-//			JLabel tmpLb = new JLabel(latestDay[0]);
-//			tmpLb.setFont(lagf);
-//			tmpLb.setSize(240, 50);
-//			tmpLb.setLocation(295, TOPPADDING + classCnt * CLASSHGAP);
-//			add(tmpLb);
-//			classCnt++;
-//			
-//			tmpLb = new JLabel(latestDay[1]);
-//			tmpLb.setFont(lagf);
-//			tmpLb.setSize(240, 50);
-//			tmpLb.setLocation(295, TOPPADDING + classCnt * CLASSHGAP);
-//			add(tmpLb);
-//			
-//			classCnt = 0;
-//			
-//			slideShowURL = getClass().getClassLoader().getResource("slideShow.png");
-//			mindmapURL = getClass().getClassLoader().getResource("mindmap.png");
-//			
-//			JButton slideBtn = new JButton(new ImageIcon(slideShowURL));
-//			JButton mindmapBtn = new JButton("12341234", new ImageIcon(mindmapURL));
-//			
-//			slideBtn.setSize(100, 24);
-//			slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
-//			slideBtn.setFocusable(false);
-//			add(slideBtn);
-//			
-//			mindmapBtn.setSize(100, 24);
-//			mindmapBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP + 25);
-//			mindmapBtn.setFocusable(false);
-//			mindmapBtn.addActionListener(this);
-//			add(mindmapBtn);
-//			classCnt++;
-//			
-//			
-//			slideBtn = new JButton(new ImageIcon(slideShowURL));
-//			mindmapBtn = new JButton("1", new ImageIcon(mindmapURL));
-//			
-//			slideBtn.setSize(100, 24);
-//			slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
-//			slideBtn.setFocusable(false);
-//			add(slideBtn);
-//			
-//			mindmapBtn.setSize(100, 24);
-//			mindmapBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP + 25);
-//			mindmapBtn.setFocusable(false);
-//			mindmapBtn.addActionListener(this);
-//			add(mindmapBtn);
-//			classCnt++;
-			
-			
-			
-//		JLabel prof = new JLabel("이 민석");
-//		prof.setFont(lagf);
-//		prof.setSize(200, 50);
-//		prof.setLocation(360, 100);
-//		add(prof);
-//		
-//		JLabel prof2 = new JLabel("이 민석");
-//		prof2.setFont(lagf);
-//		prof2.setSize(200, 50);
-//		prof2.setLocation(360, 160);
-//		add(prof2);
-//		
-//		JLabel prof3 = new JLabel("이 민석");
-//		prof3.setFont(lagf);
-//		prof3.setSize(200, 50);
-//		prof3.setLocation(360, 220);
-			//add(prof3);
-			
-			//add(system);
-			
+
 		public void paint(Graphics g) {
 			super.paint(g);
 			g.drawLine(20, 120, 580, 120);
@@ -506,23 +369,11 @@ public class LecturePageFrame extends JFrame {
 				g.drawLine(220, 140, 220, TOPPADDING + CLASSHGAP * classCnt);
 				g.drawLine(450, 140, 450, TOPPADDING + CLASSHGAP * classCnt);
 			}
-//		g.setColor(Color.white);
-//
-//		g.drawLine(40, 380, 250, 380);
-//		g.drawLine(40, 450, 250, 450);
-//		g.setColor(Color.white);
-			//g.drawRect(300, 150, 650, 500, 30, 30);
-//		g.setColor(Color.black);
-//		g.drawRoundRect(299, 149, 652, 502, 30, 30);
-//		g.drawRoundRect(299, 149, 653, 503, 30, 30);
-//		g.drawRoundRect(298, 148, 654, 504, 30, 30);
-			
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String event = e.getActionCommand();
 			System.out.println(event);
-			//mc.getController().
 			mc.getController().setClassId(Integer.parseInt(event));
 			mc.open(mc, event);
 			frame.setVisible(false);

@@ -102,21 +102,6 @@ class SurveyFrame extends JFrame implements ActionListener{
 				}
 			}
 			
-//			String jsonStr;
-//			FreemindGson myGson = new FreemindGson();
-//			Lecture createLecture = new Lecture();
-//			createLecture.setLectureName(lectureTitle);
-//			createLecture.setProfessorEmail("minsuk@hansung.ac.kr");
-//			createLecture.setStateOfLecture(false);
-//			jsonStr = myGson.toJson(createLecture);
-			
-//			UploadToServer UTS = new UploadToServer();
-//			UTS.classPost("Embedded System", "minsuk@hansung.ac.kr", surveyStr);
-			//UTS.lecturePost(classTitle, "minsuk@hansung.ac.kr", "false");
-			
-//			//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
-//			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
-			
 			this.setVisible(false);
 		}
 	}		
@@ -142,7 +127,6 @@ class SurveyResultFrame extends JFrame implements ActionListener{
 		getContentPane().setBackground(Color.white);
 		Font f = new Font("Serif", Font.BOLD, 30);
 		
-		//JTextField lecturetf = new JTextField();
 		JLabel resultLb = new JLabel("RESULT");
 		resultLb.setFont(f);
 		resultLb.setSize(200, 50);
@@ -162,7 +146,6 @@ class SurveyResultFrame extends JFrame implements ActionListener{
 		okBtn.setLocation(300, 300);
 		add(okBtn);
 		
-		
 		JPanel resultPn2 = new ResultPanel2();
 		resultPn2.setSize(460, 100);
 		resultPn2.setLocation(20, 160);
@@ -180,7 +163,6 @@ class SurveyResultFrame extends JFrame implements ActionListener{
 		g.drawLine(20, 85, 500, 85);
 		g.drawLine(20, 86, 500, 86);
 		g.drawLine(20, 87, 500, 87);
-		//g.fillRect(20, 150, 480, 200);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -201,16 +183,10 @@ class SurveyResultFrame extends JFrame implements ActionListener{
 			joinCnt.setSize(160, 40);
 			joinCnt.setLocation(150, 0);
 			add(joinCnt);
-			
-			
 		}
-		
 		public void paint(Graphics g){
 			super.paint(g);
 			g.setColor(Color.white);
-			
-			//g.drawRoundRect(10, 40, 460, 100, 30, 30);
-			
 		}
 	}
 	
@@ -253,8 +229,6 @@ class SurveyResultFrame extends JFrame implements ActionListener{
 			g.drawLine(50, 64, 50 + noPer * 3, 64);
 			g.drawLine(50, 65, 50 + noPer * 3, 65);
 			g.drawLine(50, 66, 50 + noPer * 3, 66);
-//		
-//		g.drawRoundRect(10, 40, 460, 100, 30, 30);
 			
 		}
 	}

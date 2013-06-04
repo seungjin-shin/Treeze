@@ -65,12 +65,6 @@ public class NaviSocket extends JFrame implements Runnable{
 		// TODO Auto-generated method stub
 		init();
 	}
-
-//	public static void main(String[] args) {
-//		// TODO Auto-generated method stub
-//		NaviSocket server = new NaviSocket();
-//		server.init();
-//	}
 }
 
 class Start extends Thread {
@@ -97,26 +91,17 @@ class Start extends Thread {
 		final String SURVEYYES = "0";
 		final String SURVEYNO = "1";
 		final String QUESTION = "2";
-		int yesCnt = 0;
-		int noCnt = 0;
-		
-		String folderName = "c://myweb//sPad/";// 기본 폴더 지정
+
 		int cnt = -1;
-		
+
 		String chkStr;
 		String rcvStr;
 		
 		try {
 			int i = 0;
-			String OK = "OK";
-			String END = "E#N#D#";
-			String[] userInfo;
-			final String SUBSTR = "";
-			
 			
 			InputStream is = socket.getInputStream();
 			OutputStream os = socket.getOutputStream();
-			//InputStream fileIs = socket2.getInputStream();
 			c.getNaviOs().add(os);
 			
 			write("------- A user is connect. --------");
@@ -170,10 +155,6 @@ class Start extends Thread {
 							questionNode.setQuestion(true);
 						}
 						c.getModeController().nodeChanged(questionNode);
-						
-						
-						
-						//c.getModeController().getSelected().getText()
 					}
 					
 					if(c.getTotalCnt() == c.getNaviOs().size()){

@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Random;
@@ -42,56 +44,11 @@ public class UploadToServer {
         	  saveFile = new File(dirPath + ".mm");
                 if(saveFile.exists())
                	 bin =  new FileBody(saveFile, "UTF-8");
-        	  
-        	  
-        	  
-        	  
-        	  
-        	  
-//        	  BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(dirPath + ".mm"), "UTF-8"));
-//              String s = "";
-//
-//              while ((s = in.readLine()) != null) {
-//            	  xml += s;
-//                //System.out.println(s);
-//              }
-//              in.close(); // read xml
-//              xml = "dd";
-//              xml = "<map version=\"0.9.0\">" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"리눅스 강의\">" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" POSITION=\"left\" TEXT=\" 리눅스 소개\">" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"리눅스의 역사\"/>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Linux도 운영 체제\"/>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Linux 전에는 Unix…\"/>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Linux의 특징\"/>" +
-//				"</node>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" POSITION=\"left\" TEXT=\" 공개 소스 소프트웨어 (OSS or FOSS)\"/>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" POSITION=\"left\" TEXT=\" Linux 사용에 필요핚 기본 개념과 용어\">" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Linux 배포판 들\"/>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"그 중 가장 인기 많은… ubuntu\"/>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Linux의 구조\"/>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"인터페이스 부분\"/>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Linux 기본 개념들…\"/>" +
-//				"</node>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" POSITION=\"right\" TEXT=\" 시스템 호출 정리\">" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"프로세스 관련 명령\"/>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Top 명령\"/>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"Windows 작업관리자\"/>" +
-//				"<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" TEXT=\"시스템 호출\"/>" +
-//				"</node>" +
-//				"</node>" +
-//				"</map>";
            HttpClient httpClient = new DefaultHttpClient();  
-           //String url = serverUrl;
            HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/upload/img"); 
            String path = "";
-           //http://61.43.139.10:8080/treeze/upload/img
-           // 파일 path 잡아주고 for 돌며면서 이미지 보내
-           
            
            StringBody classBody = new StringBody(classId, Charset.forName("UTF-8"));
-           
-           //StringBody xmlBody = new StringBody(xml, Charset.forName("UTF-8"));
            
            MultipartEntity multipart = new MultipartEntity(
 					HttpMultipartMode.BROWSER_COMPATIBLE, null,
@@ -116,8 +73,6 @@ public class UploadToServer {
             	 bin =  new FileBody(saveFile, "UTF-8");
             	 post = new HttpPost("http://61.43.139.10:8080/treeze/upload/img"); 
 
-//					multipart = new MultipartEntity(
-//							HttpMultipartMode.BROWSER_COMPATIBLE);
 					multipart = new MultipartEntity(
 		  					HttpMultipartMode.BROWSER_COMPATIBLE, null,
 		  					Charset.forName("UTF-8"));
@@ -129,31 +84,6 @@ public class UploadToServer {
 					response = httpClient.execute(post);
 					resEntity = response.getEntity(); // 태웅이형소스
 				}
-        	   
-        	   
-        	   
-        	   
-        	   
-//        	   httpClient = new DefaultHttpClient();
-//        	   post = new HttpPost("http://61.43.139.10:8080/treeze/upload/img"); 
-//        	   multipart = new MultipartEntity(
-//   					HttpMultipartMode.BROWSER_COMPATIBLE, null,
-//   					Charset.forName("UTF-8")); // classId에 맞는 img 다 보내
-//   			
-//        	   tmp = sList.get(i);
-//        	   imgFileName = dirPath + "\\" + tmp.getNodeName() + ".jpg"; 
-//        	   saveFile = new File(imgFileName);
-//				if (saveFile.exists()) {
-//
-//					imgBody = new FileBody(saveFile, "UTF-8");
-//
-//					multipart.addPart("classId", classBody);
-//					multipart.addPart("upload", imgBody);
-//
-//					post.setEntity(multipart);
-//					response = httpClient.execute(post);
-//					resEntity = response.getEntity();
-//				} 내가하던거
            }
            System.out.println("postXmlImg");
        }catch(Exception e){e.printStackTrace();
@@ -162,19 +92,10 @@ public class UploadToServer {
 	  
 	  public void lecturePost(String lectureName, String profEmail, String state) {
 		  	String jsonStr;
-//			FreemindGson myGson = new FreemindGson();
-//			Lecture createLecture = new Lecture();
-//			createLecture.setLectureName(lectureTitle);
-//			createLecture.setProfessorEmail("minsuk@hansung.ac.kr");
-//			createLecture.setStateOfLecture(false);
-//			jsonStr = myGson.toJson(createLecture);
           try {
         	  HttpClient httpClient = new DefaultHttpClient();  
-        	  //String url = serverUrl;
-        	  //HttpPost post = new HttpPost("http://113.198.84.74:8080/treeze/createLecture");
         	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/createLecture");
         	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
-        	  //파일 path 잡아주고 for 돌며면서 이미지 보내
         	  
         	  StringBody lectureTitle = new StringBody(lectureName, Charset.forName("UTF-8"));
         	  StringBody profEmailBody = new StringBody(profEmail, Charset.forName("UTF-8"));
@@ -194,56 +115,30 @@ public class UploadToServer {
 	  
 	  public void classPost(String lectureId, String profEmail, String className) {
 		  	String jsonStr;
-//			FreemindGson myGson = new FreemindGson();
-//			Lecture createLecture = new Lecture();
-//			createLecture.setLectureName(lectureTitle);
-//			createLecture.setProfessorEmail("minsuk@hansung.ac.kr");
-//			createLecture.setStateOfLecture(false);
-//			jsonStr = myGson.toJson(createLecture);
         try {
       	  HttpClient httpClient = new DefaultHttpClient();  
-      	  //String url = serverUrl;
       	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/createClass"); 
       	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
-      	  //파일 path 잡아주고 for 돌며면서 이미지 보내
-      	  Random random = new Random();
-      	  
-      	  StringBuffer str = new StringBuffer(); // 변수를 바꿨으면 의미 없는 주석 달기
-      	  for (int i = 1; i < 8; i++) {
-      		  str.append((random.nextInt(10)));
-      	  }
-      	  //StringBody classId = new StringBody(str.toString(), Charset.forName("UTF-8"));
+      	  String ipStr = null;
+      	  try {
+				ipStr = InetAddress.getLocalHost().getHostAddress();
+			} catch (UnknownHostException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
       	StringBody classId = new StringBody("0", Charset.forName("UTF-8"));
       	  StringBody lectureTitle = new StringBody(lectureId, Charset.forName("UTF-8"));
       	  StringBody profEmailBody = new StringBody(profEmail, Charset.forName("UTF-8"));
       	  StringBody classNameBody = new StringBody(className, Charset.forName("UTF-8"));
-      	  StringBody tmp = new StringBody("0", Charset.forName("UTF-8"));
+      	  StringBody portBody = new StringBody("2141", Charset.forName("UTF-8"));
+      	  StringBody ipBody = new StringBody(ipStr, Charset.forName("UTF-8"));
       	  
-      	  multipart.addPart("classIP", tmp);
-      	  multipart.addPart("port", tmp);
+      	  multipart.addPart("classIP", ipBody);
+      	  multipart.addPart("port", portBody);
       	  multipart.addPart("classId", classId);
-      	//multipart.addPart("Id", classId);
       	  multipart.addPart("lectureId", lectureTitle);  
       	  multipart.addPart("professorEmail", profEmailBody);
       	  multipart.addPart("className", classNameBody);
-      	  
-      	/******** 자료구조 ********/
-			/*
-			 * nameValuePairs.add(new BasicNameValuePair("classId", "0"));
-			 * nameValuePairs.add(new BasicNameValuePair("className","1강 리스트"));
-			 * nameValuePairs.add(new BasicNameValuePair("classIP","111.111.111.111"));
-			 * nameValuePairs.add(new BasicNameValuePair("port", "8080"));
-			 * nameValuePairs.add(new BasicNameValuePair("lectureName", "자료구조"));
-			 * nameValuePairs.add(new BasicNameValuePair("professorEmail","minsuk@hansung.ac.kr"));
-			 */
-      	  
-      	  
-      	  
-      	  
-      	  
-      	  
-      	  
-      	  
       	  
       	  post.setEntity(multipart);  
       	  HttpResponse response = httpClient.execute(post);  
@@ -256,27 +151,11 @@ public class UploadToServer {
 	  public void ticketPost(String ticketTitle, String classId, String position, String contents, String userName, String ticketPosition) {
 		  	String jsonStr;
 		  	
-//		  	private String ticketTitle;
-//			private int classId;
-//			private String position;
-//			private String contents;
-//			private String userEmail;
-		  	
-		  	
-//			FreemindGson myGson = new FreemindGson();
-//			Lecture createLecture = new Lecture();
-//			createLecture.setLectureName(lectureTitle);
-//			createLecture.setProfessorEmail("minsuk@hansung.ac.kr");
-//			createLecture.setStateOfLecture(false);
-//			jsonStr = myGson.toJson(createLecture);
       try {
     	  HttpClient httpClient = new DefaultHttpClient();  
-    	  //String url = serverUrl;
     	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/createTicket"); 
     	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
-    	  //파일 path 잡아주고 for 돌며면서 이미지 보내
-    	  //StringBody classId = new StringBody(str.toString(), Charset.forName("UTF-8"));
-    	StringBody classIdBody = new StringBody(classId, Charset.forName("UTF-8"));
+    	  StringBody classIdBody = new StringBody(classId, Charset.forName("UTF-8"));
     	  StringBody ticketTitleBody = new StringBody(ticketTitle, Charset.forName("UTF-8"));
     	  StringBody positionBody = new StringBody(position, Charset.forName("UTF-8"));
     	  StringBody contentsBody = new StringBody(contents, Charset.forName("UTF-8"));
@@ -286,22 +165,10 @@ public class UploadToServer {
     	  multipart.addPart("ticketTitle", ticketTitleBody);
     	  multipart.addPart("classId", classIdBody);
     	  multipart.addPart("position", positionBody);
-    	//multipart.addPart("Id", classId);
     	  multipart.addPart("contents", contentsBody);  
     	  multipart.addPart("userName", userNameBody);
     	  multipart.addPart("ticketPosition", ticketPositionBody);
-    	  //multipart.addPart("className", classNameBody);
-    	  
-    	/******** 자료구조 ********/
-			/*
-			 * nameValuePairs.add(new BasicNameValuePair("classId", "0"));
-			 * nameValuePairs.add(new BasicNameValuePair("className","1강 리스트"));
-			 * nameValuePairs.add(new BasicNameValuePair("classIP","111.111.111.111"));
-			 * nameValuePairs.add(new BasicNameValuePair("port", "8080"));
-			 * nameValuePairs.add(new BasicNameValuePair("lectureName", "자료구조"));
-			 * nameValuePairs.add(new BasicNameValuePair("professorEmail","minsuk@hansung.ac.kr"));
-			 */
-    	  
+
     	  post.setEntity(multipart);  
     	  HttpResponse response = httpClient.execute(post);  
     	  HttpEntity resEntity = response.getEntity();
@@ -309,9 +176,4 @@ public class UploadToServer {
       }catch(Exception e){e.printStackTrace();
       }
 	  }
-	  
-	  
-	  
-	  
-	  
 }

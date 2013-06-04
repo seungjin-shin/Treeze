@@ -46,11 +46,9 @@ class QuestionFrame extends JFrame{
 		setVisible(true);
 		setLocation(350, 200);
 		
-		//getContentPane().setBackground(new Color(175, 230, 121, 255));
 		getContentPane().setBackground(new Color(141, 198, 63));
 		Font f = new Font("Serif", Font.BOLD, 30);
 		
-		//JTextField lecturetf = new JTextField();
 		JLabel titleLb = new JLabel("Hardware security");
 		titleLb.setFont(f);
 		titleLb.setSize(250, 50);
@@ -71,8 +69,6 @@ class QuestionFrame extends JFrame{
 		g.setColor(new Color(100, 100, 121, 255));
 		g.drawLine(20, 85, 500, 85);
 		g.drawLine(20, 86, 500, 86);
-		//g.drawLine(20, 87, 600, 87);
-		//g.fillRect(20, 150, 480, 200);
 	}
 	class QuestionPanel extends JPanel implements ActionListener{
 		final int TOPPADDING = 60;
@@ -92,7 +88,6 @@ class QuestionFrame extends JFrame{
 			setLayout(null);
 			setVisible(true);
 			setBackground(Color.white);
-			
 			
 			init();
 		}
@@ -116,8 +111,7 @@ class QuestionFrame extends JFrame{
 			String buf = "";
 			
 			try
-			{//http://61.43.139.10:8080/treeze/getClasses/?lectureName=LogicCircuit&professorEmail=minsuk@hansung.ac.kr
-				//URL url = new URL("http://61.43.139.10:8080/treeze/getMyLectures?professorEmail=" + "minsuk@hansung.ac.kr");
+			{
 				URL url = new URL("http://61.43.139.10:8080/treeze/getTickets/?classId=" + classId + "&position=" + idxStr);
 				URLConnection urlconn = url.openConnection();
 				in = new BufferedReader(new InputStreamReader(urlconn.getInputStream(),"UTF-8"));
@@ -137,7 +131,6 @@ class QuestionFrame extends JFrame{
 				try {
 					in.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -223,9 +216,6 @@ class QuestionFrame extends JFrame{
 			
 			for(int i = 0; i < (questionCnt + childTotalCnt); i++)
 				g.drawLine(20, LINETOPPADDING + i * QUESTIONHGAP, 430, LINETOPPADDING + i * QUESTIONHGAP);
-			
-			//g.drawRoundRect(10, 40, 460, 100, 30, 30);
-			
 		}
 		
 		@Override
@@ -266,46 +256,26 @@ class QuestionFrame extends JFrame{
 				contentsArea = new JTextArea();
 				contentsArea.setText(ticket.getContents());
 				contentsArea.setEditable(false);
-				//replyArea.set
 				contentsArea.setLineWrap(true);
 				JScrollPane sPane = new JScrollPane(contentsArea);
 				sPane.setBounds(80, 10, 200, 170);
-//			replyArea.setSize(200, 300);
-//			replyArea.setLocation(60, 10);
 				add(sPane);
 				
 				
 				JLabel inputLb = new JLabel("Reply :");
 				inputLb.setSize(50, 30);
 				inputLb.setLocation(10, 210);
-//			JLabel inputFileLb = new JLabel("File  :");
-//			inputFileLb.setSize(100, 30);
-//			inputFileLb.setLocation(10, 40);
-//			add(inputFileLb);
-				
-//			JButton fileBtn = new JButton("select PDF");
-//			fileBtn.addActionListener(btnListener);
-//			fileBtn.setSize(100, 30);
-//			fileBtn.setLocation(40, 40);
-//			add(fileBtn);
 				replyArea = new JTextArea();
-				//replyArea.set
 				replyArea.setLineWrap(true);
 				sPane = new JScrollPane(replyArea);
 				sPane.setBounds(80, 210, 200, 250);
-//			replyArea.setSize(200, 300);
-//			replyArea.setLocation(60, 10);
 				add(sPane);
 				
-//			classtf = new JTextField();
-//			classtf.setSize(150, 25);
-//			classtf.setLocation(60, 10);
 				JButton input = new JButton("Reply");
 				input.addActionListener(this);
 				input.setSize(80, 25);
 				input.setLocation(290, 434);
 				add(inputLb);
-				//add(classtf);
 				add(input);
 			}
 			
@@ -335,26 +305,13 @@ class QuestionFrame extends JFrame{
 					return;
 				}
 				else{
-//				String jsonStr;
-//				FreemindGson myGson = new FreemindGson();
-//				Lecture createLecture = new Lecture();
-//				createLecture.setLectureName(lectureTitle);
-//				createLecture.setProfessorEmail("minsuk@hansung.ac.kr");
-//				createLecture.setStateOfLecture(false);
-//				jsonStr = myGson.toJson(createLecture);
-					
-				UploadToServer UTS = new UploadToServer();
-				UTS.ticketPost("[Re]" + ticket.getTicketTitle(), ticket.getClassId() + "", ticket.getPosition(), classTitle, "prof", ticket.getTicketPosition() + "/0");
-//				UTS.classPost("Embedded System", "minsuk@hansung.ac.kr", classTitle);
-					//UTS.lecturePost(classTitle, "minsuk@hansung.ac.kr", "false");
-					
-//				//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
-//				//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
-				questPn.removeAll(); // 이상하게 No가 겹치네
-				questPn.init();
-				//questPn.update(questPn.getGraphics());
-//				questPn.repaint();
-//				sPanel.repaint();
+					UploadToServer UTS = new UploadToServer();
+					UTS.ticketPost("[Re]" + ticket.getTicketTitle(),
+							ticket.getClassId() + "", ticket.getPosition(),
+							classTitle, "prof", ticket.getTicketPosition()
+									+ "/0");
+					questPn.removeAll(); // No가 겹쳐서 removeAll 하고 다시 그리기
+					questPn.init();
 					sPanel.updateUI();
 					this.setVisible(false);
 				}

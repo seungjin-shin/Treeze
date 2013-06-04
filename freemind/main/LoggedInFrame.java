@@ -47,7 +47,7 @@ public class LoggedInFrame extends JFrame {
 	private Image profileImg;
 	private URL profileImgURL = getClass().getClassLoader().getResource("minsuk.jpg");
 	private Image logo;
-	private URL tmp;// = getClass().getClassLoader().getResource("profile.png");
+	private URL tmp;
 	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
 	CreateBtn createLs;
 	MindMapController mc;
@@ -63,7 +63,6 @@ public class LoggedInFrame extends JFrame {
 		setSize(950, 800);
 		setLayout(null);//#afd679
 		
-		//getContentPane().setBackground(new Color(175, 230, 121, 255));142, 214, 63  
 		getContentPane().setBackground(new Color(141, 198, 63));
 		JLabel name = new JLabel("Minsuk Lee");
 		JLabel address = new JLabel("Department of Computer Engineering,");
@@ -119,13 +118,7 @@ public class LoggedInFrame extends JFrame {
 		tmpBtn.setFocusable(false);
 		add(tmpBtn);
 		
-		
 		sPanel.setBounds(290, 130, 600, 498);
-//		lecturePanel.setSize(600, 500);
-//		lecturePanel.setLocation(290, 130);
-		//connectPanel.setBackground(Color.white);
-		
-		//add(lecturePanel);
 		add(sPanel);
 		
 		setTitle("Select your lecture");
@@ -141,19 +134,12 @@ public class LoggedInFrame extends JFrame {
 		g.drawLine(30, 90, 900, 90);
 		
 		g.setColor(Color.white);
-
 		g.drawLine(40, 380, 270, 380);
 		g.drawLine(40, 450, 270, 450);
-		//g.drawImage(logo, 20, 30, null);
-//		g.setColor(Color.white);
-//		g.fillRoundRect(300, 150, 650, 500, 30, 30);
+
 		g.setColor(Color.black);
 		g.drawRect(298, 158, 600, 500);
 		g.drawRect(297, 157, 602, 502);
-		//g.drawRoundRect(299, 149, 652, 502, 30, 30);
-//		g.drawRoundRect(299, 149, 653, 503, 30, 30);
-//		g.drawRoundRect(298, 148, 654, 504, 30, 30);
-		
 	}
 	
 }
@@ -165,12 +151,10 @@ class CreateBtn implements ActionListener{
 		this.sp = frame;
 		this.sPanel = sPanel;
 	}
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		new InputLectureFrame(sp, sPanel);
 	}
-	
 }
 
 class InputLectureFrame extends JFrame implements ActionListener{
@@ -220,39 +204,15 @@ class InputLectureFrame extends JFrame implements ActionListener{
 			return;
 		}
 		else{
-//			String jsonStr;
-//			FreemindGson myGson = new FreemindGson();
-//			Lecture createLecture = new Lecture();
-//			createLecture.setLectureName(lectureTitle);
-//			createLecture.setProfessorEmail("minsuk@hansung.ac.kr");
-//			createLecture.setStateOfLecture(false);
-//			jsonStr = myGson.toJson(createLecture);
-			
 			UploadToServer UTS = new UploadToServer();
 			UTS.lecturePost(lectureTitle, "minsuk@hansung.ac.kr", "false");
-			
-//			//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
-//			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
-
 			
 			this.setVisible(false);
 			frame.init();
 			
-//			frame.validate();
-//			frame.repaint();
-//			frame.invalidate();
 			frame.update(frame.getGraphics());
 			sPanel.updateUI();
-//			frame.print(getGraphics());
-//			frame.printAll(getGraphics());
-//			frame.printComponents(getGraphics());
-//			frame.validate();
-//			frame.repaint();
-//			frame.invalidate();
-			//frame.
-			//frame.
 		}
-			
 	}
 }
 
@@ -260,7 +220,6 @@ class LecturePanel extends JPanel implements ActionListener{
 	JLabel tmpLb;
 	Image onBookMark, offBookMark;
 	Image onState, offState;
-	//URL onBookMarkURL = getClass().getClassLoader().getResource("onBookMark.png");
 	JFrame frame;
 	MindMapController mc;
 	final int TOPPADDING = 100;
@@ -338,7 +297,6 @@ class LecturePanel extends JPanel implements ActionListener{
 		ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
 		Lecture tmpLecture;
 		FreemindGson myGson = new FreemindGson();
-		//lectureList = (ArrayLecture) myGson.fromJson(sHtml, "ArrayLecture");
 		Gson gson = new Gson();
 		
 		Type type = new TypeToken<ArrayLecture>() {
@@ -346,18 +304,6 @@ class LecturePanel extends JPanel implements ActionListener{
 		ArrayLecture jonResultlecturelist = (ArrayLecture) gson
 				.fromJson(sHtml, type);
 		lectureList = jonResultlecturelist.getLectures();
-		//lectureList.get(0).get
-//		System.out.println("dd");
-//		
-//		JsonParser parser = new JsonParser();
-//
-//		JsonArray array = parser.parse(sHtml).getAsJsonArray();
-//
-//		for(JsonElement element : array)
-//		{
-//		  // ...
-//		}
-		
 		
 		Font midF = new Font("Serif", Font.BOLD, 30);
 		JButton tmpBtn;
@@ -387,90 +333,6 @@ class LecturePanel extends JPanel implements ActionListener{
 		setPreferredSize(new Dimension(550, 20 + TOPPADDING + LECTUREHGAP * lectureCnt));
 	}
 		
-//		JButton logic = new JButton("Logic Circuit");
-//		logic.addActionListener(this);
-//		logic.setFont(lagf);
-//		logic.setSize(220, 50);
-//		logic.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
-//		lectureCnt++;
-//		
-//		JButton system = new JButton("System Programming");
-//		system.addActionListener(this);
-//		system.setFont(lagf);
-//		system.setSize(220, 50);
-//		system.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
-//		
-//		lectureCnt = 0;
-//		
-//		lagf = new Font("Serif", Font.BOLD, 30);
-//		tmpLb = new JLabel(registered[0]);
-//		tmpLb.setSize(100, 50);
-//		tmpLb.setFont(lagf);
-//		tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
-//		add(tmpLb);
-//		lectureCnt++;
-//		
-//		tmpLb = new JLabel(registered[1]);
-//		tmpLb.setSize(100, 50);
-//		tmpLb.setFont(lagf);
-//		tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
-//		add(tmpLb);
-//		lectureCnt++;
-//		
-//		tmpLb = new JLabel(registered[2]);
-//		tmpLb.setSize(100, 50);
-//		tmpLb.setFont(lagf);
-//		tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
-//		add(tmpLb);
-//		
-//		lectureCnt = 0;
-//		
-//		tmpLb = new JLabel(latestDay[0]);
-//		tmpLb.setSize(140, 50);
-//		tmpLb.setFont(lagf);
-//		tmpLb.setLocation(440, TOPPADDING + LECTUREHGAP * lectureCnt);
-//		add(tmpLb);
-//		lectureCnt++;
-//		
-//		tmpLb = new JLabel(latestDay[1]);
-//		tmpLb.setSize(160, 50);
-//		tmpLb.setFont(lagf);
-//		tmpLb.setLocation(440,  TOPPADDING + LECTUREHGAP * lectureCnt);
-//		add(tmpLb);
-//		lectureCnt++;
-//		
-//		tmpLb = new JLabel(latestDay[2]);
-//		tmpLb.setSize(180, 50);
-//		tmpLb.setFont(lagf);
-//		//tmpLb.setLocation(440, 220);
-//		tmpLb.setLocation(440,  TOPPADDING + LECTUREHGAP * lectureCnt);
-//		add(tmpLb);
-//		lectureCnt++;
-		
-		
-		
-//		JLabel prof = new JLabel("이 민석");
-//		prof.setFont(lagf);
-//		prof.setSize(200, 50);
-//		prof.setLocation(360, 100);
-//		add(prof);
-//		
-//		JLabel prof2 = new JLabel("이 민석");
-//		prof2.setFont(lagf);
-//		prof2.setSize(200, 50);
-//		prof2.setLocation(360, 160);
-//		add(prof2);
-//		
-//		JLabel prof3 = new JLabel("이 민석");
-//		prof3.setFont(lagf);
-//		prof3.setSize(200, 50);
-//		prof3.setLocation(360, 220);
-		//add(prof3);
-		
-//		add(embedded);
-//		add(logic);
-//		add(system);
-		
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.drawLine(20, 80, 560, 80);
@@ -478,17 +340,6 @@ class LecturePanel extends JPanel implements ActionListener{
 			g.drawLine(270, 100, 270, TOPPADDING + LECTUREHGAP * lectureCnt);
 			g.drawLine(420, 100, 420, TOPPADDING + LECTUREHGAP * lectureCnt);
 		}
-//		g.setColor(Color.white);
-//
-//		g.drawLine(40, 380, 250, 380);
-//		g.drawLine(40, 450, 250, 450);
-//		g.setColor(Color.white);
-		//g.drawRect(300, 150, 650, 500, 30, 30);
-//		g.setColor(Color.black);
-//		g.drawRoundRect(299, 149, 652, 502, 30, 30);
-//		g.drawRoundRect(299, 149, 653, 503, 30, 30);
-//		g.drawRoundRect(298, 148, 654, 504, 30, 30);
-		
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

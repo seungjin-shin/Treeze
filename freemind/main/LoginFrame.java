@@ -30,8 +30,6 @@ import freemind.modes.mindmapmode.MindMapController;
 public class LoginFrame extends JFrame {
 	private Container ct;
 	
-	private String filePath;
-	
 	JLabel nLabel = null;
 	JTextField jText = null;
 	
@@ -105,10 +103,6 @@ public class LoginFrame extends JFrame {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//UploadToServer UTS = new UploadToServer();
-			//UTS.doFileUpload(sList);
-			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
-			//mc.removeUploadMM();
 			frame.setVisible(false);
 			new LoggedInFrame(mc);
 		}

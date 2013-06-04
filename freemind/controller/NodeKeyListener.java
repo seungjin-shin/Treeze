@@ -24,6 +24,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import freemind.json.CurrentPositionOfNav;
@@ -110,26 +112,12 @@ public class NodeKeyListener implements KeyListener {
 			}
 			
 			System.out.println(jsonString);
-//			for(int i = 0; i < c.getNaviOs().size(); i++){
-//				os = c.getNaviOs().get(i);
-//				try {
-//					os.write(jsonString.getBytes()); // 다 보내
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//			}
-			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F5){
 			new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
-			//new SurveyResultFrame(31, 9);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F6){
 			//new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
-			System.out.println(c.getModeController().getSelected().getText() + "dd");
-			//System.out.println(c.getModel().getRootNode().getText());
-			//System.out.println(c.getModel().getRootNode().getChildAt(0));
 			String idxStr = "0"; // 
 			String[] splitStr;
 			splitStr = idxStr.split("/");
@@ -154,18 +142,6 @@ public class NodeKeyListener implements KeyListener {
 			
 			UploadToServer uts = new UploadToServer();
 			uts.ticketPost("헤이ㅎㅎ", c.getClassId() + "", "0", "왜이론고양??????ㅠㅠ", "student", "0/3");
-			
-//			addQuestionNode.addIcon(icon, position)
-			/*
-			 * 완전 못해 와...
-			 * 이게 실력이냐
-			 * 이게 코딩이냐
-			 * ...키보드가 아깝다
-			 * ㅉㅉㅉ 반성해라
-			 * setIcon("ㅗ' ㅅ  'ㅗ ") 
-	
-			 */
-			
 		}
 		
 		if (mListener != null)

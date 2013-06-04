@@ -30,7 +30,6 @@ public class SlideShow {
 		this.c = c;
 	}
 	
-	
 	void setfocus(SlideData focus) {
 		if(focus.getPrev() ==null){
 			this.focus = focus;
