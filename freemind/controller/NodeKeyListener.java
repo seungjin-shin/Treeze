@@ -30,6 +30,7 @@ import freemind.json.CurrentPositionOfNav;
 import freemind.json.FreemindGson;
 import freemind.modes.MindIcon;
 import freemind.modes.MindMapNode;
+import freemind.modes.UploadToServer;
 
 /**
  * The KeyListener which belongs to the node and cares for Events like C-D
@@ -122,13 +123,14 @@ public class NodeKeyListener implements KeyListener {
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F5){
 			new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
+			//new SurveyResultFrame(31, 9);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F6){
 			//new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
 			System.out.println(c.getModeController().getSelected().getText() + "dd");
 			//System.out.println(c.getModel().getRootNode().getText());
 			//System.out.println(c.getModel().getRootNode().getChildAt(0));
-			String idxStr = "root";
+			String idxStr = "0"; // 
 			String[] splitStr;
 			splitStr = idxStr.split("/");
 			MindMapNode tmp = c.getModel().getRootNode(); // 소켓 받는 부분
@@ -149,6 +151,10 @@ public class NodeKeyListener implements KeyListener {
 				questionNode.setQuestion(true);
 			}
 			c.getModeController().nodeChanged(questionNode);
+			
+			UploadToServer uts = new UploadToServer();
+			uts.ticketPost("헤이ㅎㅎ", c.getClassId() + "", "0", "왜이론고양??????ㅠㅠ", "student", "0/3");
+			
 //			addQuestionNode.addIcon(icon, position)
 			/*
 			 * 완전 못해 와...

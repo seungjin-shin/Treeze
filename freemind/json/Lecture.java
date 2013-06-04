@@ -8,7 +8,14 @@ public class Lecture{
 	private String professorEmail;
 	private String lectureName;
 	private Boolean stateOfLecture;
+	private Long lectureId;
 	
+	public Long getLectureId() {
+		return lectureId;
+	}
+	public void setLectureId(Long lectureId) {
+		this.lectureId = lectureId;
+	}
 	public String getProfessorEmail() {
 		return professorEmail;
 	}

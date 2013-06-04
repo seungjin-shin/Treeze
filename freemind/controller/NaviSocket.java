@@ -18,6 +18,10 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import freemind.modes.MindIcon;
+import freemind.modes.MindMapNode;
+import freemind.modes.UploadToServer;
+
 public class NaviSocket extends JFrame implements Runnable{
 	private JTextArea textArea;
 	private JScrollPane pane;
@@ -127,6 +131,8 @@ class Start extends Thread {
 				else{
 					String str = new String(b, 0, cnt);
 					chkStr = str.substring(0, 1);
+					System.out.println(chkStr);
+					
 					if(chkStr.equals(SURVEYYES)){
 						c.setYesCnt(c.getYesCnt() + 1);
 						c.setTotalCnt(c.getTotalCnt() + 1);
@@ -138,9 +144,36 @@ class Start extends Thread {
 					else if(chkStr.equals(QUESTION)){
 						rcvStr = str.substring(1, str.length()); // 질문 처리
 						
+						//61.43.139.10:8080/treeze/createTicket
+						//String ticketTitle, String classId, String position, String contents, String userEmail
+						UploadToServer uts = new UploadToServer();
+						//uts.ticketPost(ticketTitle, classId, position, contents, userEmail)
+						
+						String idxStr = "root";
+						String[] splitStr;
+						splitStr = idxStr.split("/");
+						MindMapNode tmp = c.getModel().getRootNode(); // 소켓 받는 부분
+						// idxStr == "root" 면 root
+						//아니면 찾아
+						if(!idxStr.equals("root")){
+							for(i = 0; i < splitStr.length; i++) {
+								tmp = (MindMapNode) tmp.getChildAt(Integer
+										.parseInt(splitStr[i]));
+							}
+						}
+						
+						MindMapNode questionNode = tmp;
+						System.out.println(questionNode.getText());
+						MindIcon icon = MindIcon.factory("help");
+						if(!questionNode.isQuestion()){
+							questionNode.addIcon(icon, -1); // ? 아이콘 한번만
+							questionNode.setQuestion(true);
+						}
+						c.getModeController().nodeChanged(questionNode);
+						
+						
+						
 						//c.getModeController().getSelected().getText()
-						
-						
 					}
 					
 					if(c.getTotalCnt() == c.getNaviOs().size()){

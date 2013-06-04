@@ -73,19 +73,23 @@ public class NodeMouseMotionListener implements MouseMotionListener,
         }
         c.getModeController().nodeChanged(questionNode); // 아이콘 지우기
         
+        if(!questionNode.isRoot())
+        	idxStr = "";
+        
         while(!questionNode.isRoot()){
         	questionNodeParent = questionNode.getParentNode(); // 클릭하고 노드 idx 보내서 질문 리스트 받아와
         	idx = questionNodeParent.getChildPosition(questionNode);
         	idxReverseList.add(idx);
         	questionNode = questionNodeParent;
         }
-        
         for(int i = idxReverseList.size(); i > 0; i--){
-        	idxStr = idxStr + idxReverseList.get(i - 1) + "/";
+        	if(i == 1)
+        		idxStr = idxStr + idxReverseList.get(i - 1);
+        	else
+        		idxStr = idxStr + idxReverseList.get(i - 1) + "/";
         	System.out.print(idxReverseList.get(i - 1)); 
         }
-
-        new QuestionFrame(idxStr);
+        new QuestionFrame(c.getClassId() + "", idxStr);
     }
 
     public void mouseDragged(MouseEvent e) {

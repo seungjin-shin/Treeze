@@ -9,7 +9,13 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,6 +26,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import freemind.json.ArrayClass;
+import freemind.json.FreemindGson;
 import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
 
@@ -36,8 +47,11 @@ public class LecturePageFrame extends JFrame {
 	MindMapController mc;
 	private URL tmp;
 	String lectureName;
-	public LecturePageFrame(MindMapController mc, String lectName) {
+	JScrollPane sPanel;
+	String lectureId;
+	public LecturePageFrame(MindMapController mc, String lectName, String lectureId) {
 		this.mc = mc;
+		this.lectureId = lectureId;
 		lectureName = lectName;
 		profileImg = new ImageIcon(profileImgURL).getImage();
 		logo = new ImageIcon(logoURL).getImage();
@@ -119,7 +133,7 @@ public class LecturePageFrame extends JFrame {
 		add(tmpBtn);
 		
 		
-		JScrollPane sPanel = new JScrollPane(classPanel);
+		sPanel = new JScrollPane(classPanel);
 		sPanel.setBounds(290, 130, 600, 498);
 		
 //		classPanel.setSize(600, 500);
@@ -157,10 +171,9 @@ public class LecturePageFrame extends JFrame {
 	}
 	
 	class ClassTopBarPanel extends JPanel implements ActionListener{
-		JFrame frame;
+		ClassPanel frame;
 		URL tmpURL;
-		
-		public ClassTopBarPanel(JFrame frame) {
+		public ClassTopBarPanel(ClassPanel frame) {
 			this.frame = frame;
 			setSize(450, 500);
 			setLayout(null);
@@ -190,10 +203,10 @@ public class LecturePageFrame extends JFrame {
 		}
 	}
 	class InputClassFrame extends JFrame implements ActionListener{
-		JFrame frame;
+		ClassPanel frame;
 		JTextField classtf;
 		
-		public InputClassFrame(JFrame frame) {
+		public InputClassFrame(ClassPanel frame) {
 			this.frame = frame;
 			
 			setSize(380, 100);
@@ -252,9 +265,11 @@ public class LecturePageFrame extends JFrame {
 //			jsonStr = myGson.toJson(createLecture);
 				
 				UploadToServer UTS = new UploadToServer();
-				UTS.classPost(lectureName, "minsuk@hansung.ac.kr", classTitle);
+				UTS.classPost(lectureId, "minsuk@hansung.ac.kr", classTitle);
 				//UTS.lecturePost(classTitle, "minsuk@hansung.ac.kr", "false");
-				
+				frame.init();
+				frame.update(frame.getGraphics());
+				sPanel.updateUI();
 //			//UTS.doFileUpload("C:\\test\\양식있음 수학의 정석\\지수.jpg","http://localhost:8080/ImageUploadTest/file.jsp");
 //			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
 				
@@ -269,10 +284,12 @@ public class LecturePageFrame extends JFrame {
 		//URL onBookMarkURL = getClass().getClassLoader().getResource("onBookMark.png");
 		JFrame frame;
 		URL slideShowURL, mindmapURL;
+		
 		MindMapController mc;
 		final int TOPPADDING = 130;
 		final int CLASSHGAP = 60;
 		int classCnt = 0;
+		Font lagf = new Font("Serif", Font.BOLD, 30);
 		String[] latestDay = {"2013.4.11", "2013.5.21", "2013.1.22", "2012.12.23", "2012.1.3", "2013.4.23", "2013.3.3", "2012.11.23", "2012.10.1"
 				, "2012.5.23", "2013.5.23", "2012.2.23", "2012.1.28", "2012.6.23", "2012.7.23", "2011.7.23", "2012.8.15", "2011.7.2"}; // 18개
 		public ClassPanel(JFrame frame, MindMapController mc) {
@@ -282,7 +299,9 @@ public class LecturePageFrame extends JFrame {
 			setSize(450, 500);
 			setLayout(null);
 			
-			Font lagf = new Font("Serif", Font.BOLD, 30);
+			slideShowURL = getClass().getClassLoader().getResource("slideShow.png");
+			mindmapURL = getClass().getClassLoader().getResource("mindmap.png");
+			
 			tmpLb = new JLabel("Class Title");
 			tmpLb.setSize(200, 50);
 			tmpLb.setFont(lagf);
@@ -300,78 +319,165 @@ public class LecturePageFrame extends JFrame {
 			tmpLb.setFont(lagf);
 			tmpLb.setLocation(240, 60);
 			add(tmpLb);
-			
-			JLabel embedded = new JLabel("First Class");
-			embedded.setFont(lagf);
-			embedded.setSize(240, 50);
-			embedded.setLocation(40, TOPPADDING + classCnt * CLASSHGAP);
-			classCnt++;
-			add(embedded);
-			
-			JLabel logic = new JLabel("Second Class");
-			logic.setFont(lagf);
-			logic.setSize(240, 50);
-			logic.setLocation(40, TOPPADDING + classCnt * CLASSHGAP);
-			
-			classCnt = 0;
-			
-			lagf = new Font("Serif", Font.BOLD, 20);
-			
-			JLabel tmpLb = new JLabel(latestDay[0]);
-			tmpLb.setFont(lagf);
-			tmpLb.setSize(240, 50);
-			tmpLb.setLocation(295, TOPPADDING + classCnt * CLASSHGAP);
-			add(tmpLb);
-			classCnt++;
-			
-			tmpLb = new JLabel(latestDay[1]);
-			tmpLb.setFont(lagf);
-			tmpLb.setSize(240, 50);
-			tmpLb.setLocation(295, TOPPADDING + classCnt * CLASSHGAP);
-			add(tmpLb);
-			
-			classCnt = 0;
-			
-			slideShowURL = getClass().getClassLoader().getResource("slideShow.png");
-			mindmapURL = getClass().getClassLoader().getResource("mindmap.png");
-			
-			JButton slideBtn = new JButton(new ImageIcon(slideShowURL));
-			JButton mindmapBtn = new JButton("12341234", new ImageIcon(mindmapURL));
-			
-			slideBtn.setSize(100, 24);
-			slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
-			slideBtn.setFocusable(false);
-			add(slideBtn);
-			
-			mindmapBtn.setSize(100, 24);
-			mindmapBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP + 25);
-			mindmapBtn.setFocusable(false);
-			mindmapBtn.addActionListener(this);
-			add(mindmapBtn);
-			classCnt++;
-			
-			
-			slideBtn = new JButton(new ImageIcon(slideShowURL));
-			mindmapBtn = new JButton("45645645", new ImageIcon(mindmapURL));
-			
-			slideBtn.setSize(100, 24);
-			slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
-			slideBtn.setFocusable(false);
-			add(slideBtn);
-			
-			mindmapBtn.setSize(100, 24);
-			mindmapBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP + 25);
-			mindmapBtn.setFocusable(false);
-			mindmapBtn.addActionListener(this);
-			add(mindmapBtn);
-			classCnt++;
-			
-			setPreferredSize(new Dimension(550, 20 + TOPPADDING + classCnt * CLASSHGAP));
-			
-			ClassTopBarPanel classToppn = new ClassTopBarPanel(null);
+			//init() 만들고 update
+			ClassTopBarPanel classToppn = new ClassTopBarPanel(this);
 			classToppn.setSize(580, 50);
 			classToppn.setLocation(10, 10);
 			add(classToppn);
+			
+			init();
+		}
+			
+		public void init(){	
+			String sHtml = "";
+			BufferedReader in = null;
+			String buf = "";
+			try
+			{//http://61.43.139.10:8080/treeze/getClasses/?lectureName=LogicCircuit&professorEmail=minsuk@hansung.ac.kr
+			    //URL url = new URL("http://61.43.139.10:8080/treeze/getMyLectures?professorEmail=" + "minsuk@hansung.ac.kr");
+				URL url = new URL("http://61.43.139.10:8080/treeze/getClasses?lectureId=" + lectureId);
+			    URLConnection urlconn = url.openConnection();
+			    in = new BufferedReader(new InputStreamReader(urlconn.getInputStream(),"UTF-8"));
+
+			    while((buf = in.readLine()) != null)
+			    {
+			        sHtml += buf;
+			    }
+			}
+			catch(Exception e)
+			{
+			    System.out.println("연결 에러");
+			}
+			finally
+			{
+			    if(sHtml.equals("")) sHtml = "Data가 존재하지 않습니다";
+			    try {
+					in.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			System.out.println(sHtml);
+			ArrayList<freemind.json.ClassInfo> classList = new ArrayList<freemind.json.ClassInfo>();
+			freemind.json.ClassInfo tmpClass;
+			FreemindGson myGson = new FreemindGson();
+			//lectureList = (ArrayLecture) myGson.fromJson(sHtml, "ArrayLecture");
+			Gson gson = new Gson();
+			
+			Type type = new TypeToken<ArrayClass>() {
+			}.getType();
+			ArrayClass jonResultClasslist = (ArrayClass) gson
+					.fromJson(sHtml, type);
+			classList = jonResultClasslist.getClasses();
+			
+			JLabel tmpLb;
+			JButton slideBtn;
+			JButton mindmapBtn;
+			Font midf = new Font("Serif", Font.BOLD, 20);
+			for(classCnt = 0; classCnt < classList.size(); classCnt++){
+				tmpClass = classList.get(classCnt);
+				tmpLb = new JLabel(tmpClass.getClassName());
+				tmpLb.setFont(lagf);
+				tmpLb.setSize(240, 50);
+				tmpLb.setLocation(40, TOPPADDING + classCnt * CLASSHGAP);
+				add(tmpLb);
+				
+				tmpLb = new JLabel(latestDay[classCnt % 18]);
+				tmpLb.setFont(midf);
+				tmpLb.setSize(240, 50);
+				tmpLb.setLocation(295, TOPPADDING + classCnt * CLASSHGAP);
+				add(tmpLb);
+				
+				slideBtn = new JButton(new ImageIcon(slideShowURL));
+				mindmapBtn = new JButton(tmpClass.getClassId() + "", new ImageIcon(mindmapURL));
+				
+				slideBtn.setSize(100, 24);
+				slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
+				slideBtn.setFocusable(false);
+				add(slideBtn);
+				
+				mindmapBtn.setSize(100, 24);
+				mindmapBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP + 25);
+				mindmapBtn.setFocusable(false);
+				mindmapBtn.addActionListener(this);
+				add(mindmapBtn);
+			}
+			
+
+			setPreferredSize(new Dimension(550, 20 + TOPPADDING + classCnt * CLASSHGAP));
+			
+		}
+			
+			
+			
+			
+//			JLabel embedded = new JLabel("First Class");
+//			embedded.setFont(lagf);
+//			embedded.setSize(240, 50);
+//			embedded.setLocation(40, TOPPADDING + classCnt * CLASSHGAP);
+//			classCnt++;
+//			add(embedded);
+//			
+//			JLabel logic = new JLabel("Second Class");
+//			logic.setFont(lagf);
+//			logic.setSize(240, 50);
+//			logic.setLocation(40, TOPPADDING + classCnt * CLASSHGAP);
+//			
+//			classCnt = 0;
+//			
+//			lagf = new Font("Serif", Font.BOLD, 20);
+//			
+//			JLabel tmpLb = new JLabel(latestDay[0]);
+//			tmpLb.setFont(lagf);
+//			tmpLb.setSize(240, 50);
+//			tmpLb.setLocation(295, TOPPADDING + classCnt * CLASSHGAP);
+//			add(tmpLb);
+//			classCnt++;
+//			
+//			tmpLb = new JLabel(latestDay[1]);
+//			tmpLb.setFont(lagf);
+//			tmpLb.setSize(240, 50);
+//			tmpLb.setLocation(295, TOPPADDING + classCnt * CLASSHGAP);
+//			add(tmpLb);
+//			
+//			classCnt = 0;
+//			
+//			slideShowURL = getClass().getClassLoader().getResource("slideShow.png");
+//			mindmapURL = getClass().getClassLoader().getResource("mindmap.png");
+//			
+//			JButton slideBtn = new JButton(new ImageIcon(slideShowURL));
+//			JButton mindmapBtn = new JButton("12341234", new ImageIcon(mindmapURL));
+//			
+//			slideBtn.setSize(100, 24);
+//			slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
+//			slideBtn.setFocusable(false);
+//			add(slideBtn);
+//			
+//			mindmapBtn.setSize(100, 24);
+//			mindmapBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP + 25);
+//			mindmapBtn.setFocusable(false);
+//			mindmapBtn.addActionListener(this);
+//			add(mindmapBtn);
+//			classCnt++;
+//			
+//			
+//			slideBtn = new JButton(new ImageIcon(slideShowURL));
+//			mindmapBtn = new JButton("1", new ImageIcon(mindmapURL));
+//			
+//			slideBtn.setSize(100, 24);
+//			slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
+//			slideBtn.setFocusable(false);
+//			add(slideBtn);
+//			
+//			mindmapBtn.setSize(100, 24);
+//			mindmapBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP + 25);
+//			mindmapBtn.setFocusable(false);
+//			mindmapBtn.addActionListener(this);
+//			add(mindmapBtn);
+//			classCnt++;
+			
+			
 			
 //		JLabel prof = new JLabel("이 민석");
 //		prof.setFont(lagf);
@@ -391,18 +497,15 @@ public class LecturePageFrame extends JFrame {
 //		prof3.setLocation(360, 220);
 			//add(prof3);
 			
-			
-			add(logic);
 			//add(system);
 			
-		}
 		public void paint(Graphics g) {
 			super.paint(g);
 			g.drawLine(20, 120, 580, 120);
-			
-			g.drawLine(220, 140, 220, TOPPADDING + CLASSHGAP * classCnt);
-			g.drawLine(450, 140, 450, TOPPADDING + CLASSHGAP * classCnt);
-			
+			if(classCnt != 0){
+				g.drawLine(220, 140, 220, TOPPADDING + CLASSHGAP * classCnt);
+				g.drawLine(450, 140, 450, TOPPADDING + CLASSHGAP * classCnt);
+			}
 //		g.setColor(Color.white);
 //
 //		g.drawLine(40, 380, 250, 380);
@@ -419,6 +522,8 @@ public class LecturePageFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			String event = e.getActionCommand();
 			System.out.println(event);
+			//mc.getController().
+			mc.getController().setClassId(Integer.parseInt(event));
 			mc.open(mc, event);
 			frame.setVisible(false);
 		}

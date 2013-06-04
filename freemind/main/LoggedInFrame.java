@@ -15,6 +15,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -41,17 +43,20 @@ import java.lang.reflect.Type;
 public class LoggedInFrame extends JFrame {
 	private Container ct;
 
-	JPanel lecturePanel;
+	LecturePanel lecturePanel;
 	private Image profileImg;
 	private URL profileImgURL = getClass().getClassLoader().getResource("minsuk.jpg");
 	private Image logo;
 	private URL tmp;// = getClass().getClassLoader().getResource("profile.png");
 	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
-	CreateBtn createLs = new CreateBtn();
+	CreateBtn createLs;
 	MindMapController mc;
 	public LoggedInFrame(MindMapController mc) {
 		this.mc = mc;
 		lecturePanel = new LecturePanel(this, mc);
+		JScrollPane sPanel = new JScrollPane(lecturePanel);
+		createLs = new CreateBtn(lecturePanel, sPanel);
+		
 		profileImg = new ImageIcon(profileImgURL).getImage();
 		logo = new ImageIcon(logoURL).getImage();
 		
@@ -115,7 +120,6 @@ public class LoggedInFrame extends JFrame {
 		add(tmpBtn);
 		
 		
-		JScrollPane sPanel = new JScrollPane(lecturePanel);
 		sPanel.setBounds(290, 130, 600, 498);
 //		lecturePanel.setSize(600, 500);
 //		lecturePanel.setLocation(290, 130);
@@ -155,16 +159,27 @@ public class LoggedInFrame extends JFrame {
 }
 
 class CreateBtn implements ActionListener{
+	LecturePanel sp;
+	JScrollPane sPanel;
+	public CreateBtn(LecturePanel frame, JScrollPane sPanel){
+		this.sp = frame;
+		this.sPanel = sPanel;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new InputLectureFrame();
+		new InputLectureFrame(sp, sPanel);
 	}
 	
 }
 
 class InputLectureFrame extends JFrame implements ActionListener{
 	JTextField lecturetf;
-	public InputLectureFrame() {
+	LecturePanel frame;
+	JScrollPane sPanel;
+	public InputLectureFrame(LecturePanel fr, JScrollPane sPanel) {
+		frame = fr;
+		this.sPanel = sPanel;
 		setSize(400, 100);
 		setLayout(null);
 		setTitle("Input your lecture title");
@@ -221,6 +236,21 @@ class InputLectureFrame extends JFrame implements ActionListener{
 
 			
 			this.setVisible(false);
+			frame.init();
+			
+//			frame.validate();
+//			frame.repaint();
+//			frame.invalidate();
+			frame.update(frame.getGraphics());
+			sPanel.updateUI();
+//			frame.print(getGraphics());
+//			frame.printAll(getGraphics());
+//			frame.printComponents(getGraphics());
+//			frame.validate();
+//			frame.repaint();
+//			frame.invalidate();
+			//frame.
+			//frame.
 		}
 			
 	}
@@ -236,19 +266,24 @@ class LecturePanel extends JPanel implements ActionListener{
 	final int TOPPADDING = 100;
 	final int LECTUREHGAP = 60;
 	int lectureCnt = 0;
+	public int getLectureCnt() {
+		return lectureCnt;
+	}
 	String[] latestDay = {"2013.4.11", "2013.5.21", "2013.1.22", "2012.12.23", "2012.1.3", "2013.4.23", "2013.3.3", "2012.11.23", "2012.10.1"
 			, "2012.5.23", "2013.5.23", "2012.2.23", "2012.1.28", "2012.6.23", "2012.7.23", "2011.7.23", "2012.8.15", "2011.7.2"}; // 18°³
 	String[] registered = {"21","30","31","40","41","15","22","26","33","19",
 			               "24","22","41","42","35","37","41","22"}; 
 	
-	
+	Font lagf;
+	Font midF = new Font("Serif", Font.BOLD, 20);
+	HashMap<String, String> lectureMap;
 	public LecturePanel(JFrame frame, MindMapController mc) {
 		this.mc = mc;
 		this.frame = frame;
 		setSize(450, 500);
 		setLayout(null);
 		
-		Font lagf = new Font("Serif", Font.BOLD, 25);
+		lagf = new Font("Serif", Font.BOLD, 25);
 		tmpLb = new JLabel("Lecture Title");
 		tmpLb.setSize(200, 50);
 		tmpLb.setFont(lagf);
@@ -267,8 +302,10 @@ class LecturePanel extends JPanel implements ActionListener{
 		tmpLb.setLocation(440, 20);
 		add(tmpLb);
 		
-		lagf = new Font("Serif", Font.BOLD, 20);
+		init();
 		
+	}
+	public void init(){
 		String sHtml = "";
 		BufferedReader in = null;
 		String buf = "";
@@ -324,9 +361,11 @@ class LecturePanel extends JPanel implements ActionListener{
 		
 		Font midF = new Font("Serif", Font.BOLD, 30);
 		JButton tmpBtn;
+		lectureMap = new HashMap<String, String>();
 		for(lectureCnt = 0; lectureCnt < lectureList.size(); lectureCnt++){
 			tmpLecture = lectureList.get(lectureCnt);
 			tmpBtn = new JButton(tmpLecture.getLectureName());
+			lectureMap.put(tmpLecture.getLectureName(), tmpLecture.getLectureId() + "");
 			tmpBtn.addActionListener(this);
 			tmpBtn.setFont(lagf);
 			tmpBtn.setSize(220, 50);
@@ -345,6 +384,8 @@ class LecturePanel extends JPanel implements ActionListener{
 			tmpLb.setLocation(440, TOPPADDING + LECTUREHGAP * lectureCnt);
 			add(tmpLb);
 		}
+		setPreferredSize(new Dimension(550, 20 + TOPPADDING + LECTUREHGAP * lectureCnt));
+	}
 		
 //		JButton logic = new JButton("Logic Circuit");
 //		logic.addActionListener(this);
@@ -406,7 +447,7 @@ class LecturePanel extends JPanel implements ActionListener{
 //		add(tmpLb);
 //		lectureCnt++;
 		
-		setPreferredSize(new Dimension(550, 20 + TOPPADDING + LECTUREHGAP * lectureCnt));
+		
 		
 //		JLabel prof = new JLabel("ÀÌ ¹Î¼®");
 //		prof.setFont(lagf);
@@ -430,13 +471,13 @@ class LecturePanel extends JPanel implements ActionListener{
 //		add(logic);
 //		add(system);
 		
-	}
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.drawLine(20, 80, 560, 80);
-		
-		g.drawLine(270, 100, 270, TOPPADDING + LECTUREHGAP * lectureCnt);
-		g.drawLine(420, 100, 420, TOPPADDING + LECTUREHGAP * lectureCnt);
+		if(lectureCnt != 0){
+			g.drawLine(270, 100, 270, TOPPADDING + LECTUREHGAP * lectureCnt);
+			g.drawLine(420, 100, 420, TOPPADDING + LECTUREHGAP * lectureCnt);
+		}
 //		g.setColor(Color.white);
 //
 //		g.drawLine(40, 380, 250, 380);
@@ -452,9 +493,10 @@ class LecturePanel extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String event = e.getActionCommand();
-		System.out.println(event);
+		System.out.println("classId = " + event);
+		String lectureIdStr = lectureMap.get(event);
 		frame.setVisible(false);
-		new LecturePageFrame(mc, event);
+		new LecturePageFrame(mc, event, lectureIdStr);
 	}
 }
 

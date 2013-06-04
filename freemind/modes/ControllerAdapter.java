@@ -1054,17 +1054,15 @@ public abstract class ControllerAdapter implements ModeController {
 		}
 		
 		out.write("<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" " +
-				"MODIFIED=\"1365038132371\" IMGPATH=\"" + imgPath + slideList.get(0).getNodeName() + ".jpg" + "\" " +
-				"TEXT=\"" + fileName + "\">\n");
+				"MODIFIED=\"1365038132371\" " +	"TEXT=\"" + fileName + "\">\n");
 		TableData showTable;
 		int dif;
 		for(int i = 0; i < root.size(); i++){
-			out.write("<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" " + 
-					"IMGPATH=\"" + imgPath + slideList.get(i + 1).getNodeName() + ".jpg" + "\" ");
+			out.write("<node CREATED=\"1365038113483\" ID=\"ID_1002961678\" MODIFIED=\"1365038132371\" ");
 			showTable = root.get(i);
 			if(!showTable.getDirection().equals(""))
 				out.write("POSITION=\"" + showTable.getDirection() + "\" ");
-			out.write("TEXT=\"" + showTable.getData() + "\"");
+			out.write("TEXT=\"" + showTable.getData().trim() + "\"");
 			if(showTable.isHaveChild())
 				out.write(">\n");
 			else

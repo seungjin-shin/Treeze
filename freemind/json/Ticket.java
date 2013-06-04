@@ -4,24 +4,44 @@ public class Ticket{
 	/**
 	 * 
 	 */
-
+	private String ticketTitle;
 	private int classId;
 	private String position;
+	private String ticketPosition;
 	private String contents;
-	private int ticketNumber;
-	private String userEmail;
+	private String userName;
+	private Ticket child;
+	private boolean haveChild;
 	
-	public String getUserEmail() {
-		return userEmail;
+	public Ticket getChild() {
+		return child;
 	}
-	public void setUserEmail(String userEmail) {
-		this.userEmail = userEmail;
+	public void setChild(Ticket child) {
+		this.child = child;
 	}
-	public int getTicketNumber() {
-		return ticketNumber;
+	public boolean isHaveChild() {
+		return haveChild;
 	}
-	public void setTicketNumber(int ticketNumber) {
-		this.ticketNumber = ticketNumber;
+	public void setHaveChild(boolean haveChild) {
+		this.haveChild = haveChild;
+	}
+	public String getTicketPosition() {
+		return ticketPosition;
+	}
+	public void setTicketPosition(String ticketPosition) {
+		this.ticketPosition = ticketPosition;
+	}
+	public String getTicketTitle() {
+		return ticketTitle;
+	}
+	public void setTicketTitle(String ticketTitle) {
+		this.ticketTitle = ticketTitle;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public String getContents() {
 		return contents;

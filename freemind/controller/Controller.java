@@ -194,8 +194,17 @@ public class Controller  implements MapModuleChangeObserver {
     int yesCnt = 0;
     int noCnt = 0;
     int totalCnt = 0;
+    int classId = 0;
     
-    public int getYesCnt() {
+    public int getClassId() {
+		return classId;
+	}
+
+	public void setClassId(int classId) {
+		this.classId = classId;
+	}
+
+	public int getYesCnt() {
 		return yesCnt;
 	}
 
