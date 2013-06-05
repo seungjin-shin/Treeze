@@ -20,6 +20,13 @@ public class LectureServiceImpl implements LectureService{
 		// TODO Auto-generated method stub
 		return lectureRepository.save(lecture);
 	}
+	
+	@Override
+	public Lecture findOne(Long lectureId){
+		// TODO Auto-generated method stub
+		return lectureRepository.findOne(Specifications.where(LectureSpecifications.isLectureId(lectureId)));
+	}
+
 
 	@Override
 	public Object findAll() {

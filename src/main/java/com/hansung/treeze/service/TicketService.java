@@ -7,5 +7,5 @@ public interface TicketService {
 
 	Ticket saveTicket(Ticket ticket);
 	Object getTickets(Long classId,String position);
-
+	Object getAllTickets(Long classId);
 }

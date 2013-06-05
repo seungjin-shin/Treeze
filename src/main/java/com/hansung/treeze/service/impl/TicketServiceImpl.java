@@ -26,4 +26,12 @@ public class TicketServiceImpl implements TicketService{
 		
 		return ticketRepository.findAll(TicketSpecifications.isTicketsOnPosition(classId,position));
 	}
+	
+	@Override
+	public Object getAllTickets(Long classId) {
+		// TODO Auto-generated method stub
+		//Specifications<Ticket> spec = Specifications.where(TicketSpecifications.isclassId(classId);
+		
+		return ticketRepository.findAll(TicketSpecifications.isTicketsOnClass(classId));
+	}
 }

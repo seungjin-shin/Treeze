@@ -23,4 +23,18 @@ public class TicketSpecifications {
 			}
 		};
 	}
+	
+	public static Specification<Ticket> isTicketsOnClass(final Long classId){
+		return new Specification<Ticket>() {
+
+			@Override
+			public Predicate toPredicate(Root<Ticket> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				// TODO Auto-generated method stub
+				return cb.and(cb.equal(root.<Long>get(Ticket_.classId), classId));
+			}
+		};
+	}
+	
+
 }

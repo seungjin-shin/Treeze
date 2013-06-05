@@ -50,4 +50,11 @@ public class TicketController {
 		map.put("Ticket", ticketService.getTickets(classId,position));
 		return "jsonView";	
 	}
+		
+		@RequestMapping(value="/getAllTickets", method=RequestMethod.GET)
+	public String getAllTickets(@RequestParam("classId") Long classId, ModelMap map) {
+
+		map.put("Ticket", ticketService.getAllTickets(classId));
+		return "jsonView";	
+	}
 }

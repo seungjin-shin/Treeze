@@ -32,8 +32,9 @@ public class LectureController {
 
 	@RequestMapping(value = "/setStateOfLecture", method = RequestMethod.POST)
 	public String setStateOfLecture(Lecture model, ModelMap map) {
-		lectureService.saveLecture(model);
-		map.put("result", "success");
+		Lecture lecture = lectureService.findOne(model.getLectureId());
+		lectureService.saveLecture(lecture);
+		map.put("lecture", lecture);
 
 		return "jsonView";
 	}
