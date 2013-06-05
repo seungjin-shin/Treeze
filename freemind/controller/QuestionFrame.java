@@ -205,9 +205,8 @@ class QuestionFrame extends JFrame{
 					tmpLb.setLocation(380, TOPNUMPADDING + (questionCnt + childCnt) * QUESTIONHGAP);
 					add(tmpLb);
 				}
-				
 			}
-			setPreferredSize(new Dimension(420, 20 + TOPPADDING + questionCnt * QUESTIONHGAP));
+			setPreferredSize(new Dimension(420, 20 + TOPPADDING + (questionCnt + childTotalCnt) * QUESTIONHGAP));
 		}
 		
 		public void paint(Graphics g){
