@@ -59,6 +59,7 @@ public class MindMapMode extends Mode {
 	public ModeController createModeController() {
 		logger.finest("Creating new MindMapController..." );
 		MindMapController mindMapController = new MindMapController(this);
+		c.setMc(mindMapController);
 		logger.finest("Creating new MindMapController. Done:"+mindMapController );
 		return mindMapController;
 	}

@@ -47,8 +47,10 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.security.AccessControlException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -83,6 +85,15 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import com.sun.org.apache.xalan.internal.xsltc.trax.OutputSettings;
 
 import freemind.common.BooleanProperty;
@@ -92,6 +103,7 @@ import freemind.controller.printpreview.PreviewDialog;
 import freemind.main.FreeMind;
 import freemind.main.FreeMindCommon;
 import freemind.main.FreeMindMain;
+import freemind.main.LoggedInFrame;
 import freemind.main.Resources;
 import freemind.main.Tools;
 import freemind.modes.MindMap;
@@ -101,6 +113,7 @@ import freemind.modes.ModesCreator;
 import freemind.modes.attributes.AttributeRegistry;
 import freemind.modes.attributes.AttributeTableLayoutModel;
 import freemind.modes.browsemode.BrowseMode;
+import freemind.modes.mindmapmode.MindMapController;
 import freemind.modes.mindmapmode.attributeactors.AttributeManagerDialog;
 import freemind.preferences.FreemindPropertyListener;
 import freemind.preferences.layout.OptionPanel;
@@ -190,14 +203,17 @@ public class Controller  implements MapModuleChangeObserver {
     public ArrayList<SlideData> slideList = new ArrayList<SlideData>();
     public SlideShow slideShow = new SlideShow(this);
     public Action selectLecture;
-    
-    
-    public ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
+    private MindMapController mc;
+
+	public ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
     int yesCnt = 0;
     int noCnt = 0;
     int totalCnt = 0;
     int classId = 0;
     
+    public void setMc(MindMapController mc) {
+    	this.mc = mc;
+    }
     public int getClassId() {
 		return classId;
 	}
@@ -1023,7 +1039,41 @@ public class Controller  implements MapModuleChangeObserver {
         public void actionPerformed(ActionEvent e) {
         	// 여기에 바로가기 될듯
 //            logger.info("ZoomInAction actionPerformed");
-           ((MainToolBar)toolbar).selectLecture(); }}
+        	//
+        	String lectureTitle = mc.getLectureTitle();
+        	String lectureId = mc.getLectureId() + "";
+        	
+        	HttpClient httpClient = new DefaultHttpClient();  
+      	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/setStateOfLecture");
+      	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
+      	  
+      	  StringBody lectureTitleBody = null;
+      	  StringBody profEmailBody = null;
+      	  StringBody lectureState = null;
+      	  
+		try {
+			lectureTitleBody = new StringBody(lectureTitle, Charset.forName("UTF-8"));
+			profEmailBody = new StringBody("minsuk@hansung.ac.kr", Charset.forName("UTF-8"));
+			lectureState = new StringBody("false", Charset.forName("UTF-8"));
+			StringBody lectureIdBody = new StringBody(lectureId, Charset.forName("UTF-8"));
+			
+			multipart.addPart("lectureName", lectureTitleBody);  
+			multipart.addPart("professorEmail", profEmailBody);
+			multipart.addPart("stateOfLecture", lectureState);
+			multipart.addPart("lectureId", lectureIdBody);
+			
+			post.setEntity(multipart);  
+			HttpResponse response = httpClient.execute(post);  
+			HttpEntity resEntity = response.getEntity();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+         
+      	  System.out.println("set state false");
+        	
+        	new LoggedInFrame(mc);
+           }}
     
 
     private class QuitAction extends AbstractAction {

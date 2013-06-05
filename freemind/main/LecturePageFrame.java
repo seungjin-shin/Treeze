@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -25,6 +26,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -376,7 +386,33 @@ public class LecturePageFrame extends JFrame {
 			System.out.println("classId =" + event);
 			mc.getController().setClassId(Integer.parseInt(event));
 			mc.open(mc, event);
-			//lectureId
+			
+			HttpClient httpClient = new DefaultHttpClient();  
+	      	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/setStateOfLecture");
+	      	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
+	      	  
+	      	  
+			try {
+				StringBody lectureTitleBody = new StringBody("temp", Charset.forName("UTF-8"));
+				StringBody profEmailBody = new StringBody("minsuk@hansung.ac.kr", Charset.forName("UTF-8"));
+				StringBody lectureState = new StringBody("true", Charset.forName("UTF-8"));
+				StringBody lectureIdBody = new StringBody(lectureId, Charset.forName("UTF-8"));
+				
+				multipart.addPart("lectureName", lectureTitleBody);  
+				multipart.addPart("professorEmail", profEmailBody);
+				multipart.addPart("stateOfLecture", lectureState);
+				multipart.addPart("lectureId", lectureIdBody);
+				
+				post.setEntity(multipart);  
+				HttpResponse response = httpClient.execute(post);  
+				HttpEntity resEntity = response.getEntity();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	         
+	      	  System.out.println("set state true");
+			
 			frame.setVisible(false);
 		}
 	}

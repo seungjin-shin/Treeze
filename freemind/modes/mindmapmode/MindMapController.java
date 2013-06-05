@@ -372,8 +372,26 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
     
     //dewlit
 	static int FIRST = 1;
+	private int lectureId;
+	private String lectureTitle;
 	//dewlit
 	
+	public String getLectureTitle() {
+		return lectureTitle;
+	}
+
+	public void setLectureTitle(String lectureTitle) {
+		this.lectureTitle = lectureTitle;
+	}
+
+	public int getLectureId() {
+		return lectureId;
+	}
+
+	public void setLectureId(int lectureId) {
+		this.lectureId = lectureId;
+	}
+
 	public String getChildName() {
 		return childName;
 	}

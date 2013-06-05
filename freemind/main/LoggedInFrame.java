@@ -347,6 +347,8 @@ class LecturePanel extends JPanel implements ActionListener{
 		String lectureIdStr = lectureMap.get(event);
 		System.out.println("lectureId = " + lectureIdStr);
 		frame.setVisible(false);
+		mc.setLectureTitle(event);
+		mc.setLectureId(Integer.parseInt(lectureIdStr));
 		new LecturePageFrame(mc, event, lectureIdStr);
 	}
 }
