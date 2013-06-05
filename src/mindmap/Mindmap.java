@@ -79,6 +79,7 @@ public class Mindmap extends HttpServlet {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		datastore.put(entity);
+		resp.getWriter().print("Save mindmap");
 		return;
 	}
 	

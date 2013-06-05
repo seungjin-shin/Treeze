@@ -218,7 +218,47 @@ mindmaps.SaveDocumentPresenter = function(eventBus, mindmapModel, view, autosave
 
   this.go = function() {
     view.setAutoSaveCheckboxState(autosaveController.isEnabled());
-    view.showSaveDialog();
+    //alert('dd');
+    
+    var doc = mindmapModel.getDocument();
+    
+    xmlhttp=null;
+    if (window.XMLHttpRequest) {// code for all new browsers
+      xmlhttp = new XMLHttpRequest();
+    }
+    else if (window.ActiveXObject) {// code for IE5 and IE6
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    if (xmlhttp != null) {
+    	
+    	var con = doc.prepareSave().serialize();
+      
+      var len = String(con).length;
+      
+      var index = len / 500;
+      var params = "";
+
+      for(i = 0; i < index ; i++){
+       var tmp = con.substring(500 * i , 500 * (i+1));
+       params += "mindmap" + i + "=" + tmp + "&";
+     }
+     params += "cnt=" + i;
+     params += "&id=" + doc.id;
+     params += "&title=" + doc.title;
+     
+     var url = "mindmap";
+     xmlhttp.onreadystatechange = callBackTEST;
+     xmlhttp.open("POST",url,true);
+     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+     xmlhttp.setRequestHeader("Content-length", params.length);
+     xmlhttp.setRequestHeader("Connection", "close");
+     xmlhttp.send(params);
+   }
+   else {
+    alert("Your browser does not support XMLHTTP. so impossible to save your mindmap. please you use Chrome browser or so.");
+  }
+    
+    //view.showSaveDialog();
   };
   
   function callBackTEST() {

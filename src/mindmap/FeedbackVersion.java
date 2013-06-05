@@ -105,6 +105,7 @@ public class FeedbackVersion extends HttpServlet {
 				}
 			}
 		}
+		resp.getWriter().print("Accept feedback");
 	}
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)

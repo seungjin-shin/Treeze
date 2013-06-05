@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<%@ page pageEncoding="EUC-KR" %>
+	<%@ page pageEncoding="UTF-8" %>
   <!--<meta charset="utf-8">-->
   
   <title>Template &middot; Bootstrap</title>
@@ -77,9 +77,9 @@
     <div class="container">
       <div class="well sidebar-nav">
         <ul class="nav nav-list">
-          <li class="nav-header"><strong style="font-size:50px">쨩챌쨋첨쨉챕 Mind-Map 횁짚쨘쨍</strong></li>
-          <p><a class="btn btn-success" href="#" onclick="showProject('', '0')">쨩천쨌횓쩔챤 Mind-Map 쨩첵쩌쨘횉횕짹창 &raquo;</a></p>
-          <p><a class="btn btn-success" href="playing.jsp" onclick="showProject('', '0')">My Page &raquo;</a></p>
+          <li class="nav-header"><strong style="font-size:50px">Mind-Map 프로젝트</strong></li>
+          <p><a class="btn btn-success" href="#" onclick="showProject('', '0')">새로운  Mind-Map 생성하기>></a></p>
+          <p><a class="btn btn-success" href="playing.jsp" onclick="showProject('', '0')">My Page >></a></p>
           <!-- �쒕쾭�먮떎媛�留덉씤�쒕㏊ �붿껌 �섎뒗 濡쒖쭅 -->
           <%@ page import="org.json.*"%>
           <%@ page import = "java.io.*" %>

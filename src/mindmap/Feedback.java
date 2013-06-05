@@ -138,7 +138,7 @@ public class Feedback extends HttpServlet {
 				}
 			}
 		}
-		
+		resp.getWriter().print("Send feedback");
 		return;
 	}
 
