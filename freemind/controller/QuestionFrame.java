@@ -229,9 +229,12 @@ class QuestionFrame extends JFrame{
 					new InputReplyFrame(ticketList.get(i));
 					break;
 				}
-				else if(ticketTitle.equals(ticketList.get(i).getChild().getTicketTitle())){
-					new InputReplyFrame(ticketList.get(i).getChild());
-					break;
+				else if(ticketList.get(i).isHaveChild()){
+					if (ticketTitle.equals(ticketList.get(i).getChild()
+							.getTicketTitle())) {
+						new InputReplyFrame(ticketList.get(i).getChild());
+						break;
+					}
 				}
 			}
 		}
