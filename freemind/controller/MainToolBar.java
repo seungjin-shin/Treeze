@@ -114,11 +114,6 @@ public class MainToolBar extends FreeMindToolBar {
 		return itemCount - 0.5f;
 	}
 	
-	public void SlideShow(ArrayList<SlideData> slideList){
-		System.out.println(slideList.get(0).getImgCnt());
-		System.out.println("dd");
-	}
-
 	public void zoomIn() {
 		final float currentZoomIndex = getCurrentZoomIndex();
 		if (currentZoomIndex < zoom.getItemCount() - 1) {

@@ -68,6 +68,16 @@ public class SlideShow {
 			imgFrame.setVisible(false);
 		}
 	}
+	
+	public void setfocusprev() {
+		// TODO Auto-generated method stub
+		if (focus.getPrev() != null)
+			this.setfocus(focus.getPrev());
+		else {
+			System.out.println("첫 슬라이드입니다.");
+			imgFrame.setVisible(false);
+		}
+	}
 
 	public void show() {
 		// TODO Auto-generated method stub
@@ -135,16 +145,68 @@ public class SlideShow {
 						 // 여기서도 소켓 보내야대
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						showpause();
-					} else
+					} else if(e.getKeyCode() == KeyEvent.VK_PAGE_DOWN){
+						nextShow();
+						
+						ArrayList<Integer> idxList = focus.getIdxList();
+						
+						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
+						
+						String jsonString;
+						FreemindGson myGson = new FreemindGson();
+
+						sendPs.setPosition(idxList);
+
+						jsonString = myGson.toJson(sendPs);
+						System.out.println(jsonString);
+						
+						for(int i = 0; i < c.getNaviOs().size(); i++){
+							os = c.getNaviOs().get(i);
+							try {
+								os.write((NAVINUM + jsonString).getBytes()); // 다 보내
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+					}
+					else if(e.getKeyCode() == KeyEvent.VK_PAGE_UP){
+						prevShow();
+						
+						ArrayList<Integer> idxList = focus.getIdxList();
+						
+						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
+						
+						String jsonString;
+						FreemindGson myGson = new FreemindGson();
+
+						sendPs.setPosition(idxList);
+
+						jsonString = myGson.toJson(sendPs);
+						System.out.println(jsonString);
+						
+						for(int i = 0; i < c.getNaviOs().size(); i++){
+							os = c.getNaviOs().get(i);
+							try {
+								os.write((NAVINUM + jsonString).getBytes()); // 다 보내
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+					}
+					else
 						return;
 				}
-
 			});
 		}
 
 		private void nextShow() {
 			// TODO Auto-generated method stub
 			this.slideShow.setfocusnext();
+		}
+		private void prevShow(){
+			this.slideShow.setfocusprev();
 		}
 
 		@Override

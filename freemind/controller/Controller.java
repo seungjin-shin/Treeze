@@ -203,6 +203,7 @@ public class Controller  implements MapModuleChangeObserver {
     public ArrayList<SlideData> slideList = new ArrayList<SlideData>();
     public SlideShow slideShow = new SlideShow(this);
     public Action selectLecture;
+    //public Action slideShow;
     private MindMapController mc;
 
 	public ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
@@ -1471,7 +1472,8 @@ public class Controller  implements MapModuleChangeObserver {
            super("SlideShow"); }
         public void actionPerformed(ActionEvent e) {
 //            logger.info("ZoomInAction actionPerformed");
-           ((MainToolBar)toolbar).SlideShow(slideList); }}
+           
+        }}
 
     protected class ZoomInAction extends AbstractAction {
         public ZoomInAction(Controller controller) {
