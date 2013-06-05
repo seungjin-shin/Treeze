@@ -189,6 +189,8 @@ public class Controller  implements MapModuleChangeObserver {
     //dewlit
     public ArrayList<SlideData> slideList = new ArrayList<SlideData>();
     public SlideShow slideShow = new SlideShow(this);
+    public Action selectLecture;
+    
     
     public ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
     int yesCnt = 0;
@@ -333,6 +335,8 @@ public class Controller  implements MapModuleChangeObserver {
         zoomIn = new ZoomInAction(this);
         zoomOut = new ZoomOutAction(this);
         propertyAction = new PropertyAction(this);
+        
+        selectLecture = new SelectLectureAction(this);
 
         showSelectionAsRectangle = new ShowSelectionAsRectangleAction(this);
 
@@ -1012,6 +1016,15 @@ public class Controller  implements MapModuleChangeObserver {
     //
     // program/map control
     //
+    
+    protected class SelectLectureAction extends AbstractAction {
+        public SelectLectureAction(Controller controller) {
+           super("Select lecture"); }
+        public void actionPerformed(ActionEvent e) {
+        	// 여기에 바로가기 될듯
+//            logger.info("ZoomInAction actionPerformed");
+           ((MainToolBar)toolbar).selectLecture(); }}
+    
 
     private class QuitAction extends AbstractAction {
         QuitAction(Controller controller) {

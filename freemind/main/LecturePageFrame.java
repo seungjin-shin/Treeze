@@ -376,6 +376,7 @@ public class LecturePageFrame extends JFrame {
 			System.out.println("classId =" + event);
 			mc.getController().setClassId(Integer.parseInt(event));
 			mc.open(mc, event);
+			//lectureId
 			frame.setVisible(false);
 		}
 	}

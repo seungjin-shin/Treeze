@@ -113,7 +113,7 @@ public class MenuBar extends JMenuBar {
 		menuHolder.addSeparator(FILE_MENU);	
 		menuHolder.addCategory(FILE_MENU+"last");	
 		menuHolder.addSeparator(FILE_MENU);	
-		menuHolder.addCategory(FILE_MENU+"quit");	
+		menuHolder.addCategory(FILE_MENU+"quit");
 
 		// editmenu
 		editmenu = menuHolder.addMenu(new JMenu(c.getResourceString("edit")), EDIT_MENU+".");
@@ -336,6 +336,8 @@ public class MenuBar extends JMenuBar {
 
 		JMenuItem zoomIn = menuHolder.addAction(c.zoomIn, VIEW_MENU+"zoom/zoomIn");
 		zoomIn.setAccelerator(KeyStroke.getKeyStroke(c.getFrame().getAdjustableProperty("keystroke_zoom_in")));
+		
+		JMenuItem slideShow = menuHolder.addAction(c.selectLecture, VIEW_MENU+"Select lecture");
 		
 		JMenuItem zoomOut = menuHolder.addAction(c.zoomOut, VIEW_MENU+"zoom/zoomOut");
 		zoomOut.setAccelerator(KeyStroke.getKeyStroke(c.getFrame().getAdjustableProperty("keystroke_zoom_out")));

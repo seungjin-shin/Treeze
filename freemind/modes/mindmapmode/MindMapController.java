@@ -392,6 +392,10 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
     private List mRegistrations;
 	private List mPatternsList = new Vector();
 	
+	public void dd(){
+		System.out.println("dd");
+	}
+	
     public MindMapController(Mode mode) {
 	super(mode);
 	if(logger == null) {

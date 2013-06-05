@@ -114,6 +114,10 @@ public class MainToolBar extends FreeMindToolBar {
 		return itemCount - 0.5f;
 	}
 	
+	public void selectLecture(){
+		System.out.println("dd");
+	}
+	
 	public void SlideShow(ArrayList<SlideData> slideList){
 		System.out.println(slideList.get(0).getImgCnt());
 		System.out.println("dd");
