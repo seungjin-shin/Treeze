@@ -317,8 +317,8 @@ class QuestionFrame extends JFrame{
 					
 					TicketInfo ticketInfo = new TicketInfo();
 					ticketInfo.setContents(classTitle);
-					ticketInfo.setPosition(ticket.getPosition());
-					ticketInfo.setTicketPosition(ticket.getTicketPosition());
+					ticketInfo.setPosition(ticket.getTicketPosition());
+					ticketInfo.setTicketPosition(ticket.getTicketPosition() + "/0");
 					ticketInfo.setTicketTitle("[Re]" + ticket.getTicketTitle());
 					ticketInfo.setUserName("prof");
 					Gson gson = new Gson();
