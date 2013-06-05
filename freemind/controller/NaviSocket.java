@@ -163,7 +163,7 @@ class Start extends Thread {
 							//아니면 찾아
 							if(!idxStr.equals("root")){
 								for (i = 0; i < splitStr.length; i++) {
-									if(tmp.getChildCount() == 0){
+									if(Integer.parseInt(splitStr[i]) == tmp.getChildCount() || tmp.getChildCount() == 0){
 										betweenStu = true;
 										break;
 									}
