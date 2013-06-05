@@ -321,7 +321,7 @@ public class LecturePageFrame extends JFrame {
 			FreemindGson myGson = new FreemindGson();
 			Gson gson = new Gson();
 			
-			Type type = new TypeToken<ArrayClass>() {
+			java.lang.reflect.Type type = new TypeToken<ArrayClass>() {
 			}.getType();
 			ArrayClass jonResultClasslist = (ArrayClass) gson
 					.fromJson(sHtml, type);

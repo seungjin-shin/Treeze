@@ -120,6 +120,7 @@ class Start extends Thread {
 			c.getNaviOs().add(os);
 			
 			write("------- A user is connect. --------");
+			System.out.println("------- A user is connect. --------");
 			while (true) {
 				cnt = is.read(b); // 받는 부분 // 프로토콜 정해서 해
 				if(cnt == -1){
@@ -131,7 +132,7 @@ class Start extends Thread {
 				else{
 					String str = new String(b, 0, cnt);
 					chkStr = str.substring(0, 1);
-					System.out.println(chkStr);
+					System.out.println("구분자 : " + chkStr);
 					
 					if(chkStr.equals(SURVEYYES)){
 						c.setYesCnt(c.getYesCnt() + 1);
@@ -143,8 +144,9 @@ class Start extends Thread {
 					}
 					else if(chkStr.equals(QUESTION)){
 						rcvStr = str.substring(1, str.length()); // 질문 처리
-						
+						System.out.println(rcvStr);
 						TicketInfo ticket = new TicketInfo();
+						FreemindGson myGson = new FreemindGson();
 						Gson gson = new Gson();
 						
 						Type type = new TypeToken<TicketInfo>() {

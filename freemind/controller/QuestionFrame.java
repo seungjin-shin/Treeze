@@ -138,8 +138,7 @@ class QuestionFrame extends JFrame{
 			ticketList = new ArrayList<Ticket>();
 			Ticket tmpTicket;
 			Gson gson = new Gson();
-			
-			Type type = new TypeToken<ArrayTicket>() {
+			java.lang.reflect.Type type = new TypeToken<ArrayTicket>() {
 			}.getType();
 			ArrayTicket jonResultClasslist = (ArrayTicket) gson
 					.fromJson(sHtml, type);
