@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
@@ -30,16 +31,19 @@ import com.google.gson.reflect.TypeToken;
 import freemind.json.ArrayClass;
 import freemind.json.ArrayTicket;
 import freemind.json.Ticket;
+import freemind.json.TicketInfo;
 import freemind.main.BtnListener;
 import freemind.modes.UploadToServer;
 
 
 
 class QuestionFrame extends JFrame{
+	Controller c;
 	BtnListener btnListener = new BtnListener(this);
 	JScrollPane sPanel;
 	QuestionPanel questPn;
-	public QuestionFrame(String classId, String idxStr) {
+	public QuestionFrame(String classId, String idxStr, Controller c) {
+		this.c = c;
 		setSize(550, 400);
 		setLayout(null);
 		setTitle("Survey result");
@@ -293,6 +297,7 @@ class QuestionFrame extends JFrame{
 				String classTitle = replyArea.getText();
 				classTitle = classTitle.trim();
 				JDialog dlg;
+				final String QUESTION = "2";
 				
 				if(classTitle.equals("")){
 					dlg = new JDialog(this, "Error", true);
@@ -309,6 +314,26 @@ class QuestionFrame extends JFrame{
 							ticket.getClassId() + "", ticket.getPosition(),
 							classTitle, "prof", ticket.getTicketPosition()
 									+ "/0");
+					
+					TicketInfo ticketInfo = new TicketInfo();
+					ticketInfo.setContents(classTitle);
+					ticketInfo.setPosition(ticket.getPosition());
+					ticketInfo.setTicketPosition(ticket.getTicketPosition());
+					ticketInfo.setTicketTitle("[Re]" + ticket.getTicketTitle());
+					ticketInfo.setUserName("prof");
+					Gson gson = new Gson();
+					String quesStr = gson.toJson(ticketInfo);
+					OutputStream tmpOs;
+					for(int i = 0; i < c.getNaviOs().size(); i++){
+						tmpOs = c.getNaviOs().get(i);
+						try {
+							tmpOs.write((QUESTION + quesStr).getBytes());
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+					
 					questPn.removeAll(); // No가 겹쳐서 removeAll 하고 다시 그리기
 					questPn.init();
 					sPanel.updateUI();

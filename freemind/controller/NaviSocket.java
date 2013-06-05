@@ -179,8 +179,18 @@ class Start extends Thread {
 							UploadToServer uts = new UploadToServer();
 							uts.ticketPost(ticket.getTicketTitle(), c.getClassId() + "", ticket.getPosition(), ticket.getContents(), ticket.getUserName(), ticket.getTicketPosition());
 						
-							//切积 较 倒妨具蹬
+							OutputStream tmpOs;
+							for(i = 0; i < c.getNaviOs().size(); i++){
+								tmpOs = c.getNaviOs().get(i);
+								try {
+									tmpOs.write((QUESTION + rcvStr).getBytes());
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+							}
 							
+							//切积 较 倒妨具蹬
 							
 //						//61.43.139.10:8080/treeze/createTicket
 //						//String ticketTitle, String classId, String position, String contents, String userEmail

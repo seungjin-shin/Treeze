@@ -89,7 +89,7 @@ public class NodeMouseMotionListener implements MouseMotionListener,
         		idxStr = idxStr + idxReverseList.get(i - 1) + "/";
         	System.out.print(idxReverseList.get(i - 1)); 
         }
-        new QuestionFrame(c.getClassId() + "", idxStr);
+        new QuestionFrame(c.getClassId() + "", idxStr, c);
     }
 
     public void mouseDragged(MouseEvent e) {
