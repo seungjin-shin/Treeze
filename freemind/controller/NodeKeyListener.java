@@ -114,8 +114,8 @@ public class NodeKeyListener implements KeyListener {
 			System.out.println(jsonString);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F4){
-			//new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
-			new SurveyResultFrame(31, 9);
+			new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
+			//new SurveyResultFrame(31, 9);
 		}
 		
 		if (mListener != null)
