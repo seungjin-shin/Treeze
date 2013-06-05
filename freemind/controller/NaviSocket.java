@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -12,12 +13,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import freemind.json.ArrayLecture;
+import freemind.json.FreemindGson;
+import freemind.json.Lecture;
+import freemind.json.TicketInfo;
 import freemind.modes.MindIcon;
 import freemind.modes.MindMapNode;
 import freemind.modes.UploadToServer;
@@ -133,32 +144,68 @@ class Start extends Thread {
 					else if(chkStr.equals(QUESTION)){
 						rcvStr = str.substring(1, str.length()); // 질문 처리
 						
-						//61.43.139.10:8080/treeze/createTicket
-						//String ticketTitle, String classId, String position, String contents, String userEmail
-						UploadToServer uts = new UploadToServer();
-						//uts.ticketPost(ticketTitle, classId, position, contents, userEmail)
+						TicketInfo ticket = new TicketInfo();
+						Gson gson = new Gson();
 						
-						String idxStr = "root";
-						String[] splitStr;
-						splitStr = idxStr.split("/");
-						MindMapNode tmp = c.getModel().getRootNode(); // 소켓 받는 부분
-						// idxStr == "root" 면 root
-						//아니면 찾아
-						if(!idxStr.equals("root")){
-							for(i = 0; i < splitStr.length; i++) {
-								tmp = (MindMapNode) tmp.getChildAt(Integer
-										.parseInt(splitStr[i]));
+						Type type = new TypeToken<TicketInfo>() {
+						}.getType();
+						ticket = (TicketInfo) gson.fromJson(rcvStr, type);
+						
+							//new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
+							String idxStr = ticket.getPosition(); 
+							String[] splitStr;
+							splitStr = idxStr.split("/");
+							MindMapNode tmp = c.getModel().getRootNode(); // 소켓 받는 부분
+							// idxStr == "root" 면 root
+							//아니면 찾아
+							if(!idxStr.equals("root")){
+								for (i = 0; i < splitStr.length; i++) {
+									tmp = (MindMapNode) tmp.getChildAt(Integer
+											.parseInt(splitStr[i]));
+								}
 							}
-						}
+							
+							MindMapNode questionNode = tmp;
+							System.out.println(questionNode.getText() + "에 질문 받음");
+							MindIcon icon = MindIcon.factory("help");
+							if(!questionNode.isQuestion()){
+								questionNode.addIcon(icon, -1); // ? 아이콘 한번만
+								questionNode.setQuestion(true);
+							}
+							c.getModeController().nodeChanged(questionNode);
+							
+							UploadToServer uts = new UploadToServer();
+							uts.ticketPost(ticket.getTicketTitle(), c.getClassId() + "", ticket.getPosition(), ticket.getContents(), ticket.getUserName(), ticket.getTicketPosition());
 						
-						MindMapNode questionNode = tmp;
-						System.out.println(questionNode.getText());
-						MindIcon icon = MindIcon.factory("help");
-						if(!questionNode.isQuestion()){
-							questionNode.addIcon(icon, -1); // ? 아이콘 한번만
-							questionNode.setQuestion(true);
-						}
-						c.getModeController().nodeChanged(questionNode);
+							//학생 싹 돌려야돼
+							
+							
+//						//61.43.139.10:8080/treeze/createTicket
+//						//String ticketTitle, String classId, String position, String contents, String userEmail
+//						UploadToServer uts = new UploadToServer();
+//						//uts.ticketPost(ticketTitle, classId, position, contents, userEmail)
+//						
+//						String idxStr = "root";
+//						String[] splitStr;
+//						splitStr = idxStr.split("/");
+//						MindMapNode tmp = c.getModel().getRootNode(); // 소켓 받는 부분
+//						// idxStr == "root" 면 root
+//						//아니면 찾아
+//						if(!idxStr.equals("root")){
+//							for(i = 0; i < splitStr.length; i++) {
+//								tmp = (MindMapNode) tmp.getChildAt(Integer
+//										.parseInt(splitStr[i]));
+//							}
+//						}
+//						
+//						MindMapNode questionNode = tmp;
+//						System.out.println(questionNode.getText());
+//						MindIcon icon = MindIcon.factory("help");
+//						if(!questionNode.isQuestion()){
+//							questionNode.addIcon(icon, -1); // ? 아이콘 한번만
+//							questionNode.setQuestion(true);
+//						}
+//						c.getModeController().nodeChanged(questionNode);
 					}
 					
 					if(c.getTotalCnt() == c.getNaviOs().size()){

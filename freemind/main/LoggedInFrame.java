@@ -296,7 +296,6 @@ class LecturePanel extends JPanel implements ActionListener{
 		System.out.println(sHtml);
 		ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
 		Lecture tmpLecture;
-		FreemindGson myGson = new FreemindGson();
 		Gson gson = new Gson();
 		
 		Type type = new TypeToken<ArrayLecture>() {
@@ -308,6 +307,7 @@ class LecturePanel extends JPanel implements ActionListener{
 		Font midF = new Font("Serif", Font.BOLD, 30);
 		JButton tmpBtn;
 		lectureMap = new HashMap<String, String>();
+		
 		for(lectureCnt = 0; lectureCnt < lectureList.size(); lectureCnt++){
 			tmpLecture = lectureList.get(lectureCnt);
 			tmpBtn = new JButton(tmpLecture.getLectureName());
@@ -344,8 +344,8 @@ class LecturePanel extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String event = e.getActionCommand();
-		System.out.println("classId = " + event);
 		String lectureIdStr = lectureMap.get(event);
+		System.out.println("lectureId = " + lectureIdStr);
 		frame.setVisible(false);
 		new LecturePageFrame(mc, event, lectureIdStr);
 	}

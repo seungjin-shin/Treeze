@@ -373,7 +373,7 @@ public class LecturePageFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String event = e.getActionCommand();
-			System.out.println(event);
+			System.out.println("classId =" + event);
 			mc.getController().setClassId(Integer.parseInt(event));
 			mc.open(mc, event);
 			frame.setVisible(false);

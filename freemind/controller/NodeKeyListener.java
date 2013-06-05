@@ -113,35 +113,9 @@ public class NodeKeyListener implements KeyListener {
 			
 			System.out.println(jsonString);
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_F5){
-			new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_F6){
+		else if(e.getKeyCode() == KeyEvent.VK_F4){
 			//new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
-			String idxStr = "0"; // 
-			String[] splitStr;
-			splitStr = idxStr.split("/");
-			MindMapNode tmp = c.getModel().getRootNode(); // 소켓 받는 부분
-			// idxStr == "root" 면 root
-			//아니면 찾아
-			if(!idxStr.equals("root")){
-				for (int i = 0; i < splitStr.length; i++) {
-					tmp = (MindMapNode) tmp.getChildAt(Integer
-							.parseInt(splitStr[i]));
-				}
-			}
-			
-			MindMapNode questionNode = tmp;
-			System.out.println(questionNode.getText());
-			MindIcon icon = MindIcon.factory("help");
-			if(!questionNode.isQuestion()){
-				questionNode.addIcon(icon, -1); // ? 아이콘 한번만
-				questionNode.setQuestion(true);
-			}
-			c.getModeController().nodeChanged(questionNode);
-			
-			UploadToServer uts = new UploadToServer();
-			uts.ticketPost("헤이ㅎㅎ", c.getClassId() + "", "0", "왜이론고양??????ㅠㅠ", "student", "0/3");
+			new SurveyResultFrame(31, 9);
 		}
 		
 		if (mListener != null)
