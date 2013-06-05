@@ -161,6 +161,8 @@ class QuestionFrame extends JFrame{
 						tmpTicketList.get(i).setChild(tmpTicket);
 						ticketList.remove(tmpTicket);
 						childTotalCnt++;
+						questionCnt--;
+						break;
 					}
 				}
 			}
