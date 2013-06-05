@@ -338,7 +338,7 @@ public class MenuBar extends JMenuBar {
 		zoomIn.setAccelerator(KeyStroke.getKeyStroke(c.getFrame().getAdjustableProperty("keystroke_zoom_in")));
 		
 		JMenuItem closeLecture = menuHolder.addAction(c.selectLecture, VIEW_MENU+"Close lecture");
-		JMenuItem slideShow = menuHolder.addAction(c.selectLecture, VIEW_MENU+"Slide Show");
+		JMenuItem slideShow = menuHolder.addAction(c.slideShowAction, VIEW_MENU+"Slide Show");
 		
 		JMenuItem zoomOut = menuHolder.addAction(c.zoomOut, VIEW_MENU+"zoom/zoomOut");
 		zoomOut.setAccelerator(KeyStroke.getKeyStroke(c.getFrame().getAdjustableProperty("keystroke_zoom_out")));

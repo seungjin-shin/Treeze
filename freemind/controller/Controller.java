@@ -45,6 +45,7 @@ import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -203,7 +204,7 @@ public class Controller  implements MapModuleChangeObserver {
     public ArrayList<SlideData> slideList = new ArrayList<SlideData>();
     public SlideShow slideShow = new SlideShow(this);
     public Action selectLecture;
-    //public Action slideShow;
+    public Action slideShowAction;
     private MindMapController mc;
 
 	public ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
@@ -354,6 +355,7 @@ public class Controller  implements MapModuleChangeObserver {
         propertyAction = new PropertyAction(this);
         
         selectLecture = new SelectLectureAction(this);
+        slideShowAction = new SlideShowAction();
 
         showSelectionAsRectangle = new ShowSelectionAsRectangleAction(this);
 
@@ -1036,7 +1038,7 @@ public class Controller  implements MapModuleChangeObserver {
     
     protected class SelectLectureAction extends AbstractAction {
         public SelectLectureAction(Controller controller) {
-           super("Select lecture"); }
+           super("Close lecture"); }
         public void actionPerformed(ActionEvent e) {
         	// 여기에 바로가기 될듯
 //            logger.info("ZoomInAction actionPerformed");
@@ -1468,11 +1470,29 @@ public class Controller  implements MapModuleChangeObserver {
     }
     
     protected class SlideShowAction extends AbstractAction {
-        public SlideShowAction(Controller controller) {
-           super("SlideShow"); }
+        public SlideShowAction() {
+           super("Slide Show"); }
         public void actionPerformed(ActionEvent e) {
-//            logger.info("ZoomInAction actionPerformed");
-           
+        	final String NAVINUM = "0";
+
+        	if(getSlideList().size() == 0)
+				return;
+        	
+			getSlideShow().setfocus(getSlideList().get(0));
+			getSlideShow().show();
+			
+			OutputStream os;
+			
+			for(int i = 0; i < getNaviOs().size(); i++){
+				os = getNaviOs().get(i);
+				try {
+					os.write((NAVINUM + "start").getBytes());
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			System.out.println("start");
         }}
 
     protected class ZoomInAction extends AbstractAction {
