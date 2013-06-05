@@ -148,6 +148,7 @@ class Start extends Thread {
 						TicketInfo ticket = new TicketInfo();
 						FreemindGson myGson = new FreemindGson();
 						Gson gson = new Gson();
+						boolean betweenStu = false;
 						
 						Type type = new TypeToken<TicketInfo>() {
 						}.getType();
@@ -162,9 +163,25 @@ class Start extends Thread {
 							//아니면 찾아
 							if(!idxStr.equals("root")){
 								for (i = 0; i < splitStr.length; i++) {
+									if(Integer.parseInt(splitStr[i]) == tmp.getChildCount() + 1){
+										betweenStu = true;
+										break;
+									}
 									tmp = (MindMapNode) tmp.getChildAt(Integer
 											.parseInt(splitStr[i]));
 								}
+							}
+							
+							if(betweenStu){
+								idxStr = ticket.getPosition().substring(0, ticket.getPosition().length() - 2); 
+								splitStr = idxStr.split("/");
+								tmp = c.getModel().getRootNode(); // 소켓 받는 부분
+								
+								for (i = 0; i < splitStr.length; i++) {
+									tmp = (MindMapNode) tmp.getChildAt(Integer
+											.parseInt(splitStr[i]));
+								}
+								
 							}
 							
 							MindMapNode questionNode = tmp;
@@ -177,7 +194,7 @@ class Start extends Thread {
 							c.getModeController().nodeChanged(questionNode);
 							
 							UploadToServer uts = new UploadToServer();
-							uts.ticketPost(ticket.getTicketTitle(), c.getClassId() + "", ticket.getPosition(), ticket.getContents(), ticket.getUserName(), ticket.getTicketPosition());
+							uts.ticketPost(ticket.getTicketTitle(), c.getClassId() + "", idxStr, ticket.getContents(), ticket.getUserName(), ticket.getTicketPosition());
 						
 							OutputStream tmpOs;
 							for(i = 0; i < c.getNaviOs().size(); i++){
