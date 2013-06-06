@@ -130,7 +130,7 @@ class Start extends Thread {
 					break;
 				}
 				else{
-					String str = new String(b, 0, cnt);
+					String str = new String(b, 0, cnt, "UTF-8");
 					chkStr = str.substring(0, 1);
 					System.out.println("±¸ºÐÀÚ : " + chkStr);
 					

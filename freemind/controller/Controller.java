@@ -1045,7 +1045,7 @@ public class Controller  implements MapModuleChangeObserver {
         	//
         	String lectureTitle = mc.getLectureTitle();
         	String lectureId = mc.getLectureId() + "";
-        	
+
         	HttpClient httpClient = new DefaultHttpClient();  
       	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/setStateOfLecture");
       	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
@@ -1055,7 +1055,7 @@ public class Controller  implements MapModuleChangeObserver {
       	  StringBody lectureState = null;
       	  
 		try {
-			lectureTitleBody = new StringBody(lectureTitle, Charset.forName("UTF-8"));
+			lectureTitleBody = new StringBody("tmp", Charset.forName("UTF-8"));
 			profEmailBody = new StringBody("minsuk@hansung.ac.kr", Charset.forName("UTF-8"));
 			lectureState = new StringBody("false", Charset.forName("UTF-8"));
 			StringBody lectureIdBody = new StringBody(lectureId, Charset.forName("UTF-8"));
