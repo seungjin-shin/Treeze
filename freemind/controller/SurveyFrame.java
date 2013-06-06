@@ -63,7 +63,7 @@ class SurveyFrame extends JFrame implements ActionListener{
 		
 		surveyStr = surveyTf.getText();
 		
-		System.out.println(surveyStr);
+		System.out.println("원래 설문  : " + surveyStr);
 //		try {
 //			surveyStr = new String(surveyTf.getText().getBytes(), "UTF-8");
 //			System.out.println(surveyStr);
@@ -71,7 +71,13 @@ class SurveyFrame extends JFrame implements ActionListener{
 //			// TODO Auto-generated catch block
 //			e2.printStackTrace();
 //		}
-		surveyStr = surveyStr.trim();
+//		try {
+//			//surveyStr = new String(surveyStr.trim().getBytes(), "UTF-8");
+//			System.out.println("UTF-8  설문  : " + surveyStr);
+//		} catch (UnsupportedEncodingException e2) {
+//			// TODO Auto-generated catch block
+//			e2.printStackTrace();
+//		}
 		JDialog dlg;
 		
 		if(surveyStr.equals("")){
@@ -90,12 +96,13 @@ class SurveyFrame extends JFrame implements ActionListener{
 			survey.setContents(surveyStr);
 			jsonStr = myGson.toJson(survey);
 			OutputStream os;
-			
-			
 			for(int i = 0; i < naviOs.size(); i++){
 				os = naviOs.get(i);
 				try {
-					os.write((SURVEYPNUM + jsonStr).getBytes()); // 다 보내
+					if(!os.equals(null)){
+						os.write((SURVEYPNUM + jsonStr).getBytes("UTF-8")); // 다 보내
+						System.out.println(i + "번째 보냄");
+					}
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

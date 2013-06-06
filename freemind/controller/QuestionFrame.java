@@ -331,7 +331,8 @@ class QuestionFrame extends JFrame{
 					for(int i = 0; i < c.getNaviOs().size(); i++){
 						tmpOs = c.getNaviOs().get(i);
 						try {
-							tmpOs.write((QUESTION + quesStr).getBytes());
+							if(!tmpOs.equals(null))
+								tmpOs.write((QUESTION + quesStr).getBytes("UTF-8"));
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();

@@ -200,8 +200,8 @@ class Start extends Thread {
 							for(i = 0; i < c.getNaviOs().size(); i++){
 								tmpOs = c.getNaviOs().get(i);
 								try {
-									if(!os.equals(tmpOs))
-										tmpOs.write((QUESTION + rcvStr).getBytes());
+									if(!os.equals(tmpOs) && !tmpOs.equals(null))
+										tmpOs.write((QUESTION + rcvStr).getBytes("UTF-8"));
 								} catch (IOException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
