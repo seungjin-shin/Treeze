@@ -241,7 +241,7 @@ class QuestionFrame extends JFrame{
 					for(int j = 0; j < ticketList.get(i).getChildList().size(); j++){
 					
 						if (ticketTitle.equals(ticketList.get(i).getChildList().get(j).getTicketTitle())) {
-							//new InputReplyFrame(ticketList.get(i).getChild());
+							new InputReplyFrame(ticketList.get(i).getChildList().get(j));
 							break;
 						}
 					}
