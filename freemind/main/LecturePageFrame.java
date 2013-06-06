@@ -344,7 +344,7 @@ public class LecturePageFrame extends JFrame {
 			for(classCnt = 0; classCnt < classList.size(); classCnt++){
 				tmpClass = classList.get(classCnt);
 				tmpLb = new JLabel(tmpClass.getClassName());
-				tmpLb.setFont(lagf);
+				tmpLb.setFont(midf);
 				tmpLb.setSize(240, 50);
 				tmpLb.setLocation(40, TOPPADDING + classCnt * CLASSHGAP);
 				add(tmpLb);

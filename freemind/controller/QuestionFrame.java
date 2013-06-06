@@ -354,7 +354,7 @@ class QuestionFrame extends JFrame{
 					ticketInfo.setPosition(ticket.getTicketPosition());
 					ticketInfo.setTicketPosition(ticket.getTicketPosition() + "/0");
 					ticketInfo.setTicketTitle("[Re]" + ticket.getTicketTitle());
-					ticketInfo.setUserName("prof");
+					ticketInfo.setUserName("±³¼ö");
 					Gson gson = new Gson();
 					String quesStr = gson.toJson(ticketInfo);
 					OutputStream tmpOs;
