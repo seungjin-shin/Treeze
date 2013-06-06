@@ -158,7 +158,7 @@ class QuestionFrame extends JFrame{
 				for(int i = 0; i < tmpTicketList.size(); i++){
 					if(tmpTicket.getTicketPosition().substring(0, tmpTicket.getTicketPosition().length() - 2).equals(tmpTicketList.get(i).getTicketPosition())){
 						tmpTicketList.get(i).setHaveChild(true);
-						tmpTicketList.get(i).setChild(tmpTicket);
+						tmpTicketList.get(i).getChildList().add(tmpTicket);
 						ticketList.remove(tmpTicket);
 						childTotalCnt++;
 						questionCnt--;
@@ -188,24 +188,31 @@ class QuestionFrame extends JFrame{
 				add(tmpLb);
 				
 				if(tmpTicket.isHaveChild()){
-					childCnt++;
-					tmpTicket = tmpTicket.getChild();
-					tmpLb = new JLabel((ticketList.size() + childTotalCnt - questionCnt - childCnt) + "");
-					tmpLb.setSize(50, 40);
-					tmpLb.setLocation(20, TOPNUMPADDING + (questionCnt + childCnt) * QUESTIONHGAP);
-					add(tmpLb);
-					
-					tmpBtn = new JButton(tmpTicket.getTicketTitle());
-					tmpBtn.setSize(260, 20);
-					tmpBtn.setLocation(60, TOPPADDING + (questionCnt + childCnt) * QUESTIONHGAP);
-					tmpBtn.addActionListener(this);
-					tmpBtn.setFocusable(false);
-					add(tmpBtn);
-					
-					tmpLb = new JLabel(tmpTicket.getUserName());
-					tmpLb.setSize(60, 40);
-					tmpLb.setLocation(380, TOPNUMPADDING + (questionCnt + childCnt) * QUESTIONHGAP);
-					add(tmpLb);
+					for(int j = 0; j < tmpTicket.getChildList().size(); j++){
+						childCnt++;
+						tmpTicket = tmpTicket.getChildList().get(j);
+						tmpLb = new JLabel((ticketList.size() + childTotalCnt
+								- questionCnt - childCnt)
+								+ "");
+						tmpLb.setSize(50, 40);
+						tmpLb.setLocation(20, TOPNUMPADDING
+								+ (questionCnt + childCnt) * QUESTIONHGAP);
+						add(tmpLb);
+
+						tmpBtn = new JButton(tmpTicket.getTicketTitle());
+						tmpBtn.setSize(260, 20);
+						tmpBtn.setLocation(60, TOPPADDING
+								+ (questionCnt + childCnt) * QUESTIONHGAP);
+						tmpBtn.addActionListener(this);
+						tmpBtn.setFocusable(false);
+						add(tmpBtn);
+
+						tmpLb = new JLabel(tmpTicket.getUserName());
+						tmpLb.setSize(60, 40);
+						tmpLb.setLocation(380, TOPNUMPADDING
+								+ (questionCnt + childCnt) * QUESTIONHGAP);
+						add(tmpLb);
+					}
 				}
 			}
 			setPreferredSize(new Dimension(420, 20 + TOPPADDING + (questionCnt + childTotalCnt) * QUESTIONHGAP));
@@ -231,10 +238,12 @@ class QuestionFrame extends JFrame{
 					break;
 				}
 				else if(ticketList.get(i).isHaveChild()){
-					if (ticketTitle.equals(ticketList.get(i).getChild()
-							.getTicketTitle())) {
-						new InputReplyFrame(ticketList.get(i).getChild());
-						break;
+					for(int j = 0; j < ticketList.get(i).getChildList().size(); j++){
+					
+						if (ticketTitle.equals(ticketList.get(i).getChildList().get(j).getTicketTitle())) {
+							//new InputReplyFrame(ticketList.get(i).getChild());
+							break;
+						}
 					}
 				}
 			}
@@ -331,7 +340,7 @@ class QuestionFrame extends JFrame{
 					for(int i = 0; i < c.getNaviOs().size(); i++){
 						tmpOs = c.getNaviOs().get(i);
 						try {
-							if(!tmpOs.equals(null))
+							if(tmpOs != null)
 								tmpOs.write((QUESTION + quesStr).getBytes("UTF-8"));
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block

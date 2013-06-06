@@ -1043,8 +1043,11 @@ public class Controller  implements MapModuleChangeObserver {
         	// 여기에 바로가기 될듯
 //            logger.info("ZoomInAction actionPerformed");
         	//
-        	String lectureTitle = mc.getLectureTitle();
-        	String lectureId = mc.getLectureId() + "";
+        	LectureInfo lectureInfo;
+    		lectureInfo = FreemindLectureManager.getInstance();
+    		
+        	String lectureTitle = lectureInfo.getLectureTitle();
+        	String lectureId = lectureInfo.getLectureId() + "";
 
         	HttpClient httpClient = new DefaultHttpClient();  
       	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/setStateOfLecture");

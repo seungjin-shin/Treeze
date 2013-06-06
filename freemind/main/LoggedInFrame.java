@@ -33,6 +33,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+import freemind.controller.FreemindLectureManager;
+import freemind.controller.LectureInfo;
 import freemind.json.ArrayLecture;
 import freemind.json.FreemindGson;
 import freemind.json.Lecture;
@@ -347,8 +349,12 @@ class LecturePanel extends JPanel implements ActionListener{
 		String lectureIdStr = lectureMap.get(event);
 		System.out.println("lectureId = " + lectureIdStr);
 		frame.setVisible(false);
-		mc.setLectureTitle(event);
-		mc.setLectureId(Integer.parseInt(lectureIdStr));
+		
+		LectureInfo lectureInfo;
+		lectureInfo = FreemindLectureManager.getInstance();
+		
+		lectureInfo.setLectureTitle(event);
+		lectureInfo.setLectureId(Integer.parseInt(lectureIdStr));
 		new LecturePageFrame(mc, event, lectureIdStr);
 	}
 }

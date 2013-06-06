@@ -1,4 +1,7 @@
 package freemind.json;
+
+import java.util.ArrayList;
+
 public class Ticket{
 
 	/**
@@ -10,14 +13,14 @@ public class Ticket{
 	private String ticketPosition;
 	private String contents;
 	private String userName;
-	private Ticket child;
+	private ArrayList<Ticket> childList;
 	private boolean haveChild;
 	
-	public Ticket getChild() {
-		return child;
+	public ArrayList<Ticket> getChildList() {
+		return childList;
 	}
-	public void setChild(Ticket child) {
-		this.child = child;
+	public void setChildList(ArrayList<Ticket> childList) {
+		this.childList = childList;
 	}
 	public boolean isHaveChild() {
 		return haveChild;

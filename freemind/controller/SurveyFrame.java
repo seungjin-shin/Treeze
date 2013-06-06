@@ -99,7 +99,7 @@ class SurveyFrame extends JFrame implements ActionListener{
 			for(int i = 0; i < naviOs.size(); i++){
 				os = naviOs.get(i);
 				try {
-					if(!os.equals(null)){
+					if(os != null){
 						os.write((SURVEYPNUM + jsonStr).getBytes("UTF-8")); // 다 보내
 						System.out.println(i + "번째 보냄");
 					}

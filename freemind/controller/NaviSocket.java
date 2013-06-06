@@ -149,7 +149,7 @@ class Start extends Thread {
 						FreemindGson myGson = new FreemindGson();
 						Gson gson = new Gson();
 						boolean betweenStu = false;
-						
+						boolean twoAnswer = false;
 						Type type = new TypeToken<TicketInfo>() {
 						}.getType();
 						ticket = (TicketInfo) gson.fromJson(rcvStr, type);
@@ -161,9 +161,15 @@ class Start extends Thread {
 							MindMapNode tmp = c.getModel().getRootNode(); // 소켓 받는 부분
 							// idxStr == "root" 면 root
 							//아니면 찾아
+							int parentPositionCnt = 0;
 							if(!idxStr.equals("root")){
 								for (i = 0; i < splitStr.length; i++) {
 									if(Integer.parseInt(splitStr[i]) == tmp.getChildCount() || tmp.getChildCount() == 0){
+										//split lend
+										if(i + 2 <= splitStr.length){
+											parentPositionCnt = i;
+											twoAnswer = true; // 답글에 답글
+										}
 										betweenStu = true;
 										break;
 									}
@@ -171,8 +177,17 @@ class Start extends Thread {
 											.parseInt(splitStr[i]));
 								}
 							}
-							
-							if(betweenStu){
+							if(twoAnswer){
+								idxStr = ticket.getPosition().substring(0, i * 2);
+								splitStr = idxStr.split("/");
+								tmp = c.getModel().getRootNode(); // 소켓 받는 부분
+								
+								for (i = 0; i < splitStr.length; i++) {
+									tmp = (MindMapNode) tmp.getChildAt(Integer
+											.parseInt(splitStr[i]));
+								}
+							}
+							else if(betweenStu){
 								idxStr = ticket.getPosition().substring(0, ticket.getPosition().length() - 2); 
 								splitStr = idxStr.split("/");
 								tmp = c.getModel().getRootNode(); // 소켓 받는 부분
@@ -200,8 +215,11 @@ class Start extends Thread {
 							for(i = 0; i < c.getNaviOs().size(); i++){
 								tmpOs = c.getNaviOs().get(i);
 								try {
-									if(!os.equals(tmpOs) && !tmpOs.equals(null))
-										tmpOs.write((QUESTION + rcvStr).getBytes("UTF-8"));
+									if(tmpOs != null){
+										if(!os.equals(tmpOs)){
+											tmpOs.write((QUESTION + rcvStr).getBytes("UTF-8"));
+										}
+									}
 								} catch (IOException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
