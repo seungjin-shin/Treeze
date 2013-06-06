@@ -257,7 +257,11 @@ class Start extends Thread {
 					}
 					
 					if(c.getTotalCnt() == c.getNaviOs().size()){
-						new SurveyResultFrame(c.getYesCnt(), c.getNoCnt());
+						
+						LectureInfo lectureInfo;
+			    		lectureInfo = FreemindLectureManager.getInstance();
+			    		
+						new SurveyResultFrame(c.getYesCnt(), c.getNoCnt(), lectureInfo.getSurverTitle());
 						c.setYesCnt(0);
 						c.setNoCnt(0);
 						c.setTotalCnt(0);

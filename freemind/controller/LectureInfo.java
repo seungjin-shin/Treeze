@@ -4,7 +4,14 @@ public class LectureInfo{
 	
 	String lectureTitle;
 	int lectureId;
+	String surverTitle;
 	
+	public String getSurverTitle() {
+		return surverTitle;
+	}
+	public void setSurverTitle(String surverTitle) {
+		this.surverTitle = surverTitle;
+	}
 	public String getLectureTitle() {
 		return lectureTitle;
 	}

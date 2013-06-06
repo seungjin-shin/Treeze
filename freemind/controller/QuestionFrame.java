@@ -42,18 +42,20 @@ class QuestionFrame extends JFrame{
 	BtnListener btnListener = new BtnListener(this);
 	JScrollPane sPanel;
 	QuestionPanel questPn;
-	public QuestionFrame(String classId, String idxStr, Controller c) {
+	String questionTitle;
+	public QuestionFrame(String classId, String idxStr, Controller c, String s) {
+		questionTitle = s;
 		this.c = c;
 		setSize(550, 400);
 		setLayout(null);
-		setTitle("Survey result");
+		setTitle("Question Frame");
 		setVisible(true);
 		setLocation(350, 200);
 		
 		getContentPane().setBackground(new Color(141, 198, 63));
 		Font f = new Font("Serif", Font.BOLD, 30);
 		
-		JLabel titleLb = new JLabel("Hardware security");
+		JLabel titleLb = new JLabel(questionTitle);
 		titleLb.setFont(f);
 		titleLb.setSize(250, 50);
 		titleLb.setLocation(20, 10);

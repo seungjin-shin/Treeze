@@ -62,6 +62,7 @@ public class NodeMouseMotionListener implements MouseMotionListener,
             mListener.mouseClicked(e);
         System.out.println("Click"); //¸·¾Æ¾ßµÅ
         //System.out.println(c.getModeController().getSelected().getNodeLevel());
+        String nodeText = c.getModeController().getSelected().getText();
         MindMapNode questionNode = c.getModeController().getSelected();
         MindMapNode questionNodeParent;//
         ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
@@ -89,7 +90,7 @@ public class NodeMouseMotionListener implements MouseMotionListener,
         		idxStr = idxStr + idxReverseList.get(i - 1) + "/";
         	System.out.print(idxReverseList.get(i - 1)); 
         }
-        new QuestionFrame(c.getClassId() + "", idxStr, c);
+        new QuestionFrame(c.getClassId() + "", idxStr, c, nodeText);
     }
 
     public void mouseDragged(MouseEvent e) {

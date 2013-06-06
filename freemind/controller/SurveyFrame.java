@@ -28,6 +28,7 @@ class SurveyFrame extends JFrame implements ActionListener{
 	final String SURVEYPNUM = "1";
 	ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
 	JTextField surveyTf;
+	String surveyStr = null;
 	public SurveyFrame(ArrayList<OutputStream> naviOs) {
 		this.naviOs = naviOs;
 		
@@ -59,7 +60,7 @@ class SurveyFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		this.setVisible(false);
 		
-		String surveyStr = null;
+		
 		
 		surveyStr = surveyTf.getText();
 		
@@ -92,6 +93,12 @@ class SurveyFrame extends JFrame implements ActionListener{
 		else{
 			String jsonStr;
 			FreemindGson myGson = new FreemindGson();
+			
+			LectureInfo lectureInfo;
+    		lectureInfo = FreemindLectureManager.getInstance();
+    		
+    		lectureInfo.setSurverTitle(surveyStr);
+        	
 			Survey survey = new Survey();
 			survey.setContents(surveyStr);
 			jsonStr = myGson.toJson(survey);
@@ -119,7 +126,9 @@ class SurveyResultFrame extends JFrame implements ActionListener{
 	int noCnt;
 	int yesPer;
 	int noPer;
-	public SurveyResultFrame(int y, int n) {
+	String surveyTitle;
+	public SurveyResultFrame(int y, int n, String s) {
+		surveyTitle = s;
 		yesCnt = y;
 		noCnt = n;
 		yesPer = (int)(((double)y/(double)(y + n)) * 100);
@@ -140,7 +149,7 @@ class SurveyResultFrame extends JFrame implements ActionListener{
 		resultLb.setLocation(10, 10);
 		add(resultLb);
 
-		JLabel StringLb = new JLabel("Are you understand?");
+		JLabel StringLb = new JLabel(surveyTitle);
 		StringLb.setFont(f);
 		StringLb.setSize(400, 50);
 		StringLb.setLocation(10, 60);
@@ -153,24 +162,25 @@ class SurveyResultFrame extends JFrame implements ActionListener{
 		okBtn.setLocation(300, 300);
 		add(okBtn);
 
+		JPanel resultPn2 = new ResultPanel2();
+		resultPn2.setSize(460, 100);
+		resultPn2.setLocation(20, 160);
+		add(resultPn2);
+
 		JPanel resultPn = new ResultPanel();
 		resultPn.setSize(480, 160);
 		resultPn.setLocation(10, 120);
 		add(resultPn);
 		
-		JPanel resultPn2 = new ResultPanel2();
-		resultPn2.setSize(460, 100);
-		resultPn2.setLocation(20, 160);
-		add(resultPn2);
 		
 	}
 	public void paint(Graphics g){
 		
-		super.paint(g);
 		g.setColor(new Color(141, 198, 63));
 		g.drawLine(20, 85, 500, 85);
 		g.drawLine(20, 86, 500, 86);
 		g.drawLine(20, 87, 500, 87);
+		super.paint(g);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
