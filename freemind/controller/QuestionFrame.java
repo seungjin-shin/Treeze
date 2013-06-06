@@ -346,7 +346,7 @@ class QuestionFrame extends JFrame{
 					UploadToServer UTS = new UploadToServer();
 					UTS.ticketPost("[Re]" + ticket.getTicketTitle(),
 							ticket.getClassId() + "", ticket.getPosition(),
-							classTitle, "prof", ticket.getTicketPosition()
+							classTitle, "±³¼ö", ticket.getTicketPosition()
 									+ "/0");
 					
 					TicketInfo ticketInfo = new TicketInfo();
