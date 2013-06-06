@@ -15,7 +15,6 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Stack;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -208,32 +207,30 @@ class QuestionFrame extends JFrame{
 				
 				
 				if(tmpTicket.isHaveChild()){
-					while(tmpTicket != null){
-						for (int j = 0; j < tmpTicket.getChildList().size(); j++) {
-							childCnt++;
-							tmpTicket = tmpTicket.getChildList().get(j);
-							tmpLb = new JLabel((ticketList.size()
-									+ childTotalCnt - questionCnt - childCnt)
-									+ "");
-							tmpLb.setSize(50, 40);
-							tmpLb.setLocation(20, TOPNUMPADDING
-									+ (questionCnt + childCnt) * QUESTIONHGAP);
-							add(tmpLb);
+					for (int j = 0; j < tmpTicket.getChildList().size(); j++) {
+						childCnt++;
+						tmpTicket = tmpTicket.getChildList().get(j);
+						tmpLb = new JLabel((ticketList.size() + childTotalCnt
+								- questionCnt - childCnt)
+								+ "");
+						tmpLb.setSize(50, 40);
+						tmpLb.setLocation(20, TOPNUMPADDING
+								+ (questionCnt + childCnt) * QUESTIONHGAP);
+						add(tmpLb);
 
-							tmpBtn = new JButton(tmpTicket.getTicketTitle());
-							tmpBtn.setSize(260, 20);
-							tmpBtn.setLocation(60, TOPPADDING
-									+ (questionCnt + childCnt) * QUESTIONHGAP);
-							tmpBtn.addActionListener(this);
-							tmpBtn.setFocusable(false);
-							add(tmpBtn);
+						tmpBtn = new JButton(tmpTicket.getTicketTitle());
+						tmpBtn.setSize(260, 20);
+						tmpBtn.setLocation(60, TOPPADDING
+								+ (questionCnt + childCnt) * QUESTIONHGAP);
+						tmpBtn.addActionListener(this);
+						tmpBtn.setFocusable(false);
+						add(tmpBtn);
 
-							tmpLb = new JLabel(tmpTicket.getUserName());
-							tmpLb.setSize(60, 40);
-							tmpLb.setLocation(380, TOPNUMPADDING
-									+ (questionCnt + childCnt) * QUESTIONHGAP);
-							add(tmpLb);
-						}
+						tmpLb = new JLabel(tmpTicket.getUserName());
+						tmpLb.setSize(60, 40);
+						tmpLb.setLocation(380, TOPNUMPADDING
+								+ (questionCnt + childCnt) * QUESTIONHGAP);
+						add(tmpLb);
 					}
 				}
 			}
