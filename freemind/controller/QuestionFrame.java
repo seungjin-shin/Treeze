@@ -15,6 +15,7 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -151,12 +152,14 @@ class QuestionFrame extends JFrame{
 			JButton tmpBtn;
 			childTotalCnt = 0;
 			ArrayList<Ticket> tmpTicketList = new ArrayList<Ticket>();
+			
 			for(questionCnt = 0; questionCnt < ticketList.size(); questionCnt++){
 				tmpTicket = ticketList.get(questionCnt);
 				tmpTicketList.add(tmpTicket);
 				
 				for(int i = 0; i < tmpTicketList.size(); i++){
-					if(tmpTicket.getTicketPosition().substring(0, tmpTicket.getTicketPosition().length() - 2).equals(tmpTicketList.get(i).getTicketPosition())){
+					if (tmpTicket.getTicketPosition().substring(0,tmpTicket.getTicketPosition().length() - 2).equals(tmpTicketList.get(i).getTicketPosition())) {
+						// 자식으로 들어감
 						tmpTicketList.get(i).setHaveChild(true);
 						tmpTicketList.get(i).getChildList().add(tmpTicket);
 						ticketList.remove(tmpTicket);
@@ -164,13 +167,16 @@ class QuestionFrame extends JFrame{
 						questionCnt--;
 						break;
 					}
-					if(tmpTicketList.get(i).isHaveChild()){
-						for(int j = 0; j < tmpTicketList.get(i).getChildList().size(); j++){
+					if (tmpTicketList.get(i).isHaveChild()) {
+						for (int j = 0; j < tmpTicketList.get(i).getChildList()
+								.size(); j++) {
+							// 자식에 자식으로 들어감
 							Ticket tmp = tmpTicketList.get(i).getChildList().get(j);
-							if(tmpTicket.getTicketPosition().substring(0, tmpTicket.getTicketPosition().length() - 2).equals(tmpTicketList.get(i).getTicketPosition())){
+							if (tmpTicket.getTicketPosition().substring(0,tmpTicket.getTicketPosition().length() - 2).equals(tmp.getTicketPosition())) {
 								tmp.setHaveChild(true);
 								tmp.getChildList().add(tmpTicket);
 								ticketList.remove(tmpTicket);
+								tmpTicketList.remove(tmp);
 								childTotalCnt++;
 								questionCnt--;
 								break;
@@ -200,31 +206,34 @@ class QuestionFrame extends JFrame{
 				tmpLb.setLocation(380, TOPNUMPADDING + (questionCnt + childCnt) * QUESTIONHGAP);
 				add(tmpLb);
 				
+				
 				if(tmpTicket.isHaveChild()){
-					for(int j = 0; j < tmpTicket.getChildList().size(); j++){
-						childCnt++;
-						tmpTicket = tmpTicket.getChildList().get(j);
-						tmpLb = new JLabel((ticketList.size() + childTotalCnt
-								- questionCnt - childCnt)
-								+ "");
-						tmpLb.setSize(50, 40);
-						tmpLb.setLocation(20, TOPNUMPADDING
-								+ (questionCnt + childCnt) * QUESTIONHGAP);
-						add(tmpLb);
+					while(tmpTicket != null){
+						for (int j = 0; j < tmpTicket.getChildList().size(); j++) {
+							childCnt++;
+							tmpTicket = tmpTicket.getChildList().get(j);
+							tmpLb = new JLabel((ticketList.size()
+									+ childTotalCnt - questionCnt - childCnt)
+									+ "");
+							tmpLb.setSize(50, 40);
+							tmpLb.setLocation(20, TOPNUMPADDING
+									+ (questionCnt + childCnt) * QUESTIONHGAP);
+							add(tmpLb);
 
-						tmpBtn = new JButton(tmpTicket.getTicketTitle());
-						tmpBtn.setSize(260, 20);
-						tmpBtn.setLocation(60, TOPPADDING
-								+ (questionCnt + childCnt) * QUESTIONHGAP);
-						tmpBtn.addActionListener(this);
-						tmpBtn.setFocusable(false);
-						add(tmpBtn);
+							tmpBtn = new JButton(tmpTicket.getTicketTitle());
+							tmpBtn.setSize(260, 20);
+							tmpBtn.setLocation(60, TOPPADDING
+									+ (questionCnt + childCnt) * QUESTIONHGAP);
+							tmpBtn.addActionListener(this);
+							tmpBtn.setFocusable(false);
+							add(tmpBtn);
 
-						tmpLb = new JLabel(tmpTicket.getUserName());
-						tmpLb.setSize(60, 40);
-						tmpLb.setLocation(380, TOPNUMPADDING
-								+ (questionCnt + childCnt) * QUESTIONHGAP);
-						add(tmpLb);
+							tmpLb = new JLabel(tmpTicket.getUserName());
+							tmpLb.setSize(60, 40);
+							tmpLb.setLocation(380, TOPNUMPADDING
+									+ (questionCnt + childCnt) * QUESTIONHGAP);
+							add(tmpLb);
+						}
 					}
 				}
 			}
