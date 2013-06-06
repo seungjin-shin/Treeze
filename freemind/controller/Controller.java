@@ -1509,7 +1509,8 @@ public class Controller  implements MapModuleChangeObserver {
 			for(int i = 0; i < getNaviOs().size(); i++){
 				os = getNaviOs().get(i);
 				try {
-					os.write((NAVINUM + "start").getBytes());
+					if(os != null)
+						os.write((NAVINUM + "start").getBytes());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

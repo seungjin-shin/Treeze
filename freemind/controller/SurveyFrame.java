@@ -152,16 +152,17 @@ class SurveyResultFrame extends JFrame implements ActionListener{
 		okBtn.setSize(130, 30);
 		okBtn.setLocation(300, 300);
 		add(okBtn);
+
+		JPanel resultPn = new ResultPanel();
+		resultPn.setSize(480, 160);
+		resultPn.setLocation(10, 120);
+		add(resultPn);
 		
 		JPanel resultPn2 = new ResultPanel2();
 		resultPn2.setSize(460, 100);
 		resultPn2.setLocation(20, 160);
 		add(resultPn2);
 		
-		JPanel resultPn = new ResultPanel();
-		resultPn.setSize(480, 160);
-		resultPn.setLocation(10, 120);
-		add(resultPn);
 	}
 	public void paint(Graphics g){
 		

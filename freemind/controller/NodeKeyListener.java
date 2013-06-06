@@ -75,7 +75,8 @@ public class NodeKeyListener implements KeyListener {
 			for(int i = 0; i < c.getNaviOs().size(); i++){
 				os = c.getNaviOs().get(i);
 				try {
-					os.write((NAVINUM + "start").getBytes());
+					if(os != null)
+						os.write((NAVINUM + "start").getBytes());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -104,7 +105,8 @@ public class NodeKeyListener implements KeyListener {
 			for(int i = 0; i < c.getNaviOs().size(); i++){
 				os = c.getNaviOs().get(i);
 				try {
-					os.write((NAVINUM + jsonString).getBytes()); // 다 보내
+					if(os != null)
+						os.write((NAVINUM + jsonString).getBytes()); // 다 보내
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
