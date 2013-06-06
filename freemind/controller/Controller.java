@@ -1084,6 +1084,7 @@ public class Controller  implements MapModuleChangeObserver {
 		}
          
       	  System.out.println("set state false");
+      	  getSlideList().clear();
       	  
       	OutputStream tmpOs;
 		for(int i = 0; i < getNaviOs().size(); i++){
