@@ -178,14 +178,17 @@ class Start extends Thread {
 								}
 							}
 							if(twoAnswer){
-								idxStr = ticket.getPosition().substring(0, (i * 2) - 1);
+							if (parentPositionCnt > 0) {
+								idxStr = ticket.getPosition().substring(0,
+										(parentPositionCnt * 2) - 1);
 								splitStr = idxStr.split("/");
 								tmp = c.getModel().getRootNode(); // 소켓 받는 부분
-								
+
 								for (i = 0; i < splitStr.length; i++) {
 									tmp = (MindMapNode) tmp.getChildAt(Integer
 											.parseInt(splitStr[i]));
 								}
+							}
 							}
 							else if(betweenStu){
 								idxStr = ticket.getPosition().substring(0, ticket.getPosition().length() - 2); 
