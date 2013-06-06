@@ -13,7 +13,7 @@ public class Ticket{
 	private String ticketPosition;
 	private String contents;
 	private String userName;
-	private ArrayList<Ticket> childList;
+	private ArrayList<Ticket> childList = new ArrayList<Ticket>();
 	private boolean haveChild;
 	
 	public ArrayList<Ticket> getChildList() {

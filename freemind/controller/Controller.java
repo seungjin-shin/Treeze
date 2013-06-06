@@ -50,6 +50,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.AccessControlException;
@@ -208,7 +209,12 @@ public class Controller  implements MapModuleChangeObserver {
     private MindMapController mc;
 
 	public ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
-    int yesCnt = 0;
+	public ArrayList<Socket> socketList = new ArrayList<Socket>();
+    public ArrayList<Socket> getSocketList() {
+		return socketList;
+	}
+
+	int yesCnt = 0;
     int noCnt = 0;
     int totalCnt = 0;
     int classId = 0;
@@ -1043,6 +1049,7 @@ public class Controller  implements MapModuleChangeObserver {
         	// 여기에 바로가기 될듯
 //            logger.info("ZoomInAction actionPerformed");
         	//
+        	final String CLOSELECTURE = "3";
         	LectureInfo lectureInfo;
     		lectureInfo = FreemindLectureManager.getInstance();
     		
@@ -1077,7 +1084,20 @@ public class Controller  implements MapModuleChangeObserver {
 		}
          
       	  System.out.println("set state false");
-        	
+      	  
+      	OutputStream tmpOs;
+		for(int i = 0; i < getNaviOs().size(); i++){
+			tmpOs = getNaviOs().get(i);
+			try {
+				if(tmpOs != null){
+					tmpOs.write(CLOSELECTURE.getBytes("UTF-8"));
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+      	  
         	new LoggedInFrame(mc);
            }}
     

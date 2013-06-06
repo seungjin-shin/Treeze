@@ -178,7 +178,7 @@ class Start extends Thread {
 								}
 							}
 							if(twoAnswer){
-								idxStr = ticket.getPosition().substring(0, i * 2);
+								idxStr = ticket.getPosition().substring(0, (i * 2) - 1);
 								splitStr = idxStr.split("/");
 								tmp = c.getModel().getRootNode(); // 소켓 받는 부분
 								

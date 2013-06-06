@@ -100,10 +100,12 @@ public class UploadToServer {
         	  StringBody lectureTitle = new StringBody(lectureName, Charset.forName("UTF-8"));
         	  StringBody profEmailBody = new StringBody(profEmail, Charset.forName("UTF-8"));
         	  StringBody lectureState = new StringBody(state, Charset.forName("UTF-8"));
+        	  StringBody profssorNameBody = new StringBody("이민석", Charset.forName("UTF-8"));
            
         	  multipart.addPart("lectureName", lectureTitle);  
         	  multipart.addPart("professorEmail", profEmailBody);
         	  multipart.addPart("stateOfLecture", lectureState);
+        	  multipart.addPart("professorName", profssorNameBody);
 
         	  post.setEntity(multipart);  
         	  HttpResponse response = httpClient.execute(post);  
