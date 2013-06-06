@@ -167,14 +167,14 @@ class QuestionFrame extends JFrame{
 					if(tmpTicketList.get(i).isHaveChild()){
 						for(int j = 0; j < tmpTicketList.get(i).getChildList().size(); j++){
 							Ticket tmp = tmpTicketList.get(i).getChildList().get(j);
-								if(tmpTicket.getTicketPosition().substring(0, tmpTicket.getTicketPosition().length() - 2).equals(tmpTicket.getTicketPosition())){
-									tmpTicketList.get(i).getChildList().get(i).setHaveChild(true);
-									tmpTicketList.get(i).getChildList().get(i).getChildList().add(tmpTicket);
-									ticketList.remove(tmpTicket);
-									childTotalCnt++;
-									questionCnt--;
-									break;
-								}
+							if(tmpTicket.getTicketPosition().substring(0, tmpTicket.getTicketPosition().length() - 2).equals(tmpTicketList.get(i).getTicketPosition())){
+								tmp.setHaveChild(true);
+								tmp.getChildList().add(tmpTicket);
+								ticketList.remove(tmpTicket);
+								childTotalCnt++;
+								questionCnt--;
+								break;
+							}
 						}
 					}
 				}

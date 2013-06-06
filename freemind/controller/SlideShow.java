@@ -196,7 +196,7 @@ public class SlideShow {
 						}
 					}
 					else if(e.getKeyCode() == KeyEvent.VK_F4){
-						
+						new SurveyFrame(c.getNaviOs());
 					}
 					else
 						return;
