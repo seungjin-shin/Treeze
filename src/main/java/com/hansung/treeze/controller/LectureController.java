@@ -29,10 +29,12 @@ public class LectureController {
 
 		return "jsonView";
 	}
-
+	
 	@RequestMapping(value = "/setStateOfLecture", method = RequestMethod.POST)
 	public String setStateOfLecture(Lecture model, ModelMap map) {
 		Lecture lecture = lectureService.findOne(model.getLectureId());
+		logger.info("state :::::::::::::"+model.getStateOfLecture());
+		lecture.setStateOfLecture(model.getStateOfLecture());
 		lectureService.saveLecture(lecture);
 		map.put("lecture", lecture);
 
