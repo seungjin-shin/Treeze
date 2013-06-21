@@ -64,21 +64,6 @@ class SurveyFrame extends JFrame implements ActionListener{
 		
 		surveyStr = surveyTf.getText();
 		
-		System.out.println("원래 설문  : " + surveyStr);
-//		try {
-//			surveyStr = new String(surveyTf.getText().getBytes(), "UTF-8");
-//			System.out.println(surveyStr);
-//		} catch (UnsupportedEncodingException e2) {
-//			// TODO Auto-generated catch block
-//			e2.printStackTrace();
-//		}
-//		try {
-//			//surveyStr = new String(surveyStr.trim().getBytes(), "UTF-8");
-//			System.out.println("UTF-8  설문  : " + surveyStr);
-//		} catch (UnsupportedEncodingException e2) {
-//			// TODO Auto-generated catch block
-//			e2.printStackTrace();
-//		}
 		JDialog dlg;
 		
 		if(surveyStr.equals("")){

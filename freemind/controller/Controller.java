@@ -254,7 +254,7 @@ public class Controller  implements MapModuleChangeObserver {
 		this.totalCnt = totalCnt;
 	}
 
-	public NaviSocket nvSck = new NaviSocket(this);
+	public FreemindSocket nvSck = new FreemindSocket(this);
     
     public ArrayList<OutputStream> getNaviOs() {
 		return naviOs;
@@ -370,8 +370,6 @@ public class Controller  implements MapModuleChangeObserver {
         //Create the ToolBar
         northToolbarPanel = new JPanel(new BorderLayout());
         toolbar = new MainToolBar(this);
-        
-        // 여기서 MAIn
         
         mFilterController = new FilterController(this);
         filterToolbar = mFilterController.getFilterToolbar();
@@ -1046,9 +1044,6 @@ public class Controller  implements MapModuleChangeObserver {
         public SelectLectureAction(Controller controller) {
            super("Close lecture"); }
         public void actionPerformed(ActionEvent e) {
-        	// 여기에 바로가기 될듯
-//            logger.info("ZoomInAction actionPerformed");
-        	//
         	final String CLOSELECTURE = "3";
         	LectureInfo lectureInfo;
     		lectureInfo = FreemindLectureManager.getInstance();

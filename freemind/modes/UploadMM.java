@@ -90,8 +90,6 @@ public class UploadMM extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			UploadToServer UTS = new UploadToServer();
-			//UTS.doFileUpload(sList);
-			//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
 			mc.removeUploadMM();
 		}
 		

@@ -58,10 +58,6 @@ public class NodeKeyListener implements KeyListener {
 	}
 
 	public void keyPressed(KeyEvent e) {
-//		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-//			c.getSlideShow().setfocusnext();
-//			c.getSlideShow().show();
-//		}
 		final String NAVINUM = "0";
 		OutputStream os;
 

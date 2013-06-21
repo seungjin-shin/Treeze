@@ -143,7 +143,6 @@ public class SlideShow {
 							}
 						}
 						
-						 // 여기서도 소켓 보내야대
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						showpause();
 					} else if(e.getKeyCode() == KeyEvent.VK_PAGE_DOWN){
@@ -229,11 +228,10 @@ public class SlideShow {
 					i = ImageIO.read(new File(slideShow.getfocus().imgPath
 							+ slideShow.getfocus().getNodeName() + ".jpg"));
 				}
-				// i = ImageIO.read(new File(str));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} // 변형하고자 하는 이미지
+			} 
 			Image img = i.getScaledInstance((int) xsize, (int) ysize,
 					Image.SCALE_DEFAULT); // 사이즈 변경
 			g.drawImage(img, 0, 0, this); // 이미지 그리기. 좌표 수정

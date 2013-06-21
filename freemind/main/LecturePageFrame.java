@@ -69,7 +69,7 @@ public class LecturePageFrame extends JFrame {
 		classPanel = new ClassPanel(this, mc);
 		
 		setSize(950, 800);
-		setLayout(null);//#afd679
+		setLayout(null);
 		
 		getContentPane().setBackground(new Color(141, 198, 63));
 

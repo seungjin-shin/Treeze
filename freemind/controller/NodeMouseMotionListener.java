@@ -60,8 +60,6 @@ public class NodeMouseMotionListener implements MouseMotionListener,
     public void mouseClicked(MouseEvent e) {
         if (mListener != null)
             mListener.mouseClicked(e);
-        System.out.println("Click"); //막아야돼
-        //System.out.println(c.getModeController().getSelected().getNodeLevel());
         String nodeText = c.getModeController().getSelected().getText();
         MindMapNode questionNode = c.getModeController().getSelected();
         MindMapNode questionNodeParent;//
@@ -78,7 +76,7 @@ public class NodeMouseMotionListener implements MouseMotionListener,
         	idxStr = "";
         
         while(!questionNode.isRoot()){
-        	questionNodeParent = questionNode.getParentNode(); // 클릭하고 노드 idx 보내서 질문 리스트 받아와
+        	questionNodeParent = questionNode.getParentNode(); 
         	idx = questionNodeParent.getChildPosition(questionNode);
         	idxReverseList.add(idx);
         	questionNode = questionNodeParent;

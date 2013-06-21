@@ -63,7 +63,7 @@ public class LoggedInFrame extends JFrame {
 		logo = new ImageIcon(logoURL).getImage();
 		
 		setSize(950, 800);
-		setLayout(null);//#afd679
+		setLayout(null);
 		
 		getContentPane().setBackground(new Color(141, 198, 63));
 		JLabel name = new JLabel("Minsuk Lee");

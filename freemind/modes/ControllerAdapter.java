@@ -637,9 +637,6 @@ public abstract class ControllerAdapter implements ModeController {
     //
 	public void removeTOC(){
 		toc.setVisible(false);
-//		JDialog dlg = new JDialog(getController().getJFrame(),"대화상자",true);
-//		 dlg.setBounds(150,200,200,100);
-//		 dlg.setVisible(true);
 		upload = new UploadMM(getController()
 				.getSlideList(), mc);
 	}
@@ -670,11 +667,9 @@ public abstract class ControllerAdapter implements ModeController {
 						fileName.length()).equals(".pdf")) {
 
 					try {
-						// JFrame tmp = getController().getJFrame();
 						
 
 						filePath = theFile.getCanonicalPath();
-						// 이미지화 하고 이미지 이름 만들어
 						pdf2img(filePath, theFile.getName());
 						
 						//tempateChk == true pdf에 양식 있는거
@@ -694,7 +689,6 @@ public abstract class ControllerAdapter implements ModeController {
 							UploadToServer UTS = new UploadToServer();
 							UTS.doFileUpload(getController()
 									.getSlideList(), filePath, theFile.getName(), classId);
-//							//UTS.doFileUpload(mmFilePath + ".mm","http://localhost:8080/ImageUploadTest/file.jsp");
 
 							theFile = new File(mmFilePath + ".mm");
 						}
@@ -708,12 +702,7 @@ public abstract class ControllerAdapter implements ModeController {
 				try {
 					lastCurrentDir = theFile.getParentFile();
 					
-					//File demoFile = new File("C:\\test\\리눅스 1강demo.mm");
 					load(theFile);
-					//load(demoFile);
-					//getRootNode().
-					//mc.addNew((MindMapNode)getRootNode().getChildAt(1), MindMapController.NEW_CHILD, null);
-					
 //					if(templateChk)
 //						upload = new UploadMM(getController()
 //								.getSlideList(), mc);
@@ -786,7 +775,6 @@ public abstract class ControllerAdapter implements ModeController {
 					sData = new SlideData();
 
 					tmp = newLine[j].split(" ");
-					//sData.setImgIdx(tmp[0]);
 					temp = tmp[0].split("\\.");
 					
 					for(int l = 0; l < temp.length; l++) // idx 정보 = depth 넣어

@@ -160,7 +160,6 @@ class QuestionFrame extends JFrame{
 				
 				for(int i = 0; i < tmpTicketList.size(); i++){
 					if (tmpTicket.getTicketPosition().substring(0,tmpTicket.getTicketPosition().length() - 2).equals(tmpTicketList.get(i).getTicketPosition())) {
-						// 자식으로 들어감
 						tmpTicketList.get(i).setHaveChild(true);
 						tmpTicketList.get(i).getChildList().add(tmpTicket);
 						ticketList.remove(tmpTicket);
@@ -171,7 +170,6 @@ class QuestionFrame extends JFrame{
 					if (tmpTicketList.get(i).isHaveChild()) {
 						for (int j = 0; j < tmpTicketList.get(i).getChildList()
 								.size(); j++) {
-							// 자식에 자식으로 들어감
 							Ticket tmp = tmpTicketList.get(i).getChildList().get(j);
 							if (tmpTicket.getTicketPosition().substring(0,tmpTicket.getTicketPosition().length() - 2).equals(tmp.getTicketPosition())) {
 								tmp.setHaveChild(true);

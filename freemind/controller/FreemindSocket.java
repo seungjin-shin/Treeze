@@ -33,12 +33,12 @@ import freemind.modes.MindIcon;
 import freemind.modes.MindMapNode;
 import freemind.modes.UploadToServer;
 
-public class NaviSocket extends JFrame implements Runnable{
+public class FreemindSocket extends JFrame implements Runnable{
 	private JTextArea textArea;
 	private JScrollPane pane;
 	Controller c;
 	Socket s;
-	public NaviSocket(Controller c) {
+	public FreemindSocket(Controller c) {
 		this.c = c;
 		setTitle("Navi Server");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -122,7 +122,7 @@ class Start extends Thread {
 			write("------- A user is connect. --------");
 			System.out.println("------- A user is connect. --------");
 			while (true) {
-				cnt = is.read(b); // 받는 부분 // 프로토콜 정해서 해
+				cnt = is.read(b); // 받는 부분
 				if(cnt == -1){
 					System.out.println("socket end");
 					write("socket end");
@@ -143,7 +143,7 @@ class Start extends Thread {
 						c.setTotalCnt(c.getTotalCnt() + 1);
 					}
 					else if(chkStr.equals(QUESTION)){
-						rcvStr = str.substring(1, str.length()); // 질문 처리
+						rcvStr = str.substring(1, str.length());
 						System.out.println(rcvStr);
 						TicketInfo ticket = new TicketInfo();
 						FreemindGson myGson = new FreemindGson();
@@ -154,18 +154,15 @@ class Start extends Thread {
 						}.getType();
 						ticket = (TicketInfo) gson.fromJson(rcvStr, type);
 						
-							//new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
 							String idxStr = ticket.getPosition(); 
 							String[] splitStr;
 							splitStr = idxStr.split("/");
-							MindMapNode tmp = c.getModel().getRootNode(); // 소켓 받는 부분
-							// idxStr == "root" 면 root
-							//아니면 찾아
+							MindMapNode tmp = c.getModel().getRootNode(); 
+
 							int parentPositionCnt = 0;
 							if(!idxStr.equals("root")){
 								for (i = 0; i < splitStr.length; i++) {
 									if(Integer.parseInt(splitStr[i]) == tmp.getChildCount() || tmp.getChildCount() == 0){
-										//split lend
 										if(i + 2 <= splitStr.length){
 											parentPositionCnt = i;
 											twoAnswer = true; // 답글에 답글
@@ -182,7 +179,7 @@ class Start extends Thread {
 								idxStr = ticket.getPosition().substring(0,
 										(parentPositionCnt * 2) - 1);
 								splitStr = idxStr.split("/");
-								tmp = c.getModel().getRootNode(); // 소켓 받는 부분
+								tmp = c.getModel().getRootNode(); 
 
 								for (i = 0; i < splitStr.length; i++) {
 									tmp = (MindMapNode) tmp.getChildAt(Integer
@@ -193,7 +190,7 @@ class Start extends Thread {
 							else if(betweenStu){
 								idxStr = ticket.getPosition().substring(0, ticket.getPosition().length() - 2); 
 								splitStr = idxStr.split("/");
-								tmp = c.getModel().getRootNode(); // 소켓 받는 부분
+								tmp = c.getModel().getRootNode(); 
 								
 								for (i = 0; i < splitStr.length; i++) {
 									tmp = (MindMapNode) tmp.getChildAt(Integer
@@ -228,35 +225,6 @@ class Start extends Thread {
 									e1.printStackTrace();
 								}
 							}
-							
-							//학생 싹 돌려야돼
-							
-//						//61.43.139.10:8080/treeze/createTicket
-//						//String ticketTitle, String classId, String position, String contents, String userEmail
-//						UploadToServer uts = new UploadToServer();
-//						//uts.ticketPost(ticketTitle, classId, position, contents, userEmail)
-//						
-//						String idxStr = "root";
-//						String[] splitStr;
-//						splitStr = idxStr.split("/");
-//						MindMapNode tmp = c.getModel().getRootNode(); // 소켓 받는 부분
-//						// idxStr == "root" 면 root
-//						//아니면 찾아
-//						if(!idxStr.equals("root")){
-//							for(i = 0; i < splitStr.length; i++) {
-//								tmp = (MindMapNode) tmp.getChildAt(Integer
-//										.parseInt(splitStr[i]));
-//							}
-//						}
-//						
-//						MindMapNode questionNode = tmp;
-//						System.out.println(questionNode.getText());
-//						MindIcon icon = MindIcon.factory("help");
-//						if(!questionNode.isQuestion()){
-//							questionNode.addIcon(icon, -1); // ? 아이콘 한번만
-//							questionNode.setQuestion(true);
-//						}
-//						c.getModeController().nodeChanged(questionNode);
 					}
 					
 					if(c.getTotalCnt() == c.getNaviOs().size()){

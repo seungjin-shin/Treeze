@@ -66,7 +66,6 @@ public class TableOfContents extends JFrame {
 		setLayout(null);
 
 		JLabel title = new JLabel("table of contents");
-		//JLabel title = new JLabel(new ImageIcon("c:\\test\\수학의 정석\\지수.jpg"));
 		title.setSize(100, 40);
 		title.setLocation(150, 20);
 		add(title);
@@ -98,10 +97,6 @@ public class TableOfContents extends JFrame {
 		
 		iPanel.setBorder(b1);
 		
-		//iPanel.setLayout(new FlowLayout());
-//		iPanel.setSize(200, 600);
-//		iPanel.setLocation(500, 50);
-
 		nPanel = new JPanel();
 		nPanel.setBorder(b1);
 		
@@ -151,12 +146,10 @@ public class TableOfContents extends JFrame {
 		nPanel.add(jText);
 		nPanel.add(pageTf);
 		add(nPanel);
-		//add(iPanel);
 
 		setTitle("textarea");
 		setVisible(true);
 		setLocation(600, 200);
-		//setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
 	class ImgPanel extends JPanel{
