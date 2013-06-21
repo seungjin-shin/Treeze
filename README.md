@@ -1,3 +1,12 @@
-임시사이트
+<h2>This Branch is empty </h2>
 
-http://dewliteyez.appspot.com/
+<h3 style="color:#999999"><strong>If you want to show source code  </strong>about 'Treeze', Click other branch like 'for_professor', 
+'for_student', 'gh-pages', 'server', 'android_client', 'treeze_map'. </h3>
+
+- Treeze Open Source project site
+
+http://treeze.github.com/Treeze
+
+- Treeze Service site
+
+http://www.treeze-map.appspot.com/main.jsp
