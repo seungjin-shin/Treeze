@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item
+		android:showAsAction="ifRoom|withText"
+		android:id="@+id/item1"
+		android:icon="@android:drawable/ic_menu_add"
+		android:title="Add"
+	/>
+	<item
+		android:id="@+id/item2"
+		android:showAsAction="always"
+		android:title="Action item with icon"
+		android:icon="@android:drawable/ic_menu_search"
+	/>
+	<item
+		android:title="Normal item"
+		android:id="@+id/item3"
+	/>
+</menu>

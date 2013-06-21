@@ -1,0 +1,7 @@
+교수용 PC 프로그램 : 외부 파일 참조에 대한 이슈가 있기 때문에 첨부한 classes 안에 Treeze server.jar를 넣고 실행해야 정상 작동한다.
+
+학생용 Application : 안드로이드 용 어플리케이션
+
+Treeze.com : http://treeze-map.appspot.com/
+
+프로젝트 소개 페이지 : treeze.github.com/Treeze

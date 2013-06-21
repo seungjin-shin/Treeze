@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Treeze&middot; Social Collaborating PT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Le styles -->
+  <link href="./assets/css/bootstrap.css" rel="stylesheet">
+  <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet">
+  <style>
+
+    /* GLOBAL STYLES
+    -------------------------------------------------- */
+    /* Padding below the footer and lighter body text */
+
+    body {
+      padding-bottom: 40px;
+      color: #5a5a5a;
+    }
+
+
+
+    /* CUSTOMIZE THE NAVBAR
+    -------------------------------------------------- */
+
+    /* Special class on .container surrounding .navbar, used for positioning it into place. */
+    .navbar-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      margin-top: 20px;
+      margin-bottom: -90px; /* Negative margin to pull up carousel. 90px is roughly margins and height of navbar. */
+    }
+    .navbar-wrapper .navbar {
+
+    }
+
+    .navbar .navbar-inner {
+      padding: 0;
+    }
+    .navbar .nav {
+      margin: 0;
+      display: table;
+      width: 100%;
+    }
+    .navbar .nav li {
+      display: table-cell;
+      width: 1%;
+      float: none;
+    }
+    .navbar .nav li a {
+      font-weight: bold;
+      text-align: center;
+      border-left: 1px solid rgba(255,255,255,.75);
+      border-right: 1px solid rgba(0,0,0,.1);
+    }
+    .navbar .nav li:first-child a {
+      border-left: 0;
+      border-radius: 3px 0 0 3px;
+    }
+    .navbar .nav li:last-child a {
+      border-right: 0;
+      border-radius: 0 3px 3px 0;
+    }
+
+    /* Downsize the brand/project name a bit */
+    .navbar .brand {
+      padding: 14px 20px 16px; /* Increase vertical padding to match navbar links */
+      font-size: 16px;
+      font-weight: bold;
+      text-shadow: 0 -1px 0 rgba(0,0,0,.5);
+    }
+
+
+
+    /* Offset the responsive button for proper vertical alignment */
+    .navbar .btn-navbar {
+      margin-top: 10px;
+    }
+
+
+
+    /* CUSTOMIZE THE CAROUSEL
+    -------------------------------------------------- */
+
+    /* Carousel base class */
+    .carousel {
+      margin-bottom: 2px;
+    }
+
+    .carousel .container {
+      position: relative;
+      z-index: 9;
+    }
+
+
+
+    .carousel .item {
+      height: 500px;
+    }
+    .carousel img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      height: 500px;
+    }
+
+    .carousel-caption {
+      background-color: transparent;
+      position: static;
+      max-width: 750px;
+      padding: 0 20px;
+      margin-top: 200px;
+    }
+    .carousel-caption h1,
+    .carousel-caption .lead {
+      margin: 0;
+      line-height: 1.25;
+      color: #fff;
+      text-shadow: 0 1px 1px rgba(0,0,0,.4);
+    }
+    .carousel-caption .btn {
+      margin-top: 10px;
+    }
+
+
+
+    /* MARKETING CONTENT
+    -------------------------------------------------- */
+
+    /* Center align the text within the three columns below the carousel */
+    .marketing .span4 {
+      text-align: center;
+    }
+    .marketing h2 {
+      font-weight: normal;
+    }
+    .marketing .span4 p {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+
+    /* Featurettes
+    ------------------------- */
+
+    .featurette-divider {
+      margin: 80px 0; /* Space out the Bootstrap <hr> more */
+    }
+    .featurette {
+      padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
+      overflow: hidden; /* Vertically center images part 2: clear their floats. */
+    }
+    .featurette-image {
+      margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
+    }
+
+    /* Give some space on the sides of the floated elements so text doesn't run right into it. */
+    .featurette-image.pull-left {
+      margin-right: 40px;
+    }
+    .featurette-image.pull-right {
+      margin-left: 40px;
+    }
+
+    /* Thin out the marketing headings */
+    .featurette-heading {
+      font-size: 50px;
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+
+
+    /* RESPONSIVE CSS
+    -------------------------------------------------- */
+
+    @media (max-width: 979px) {
+
+      .container.navbar-wrapper {
+        margin-bottom: 0;
+        width: auto;
+      }
+      .navbar-inner {
+        border-radius: 0;
+        margin: -20px 0;
+      }
+
+      .carousel .item {
+        height: 500px;
+      }
+      .carousel img {
+        width: auto;
+        height: 500px;
+      }
+
+      .featurette {
+        height: auto;
+        padding: 0;
+      }
+      .featurette-image.pull-left,
+      .featurette-image.pull-right {
+        display: block;
+        float: none;
+        max-width: 40%;
+        margin: 0 auto 20px;
+      }
+    }
+
+
+    @media (max-width: 767px) {
+
+      .navbar-inner {
+        margin: -20px;
+      }
+
+      .carousel {
+        margin-left: -20px;
+        margin-right: -20px;
+      }
+      .carousel .container {
+
+      }
+      .carousel .item {
+        height: 300px;
+      }
+      .carousel img {
+        height: 300px;
+      }
+      .carousel-caption {
+        width: 65%;
+        padding: 0 70px;
+        margin-top: 100px;
+      }
+      .carousel-caption h1 {
+        font-size: 30px;
+      }
+      .carousel-caption .lead,
+      .carousel-caption .btn {
+        font-size: 18px;
+      }
+
+      .marketing .span4 + .span4 {
+        margin-top: 40px;
+      }
+
+      .featurette-heading {
+        font-size: 30px;
+      }
+      .featurette .lead {
+        font-size: 18px;
+        line-height: 1.5;
+      }
+
+    }
+    </style>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="./assets/js/html5shiv.js"></script>
+      <![endif]-->
+
+      <!-- Fav and touch icons -->
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./assets/ico/apple-touch-icon-144-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./assets/ico/apple-touch-icon-72-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" href="./assets/ico/apple-touch-icon-57-precomposed.png">
+      <link rel="shortcut icon" href="./assets/ico/favicon.png">
+    </head>
+
+    <body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true">
+
+
+
+    <!-- NAVBAR
+    ================================================== -->
+    <div class="navbar-wrapper">
+      <!-- Wrap the .navbar in .container to center it within the absolutely positioned parent. -->
+      <div class="container">
+
+        <div class="masthead">
+             <div class="row">
+            <div class="span5">
+            <h1 style="color:rgb(234,240,226);">
+              <p style="font-size:60px;margin-left:170px;margin-bottom:30px">Treeze</p></h1>
+            </div>
+            <div class="span6" style="margin-left:0px;margin-top:10px">
+              <h2 style="color:rgb(58, 145, 47);">
+              <p style="font-size:20px;">Open source Project</p></h2>
+            </div>
+            </div>
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="container" >
+                <ul class="nav">
+                  <li><a href="index.html"><strong>Introduction</strong></a></li>
+                  <li class="active"><a href="tutorials.html"><strong>Tutorials</strong></a></li>
+    
+                  <li><a href="download.html"><strong>Download</strong></a></li>
+                  <li><a href="source.html"><strong>Source</strong></a></li>
+                  <li><a href="about us.html"><strong>About us</strong></a></li>
+     
+                </ul>
+              </div>
+            </div>
+          </div><!-- /.navbar -->
+        </div>
+      </div>
+    </div><!-- /.navbar-wrapper -->
+
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div style="background-image: linear-gradient(to top, rgb(142,198,63),  rgb(162,208,99))">
+
+      <div class="carousel-inner" style="height:180px;">
+        <div class="item active">
+          <!--<img src="./assets/img/examples/slide-01.jpg" alt="">-->
+          <div class="container">
+            <div class="carousel-caption" style="padding:85px">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.carousel -->
+    <div class="container">
+      <div class="row-fluid">
+        <div class="span12">
+          <!--<div class="container">-->
+          <div class="container-fluid" style="margin-top:5px">
+           <div class="span2" style="margin-top:10px">
+             <hr>
+           </div>
+           <div class="span4" style="color:rgb(35,31,32);">
+             <H2>Tutorials Page</H2>
+           </div>
+           <div class="span6" style="margin-top:10px; margin-left:-40px">
+             <hr>
+           </div>
+           <!--</div>-->
+         </div>
+       </div>
+     </div>
+   </div><!-- /.carousel -->
+
+   
+   <div class="row-fluid" style="margin-top: 40px;" >
+    <div class="span12">
+      <div class="row-fluid">
+        <div class="container">
+
+          <div class="row">
+            <div class="span3 bs-docs-sidebar">
+              <ul class="nav nav-list bs-docs-sidenav affix-top">
+                <li class="acttive">
+                  <li><a href="#Professor-tutorials"><i class="icon-chevron-right"></i>1. Professor Tutorial</a></li>
+                  <li><a href="#student-tutorials"><i class="icon-chevron-right"></i>2. Student(학생) Tutorial</a></li>
+              
+                </li>
+
+              </ul>
+            </div>
+            <div class="span9" style="border: 3px solid rgb(142,198,63);">
+        <!-- PC-tutorials     class="hero-unit"
+        ================================================== -->
+        <section id="Professor-tutorials">
+          <div class="page-header">
+            <h2>1. Professor tutorial</h2>
+          </div>
+          <div style="padding:10px">
+            <h3>STEP 1.</h3>
+            <h4>① ID 또는 E-mail을 입력합니다. <br>
+                ② 비밀번호를 입력합니다. <br>
+                ③ 로그인 버튼을 클릭하면 로그인 할 수 있습니다.</h4>
+              <img src="./assets/img/1.JPG">
+              <h3>STEP 2. </h3>
+              <h4>① 강좌등록을 등록할 수 있는 버튼입니다. <br>
+                 ② 강좌삭제를 할 수 있는 버튼입니다.<br>
+                 ③ 과목명을 클릭하면 특정 과목 페이지로 이동합니다.</h4>
+              <img src="./assets/img/2.jpg">
+              <h3>STEP 2.1 강좌등록</h3>
+              <h4>① 강좌등록 버튼을 통해 강좌를 개설합니다. <br></h4>
+              <img src="./assets/img/3.jpg">
+              <h4>② 강의 명을 입력합니다.<br>
+                  ③ 강좌 개설 버튼을 누르면 강좌가 개설됩니다.<br>
+              <h3>STEP 2.2 강좌삭제</h3>
+              <h4>②강좌삭제 수정 버튼을 통해 강좌를 삭제합니다. <br></h4>
+              <img src="./assets/img/4.jpg">
+              <h4>①삭제 버튼을 누르면 해당 강좌가 삭제됩니다.<br></h4>
+              <h3>STEP 2.3 강좌 시작하기</h3>
+              <img src="./assets/img/5.jpg">
+              <h4>① 강의를 추가할 수 있는 버튼입니다.<br>
+                  ② 강의를 삭제할 수 있는 버튼입니다.<br>
+                  ③ 슬라이드 쇼를 할 수 있는 버튼입니다.<br>
+                  ④ 마인드맵을 볼 수 있는 버튼입니다.</h4>
+              <h3>STEP 2.3.1 강좌 추가하기</h3>
+              <img src="./assets/img/6.jpg">
+              <h4>① 강의추가 버튼을 누릅니다.<br>
+                -> 강의명을 쓰고 파일추가 버튼을 누릅니다.<br>
+                -> 추가할 파일을 선택 후 열기 버튼을 누릅니다.<br>
+                -> 강의 추가하기 버튼을 누르면 강의가 업로드 됩니다.</h4>
+              <h3>STEP 2.3.2</h3>
+              <img src="./assets/img/7.jpg">
+              <h4>① 강의를 수정할 수 있는 버튼입니다.<br>
+                 ② 강의를 삭제할 수 있는 버튼입니다.<br></h4>
+              <h3>STEP 2.3.2.1 강좌 수정하기</h3>
+              <img src="./assets/img/8.jpg">
+              <h4>-> 강의 수정을 클릭합니다. <br>
+                  -> 수정될 파일을 선택 후 열기 버튼을 클릭합니다.<br>
+                  -> 강의가 수정됩니다.</h4>
+              <h3>STEP 2.3.2.2 강좌 삭제하기</h3>
+              <img src="./assets/img/9.jpg">
+              <h4>삭제하고자 하는 강의의 삭제 버튼을 클릭합니다.<br>
+                 -> 강의가 삭제됩니다.</h4>
+              <h3>STEP 2.3.3</h3>
+              <h3>STEP 2.3.4</h3>
+              <h3>STEP 3.이해도 평가하기 </h3>
+              <img src="./assets/img/19.jpg">
+              <h4>① 설문 내용을 작성합니다.<br>
+                 ② 작성한 내용을 학생에게 송신합니다.<br></h4>
+              <img src="./assets/img/20.jpg">   
+              <h4>교수는 학생들의 강의 이해도를 확인할 수 있습니다.</h4>
+              <h3>STEP 4.강의자료 -> 마인드맵.</h3>
+              <img src="./assets/img/13.jpg">
+              <h3>STEP 4.1 </h3>
+              <h4>강의 목차 있는 강의자료 -> 마인드맵 생성<br></h4>
+              <h4>동영상 삽입</h4>
+              <h3>STEP 4.2 </h3>
+              <h4>파일 -> 열기 버튼 클릭</h4>
+              <img src="./assets/img/14.jpg">
+              <h4>강의자료 선택 -> 열기 버튼 클릭</h4>
+              <img src="./assets/img/15.jpg">
+              <h4>① 강의자료 목차 자동생성 ② 초기 마인드맵 생성 -> 마인드맵 최상단 노드 입력.</h4>
+              <img src="./assets/img/16.jpg">
+              <h4>② 마인드맵 현재 노드 선택(마우스 클릭 또는 키보드 방향키 입력, 선택된 노드는 회색)
+              -> ① 하위노드에 추가될 강의자료 페이지 더블클릭 -> ②최상단 노드의 하위노드 생성.</h4>
+              <img src="./assets/img/17.jpg">
+              <h4>마인드맵 완성 -> ID 입력 -> Password 입력 -> Upload 버튼 클릭 -> 마인드맵 Upload 완료.</h4>
+              <img src="./assets/img/18.jpg">
+              <h4>강의 목차가 없는 강의 자료 -> 마인드맵 동영상 Tutorial.</h4>
+              <h4>동영상 삽입</h4>   
+
+
+          </div>
+          <hr>
+
+  </section>
+        <!-- Phone-tutorials
+        ================================================== -->
+        <section id="student-tutorials">
+          <div class="page-header">
+            <h2> 2. Student tutorial</h2>
+          </div>
+          <div style="padding:10px">
+            <h3>STEP 1.</h3>
+            <h4> ① ID 또는 E-mail을 입력합니다. <br>
+              ② 비밀번호를 입력합니다.<br>
+              ③ 로그인 버튼을 클릭하면 로그인 할 수 있습니다.</br>
+             <img src="./assets/img/1.JPG">
+             <br>
+             <br>
+             <h3>STEP 2.</h3>
+             <h4>① 자신이 등록한 과목명이 표시됩니다.<br>
+              &nbsp&nbsp&nbsp&nbsp자신이 수강하고 있는 강의의 과목명이 표시됩니다.<br>
+              &nbsp&nbsp&nbsp&nbsp과목명을 클릭하면 해당 강의를 수강할 수 있습니다.<br>
+              ② 강의의 상태를 표시합니다.<br>
+              &nbsp&nbsp&nbsp&nbsp온라인으로 표시된 강의는 현재 강의가 진행중인 상태입니다.<br>
+              &nbsp&nbsp&nbsp&nbsp오프라인으로 표시된 강의는 현재 강의가 진행되지 않고 있는 상태입니다.<br>
+              &nbsp&nbsp&nbsp&nbsp온라인으로 표시된 강의의 과목명을 클릭할 경우<br>
+              &nbsp&nbsp&nbsp&nbsp해당 강의를 수강할 수 있습니다.</h4>
+              <img src="./assets/img/21.JPG">
+              <br>
+              <br>
+              <h3>STEP 3.</h3>
+              <h4>수업이 진행중인 강좌에 들어갔을 경우의 화면입니다.<br>
+                ① 수업이 진행된 경로를 선으로 표시합니다.<br>
+                지나온 경로는 파란색으로 표시되며<br>
+                아직 배우지 않은 목차 경로의 선은 검은색으로 표시됩니다.<br>
+                ② 현재 강의가 진행중인 목차입니다.<br>
+                진행 중인 목차에 파란색으로 원을 둘러 표시됩니다.<br>
+                ③ 현재 배우고 있는 목차 다음에 배울 목차입니다.<br>
+                다음에 진행될 목차는 파란색 점선으로 표시됩니다.</h4>
+                <img src="./assets/img/22.JPG">
+                <h4>슬라이드가 진행될 때마다 표시되는 경로와 목차의 표시가 실시간으로 달라집니다.</h4>
+                <br>
+                <br>
+                <h3>STEP 4.</h3>
+                <h4>① 특정 노드를 클릭하면 <br>
+                  ② 노드에 해당되는 강의자료 슬라이드를 볼 수 있습니다.<br>
+                   <img src="./assets/img/23.JPG">
+                   <br>
+                   <br>
+                   <h3>STEP 5.</h3>
+                   <h4>① 밑줄이나 그림을 그릴 수 있는 펜을 활성화 합니다.<br>
+                    ② 필기 했던 것들을 지울 수 있습니다.<br>
+                    ③ 메모를 통해 필기를 할 수 있습니다.<br>
+                    ④ 메모장을 통해 필기가 가능하고 메모장 윗부분의 접기를 클릭할 경우<br>
+                    ⑤ 필기를 접은 상태로 바뀌게 됩니다.</h4>
+                    <img src="./assets/img/24.JPG">
+          </div>
+
+  </section>
+ 
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+ <hr>
+
+ <div class="footer">
+  <p>&copy; Company 2013 Social Collaborating PT 'Treeze'</p>
+</div>
+
+</div>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./assets/js/jquery.js"></script>
+    <script src="./assets/js/bootstrap-transition.js"></script>
+    <script src="./assets/js/bootstrap-alert.js"></script>
+    <script src="./assets/js/bootstrap-modal.js"></script>
+    <script src="./assets/js/bootstrap-dropdown.js"></script>
+    <script src="./assets/js/bootstrap-scrollspy.js"></script>
+    <script src="./assets/js/bootstrap-tab.js"></script>
+    <script src="./assets/js/bootstrap-tooltip.js"></script>
+    <script src="./assets/js/bootstrap-popover.js"></script>
+    <script src="./assets/js/bootstrap-button.js"></script>
+    <script src="./assets/js/bootstrap-collapse.js"></script>
+    <script src="./assets/js/bootstrap-carousel.js"></script>
+    <script src="./assets/js/bootstrap-typeahead.js"></script>
+    <script>
+    !function ($) {
+      $(function(){
+          // carousel demo
+          $('#myCarousel').carousel()
+        })
+    }(window.jQuery)
+    </script>
+   <script src="./assets/js/holder/holder.js"></script>
+  </body>
+  </html>
