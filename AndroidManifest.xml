@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.androidmind.MainActivity"
+            android:name="com.mindmap.androidmind.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
@@ -31,44 +31,44 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.androidmind.PptImg"
+            android:name="com.mindmap.androidmind.PptImg"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name="com.example.androidmind.TicketWriteActivity"
+            android:name="com.mindmap.androidmind.TicketWriteActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name="com.example.androidmind.HomeActivity"
+            android:name="com.mindmap.androidmind.HomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             
         </activity>
             <activity
-            android:name="com.example.androidmind.Intro"
+            android:name="com.mindmap.androidmind.Intro"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             
         </activity>
         <activity
-            android:name="com.example.androidmind.MindMapActivity"
+            android:name="com.mindmap.androidmind.MindMapActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name="com.example.androidmind.TicketActivity"
+            android:name="com.mindmap.androidmind.TicketActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name="com.example.androidmind.DetailTicketActivity"
+            android:name="com.mindmap.androidmind.DetailTicketActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
