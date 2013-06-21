@@ -1,4 +1,4 @@
-교수용 PC 프로그램 : 외부 파일 참조에 대한 이슈가 있기 때문에 첨부한 classes 안에 Treeze server.jar를 넣고 실행해야 정상 작동한다.
+교수용 PC 프로그램 : 외부 파일 참조에 대한 이슈가 있기 때문에 교수용 PC 프로그램 프로젝트 소스 안에서 /bin/classes 안에 Treeze server.jar를 넣고 실행해야 정상 작동한다.
 
 학생용 Application : 안드로이드 용 어플리케이션
 

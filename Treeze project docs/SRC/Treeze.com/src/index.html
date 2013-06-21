@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Treeze&middot; Social Collaborating PT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Le styles -->
+  <link href="./assets/css/bootstrap.css" rel="stylesheet">
+  <link href="./assets/css/bootstrap-responsive.css" rel="stylesheet">
+  <style>
+
+    /* GLOBAL STYLES
+    -------------------------------------------------- */
+    /* Padding below the footer and lighter body text */
+
+    body {
+      padding-bottom: 40px;
+      color: #5a5a5a;
+    }
+
+
+
+    /* CUSTOMIZE THE NAVBAR
+    -------------------------------------------------- */
+
+    /* Special class on .container surrounding .navbar, used for positioning it into place. */
+    .navbar-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      margin-top: 20px;
+      margin-bottom: -90px; /* Negative margin to pull up carousel. 90px is roughly margins and height of navbar. */
+    }
+    .navbar-wrapper .navbar {
+
+    }
+
+    .navbar .navbar-inner {
+      padding: 0;
+    }
+    .navbar .nav {
+      margin: 0;
+      display: table;
+      width: 100%;
+    }
+    .navbar .nav li {
+      display: table-cell;
+      width: 1%;
+      float: none;
+    }
+    .navbar .nav li a {
+      font-weight: bold;
+      text-align: center;
+      border-left: 1px solid rgba(255,255,255,.75);
+      border-right: 1px solid rgba(0,0,0,.1);
+    }
+    .navbar .nav li:first-child a {
+      border-left: 0;
+      border-radius: 3px 0 0 3px;
+    }
+    .navbar .nav li:last-child a {
+      border-right: 0;
+      border-radius: 0 3px 3px 0;
+    }
+
+    /* Downsize the brand/project name a bit */
+    .navbar .brand {
+      padding: 14px 20px 16px; /* Increase vertical padding to match navbar links */
+      font-size: 16px;
+      font-weight: bold;
+      text-shadow: 0 -1px 0 rgba(0,0,0,.5);
+    }
+
+
+
+    /* Offset the responsive button for proper vertical alignment */
+    .navbar .btn-navbar {
+      margin-top: 10px;
+    }
+
+
+
+    /* CUSTOMIZE THE CAROUSEL
+    -------------------------------------------------- */
+
+    /* Carousel base class */
+    .carousel {
+      margin-bottom: 2px;
+    }
+
+    .carousel .container {
+      position: relative;
+      z-index: 9;
+    }
+
+
+
+    .carousel .item {
+      height: 500px;
+    }
+    .carousel img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      height: 500px;
+    }
+
+    .carousel-caption {
+      background-color: transparent;
+      position: static;
+      max-width: 750px;
+      padding: 0 20px;
+      margin-top: 200px;
+    }
+    .carousel-caption h1,
+    .carousel-caption .lead {
+      margin: 0;
+      line-height: 1.25;
+      color: #fff;
+      text-shadow: 0 1px 1px rgba(0,0,0,.4);
+    }
+    .carousel-caption .btn {
+      margin-top: 10px;
+    }
+
+
+
+    /* MARKETING CONTENT
+    -------------------------------------------------- */
+
+    /* Center align the text within the three columns below the carousel */
+    .marketing .span4 {
+      text-align: center;
+    }
+    .marketing h2 {
+      font-weight: normal;
+    }
+    .marketing .span4 p {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+
+    /* Featurettes
+    ------------------------- */
+
+    .featurette-divider {
+      margin: 80px 0; /* Space out the Bootstrap <hr> more */
+    }
+    .featurette {
+      padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
+      overflow: hidden; /* Vertically center images part 2: clear their floats. */
+    }
+    .featurette-image {
+      margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
+    }
+
+    /* Give some space on the sides of the floated elements so text doesn't run right into it. */
+    .featurette-image.pull-left {
+      margin-right: 40px;
+    }
+    .featurette-image.pull-right {
+      margin-left: 40px;
+    }
+
+    /* Thin out the marketing headings */
+    .featurette-heading {
+      font-size: 50px;
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+
+
+    /* RESPONSIVE CSS
+    -------------------------------------------------- */
+
+    @media (max-width: 979px) {
+
+      .container.navbar-wrapper {
+        margin-bottom: 0;
+        width: auto;
+      }
+      .navbar-inner {
+        border-radius: 0;
+        margin: -20px 0;
+      }
+
+      .carousel .item {
+        height: 500px;
+      }
+      .carousel img {
+        width: auto;
+        height: 500px;
+      }
+
+      .featurette {
+        height: auto;
+        padding: 0;
+      }
+      .featurette-image.pull-left,
+      .featurette-image.pull-right {
+        display: block;
+        float: none;
+        max-width: 40%;
+        margin: 0 auto 20px;
+      }
+    }
+
+
+    @media (max-width: 767px) {
+
+      .navbar-inner {
+        margin: -20px;
+      }
+
+      .carousel {
+        margin-left: -20px;
+        margin-right: -20px;
+      }
+      .carousel .container {
+
+      }
+      .carousel .item {
+        height: 300px;
+      }
+      .carousel img {
+        height: 300px;
+      }
+      .carousel-caption {
+        width: 65%;
+        padding: 0 70px;
+        margin-top: 100px;
+      }
+      .carousel-caption h1 {
+        font-size: 30px;
+      }
+      .carousel-caption .lead,
+      .carousel-caption .btn {
+        font-size: 18px;
+      }
+
+      .marketing .span4 + .span4 {
+        margin-top: 40px;
+      }
+
+      .featurette-heading {
+        font-size: 30px;
+      }
+      .featurette .lead {
+        font-size: 18px;
+        line-height: 1.5;
+      }
+
+    }
+    </style>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="./assets/js/html5shiv.js"></script>
+      <![endif]-->
+
+      <!-- Fav and touch icons -->
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./assets/ico/apple-touch-icon-144-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./assets/ico/apple-touch-icon-72-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" href="./assets/ico/apple-touch-icon-57-precomposed.png">
+      <link rel="shortcut icon" href="./assets/ico/favicon.png">
+    </head>
+
+    <body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true">
+
+
+
+    <!-- NAVBAR
+    ================================================== -->
+    <div class="navbar-wrapper">
+      <!-- Wrap the .navbar in .container to center it within the absolutely positioned parent. -->
+      <div class="container">
+
+        <div class="masthead">
+          <div class="row">
+            <div class="span5">
+              <h1 style="color:rgb(234,240,226);">
+                <p style="font-size:60px;margin-left:170px;margin-bottom:30px">Treeze</p></h1>
+              </div>
+              <div class="span6" style="margin-left:0px;margin-top:10px">
+                <h2 style="color:rgb(58, 145, 47);">
+                  <p style="font-size:20px;">Open source Project</p></h2>
+                </div>
+              </div>
+              <div class="navbar">
+                <div class="navbar-inner">
+                  <div class="container" >
+                    <ul class="nav">
+                      <li class="active"><a href="index.html"><strong>Introduction</strong></a></li>
+                      <li><a href="tutorials.html"><strong>Tutorials</strong></a></li>
+
+                      <li><a href="download.html"><strong>Download</strong></a></li>
+                      <li><a href="source.html"><strong>Source</strong></a></li>
+                      <li><a href="about us.html"><strong>About us</strong></a></li>
+
+                    </ul>
+                  </div>
+                </div>
+              </div><!-- /.navbar -->
+            </div>
+          </div>
+        </div><!-- /.navbar-wrapper -->
+
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div style="background-image: linear-gradient(to top, rgb(142,198,63),  rgb(162,208,99))">
+
+      <div class="carousel-inner" style="height:180px;">
+        <div class="item active">
+          <!--<img src="./assets/img/examples/slide-01.jpg" alt="">-->
+          <div class="container">
+            <div class="carousel-caption" style="padding:85px">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.carousel -->
+    <div class="container">
+      <div class="row-fluid">
+        <div class="span12">
+          <!--<div class="container">-->
+          <div class="container-fluid" style="margin-top:5px">
+           <div class="span2" style="margin-top:10px">
+             <hr>
+           </div>
+           <div class="span8" style="color:rgb(35,31,32);">
+             <H2>Open source 'Treeze' Introduction</H2>
+           </div>
+           <div class="span2" style="margin-top:10px; margin-left:-40px">
+             <hr>
+           </div>
+           <!--</div>-->
+         </div>
+       </div>
+     </div>
+   </div><!-- /.carousel -->
+
+   <div class="container" >
+    <div class="hero-unit">
+      <h2 class="featurette-heading">Welcome Treeze &amp; Teaching Assist</h2>
+      <center><img src="./assets/img/mindmap_sample.jpg"></center>
+      </br>
+      <p class="lead">Treeze &amp; Teaching Assists help students to understand the entire flow of the lecture using mindmap.
+        For effective communication between professors and students, student can question contents of lecturing using pc in lecture time and professor can increase participation rate providing feedback on the question.</p>
+
+        <button class="btn btn-large btn-block btn-primary" type="button"><a href="http://treeze-map.appspot.com">Go to the Open Lecture "Treeze.com"</a></button>
+</br>
+        <center><img src="./assets/img/intro1.jpg"></center>
+        </br>
+Using customized 'Freemind' java program, it can change presentation file to Mind-Map summarized on contents of course by table of contents.
+</br>
+</br>
+        <center><img src="./assets/img/intro2.jpg"></center>
+        </br>
+Students can take class as being connected the class in 'Treeze' through 'teaching assistant' program. And all-around understanding about lesson  can be increased using various features of the program.
+</br>
+</br>
+        <center><img src="./assets/img/nev.jpg"></center>
+        </br>
+'Teaching Assitant'  specify path presentation(class) on Mind-Map.
+</br>
+</br>
+        <center><img src="./assets/img/question.jpg"></center>
+        </br>
+We can query or reply node(small unit) on Mind-Map in class on the way.
+</br>
+</br>
+        <center><img src="./assets/img/quiz.jpg"></center>
+         </br>
+During school hours professor can check learning understanding of students
+</br>
+</br>
+         <center><img src="./assets/img/memo.jpg"></center>
+        </br>
+Students can take down a lecture on particular slide on node in Mind-Map.
+</br>
+</br>
+        <center><img src="./assets/img/web1.jpg"></center>
+         </br>
+
+         <center><img src="./assets/img/web2.jpg"></center>
+          </br>
+
+          <center><img src="./assets/img/web3.jpg"></center>
+           </br>
+Website 'Treeze.com' provide environment that we can share and feedback Mind-Map(contents of class) as a result it promote to upgrade contents of class. 
+
+</br>
+</br>
+      </div>
+
+    <hr>
+
+    <div class="footer">
+      <p>&copy; Company 2013 Social Collaborating PT 'Treeze'</p>
+    </div>
+
+    </div>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./assets/js/jquery.js"></script>
+    <script src="./assets/js/bootstrap-transition.js"></script>
+    <script src="./assets/js/bootstrap-alert.js"></script>
+    <script src="./assets/js/bootstrap-modal.js"></script>
+    <script src="./assets/js/bootstrap-dropdown.js"></script>
+    <script src="./assets/js/bootstrap-scrollspy.js"></script>
+    <script src="./assets/js/bootstrap-tab.js"></script>
+    <script src="./assets/js/bootstrap-tooltip.js"></script>
+    <script src="./assets/js/bootstrap-popover.js"></script>
+    <script src="./assets/js/bootstrap-button.js"></script>
+    <script src="./assets/js/bootstrap-collapse.js"></script>
+    <script src="./assets/js/bootstrap-carousel.js"></script>
+    <script src="./assets/js/bootstrap-typeahead.js"></script>
+    <script>
+    !function ($) {
+      $(function(){
+          // carousel demo
+          $('#myCarousel').carousel()
+        })
+    }(window.jQuery)
+    </script>
+    <script src="./assets/js/holder/holder.js"></script>
+  </body>
+  </html>
