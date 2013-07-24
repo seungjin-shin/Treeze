@@ -70,6 +70,7 @@ public class LoginFrame extends JFrame {
 		JButton upBtn = new JButton("Login");
 		upBtn.setSize(90, 30);
 		upBtn.setLocation(140, 160);
+		//upBtn.setLocation(20, 20);
 		upBtn.addActionListener(btnListner);
 		add(upBtn);
 		

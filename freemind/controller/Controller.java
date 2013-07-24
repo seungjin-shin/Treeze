@@ -254,9 +254,12 @@ public class Controller  implements MapModuleChangeObserver {
 		this.totalCnt = totalCnt;
 	}
 
-	public FreemindSocket nvSck = new FreemindSocket(this);
+	public FreemindSocket fmSck = new FreemindSocket(this);
     
-    public ArrayList<OutputStream> getNaviOs() {
+    public FreemindSocket getFmSck() {
+		return fmSck;
+	}
+	public ArrayList<OutputStream> getNaviOs() {
 		return naviOs;
 	}
 
@@ -290,7 +293,7 @@ public class Controller  implements MapModuleChangeObserver {
             logger = frame.getLogger(this.getClass().getName());
         }
         //dewlit
-        Thread t = new Thread(nvSck);
+        Thread t = new Thread(fmSck);
     	t.start();
         //dewlit
         
@@ -1492,27 +1495,30 @@ public class Controller  implements MapModuleChangeObserver {
         public SlideShowAction() {
            super("Slide Show"); }
         public void actionPerformed(ActionEvent e) {
-        	final String NAVINUM = "0";
-
-        	if(getSlideList().size() == 0)
-				return;
         	
-			getSlideShow().setfocus(getSlideList().get(0));
-			getSlideShow().show();
-			
-			OutputStream os;
-			
-			for(int i = 0; i < getNaviOs().size(); i++){
-				os = getNaviOs().get(i);
-				try {
-					if(os != null)
-						os.write((NAVINUM + "start").getBytes());
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			System.out.println("start");
+        	
+        	
+//        	final String NAVINUM = "0";
+//
+//        	if(getSlideList().size() == 0)
+//				return;
+//        	
+//			getSlideShow().setfocus(getSlideList().get(0));
+//			getSlideShow().show();
+//			
+//			OutputStream os;
+//			
+//			for(int i = 0; i < getNaviOs().size(); i++){
+//				os = getNaviOs().get(i);
+//				try {
+//					if(os != null)
+//						os.write((NAVINUM + "start").getBytes());
+//				} catch (IOException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//			}
+//			System.out.println("start");
         }}
 
     protected class ZoomInAction extends AbstractAction {

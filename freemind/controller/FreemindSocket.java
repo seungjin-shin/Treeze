@@ -53,6 +53,12 @@ public class FreemindSocket extends JFrame implements Runnable{
 		setVisible(true);
 	}
 
+	public void write(String content) {
+		textArea.append(content + "\n");
+		pane.getVerticalScrollBar().setValue(
+				pane.getVerticalScrollBar().getMaximum());
+	}
+
 	public void init() {
 
 		try {

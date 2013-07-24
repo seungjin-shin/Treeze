@@ -644,7 +644,10 @@ public abstract class ControllerAdapter implements ModeController {
 		upload.setVisible(false);
 	}
 	
+	
+	//dewlit
     public void open(MindMapController mc, String classId) {
+    	
         JFileChooser chooser = getFileChooser();
         // fc, 24.4.2008: multi selection has problems as setTitle in Controller doesn't works
 //        chooser.setMultiSelectionEnabled(true);
@@ -652,6 +655,7 @@ public abstract class ControllerAdapter implements ModeController {
         String filePath = "";
         String mmFilePath = null;
         this.mc = mc;
+        
         if (returnVal==JFileChooser.APPROVE_OPTION) {
         	File[] selectedFiles;
 			if (chooser.isMultiSelectionEnabled()) {
@@ -702,10 +706,15 @@ public abstract class ControllerAdapter implements ModeController {
 				try {
 					lastCurrentDir = theFile.getParentFile();
 					
+					
+					
 					load(theFile);
 //					if(templateChk)
 //						upload = new UploadMM(getController()
 //								.getSlideList(), mc);
+					
+					addQuestionNode(getRootNode());
+					
 				} catch (Exception ex) {
 					handleLoadingException(ex);
 					break;
@@ -716,6 +725,22 @@ public abstract class ControllerAdapter implements ModeController {
 //        templateChk = false;
         getController().setTitle();
     }
+    
+    public void addQuestionNode(MindMapNode node){
+    	
+    	int i;
+    	MindMapNode forAddingQuestionNode = node;
+		
+    	for(i = 0; i < forAddingQuestionNode.getChildCount(); i++){
+    		mc.addNew(forAddingQuestionNode, MindMapController.NEW_CHILD, null);
+    		
+    		if(forAddingQuestionNode.hasChildren()){
+    			addQuestionNode((MindMapNode)forAddingQuestionNode.getChildAt(i));
+    		}
+    		forAddingQuestionNode = (MindMapNode)forAddingQuestionNode.getChildAt(i);
+    	}
+    }
+    
     // dewlit
     public void pdf2img(String filePath, String fileName) throws IOException{
     	PdfReader reader = new PdfReader(filePath);
@@ -959,7 +984,7 @@ public abstract class ControllerAdapter implements ModeController {
 		sData.setsCnt(page);
 		reader.close();
     }
-    
+    //dewlit
     public void pdf2mm(String filePath, String fileName) throws IOException{
     	int depth = 0;
 		String tmp[];

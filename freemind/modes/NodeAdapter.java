@@ -74,9 +74,10 @@ public abstract class NodeAdapter implements MindMapNode {
 	private String dewlit = "dd";
 	private boolean isQuestion = false;
 
-   
 
-
+	
+	
+	
 
 	final static int SHIFT = -2;//height of the vertical shift between node and its closest child
     public final static int HGAP = 20;//width of the horizontal gap that contains the edges
@@ -997,7 +998,7 @@ freemind.main.Resources.getInstance().logException(			e);
 //        }
     	
     	//dewlit
-    	node.setAttribute("dewlit",	"dewlit");
+    	//node.setAttribute("dewlit",	"dewlit");
     	//dewlit
 
         /** fc, 12.6.2005: XML must not contain any zero characters. */

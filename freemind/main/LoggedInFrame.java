@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -87,38 +88,72 @@ public class LoggedInFrame extends JFrame {
 		address2.setFont(midF);
 		address2.setLocation(50, 370);
 		add(address2);
+		
+		JPanel ltPanel = new JPanel();
+		ltPanel.setLayout(new GridLayout(1, 4, 10, 0));
+		ltPanel.setSize(580, 45);
+		ltPanel.setLocation(300, 75);
+		ltPanel.setBackground(new Color(141, 198, 63));
+		
 		tmp = getClass().getClassLoader().getResource("CreateLecture.png");
 		
 		JButton tmpBtn = new JButton(new ImageIcon(tmp));
-		tmpBtn.setSize(132, 45);
-		tmpBtn.setLocation(450, 75);
 		tmpBtn.setFocusable(false);
 		tmpBtn.addActionListener(createLs);
-		add(tmpBtn);
+		ltPanel.add(tmpBtn);
 		
 		tmp = getClass().getClassLoader().getResource("profile.png");
 		
 		tmpBtn = new JButton(new ImageIcon(tmp));
-		tmpBtn.setSize(130, 45);
-		tmpBtn.setLocation(300, 75);
 		tmpBtn.setFocusable(false);
-		add(tmpBtn);
+		ltPanel.add(tmpBtn);
 		
 		tmp = getClass().getClassLoader().getResource("deleteLecture.png");
 		
 		tmpBtn = new JButton(new ImageIcon(tmp));
-		tmpBtn.setSize(135, 42);
-		tmpBtn.setLocation(600, 75);
 		tmpBtn.setFocusable(false);
-		add(tmpBtn);
+		ltPanel.add(tmpBtn);
 		
 		tmp = getClass().getClassLoader().getResource("logout.png");
 		
 		tmpBtn = new JButton(new ImageIcon(tmp));
-		tmpBtn.setSize(132, 45);
-		tmpBtn.setLocation(750, 75);
 		tmpBtn.setFocusable(false);
-		add(tmpBtn);
+		ltPanel.add(tmpBtn);
+		
+		add(ltPanel);
+		
+		//befor layout
+//		JButton tmpBtn = new JButton(new ImageIcon(tmp));
+//		tmpBtn.setSize(132, 45);
+//		tmpBtn.setLocation(450, 75);
+//		tmpBtn.setFocusable(false);
+//		tmpBtn.addActionListener(createLs);
+//		add(tmpBtn);
+//		
+//		tmp = getClass().getClassLoader().getResource("profile.png");
+//		
+//		tmpBtn = new JButton(new ImageIcon(tmp));
+//		tmpBtn.setSize(130, 45);
+//		tmpBtn.setLocation(300, 75);
+//		tmpBtn.setFocusable(false);
+//		add(tmpBtn);
+//		
+//		tmp = getClass().getClassLoader().getResource("deleteLecture.png");
+//		
+//		tmpBtn = new JButton(new ImageIcon(tmp));
+//		tmpBtn.setSize(135, 42);
+//		tmpBtn.setLocation(600, 75);
+//		tmpBtn.setFocusable(false);
+//		add(tmpBtn);
+//		
+//		tmp = getClass().getClassLoader().getResource("logout.png");
+//		
+//		tmpBtn = new JButton(new ImageIcon(tmp));
+//		tmpBtn.setSize(132, 45);
+//		tmpBtn.setLocation(750, 75);
+//		tmpBtn.setFocusable(false);
+//		add(tmpBtn);
+		//befor layout
 		
 		sPanel.setBounds(290, 130, 600, 498);
 		add(sPanel);
@@ -270,6 +305,7 @@ class LecturePanel extends JPanel implements ActionListener{
 		String sHtml = "";
 		BufferedReader in = null;
 		String buf = "";
+		boolean isConnecError = false;
 		try
 		{
 		    URL url = new URL("http://61.43.139.10:8080/treeze/getMyLectures?professorEmail=" + "minsuk@hansung.ac.kr");
@@ -280,59 +316,71 @@ class LecturePanel extends JPanel implements ActionListener{
 		    {
 		        sHtml += buf;
 		    }
-		}
-		catch(Exception e)
-		{
-		    System.out.println("연결 에러");
-		}
-		finally
-		{
-		    if(sHtml.equals("")) sHtml = "Data가 존재하지 않습니다";
+		    
 		    try {
 				in.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		    
 		}
-		System.out.println(sHtml);
-		ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
-		Lecture tmpLecture;
-		Gson gson = new Gson();
-		
-		Type type = new TypeToken<ArrayLecture>() {
-		}.getType();
-		ArrayLecture jonResultlecturelist = (ArrayLecture) gson
-				.fromJson(sHtml, type);
-		lectureList = jonResultlecturelist.getLectures();
-		
-		Font midF = new Font("Serif", Font.BOLD, 30);
-		JButton tmpBtn;
-		lectureMap = new HashMap<String, String>();
-		
-		for(lectureCnt = 0; lectureCnt < lectureList.size(); lectureCnt++){
-			tmpLecture = lectureList.get(lectureCnt);
-			tmpBtn = new JButton(tmpLecture.getLectureName());
-			lectureMap.put(tmpLecture.getLectureName(), tmpLecture.getLectureId() + "");
-			tmpBtn.addActionListener(this);
-			tmpBtn.setFont(lagf);
-			tmpBtn.setSize(220, 50);
-			tmpBtn.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
-			add(tmpBtn);
-			
-			tmpLb = new JLabel(registered[lectureCnt % 18]);
-			tmpLb.setSize(100, 50);
-			tmpLb.setFont(midF);
-			tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
-			add(tmpLb);
-			
-			tmpLb = new JLabel(latestDay[lectureCnt % 18]);
-			tmpLb.setSize(140, 50);
-			tmpLb.setFont(midF);
-			tmpLb.setLocation(440, TOPPADDING + LECTUREHGAP * lectureCnt);
-			add(tmpLb);
+		catch(Exception e)
+		{
+			isConnecError = true;
+		    System.out.println("연결 에러");
+		    mc.getController().getFmSck().write("Server 연결 에러");
 		}
-		setPreferredSize(new Dimension(550, 20 + TOPPADDING + LECTUREHGAP * lectureCnt));
+		finally
+		{
+		    if(sHtml.equals("")){
+		    	sHtml = "Data가 존재하지 않습니다";
+		    	mc.getController().getFmSck().write("Data가 존재하지 않습니다");
+		    }
+		}
+		
+		if(!isConnecError){
+			System.out.println(sHtml);
+			ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
+			Lecture tmpLecture;
+			Gson gson = new Gson();
+
+			Type type = new TypeToken<ArrayLecture>() {
+			}.getType();
+			ArrayLecture jonResultlecturelist = (ArrayLecture) gson.fromJson(
+					sHtml, type);
+			lectureList = jonResultlecturelist.getLectures();
+
+			Font midF = new Font("Serif", Font.BOLD, 30);
+			JButton tmpBtn;
+			lectureMap = new HashMap<String, String>();
+
+			for (lectureCnt = 0; lectureCnt < lectureList.size(); lectureCnt++) {
+				tmpLecture = lectureList.get(lectureCnt);
+				tmpBtn = new JButton(tmpLecture.getLectureName());
+				lectureMap.put(tmpLecture.getLectureName(),
+						tmpLecture.getLectureId() + "");
+				tmpBtn.addActionListener(this);
+				tmpBtn.setFont(lagf);
+				tmpBtn.setSize(220, 50);
+				tmpBtn.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
+				add(tmpBtn);
+
+				tmpLb = new JLabel(registered[lectureCnt % 18]);
+				tmpLb.setSize(100, 50);
+				tmpLb.setFont(midF);
+				tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
+				add(tmpLb);
+
+				tmpLb = new JLabel(latestDay[lectureCnt % 18]);
+				tmpLb.setSize(140, 50);
+				tmpLb.setFont(midF);
+				tmpLb.setLocation(440, TOPPADDING + LECTUREHGAP * lectureCnt);
+				add(tmpLb);
+			}
+			setPreferredSize(new Dimension(550, 20 + TOPPADDING + LECTUREHGAP
+					* lectureCnt));
+		}
 	}
 		
 	public void paint(Graphics g) {

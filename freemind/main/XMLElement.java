@@ -205,7 +205,7 @@ public class XMLElement
     private String name;
     
     //dewlit
-    //private String dewlit = "dewlit";
+    private String dewlit = "dewlit";
     //dewlit
 
 
