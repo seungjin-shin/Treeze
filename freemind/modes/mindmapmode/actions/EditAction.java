@@ -115,8 +115,9 @@ public class EditAction extends AbstractAction implements ActorXml {
             final boolean isNewNode,
             final boolean parentFolded,
           final boolean editLong) {
-    	System.out.println(mMindMapController.getSelected().getText());
+    	System.out.println("EditAction에서 " + mMindMapController.getSelected().getText());
     	// 노드 텍스트 수정 action remove
+    	
 //        if (node == null) {
 //            return;
 //        }

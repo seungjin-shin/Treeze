@@ -204,7 +204,6 @@ class Start extends Thread {
 								}
 								
 							}
-							
 							MindMapNode questionNode = tmp;
 							System.out.println(questionNode.getText() + "에 질문 받음");
 							MindIcon icon = MindIcon.factory("help");

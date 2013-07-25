@@ -712,33 +712,45 @@ public abstract class ControllerAdapter implements ModeController {
 //					if(templateChk)
 //						upload = new UploadMM(getController()
 //								.getSlideList(), mc);
-					
-					addQuestionNode(getRootNode());
-					
+					//addQuestionNode(mc, getRootNode());
 				} catch (Exception ex) {
 					handleLoadingException(ex);
 					break;
 				}
 			}
-			
         }
 //        templateChk = false;
         getController().setTitle();
     }
     
-    public void addQuestionNode(MindMapNode node){
+    public void addQuestionNode(MindMapController mc, MindMapNode node){
     	
-    	int i;
     	MindMapNode forAddingQuestionNode = node;
-		
-    	for(i = 0; i < forAddingQuestionNode.getChildCount(); i++){
-    		mc.addNew(forAddingQuestionNode, MindMapController.NEW_CHILD, null);
-    		
-    		if(forAddingQuestionNode.hasChildren()){
-    			addQuestionNode((MindMapNode)forAddingQuestionNode.getChildAt(i));
-    		}
-    		forAddingQuestionNode = (MindMapNode)forAddingQuestionNode.getChildAt(i);
+    	int i;
+    	//Question 노드 추가 하기 전 카운트
+    	int cnt = forAddingQuestionNode.getChildCount();
+    	
+    	mc.addNew(forAddingQuestionNode, MindMapController.NEW_CHILD, null);
+    	
+    	for(i = 0; i < cnt; i++){
+    		addQuestionNode(mc, (MindMapNode)forAddingQuestionNode.getChildAt(i));
     	}
+    	
+//    	do{
+//    		oldHaveChild = !forAddingQuestionNode.hasChildren();
+//    		
+//    		mc.addNew(forAddingQuestionNode, MindMapController.NEW_CHILD, null);
+//    		
+//    		if(oldHaveChild)
+//    			return;
+//    		
+//    		if(forAddingQuestionNode.hasChildren()){
+//    			addQuestionNode((MindMapNode)forAddingQuestionNode.getChildAt(i));
+//    			i++;
+//    			forAddingQuestionNode = (MindMapNode)forAddingQuestionNode.getChildAt(i);
+//    		}
+//    	}while(i < cnt);
+    	
     }
     
     // dewlit

@@ -1496,7 +1496,7 @@ public class Controller  implements MapModuleChangeObserver {
            super("Slide Show"); }
         public void actionPerformed(ActionEvent e) {
         	
-        	
+        	mc.addQuestionNode(mc, mc.getRootNode());
         	
 //        	final String NAVINUM = "0";
 //

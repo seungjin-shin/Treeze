@@ -69,7 +69,7 @@ public class NewChildAction extends AbstractAction implements ActorXml {
     	NewNodeAction addNodeAction = (NewNodeAction) action;
 		NodeAdapter parent = this.c.getNodeFromID(addNodeAction.getNode());
 		int index = addNodeAction.getIndex();
-		MindMapNode newNode = c.newNode("Question", parent.getMap());
+		MindMapNode newNode = c.newNode("Q", parent.getMap());
 		
 		c.setChildName("");
         
