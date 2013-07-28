@@ -118,161 +118,166 @@ public class EditAction extends AbstractAction implements ActorXml {
     	System.out.println("EditAction에서 " + mMindMapController.getSelected().getText());
     	// 노드 텍스트 수정 action remove
     	
-//        if (node == null) {
-//            return;
-//        }
-//    	final MapView map = node.getMap();
-//		map.validate();
-//		map.invalidate();
-//    	
-//        if(! node.focused()){
-//            node.requestFocus();
-//         }
-//        stopEditing();
-//         //EditNodeBase.closeEdit();
-//        mMindMapController.setBlocked(true); // locally "modal" stated
-//        
-//        String text = node.getModel().toString();
-//        String htmlEditingOption = mMindMapController.getController().getProperty("html_editing_option");
-//
-//        boolean isHtmlNode = HtmlTools.isHtmlNode(text);
-//        boolean isLongNode = node.getIsLong();
-//
-//        // do we need a decision if plain or HTML editing?
-//        String useRichTextInNewLongNodes = (isHtmlNode)?"true":"false";
-//        // if the node is not already html, we ask if rich text or plain text edit.
-//		if(!isHtmlNode && ! isLongNode && editLong) {
-//        	// ask user:
-//    		int showResult = new OptionalDontShowMeAgainDialog(
-//					mMindMapController.getFrame().getJFrame(),
-//					mMindMapController.getSelectedView(),
-//					"edit.edit_rich_text",
-//					"edit.decision",
-//					mMindMapController,
-//					new OptionalDontShowMeAgainDialog.StandardPropertyHandler(
-//							mMindMapController.getController(),
-//							FreeMind.RESOURCES_REMIND_USE_RICH_TEXT_IN_NEW_LONG_NODES),
-//					OptionalDontShowMeAgainDialog.BOTH_OK_AND_CANCEL_OPTIONS_ARE_STORED)
-//					.show().getResult();
-//    		useRichTextInNewLongNodes = (showResult==JOptionPane.OK_OPTION)?"true":"false";
-//        }
-////        useRichTextInNewLongNodes = c.getController().getProperty("use_rich_text_in_new_long_nodes");
-//        boolean editHtml = isHtmlNode  || (editLong
-//				&& Tools.safeEquals(useRichTextInNewLongNodes, "true"));
-//        boolean editInternalWysiwyg = editHtml && Tools.safeEquals(htmlEditingOption,"internal-wysiwyg");
-//        boolean editExternal =        editHtml && Tools.safeEquals(htmlEditingOption,"external");
-//        
-//        if (editHtml && !isHtmlNode) {
-//        	text = HtmlTools.plainToHTML(text); 
-//        }
-//		if (editInternalWysiwyg) {
-//            EditNodeWYSIWYG editNodeWYSIWYG = new EditNodeWYSIWYG
-//            (node, text, firstEvent, mMindMapController,
-//                    new EditNodeBase.EditControl() {
-//                public void cancel() {
-//                    mMindMapController.setBlocked(false);                                        
-//                    mCurrentEditDialog = null;
-//                    mMindMapController.getController().obtainFocusForSelected(); 
-//                }
-//                public void ok(String newText) {
-//                    setHtmlText(node, newText);                    
-//            		cancel();
-//                    }
-//                public void split(String newText, int position) {
-//                    mMindMapController.splitNode(node.getModel(), position, newText);
-//                    cancel();                    
-//                    }}); // focus fix 
-//            mCurrentEditDialog = editNodeWYSIWYG;
-//            editNodeWYSIWYG.show();
-//            return; 
-//        }
-//        
-//		if (editExternal) {
-//            EditNodeExternalApplication editNodeExternalApplication = new EditNodeExternalApplication
-//            (node, text, firstEvent, mMindMapController,
-//                    new EditNodeBase.EditControl() {
-//                public void cancel() {
-//                    mMindMapController.setBlocked(false);                    
-//                    mCurrentEditDialog = null;
-//                    mMindMapController.getController().obtainFocusForSelected(); 
-//                }
-//                public void ok(String newText) {
-//                    setHtmlText(node, newText);                    
-//            		cancel();
-//                }
-//                public void split(String newText, int position) {
-//                    mMindMapController.splitNode(node.getModel(), position, newText);
-//                    cancel();                    
-//                    }}); // focus fix 
-//            mCurrentEditDialog = editNodeExternalApplication;
-//            editNodeExternalApplication.show();
-//            // We come here before quitting the editor window.
-//            return; }
-//        
-//        if (isLongNode || editLong) {
-//            EditNodeDialog nodeEditDialog =
-//                new EditNodeDialog(
-//                        node,
-//                        text,
-//                        firstEvent,
-//                        mMindMapController,
-//                        new EditNodeBase.EditControl() {
-//                            
-//                            public void cancel() {
-//                                mMindMapController.setBlocked(false);
-//                                mCurrentEditDialog = null;
-//                                mMindMapController.getController().obtainFocusForSelected(); // focus fix
-//                            }
-//                            
-//                            public void ok(String newText) {
-//                                setNodeText(node.getModel(), newText);
-//                                cancel();
-//                            }
-//                            
-//                            public void split(String newText, int position) {
-//                                mMindMapController.splitNode(node.getModel(), position, newText);
-//                                cancel();
-//                            }
-//                        });
-//            mCurrentEditDialog = nodeEditDialog;
-//            nodeEditDialog.show();
-//            return;
-//        }
-//        // inline editing:
-//        EditNodeTextField textfield =
-//            new EditNodeTextField(node, text, firstEvent, mMindMapController, new EditNodeBase.EditControl(){
-//                
-//                public void cancel() {
-//                    if (isNewNode) { // delete also the node and set focus to the parent
-//                        mMindMapController.getView().selectAsTheOnlyOneSelected(node);
-//                        Vector nodeList = new Vector();
-//                        nodeList.add(node.getModel());
-//                        mMindMapController.cut(nodeList);
-//                        mMindMapController.select(prevSelected);
-//                        // include max level for navigation
-//                        if (parentFolded) {
-//                            mMindMapController.setFolded(prevSelected.getModel(), true);
-//                        }
-//                    }
-//                    endEdit();
-//                }
-//                
-//                public void ok(String newText) {
-//                    setNodeText(node.getModel(), newText);
-//                    endEdit();
-//                }
-//                
-//                private void endEdit() {
-//                    mMindMapController.getController().obtainFocusForSelected();
-//                    mMindMapController.setBlocked(false);
-//                    mCurrentEditDialog = null;
-//                }
-//                
-//                public void split(String newText, int position) {
-//                }});
-//        mCurrentEditDialog = textfield;
-//        textfield.show();
-//        
+    	if(mMindMapController.getSelected().isQuestion()){
+    		System.out.println(" EditAction, 질문 선택했을때");
+    		return;
+    	}
+    	
+        if (node == null) {
+            return;
+        }
+    	final MapView map = node.getMap();
+		map.validate();
+		map.invalidate();
+    	
+        if(! node.focused()){
+            node.requestFocus();
+         }
+        stopEditing();
+         //EditNodeBase.closeEdit();
+        mMindMapController.setBlocked(true); // locally "modal" stated
+        
+        String text = node.getModel().toString();
+        String htmlEditingOption = mMindMapController.getController().getProperty("html_editing_option");
+
+        boolean isHtmlNode = HtmlTools.isHtmlNode(text);
+        boolean isLongNode = node.getIsLong();
+
+        // do we need a decision if plain or HTML editing?
+        String useRichTextInNewLongNodes = (isHtmlNode)?"true":"false";
+        // if the node is not already html, we ask if rich text or plain text edit.
+		if(!isHtmlNode && ! isLongNode && editLong) {
+        	// ask user:
+    		int showResult = new OptionalDontShowMeAgainDialog(
+					mMindMapController.getFrame().getJFrame(),
+					mMindMapController.getSelectedView(),
+					"edit.edit_rich_text",
+					"edit.decision",
+					mMindMapController,
+					new OptionalDontShowMeAgainDialog.StandardPropertyHandler(
+							mMindMapController.getController(),
+							FreeMind.RESOURCES_REMIND_USE_RICH_TEXT_IN_NEW_LONG_NODES),
+					OptionalDontShowMeAgainDialog.BOTH_OK_AND_CANCEL_OPTIONS_ARE_STORED)
+					.show().getResult();
+    		useRichTextInNewLongNodes = (showResult==JOptionPane.OK_OPTION)?"true":"false";
+        }
+//        useRichTextInNewLongNodes = c.getController().getProperty("use_rich_text_in_new_long_nodes");
+        boolean editHtml = isHtmlNode  || (editLong
+				&& Tools.safeEquals(useRichTextInNewLongNodes, "true"));
+        boolean editInternalWysiwyg = editHtml && Tools.safeEquals(htmlEditingOption,"internal-wysiwyg");
+        boolean editExternal =        editHtml && Tools.safeEquals(htmlEditingOption,"external");
+        
+        if (editHtml && !isHtmlNode) {
+        	text = HtmlTools.plainToHTML(text); 
+        }
+		if (editInternalWysiwyg) {
+            EditNodeWYSIWYG editNodeWYSIWYG = new EditNodeWYSIWYG
+            (node, text, firstEvent, mMindMapController,
+                    new EditNodeBase.EditControl() {
+                public void cancel() {
+                    mMindMapController.setBlocked(false);                                        
+                    mCurrentEditDialog = null;
+                    mMindMapController.getController().obtainFocusForSelected(); 
+                }
+                public void ok(String newText) {
+                    setHtmlText(node, newText);                    
+            		cancel();
+                    }
+                public void split(String newText, int position) {
+                    mMindMapController.splitNode(node.getModel(), position, newText);
+                    cancel();                    
+                    }}); // focus fix 
+            mCurrentEditDialog = editNodeWYSIWYG;
+            editNodeWYSIWYG.show();
+            return; 
+        }
+        
+		if (editExternal) {
+            EditNodeExternalApplication editNodeExternalApplication = new EditNodeExternalApplication
+            (node, text, firstEvent, mMindMapController,
+                    new EditNodeBase.EditControl() {
+                public void cancel() {
+                    mMindMapController.setBlocked(false);                    
+                    mCurrentEditDialog = null;
+                    mMindMapController.getController().obtainFocusForSelected(); 
+                }
+                public void ok(String newText) {
+                    setHtmlText(node, newText);                    
+            		cancel();
+                }
+                public void split(String newText, int position) {
+                    mMindMapController.splitNode(node.getModel(), position, newText);
+                    cancel();                    
+                    }}); // focus fix 
+            mCurrentEditDialog = editNodeExternalApplication;
+            editNodeExternalApplication.show();
+            // We come here before quitting the editor window.
+            return; }
+        
+        if (isLongNode || editLong) {
+            EditNodeDialog nodeEditDialog =
+                new EditNodeDialog(
+                        node,
+                        text,
+                        firstEvent,
+                        mMindMapController,
+                        new EditNodeBase.EditControl() {
+                            
+                            public void cancel() {
+                                mMindMapController.setBlocked(false);
+                                mCurrentEditDialog = null;
+                                mMindMapController.getController().obtainFocusForSelected(); // focus fix
+                            }
+                            
+                            public void ok(String newText) {
+                                setNodeText(node.getModel(), newText);
+                                cancel();
+                            }
+                            
+                            public void split(String newText, int position) {
+                                mMindMapController.splitNode(node.getModel(), position, newText);
+                                cancel();
+                            }
+                        });
+            mCurrentEditDialog = nodeEditDialog;
+            nodeEditDialog.show();
+            return;
+        }
+        // inline editing:
+        EditNodeTextField textfield =
+            new EditNodeTextField(node, text, firstEvent, mMindMapController, new EditNodeBase.EditControl(){
+                
+                public void cancel() {
+                    if (isNewNode) { // delete also the node and set focus to the parent
+                        mMindMapController.getView().selectAsTheOnlyOneSelected(node);
+                        Vector nodeList = new Vector();
+                        nodeList.add(node.getModel());
+                        mMindMapController.cut(nodeList);
+                        mMindMapController.select(prevSelected);
+                        // include max level for navigation
+                        if (parentFolded) {
+                            mMindMapController.setFolded(prevSelected.getModel(), true);
+                        }
+                    }
+                    endEdit();
+                }
+                
+                public void ok(String newText) {
+                    setNodeText(node.getModel(), newText);
+                    endEdit();
+                }
+                
+                private void endEdit() {
+                    mMindMapController.getController().obtainFocusForSelected();
+                    mMindMapController.setBlocked(false);
+                    mCurrentEditDialog = null;
+                }
+                
+                public void split(String newText, int position) {
+                }});
+        mCurrentEditDialog = textfield;
+        textfield.show();
+        
     }
     
     public void setNodeText(MindMapNode selected, String newText){

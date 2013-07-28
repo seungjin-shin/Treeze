@@ -667,6 +667,7 @@ public abstract class ControllerAdapter implements ModeController {
 				File theFile = selectedFiles[i];
 				String fileName;
 				fileName = theFile.getName();
+				
 				if (fileName.substring(fileName.length() - 4,
 						fileName.length()).equals(".pdf")) {
 

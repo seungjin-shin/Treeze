@@ -73,10 +73,17 @@ public abstract class NodeAdapter implements MindMapNode {
 	
 	private String dewlit = "dd";
 	private boolean isQuestion = false;
+	private boolean haveQuestion = false;
 
+	class A{
+		String dd="dewlit";
+	}
 
-	
-	
+	private A a = new A();
+
+	private String ticketTitle;
+	private String ticketContent;
+	private String ticketWriter;
 	
 
 	final static int SHIFT = -2;//height of the vertical shift between node and its closest child
@@ -152,15 +159,47 @@ public abstract class NodeAdapter implements MindMapNode {
     // Constructors
     //
 
+	public boolean isHaveQuestion() {
+		return haveQuestion;
+	}
+
+	public void setHaveQuestion(boolean haveQuestion) {
+		this.haveQuestion = haveQuestion;
+	}
 	
-	 public boolean isQuestion() {
-			return isQuestion;
-		}
+	public boolean isQuestion() {
+		return isQuestion;
+	}
 
-		public void setQuestion(boolean isQuestion) {
-			this.isQuestion = isQuestion;
-		}
+	public void setQuestion(boolean isQuestion) {
+		this.isQuestion = isQuestion;
+	}
+	public String getTicketTitle() {
+		return ticketTitle;
+	}
 
+	public void setTicketTitle(String ticketTitle) {
+		this.ticketTitle = ticketTitle;
+	}
+
+	public String getTicketContent() {
+		return ticketContent;
+	}
+
+	public void setTicketContent(String ticketContent) {
+		this.ticketContent = ticketContent;
+	}
+
+	public String getTicketWriter() {
+		return ticketWriter;
+	}
+
+	public void setTicketWriter(String ticketWriter) {
+		this.ticketWriter = ticketWriter;
+	}
+
+		
+		
 	protected NodeAdapter(FreeMindMain frame, MindMap map) {
 		this(null, frame, map);
     }
@@ -1000,6 +1039,7 @@ freemind.main.Resources.getInstance().logException(			e);
     	//dewlit
     	//node.setAttribute("dewlit",	"dewlit");
     	//dewlit
+    	//node.set
 
         /** fc, 12.6.2005: XML must not contain any zero characters. */
         String text = this.toString().replace('\0', ' ');

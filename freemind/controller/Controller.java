@@ -108,7 +108,9 @@ import freemind.main.FreeMindMain;
 import freemind.main.LoggedInFrame;
 import freemind.main.Resources;
 import freemind.main.Tools;
+import freemind.modes.MindIcon;
 import freemind.modes.MindMap;
+import freemind.modes.MindMapNode;
 import freemind.modes.Mode;
 import freemind.modes.ModeController;
 import freemind.modes.ModesCreator;
@@ -1495,8 +1497,58 @@ public class Controller  implements MapModuleChangeObserver {
         public SlideShowAction() {
            super("Slide Show"); }
         public void actionPerformed(ActionEvent e) {
+        	//0/0/0
+        	int position[] = {0,0,0};
+        	int i;
+        	FreemindManager fManager = FreemindManager.getInstance();
+        	MindMapNode targetNode = null;
+        	MindMapNode tmp = mc.getRootNode();
+        	for(i = 0; i < position.length; i++){
+       			tmp = (MindMapNode)tmp.getChildAt(position[i]);
+        	}
         	
-        	mc.addQuestionNode(mc, mc.getRootNode());
+        	if(tmp.hasChildren()){
+        		for(i = 0; i < tmp.getChildCount(); i++){// Q에다가만 질무문 달기 여기 고쳐야대
+        			MindMapNode forSearchQNode;
+        			forSearchQNode = (MindMapNode)tmp.getChildAt(i);
+        			if(forSearchQNode.getText().equals("Q"))
+        				break;
+        		}
+        		targetNode = (MindMapNode) tmp.getChildAt(i); 
+        		
+        	}
+        	else{
+        		System.out.println("not have Question Node!");
+        		return;
+        	}
+        	
+        	fManager.setQuestion(true); // 질문 받았을 때 newChildAction에서 처리하려고
+        	fManager.setTicketContent("content test");
+        	fManager.setTicketTitle("Title test");
+        	fManager.setTicketWriter("write t");
+        	
+        	mc.addNew(targetNode, MindMapController.NEW_CHILD, null);
+        	fManager.setQuestion(false);
+        	fManager.setTicketContent("");
+        	fManager.setTicketTitle("");
+        	fManager.setTicketWriter("");
+        	
+        	//mc.edit.stopEditing();
+        	//targetNode.setFolded(true);
+        	
+        	mc._setFolded(targetNode, true);
+        	
+        	MindIcon icon = MindIcon.factory("help");
+			if(!targetNode.isHaveQuestion()){
+				targetNode.addIcon(icon, -1); // ? 아이콘 한번만
+				targetNode.setHaveQuestion(true);
+			}
+        	
+			mc.nodeChanged(targetNode);
+        	
+        	//fManager.setAddQuestionNode(true);
+        	//mc.addQuestionNode(mc, mc.getRootNode());
+        	//fManager.setAddQuestionNode(false);
         	
 //        	final String NAVINUM = "0";
 //

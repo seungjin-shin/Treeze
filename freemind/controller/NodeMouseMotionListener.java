@@ -60,35 +60,70 @@ public class NodeMouseMotionListener implements MouseMotionListener,
     public void mouseClicked(MouseEvent e) {
         if (mListener != null)
             mListener.mouseClicked(e);
-        String nodeText = c.getModeController().getSelected().getText();
-        MindMapNode questionNode = c.getModeController().getSelected();
-        MindMapNode questionNodeParent;//
-        ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
-        int idx;
-        String idxStr = "root";
-        if(questionNode.isQuestion()){
-        	questionNode.removeIcon(0);
-        	questionNode.setQuestion(false);
-        }
-        c.getModeController().nodeChanged(questionNode); // 아이콘 지우기
         
-        if(!questionNode.isRoot())
-        	idxStr = "";
+		MindMapNode questionNode = c.getModeController().getSelected();
+		
+		if (questionNode.isHaveQuestion()) {
+			questionNode.removeIcon(0);
+			questionNode.setHaveQuestion(false);
+			c.getModeController().nodeChanged(questionNode); // 아이콘 지우기
+		}
+		
+		
+		
+//		MindMapNode questionNodeParent;//
+//		ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
+//		int idx;
+//		String idxStr = "root";
+//
+//		if (!questionNode.isRoot())
+//			idxStr = "";
+//
+//		while (!questionNode.isRoot()) {
+//			questionNodeParent = questionNode.getParentNode();
+//			idx = questionNodeParent.getChildPosition(questionNode);
+//			idxReverseList.add(idx);
+//			questionNode = questionNodeParent;
+//		}
+//		for (int i = idxReverseList.size(); i > 0; i--) {
+//			if (i == 1)
+//				idxStr = idxStr + idxReverseList.get(i - 1);
+//			else
+//				idxStr = idxStr + idxReverseList.get(i - 1) + "/";
+//			System.out.print(idxReverseList.get(i - 1));
+//		}
         
-        while(!questionNode.isRoot()){
-        	questionNodeParent = questionNode.getParentNode(); 
-        	idx = questionNodeParent.getChildPosition(questionNode);
-        	idxReverseList.add(idx);
-        	questionNode = questionNodeParent;
-        }
-        for(int i = idxReverseList.size(); i > 0; i--){
-        	if(i == 1)
-        		idxStr = idxStr + idxReverseList.get(i - 1);
-        	else
-        		idxStr = idxStr + idxReverseList.get(i - 1) + "/";
-        	System.out.print(idxReverseList.get(i - 1)); 
-        }
-        new QuestionFrame(c.getClassId() + "", idxStr, c, nodeText);
+      //before QuestionFrame
+//        String nodeText = c.getModeController().getSelected().getText();
+//        MindMapNode questionNode = c.getModeController().getSelected();
+//        MindMapNode questionNodeParent;//
+//        ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
+//        int idx;
+//        String idxStr = "root";
+//        if(questionNode.isQuestion()){
+//        	questionNode.removeIcon(0);
+//        	questionNode.setQuestion(false);
+//        }
+//        c.getModeController().nodeChanged(questionNode); // 아이콘 지우기
+//        
+//        if(!questionNode.isRoot())
+//        	idxStr = "";
+//        
+//        while(!questionNode.isRoot()){
+//        	questionNodeParent = questionNode.getParentNode(); 
+//        	idx = questionNodeParent.getChildPosition(questionNode);
+//        	idxReverseList.add(idx);
+//        	questionNode = questionNodeParent;
+//        }
+//        for(int i = idxReverseList.size(); i > 0; i--){
+//        	if(i == 1)
+//        		idxStr = idxStr + idxReverseList.get(i - 1);
+//        	else
+//        		idxStr = idxStr + idxReverseList.get(i - 1) + "/";
+//        	System.out.print(idxReverseList.get(i - 1)); 
+//        }
+//        new QuestionFrame(c.getClassId() + "", idxStr, c, nodeText);
+        //before QuestionFrame
     }
 
     public void mouseDragged(MouseEvent e) {

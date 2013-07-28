@@ -181,6 +181,7 @@ public class TOCClickVersion extends JFrame {
 					mc.setChildName(sList.get(rIdx).getNodeName());
 				else
 					mc.setChildName("undefined");
+				
 				mc.addNew(mc.getSelected(), MindMapController.NEW_CHILD, null);
 				
 				//mc.addnew

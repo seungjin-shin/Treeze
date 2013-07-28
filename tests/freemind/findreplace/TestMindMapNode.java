@@ -478,4 +478,52 @@ final class TestMindMapNode implements MindMapNode {
 		
 	}
 
+	@Override
+	public String getTicketTitle() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setTicketTitle(String ticketTitle) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getTicketContent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setTicketContent(String ticketContent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getTicketWriter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setTicketWriter(String ticketWriter) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isHaveQuestion() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setHaveQuestion(boolean haveQuestion) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

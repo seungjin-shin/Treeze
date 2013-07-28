@@ -55,6 +55,7 @@ public class NodeMotionListener extends MouseAdapter implements
     public void mouseClicked(MouseEvent e) {
         if (mListener != null)
             mListener.mouseClicked(e);
+        System.out.println("NodeMotionListener¿¡¼­ dd");
     }
 
     public void mouseDragged(MouseEvent e) {

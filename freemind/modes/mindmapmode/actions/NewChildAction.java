@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
+import freemind.controller.FreemindManager;
 import freemind.controller.actions.generated.instance.DeleteNodeAction;
 import freemind.controller.actions.generated.instance.NewNodeAction;
 import freemind.controller.actions.generated.instance.XmlAction;
@@ -62,16 +63,32 @@ public class NewChildAction extends AbstractAction implements ActorXml {
      * @see freemind.controller.actions.ActorXml#act(freemind.controller.actions.generated.instance.XmlAction)
      */
     public void act(XmlAction action) {
-    	String childName = c.getChildName(); // 양식없는거 만들때 제목으로
+    	//String childName = c.getChildName(); // 양식없는거 만들때 제목으로
     	//if(childName.equals(""))
     		//childName = "";
-		
+		FreemindManager fManager = FreemindManager.getInstance();
     	NewNodeAction addNodeAction = (NewNodeAction) action;
 		NodeAdapter parent = this.c.getNodeFromID(addNodeAction.getNode());
+		MindMapNode newNode;
 		int index = addNodeAction.getIndex();
-		MindMapNode newNode = c.newNode("Q", parent.getMap());
 		
-		c.setChildName("");
+		if(fManager.isAddQuestionNode())
+			newNode = c.newNode("Q", parent.getMap());
+		else if(fManager.isQuestion()){
+			String ticketTitle = fManager.getTicketTitle();
+			String ticketContent = fManager.getTicketContent();
+			String ticketWriter = fManager.getTicketWriter();
+			
+			newNode = c.newNode(ticketTitle, parent.getMap());
+			newNode.setTicketTitle(ticketTitle);
+			newNode.setTicketContent(ticketContent);
+			newNode.setTicketWriter(ticketWriter);
+			newNode.setQuestion(true);
+		}
+		else
+			newNode = c.newNode("", parent.getMap());
+		
+		//c.setChildName("");
         
 		newNode.setLeft(addNodeAction.getPosition().equals("left"));
 		String newId = addNodeAction.getNewId();

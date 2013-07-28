@@ -60,8 +60,16 @@ public interface MindMapNode extends MutableTreeNode {
 
 	
 	public boolean isQuestion();
-
 	public void setQuestion(boolean isQuestion);
+	public boolean isHaveQuestion();
+	public void setHaveQuestion(boolean haveQuestion);
+	public String getTicketTitle();
+	public void setTicketTitle(String ticketTitle);
+	public String getTicketContent();
+	public void setTicketContent(String ticketContent);
+	public String getTicketWriter();
+	public void setTicketWriter(String ticketWriter);
+	
 	
 	/**
 	 * @return the text representation of the nodes content. HTML is represented as <html>....</html>
