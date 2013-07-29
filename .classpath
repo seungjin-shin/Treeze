@@ -41,6 +41,6 @@
 	<classpathentry kind="lib" path="lib/httpmime-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/gson-2.2.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Shin/git/Treeze/lib/bindings.jar"/>
+	<classpathentry kind="lib" path="/Users/dewlit/git/Treeze/lib/bindings.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

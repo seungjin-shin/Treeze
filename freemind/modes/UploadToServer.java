@@ -52,7 +52,7 @@ public class UploadToServer {
            
            MultipartEntity multipart = new MultipartEntity(
 					HttpMultipartMode.BROWSER_COMPATIBLE, null,
-					Charset.forName("UTF-8"));  // xml, classId, LectureName 한번 보내
+					Charset.forName("UTF-8"));  // xml, classId, LectureName ��� 蹂대�
 			
 
            multipart.addPart("classId", classBody);
@@ -82,7 +82,7 @@ public class UploadToServer {
 
 					post.setEntity(multipart);
 					response = httpClient.execute(post);
-					resEntity = response.getEntity(); // 태웅이형소스
+					resEntity = response.getEntity(); // ����댄����
 				}
            }
            System.out.println("postXmlImg");

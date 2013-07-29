@@ -59,6 +59,7 @@ public abstract class XMLElementAdapter extends XMLElement {
     // arrow link attributes:
     protected Vector mArrowLinkAdapters;
     protected HashMap /* id -> target */  mIDToTarget;
+    
     public static final String XML_NODE_TEXT = "TEXT";
     public static final String XML_NODE = "node";
     public static final String XML_NODE_ATTRIBUTE = "attribute";
@@ -387,9 +388,8 @@ public abstract class XMLElementAdapter extends XMLElement {
 			logger.finest("Setting node text content to:" + sValue);
 	    node.setUserObject(sValue); }
      else if(name.equals("IMGPATH")){
-    	 //이미지 여러개이면 , 로 구분하고 계속 더해
-    	 //for문 돌려 sValue로
-    	 //node.getImgPath().add(sValue);
+    	 //dewlit
+    	 node.setImgPath(sValue);
      }
 	 else if (name.equals(XML_NODE_ENCRYPTED_CONTENT)) {
 	     // we change the node implementation to EncryptedMindMapNode.

@@ -206,10 +206,21 @@ public class XMLElement
     
     //dewlit
     private String dewlit = "dewlit";
+    private String imgPath;
     //dewlit
 
 
-    /**
+    public String getImgPath() {
+		return imgPath;
+	}
+
+
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
+	}
+
+
+	/**
      * The #PCDATA content of the object.
      *
      * <dl><dt><b>Invariants:</b></dt><dd>

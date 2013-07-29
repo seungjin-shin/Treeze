@@ -48,7 +48,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
@@ -96,8 +95,6 @@ import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.sun.org.apache.xalan.internal.xsltc.trax.OutputSettings;
-
 import freemind.common.BooleanProperty;
 import freemind.controller.MapModuleManager.MapModuleChangeObserver;
 import freemind.controller.filter.FilterController;
@@ -108,12 +105,12 @@ import freemind.main.FreeMindMain;
 import freemind.main.LoggedInFrame;
 import freemind.main.Resources;
 import freemind.main.Tools;
-import freemind.modes.MindIcon;
 import freemind.modes.MindMap;
 import freemind.modes.MindMapNode;
 import freemind.modes.Mode;
 import freemind.modes.ModeController;
 import freemind.modes.ModesCreator;
+import freemind.modes.NodeAdapter;
 import freemind.modes.attributes.AttributeRegistry;
 import freemind.modes.attributes.AttributeTableLayoutModel;
 import freemind.modes.browsemode.BrowseMode;
@@ -209,6 +206,11 @@ public class Controller  implements MapModuleChangeObserver {
     public Action selectLecture;
     public Action slideShowAction;
     private MindMapController mc;
+    public NodeAdapter cur;
+    public NodeAdapter prev;
+    public NodeAdapter next;
+    
+    
 
 	public ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
 	public ArrayList<Socket> socketList = new ArrayList<Socket>();
@@ -1493,58 +1495,142 @@ public class Controller  implements MapModuleChangeObserver {
 		}
     }
     
+    public void recurSetSlideShowInfo(NodeAdapter curNode){
+    	NodeAdapter cur = curNode;
+    	NodeAdapter prev;// = prevNode;
+    	NodeAdapter next;// = nextNode;
+    	NodeAdapter root = (NodeAdapter)mc.getRootNode();
+    	int i;
+    	
+    	int cnt = curNode.getChildCount();
+    	int myPos;
+
+    	prev = recurGetPrev(root, root);
+    	next = recurGetNext(root, root);
+    	
+    	cur.setPrev(prev);
+    	cur.setNext(next);
+    	
+    	for(i = 0; i < cnt; i++){ // set the others
+    		recurSetSlideShowInfo((NodeAdapter)curNode.getChildAt(i));
+    	}
+    }
+    
+    public NodeAdapter recurGetPrev(NodeAdapter prevNode, NodeAdapter curNode){
+    	cur = curNode;
+    	prev = prevNode;
+    	int i;
+
+    	int cnt = curNode.getChildCount();
+
+    	if(cur.getPrev() == null && cur.getNext() == null)
+    		return prev;
+    	
+    	for(i = 0; i < cnt; i++){
+    		NodeAdapter tmp;
+    		tmp = recurGetPrev(cur, (NodeAdapter)curNode.getChildAt(i));
+    		if(tmp != null)
+    			return tmp;
+    	}
+    	return null; // last node
+    }
+    
+    public NodeAdapter recurGetNext(NodeAdapter prevNode, NodeAdapter curNode){
+    	cur = curNode;
+    	prev = prevNode;
+    	int i;
+
+    	int cnt = curNode.getChildCount();
+    	
+    	if(prev.getNext() == null)
+    		return cur;
+    	
+    	for(i = 0; i < cnt; i++){
+    		NodeAdapter tmp;
+    		tmp = recurGetNext(cur, (NodeAdapter)curNode.getChildAt(i));
+    		if(tmp != null)
+    			return tmp;
+    	}
+    	return null; // last node
+    }
+    
     protected class SlideShowAction extends AbstractAction {
         public SlideShowAction() {
            super("Slide Show"); }
         public void actionPerformed(ActionEvent e) {
-        	//0/0/0
-        	int position[] = {0,0,0};
-        	int i;
-        	FreemindManager fManager = FreemindManager.getInstance();
-        	MindMapNode targetNode = null;
-        	MindMapNode tmp = mc.getRootNode();
-        	for(i = 0; i < position.length; i++){
-       			tmp = (MindMapNode)tmp.getChildAt(position[i]);
-        	}
+        	NodeAdapter root = (NodeAdapter)mc.getRootNode();
+        	//prev;// 
+        	//next;// = (NodeAdapter)mc.getRootNode();
         	
-        	if(tmp.hasChildren()){
-        		for(i = 0; i < tmp.getChildCount(); i++){// Q에다가만 질무문 달기 여기 고쳐야대
-        			MindMapNode forSearchQNode;
-        			forSearchQNode = (MindMapNode)tmp.getChildAt(i);
-        			if(forSearchQNode.getText().equals("Q"))
-        				break;
-        		}
-        		targetNode = (MindMapNode) tmp.getChildAt(i); 
+        	//set root
+        	root.setPrev(null);
+        	if(root.hasChildren()){
+        		next = (NodeAdapter)root.getChildAt(0);
+        		root.setNext(next);
+//        		prev = cur;
+//        		cur = (NodeAdapter)cur.getChildAt(0);
         		
+        		for(int i = 0; i < root.getChildCount(); i++){ // root direct childs set
+            		recurSetSlideShowInfo((NodeAdapter)root.getChildAt(i));
+            	}
         	}
         	else{
-        		System.out.println("not have Question Node!");
+        		System.out.println("only root");
         		return;
         	}
         	
-        	fManager.setQuestion(true); // 질문 받았을 때 newChildAction에서 처리하려고
-        	fManager.setTicketContent("content test");
-        	fManager.setTicketTitle("Title test");
-        	fManager.setTicketWriter("write t");
+        	//set the others
         	
-        	mc.addNew(targetNode, MindMapController.NEW_CHILD, null);
-        	fManager.setQuestion(false);
-        	fManager.setTicketContent("");
-        	fManager.setTicketTitle("");
-        	fManager.setTicketWriter("");
         	
-        	//mc.edit.stopEditing();
-        	//targetNode.setFolded(true);
-        	
-        	mc._setFolded(targetNode, true);
-        	
-        	MindIcon icon = MindIcon.factory("help");
-			if(!targetNode.isHaveQuestion()){
-				targetNode.addIcon(icon, -1); // ? 아이콘 한번만
-				targetNode.setHaveQuestion(true);
-			}
-        	
-			mc.nodeChanged(targetNode);
+           	System.out.println("dd");
+        	//0/0/0
+//        	int position[] = {0,0,0};
+//        	int i;
+//        	FreemindManager fManager = FreemindManager.getInstance();
+//        	MindMapNode targetNode = null;
+//        	MindMapNode tmp = mc.getRootNode();
+//        	for(i = 0; i < position.length; i++){
+//       			tmp = (MindMapNode)tmp.getChildAt(position[i]);
+//        	}
+//        	
+//        	if(tmp.hasChildren()){
+//        		for(i = 0; i < tmp.getChildCount(); i++){// Q에다가만 질무문 달기 여기 고쳐야대
+//        			MindMapNode forSearchQNode;
+//        			forSearchQNode = (MindMapNode)tmp.getChildAt(i);
+//        			if(forSearchQNode.getText().equals("Q"))
+//        				break;
+//        		}
+//        		targetNode = (MindMapNode) tmp.getChildAt(i); 
+//        		
+//        	}
+//        	else{
+//        		System.out.println("not have Question Node!");
+//        		return;
+//        	}
+//        	
+//        	fManager.setQuestion(true); // 질문 받았을 때 newChildAction에서 처리하려고
+//        	fManager.setTicketContent("content test");
+//        	fManager.setTicketTitle("Title test");
+//        	fManager.setTicketWriter("write t");
+//        	
+//        	mc.addNew(targetNode, MindMapController.NEW_CHILD, null);
+//        	fManager.setQuestion(false);
+//        	fManager.setTicketContent("");
+//        	fManager.setTicketTitle("");
+//        	fManager.setTicketWriter("");
+//        	
+//        	//mc.edit.stopEditing();
+//        	//targetNode.setFolded(true);
+//        	
+//        	mc._setFolded(targetNode, true);
+//        	
+//        	MindIcon icon = MindIcon.factory("help");
+//			if(!targetNode.isHaveQuestion()){
+//				targetNode.addIcon(icon, -1); // ? 아이콘 한번만
+//				targetNode.setHaveQuestion(true);
+//			}
+//        	
+//			mc.nodeChanged(targetNode);
         	
         	//fManager.setAddQuestionNode(true);
         	//mc.addQuestionNode(mc, mc.getRootNode());

@@ -75,16 +75,18 @@ public abstract class NodeAdapter implements MindMapNode {
 	private boolean isQuestion = false;
 	private boolean haveQuestion = false;
 
-	class A{
-		String dd="dewlit";
-	}
-
-	private A a = new A();
-
 	private String ticketTitle;
 	private String ticketContent;
 	private String ticketWriter;
 	
+	private NodeAdapter prev;
+	
+
+
+
+	private NodeAdapter next;
+	
+	private String imgPath;
 
 	final static int SHIFT = -2;//height of the vertical shift between node and its closest child
     public final static int HGAP = 20;//width of the horizontal gap that contains the edges
@@ -153,12 +155,26 @@ public abstract class NodeAdapter implements MindMapNode {
 	private static FreemindPropertyListener sSaveIdPropertyChangeListener;
 	private static boolean sSaveOnlyIntrinsicallyNeededIds = false;
 	
-	private String imgPath = "";
-
     //
     // Constructors
     //
 
+	public NodeAdapter getPrev() {
+		return prev;
+	}
+
+	public void setPrev(NodeAdapter prev) {
+		this.prev = prev;
+	}
+
+	public NodeAdapter getNext() {
+		return next;
+	}
+
+	public void setNext(NodeAdapter next) {
+		this.next = next;
+	}
+	
 	public boolean isHaveQuestion() {
 		return haveQuestion;
 	}
@@ -215,6 +231,8 @@ public abstract class NodeAdapter implements MindMapNode {
 	protected NodeAdapter(Object userObject, FreeMindMain frame, MindMap map) {
         this.frame = frame;
         setText((String) userObject);
+        imgPath = "";
+        
 		hooks = null; // lazy, fc, 30.6.2005.
 		activatedHooks = null; //lazy, fc, 30.6.2005
 		if(logger == null)
