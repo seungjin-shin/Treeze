@@ -32,6 +32,7 @@ import freemind.json.CurrentPositionOfNav;
 import freemind.json.FreemindGson;
 import freemind.modes.MindIcon;
 import freemind.modes.MindMapNode;
+import freemind.modes.NodeAdapter;
 import freemind.modes.UploadToServer;
 
 /**
@@ -63,54 +64,53 @@ public class NodeKeyListener implements KeyListener {
 
 		if (e.getKeyCode() == KeyEvent.VK_TAB) {
 			
-			if(c.getSlideList().size() == 0)
-				return;
+			//c.setFocus((NodeAdapter)c.getMc().getRootNode());
 			
-			c.getSlideShow().setfocus(c.getSlideList().get(0));
+			c.getSlideShow().setfocus((NodeAdapter)c.getMc().getRootNode());
 			c.getSlideShow().show();
 			
-			for(int i = 0; i < c.getNaviOs().size(); i++){
-				os = c.getNaviOs().get(i);
-				try {
-					if(os != null)
-						os.write((NAVINUM + "start").getBytes());
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			System.out.println("start");
+//			for(int i = 0; i < c.getNaviOs().size(); i++){
+//				os = c.getNaviOs().get(i);
+//				try {
+//					if(os != null)
+//						os.write((NAVINUM + "start").getBytes());
+//				} catch (IOException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//			}
+//			System.out.println("start");
 			
 		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			if(c.getSlideList().size() == 0)
+			if(c.getSlideShow().getfocus() == null)
 				return;
 			
 			c.getSlideShow().show();
 			
-			ArrayList<Integer> idxList = c.getSlideShow().getfocus().getIdxList();
-			
-			CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
-			
-			String jsonString;
-			FreemindGson myGson = new FreemindGson();
-
-			sendPs.setPosition(idxList);
-
-			jsonString = myGson.toJson(sendPs);
-			System.out.println(jsonString);
-			
-			for(int i = 0; i < c.getNaviOs().size(); i++){
-				os = c.getNaviOs().get(i);
-				try {
-					if(os != null)
-						os.write((NAVINUM + jsonString).getBytes()); // 다 보내
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			
-			System.out.println(jsonString);
+//			ArrayList<Integer> idxList = c.getSlideShow().getfocus().getIdxList();
+//			
+//			CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
+//			
+//			String jsonString;
+//			FreemindGson myGson = new FreemindGson();
+//
+//			sendPs.setPosition(idxList);
+//
+//			jsonString = myGson.toJson(sendPs);
+//			System.out.println(jsonString);
+//			
+//			for(int i = 0; i < c.getNaviOs().size(); i++){
+//				os = c.getNaviOs().get(i);
+//				try {
+//					if(os != null)
+//						os.write((NAVINUM + jsonString).getBytes()); // 다 보내
+//				} catch (IOException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//			}
+//			
+//			System.out.println(jsonString);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F4){
 			new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대

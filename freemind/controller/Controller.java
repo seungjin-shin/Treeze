@@ -209,8 +209,19 @@ public class Controller  implements MapModuleChangeObserver {
     public NodeAdapter cur;
     public NodeAdapter prev;
     public NodeAdapter next;
+    public NodeAdapter focus;
     
     
+
+	public MindMapController getMc() {
+		return mc;
+	}
+	public NodeAdapter getFocus() {
+		return focus;
+	}
+	public void setFocus(NodeAdapter focus) {
+		this.focus = focus;
+	}
 
 	public ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
 	public ArrayList<Socket> socketList = new ArrayList<Socket>();

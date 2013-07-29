@@ -18,10 +18,10 @@ import org.json.simple.JSONObject;
 
 import freemind.json.CurrentPositionOfNav;
 import freemind.json.FreemindGson;
+import freemind.modes.NodeAdapter;
 
 public class SlideShow {
-	SlideData focus;
-	int pagenum = 0;
+	NodeAdapter focus;
 	ImgFrame imgFrame = new ImgFrame(this);
 	String str = new String();
 	Controller c;
@@ -30,28 +30,29 @@ public class SlideShow {
 		this.c = c;
 	}
 	
-	void setfocus(SlideData focus) {
-		if(focus.getPrev() ==null){
-			this.focus = focus;
-			show();
-		}
-		else{
-		if (this.focus != null && this.focus.imgCnt > 1
-				&& this.focus.imgCnt > pagenum + 1) {
-			pagenum++;
-		} else {
-			pagenum = 0;
-			while (focus.imgCnt == 0)
-				focus = focus.next;
-			this.focus = focus;
-		}
-		str = focus.imgPath + focus.nodeName + ".jpg";
-		System.out.println(focus.imgPath + focus.nodeName + ".jpg");
-		show();
-		}
+	void setfocus(NodeAdapter focus) {
+//		if(focus.getPrev() == null){
+//			this.focus = focus;
+//			show();
+//		}
+//		else{
+//			if (this.focus != null && this.focus.imgCnt > 1
+//				&& this.focus.imgCnt > pagenum + 1) {
+//			pagenum++;
+//		} else {
+//			pagenum = 0;
+//			while (focus.imgCnt == 0)
+//				focus = focus.next;
+//			this.focus = focus;
+//		}
+//		str = focus.imgPath + focus.nodeName + ".jpg";
+//		System.out.println(focus.imgPath + focus.nodeName + ".jpg");
+//		show();
+//		}
+		this.focus = focus;
 	}
 
-	SlideData getfocus() {
+	NodeAdapter getfocus() {
 		return focus;
 	}
 
@@ -119,83 +120,83 @@ public class SlideShow {
 					
 					if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 						nextShow();
+						// 학생 보내야대
+						//ArrayList<Integer> idxList = focus.getIdxList();
 						
-						ArrayList<Integer> idxList = focus.getIdxList();
-						
-						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
-						
-						String jsonString;
-						FreemindGson myGson = new FreemindGson();
-
-						sendPs.setPosition(idxList);
-
-						jsonString = myGson.toJson(sendPs);
-						System.out.println(jsonString);
-						
-						for(int i = 0; i < c.getNaviOs().size(); i++){
-							os = c.getNaviOs().get(i);
-							try {
-								if(os != null)
-									os.write((NAVINUM + jsonString).getBytes()); // 다 보내
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						}
+//						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
+//						
+//						String jsonString;
+//						FreemindGson myGson = new FreemindGson();
+//
+//						//sendPs.setPosition(idxList);
+//
+//						jsonString = myGson.toJson(sendPs);
+//						System.out.println(jsonString);
+//						
+//						for(int i = 0; i < c.getNaviOs().size(); i++){
+//							os = c.getNaviOs().get(i);
+//							try {
+//								if(os != null)
+//									os.write((NAVINUM + jsonString).getBytes()); // 다 보내
+//							} catch (IOException e1) {
+//								// TODO Auto-generated catch block
+//								e1.printStackTrace();
+//							}
+//						}
 						
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						showpause();
 					} else if(e.getKeyCode() == KeyEvent.VK_PAGE_DOWN){
 						nextShow();
 						
-						ArrayList<Integer> idxList = focus.getIdxList();
-						
-						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
-						
-						String jsonString;
-						FreemindGson myGson = new FreemindGson();
-
-						sendPs.setPosition(idxList);
-
-						jsonString = myGson.toJson(sendPs);
-						System.out.println(jsonString);
-						
-						for(int i = 0; i < c.getNaviOs().size(); i++){
-							os = c.getNaviOs().get(i);
-							try {
-								if(os != null)
-									os.write((NAVINUM + jsonString).getBytes()); // 다 보내
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						}
+//						ArrayList<Integer> idxList = focus.getIdxList();
+//						
+//						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
+//						
+//						String jsonString;
+//						FreemindGson myGson = new FreemindGson();
+//
+//						sendPs.setPosition(idxList);
+//
+//						jsonString = myGson.toJson(sendPs);
+//						System.out.println(jsonString);
+//						
+//						for(int i = 0; i < c.getNaviOs().size(); i++){
+//							os = c.getNaviOs().get(i);
+//							try {
+//								if(os != null)
+//									os.write((NAVINUM + jsonString).getBytes()); // 다 보내
+//							} catch (IOException e1) {
+//								// TODO Auto-generated catch block
+//								e1.printStackTrace();
+//							}
+//						}
 					}
 					else if(e.getKeyCode() == KeyEvent.VK_PAGE_UP){
 						prevShow();
 						
-						ArrayList<Integer> idxList = focus.getIdxList();
-						
-						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
-						
-						String jsonString;
-						FreemindGson myGson = new FreemindGson();
-
-						sendPs.setPosition(idxList);
-
-						jsonString = myGson.toJson(sendPs);
-						System.out.println(jsonString);
-						
-						for(int i = 0; i < c.getNaviOs().size(); i++){
-							os = c.getNaviOs().get(i);
-							try {
-								if(os != null)
-									os.write((NAVINUM + jsonString).getBytes()); // 다 보내
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						}
+//						ArrayList<Integer> idxList = focus.getIdxList();
+//						
+//						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
+//						
+//						String jsonString;
+//						FreemindGson myGson = new FreemindGson();
+//
+//						sendPs.setPosition(idxList);
+//
+//						jsonString = myGson.toJson(sendPs);
+//						System.out.println(jsonString);
+//						
+//						for(int i = 0; i < c.getNaviOs().size(); i++){
+//							os = c.getNaviOs().get(i);
+//							try {
+//								if(os != null)
+//									os.write((NAVINUM + jsonString).getBytes()); // 다 보내
+//							} catch (IOException e1) {
+//								// TODO Auto-generated catch block
+//								e1.printStackTrace();
+//							}
+//						}
 					}
 					else if(e.getKeyCode() == KeyEvent.VK_F4){
 						new SurveyFrame(c.getNaviOs());
@@ -209,9 +210,11 @@ public class SlideShow {
 		private void nextShow() {
 			// TODO Auto-generated method stub
 			this.slideShow.setfocusnext();
+			slideShow.show();
 		}
 		private void prevShow(){
 			this.slideShow.setfocusprev();
+			slideShow.show();
 		}
 
 		@Override
@@ -219,15 +222,7 @@ public class SlideShow {
 			// TODO Auto-generated method stub
 			BufferedImage i = null;
 			try {
-				if (slideShow.getfocus().imgCnt > 1) {
-
-					i = ImageIO.read(new File(slideShow.getfocus().imgPath
-							+ slideShow.getfocus().getNodeName() + (pagenum)
-							+ ".jpg"));
-				} else {
-					i = ImageIO.read(new File(slideShow.getfocus().imgPath
-							+ slideShow.getfocus().getNodeName() + ".jpg"));
-				}
+					i = ImageIO.read(new File("/Users/dewlit/Desktop/test/" + slideShow.getfocus().getImgPath())); 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
