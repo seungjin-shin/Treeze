@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
 
+import freemind.controller.FreemindManager;
 import freemind.controller.actions.generated.instance.CompoundAction;
 import freemind.controller.actions.generated.instance.FoldAction;
 import freemind.controller.actions.generated.instance.XmlAction;
@@ -45,7 +46,8 @@ public class ToggleFoldedAction extends AbstractAction implements ActorXml {
 	private final MindMapController modeController;
 
 	private Logger logger;
-
+	private FreemindManager fManager = FreemindManager.getInstance();
+	
 	public ToggleFoldedAction(MindMapController controller) {
 		super(controller.getText("toggle_folded"));
 		this.modeController = controller;
@@ -128,15 +130,17 @@ public class ToggleFoldedAction extends AbstractAction implements ActorXml {
 	public void act(XmlAction action) {
 		if (action instanceof FoldAction) {
 			System.out.println("ToggleFoldedAction " + modeController.getSelected().getText()); // Æú´õ Á¢Èû action remove
-			//modeController.getSelected().is
 			
-			FoldAction foldAction = (FoldAction) action;
-			MindMapNode node = modeController.getNodeFromID(foldAction
-					.getNode());
-			boolean fold = foldAction.getFolded();
-			modeController._setFolded(node, fold);
-			if(Resources.getInstance().getBoolProperty(FreeMind.RESOURCES_SAVE_FOLDING_STATE)){
-				modeController.nodeChanged(node);
+			if (modeController.getSelected().isQuestion()) {
+				FoldAction foldAction = (FoldAction) action;
+				MindMapNode node = modeController.getNodeFromID(foldAction
+						.getNode());
+				boolean fold = foldAction.getFolded();
+				modeController._setFolded(node, fold);
+				if (Resources.getInstance().getBoolProperty(
+						FreeMind.RESOURCES_SAVE_FOLDING_STATE)) {
+					modeController.nodeChanged(node);
+				}
 			}
 		}
 	}

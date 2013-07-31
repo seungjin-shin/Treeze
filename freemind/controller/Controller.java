@@ -202,7 +202,8 @@ public class Controller  implements MapModuleChangeObserver {
     public Action zoomOut;
     //dewlit
     public ArrayList<SlideData> slideList = new ArrayList<SlideData>();
-    public SlideShow slideShow = new SlideShow(this);
+    FreemindManager fManager;
+    public SlideShow slideShow;
     public Action selectLecture;
     public Action slideShowAction;
     private MindMapController mc;
@@ -310,6 +311,11 @@ public class Controller  implements MapModuleChangeObserver {
         //dewlit
         Thread t = new Thread(fmSck);
     	t.start();
+    	
+        fManager = FreemindManager.getInstance();
+        slideShow = fManager.getSlideShow();
+        slideShow.setC(this);
+    	
         //dewlit
         
         /** 

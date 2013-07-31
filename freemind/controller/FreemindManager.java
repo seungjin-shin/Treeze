@@ -10,6 +10,13 @@ public class FreemindManager {
 		return fInstance;
 	}
 	
+	private FreemindManager(){
+		slideShow = new SlideShow();
+	}
+	
+	SlideShow slideShow;
+	
+
 	private boolean isQuestion = false;
 	private boolean addQuestionNode = false;
 	private boolean isSlideShowInfo = false;
@@ -25,6 +32,13 @@ public class FreemindManager {
 	
 	
 	
+	public SlideShow getSlideShow() {
+		return slideShow;
+	}
+	
+	public void setSlideShow(SlideShow slideShow) {
+		this.slideShow = slideShow;
+	}
 	public boolean isAddQuestionNodeInfo() {
 		return isAddQuestionNodeInfo;
 	}

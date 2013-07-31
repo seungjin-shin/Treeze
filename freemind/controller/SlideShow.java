@@ -23,11 +23,24 @@ import freemind.modes.NodeAdapter;
 public class SlideShow {
 	NodeAdapter focus;
 	ImgFrame imgFrame = new ImgFrame(this);
+
 	String str = new String();
 	Controller c;
 	
-	public SlideShow(Controller c){
+	public Controller getC() {
+		return c;
+	}
+
+	public void setC(Controller c) {
 		this.c = c;
+	}
+
+	public JFrame getImgFrame() {
+		return imgFrame;
+	}
+	
+	public void setImgFrame(ImgFrame imgFrame) {
+		this.imgFrame = imgFrame;
 	}
 	
 	void setfocus(NodeAdapter focus) {
@@ -120,8 +133,9 @@ public class SlideShow {
 
 	public void show() {
 		// TODO Auto-generated method stub
-		if(!focus.getImgPath().equals(""))
+		if(!focus.getImgPath().equals("")){
 			imgFrame.show();
+		}
 
 	}
 

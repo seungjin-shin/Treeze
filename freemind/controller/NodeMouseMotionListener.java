@@ -66,55 +66,10 @@ public class NodeMouseMotionListener implements MouseMotionListener,
 //    		System.out.println("NodeMouseMotion double click");
 //    		
 //    	}
-    		
-    	
         if (mListener != null)
             mListener.mouseClicked(e);
         
-		MindMapNode selNode = c.getMc().getSelected();
-		
-		if (selNode.isQuestion()) { // at Q node
-			if (selNode.isHaveQuestion()) {
-				selNode.removeIcon(0);
-				selNode.setHaveQuestion(false);
-				c.getModeController().nodeChanged(selNode); // 아이콘 지우기
-			}
-			
-			//show frame
-			
-		}
-		else if(selNode.getTicketTitle() == null){ // at slide Node
-			MindMapNode selNodeParent;
-			//set focus
-			if (fManager.isSlideShowInfo()) {
-				c.getSlideShow().setfocus((NodeAdapter) selNode);
-				c.getSlideShow().show();
-			}
-			
-			//get node idx
-			ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
-			int idx;
-			String idxStr = "root";
-			
-			if (!selNode.isRoot())
-				idxStr = "";
-			
-			while (!selNode.isRoot()) {
-				selNodeParent = selNode.getParentNode();
-				idx = selNodeParent.getChildPosition(selNode);
-				idxReverseList.add(idx);
-				selNode = selNodeParent;
-			}
-			
-			for (int i = idxReverseList.size(); i > 0; i--) {
-				if (i == 1)
-					idxStr = idxStr + idxReverseList.get(i - 1);
-				else
-					idxStr = idxStr + idxReverseList.get(i - 1) + "/";
-			}
-			System.out.println(idxStr);
-		}
-		
+				
       //before QuestionFrame
 //        String nodeText = c.getModeController().getSelected().getText();
 //        MindMapNode questionNode = c.getModeController().getSelected();
@@ -176,6 +131,52 @@ public class NodeMouseMotionListener implements MouseMotionListener,
     	
         if (mListener != null)
             mListener.mouseReleased(e); // 여기서 클릭
+        
+        MindMapNode selNode = c.getMc().getSelected();
+		
+		if (selNode.isQuestion()) { // at Q node
+			if (selNode.isHaveQuestion()) {
+				selNode.removeIcon(0);
+				selNode.setHaveQuestion(false);
+				c.getModeController().nodeChanged(selNode); // 아이콘 지우기
+			}
+			
+			//show Q frame
+			
+		}
+		else if(selNode.getTicketTitle() == null){ // at slide Node
+			MindMapNode selNodeParent;
+			//set focus
+			if (fManager.isSlideShowInfo()) {
+				c.getSlideShow().setfocus((NodeAdapter) selNode);
+				c.getSlideShow().show();
+			}
+			
+			//get node idx
+			ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
+			int idx;
+			String idxStr = "root";
+			
+			if (!selNode.isRoot())
+				idxStr = "";
+			
+			while (!selNode.isRoot()) {
+				selNodeParent = selNode.getParentNode();
+				idx = selNodeParent.getChildPosition(selNode);
+				idxReverseList.add(idx);
+				selNode = selNodeParent;
+			}
+			
+			for (int i = idxReverseList.size(); i > 0; i--) {
+				if (i == 1)
+					idxStr = idxStr + idxReverseList.get(i - 1);
+				else
+					idxStr = idxStr + idxReverseList.get(i - 1) + "/";
+			}
+			System.out.println(idxStr);
+		}
+
+        
     }
     public void updateSelectionMethod() {
         if (mListener != null)

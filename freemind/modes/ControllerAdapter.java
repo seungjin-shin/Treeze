@@ -93,12 +93,14 @@ import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 
 import freemind.controller.Controller;
+import freemind.controller.FreemindManager;
 import freemind.controller.MapModuleManager;
 import freemind.controller.MindMapNodesSelection;
 import freemind.controller.SlideData;
 import freemind.controller.StructuredMenuHolder;
 import freemind.controller.TableData;
 import freemind.extensions.PermanentNodeHook;
+import freemind.json.FreemindGson;
 import freemind.main.FreeMindMain;
 import freemind.main.Resources;
 import freemind.main.Tools;
@@ -714,6 +716,9 @@ public abstract class ControllerAdapter implements ModeController {
 //						upload = new UploadMM(getController()
 //								.getSlideList(), mc);
 					//addQuestionNode(mc, getRootNode());
+					
+					//getRootNode()
+					//checkLectureReady(); // 기존꺼로 루트 가져와 
 				} catch (Exception ex) {
 					handleLoadingException(ex);
 					break;
@@ -722,6 +727,25 @@ public abstract class ControllerAdapter implements ModeController {
         }
 //        templateChk = false;
         getController().setTitle();
+    }
+    
+    public void checkLectureReady(){
+    	//set QuestionNodeInfo
+    	NodeAdapter root = (NodeAdapter)getRootNode();
+    	NodeAdapter checkNode;
+    	FreemindManager fManager = FreemindManager.getInstance();
+    	int i;
+    	System.out.println("ControllerAdapter check : QuestionNodeInfo");
+    	for(i = 0; i < root.getChildCount(); i++){
+    		checkNode = (NodeAdapter)root.getChildAt(i);
+    		if(checkNode.isQuestion()){
+    			fManager.setAddQuestionNodeInfo(true);
+    			System.out.println("ControllerAdapter : set QuestionNodeInfo");
+    			break;
+    		}
+    	}
+    	
+    	
     }
     
     public void addQuestionNode(MindMapController mc, MindMapNode node){

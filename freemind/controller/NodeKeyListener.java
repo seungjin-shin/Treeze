@@ -116,7 +116,7 @@ public class NodeKeyListener implements KeyListener {
 			new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
 			//new SurveyResultFrame(31, 9);
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_F7){
+		else if(e.getKeyCode() == KeyEvent.VK_F3){
 			//set slide show
 			NodeAdapter root = (NodeAdapter)c.getMc().getRootNode();
         	NodeAdapter next;// = (NodeAdapter)mc.getRootNode();
@@ -135,6 +135,7 @@ public class NodeKeyListener implements KeyListener {
         		for(int i = 0; i < root.getChildCount(); i++){ // root direct childs set
             		c.recurSetSlideShowInfo((NodeAdapter)root.getChildAt(i));
             	}
+        		System.out.println("NodeKeyListener : set slideShowInfo");
         	}
         	else{
         		System.out.println("only root");
@@ -202,6 +203,7 @@ public class NodeKeyListener implements KeyListener {
 				c.getMc().addQuestionNode(c.getMc(), c.getMc().getRootNode());
 				fManager.setAddQuestionNode(false);
 				c.getMc().edit.stopEditing();
+				System.out.println("NodeKeyListener : set QuestionNodeInfo");
 			}
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F10){

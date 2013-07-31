@@ -44,7 +44,6 @@ public class LoginFrame extends JFrame {
 	
 	UploadListner btnListner;
 	
-	ArrayList<SlideData> sList = new ArrayList<SlideData>();
 	MindMapController mc;
 	
 	private Image logo;
