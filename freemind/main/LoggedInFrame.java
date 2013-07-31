@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -47,10 +48,8 @@ public class LoggedInFrame extends JFrame {
 
 	LecturePanel lecturePanel;
 	private Image profileImg;
-	private URL profileImgURL = getClass().getClassLoader().getResource("minsuk.jpg");
 	private Image logo;
-	private URL tmp;
-	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
+	private Image tmp;
 	CreateBtn createLs;
 	MindMapController mc;
 	public LoggedInFrame(MindMapController mc) {
@@ -59,8 +58,8 @@ public class LoggedInFrame extends JFrame {
 		JScrollPane sPanel = new JScrollPane(lecturePanel);
 		createLs = new CreateBtn(lecturePanel, sPanel);
 		
-		profileImg = new ImageIcon(profileImgURL).getImage();
-		logo = new ImageIcon(logoURL).getImage();
+		profileImg = Toolkit.getDefaultToolkit().getImage("images/minsuk.jpg");
+		logo = Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png");
 		
 		setSize(950, 800);
 		setLayout(null);
@@ -87,7 +86,7 @@ public class LoggedInFrame extends JFrame {
 		address2.setFont(midF);
 		address2.setLocation(50, 370);
 		add(address2);
-		tmp = getClass().getClassLoader().getResource("CreateLecture.png");
+		tmp = Toolkit.getDefaultToolkit().getImage("images/CreateLecture.png");
 		
 		JButton tmpBtn = new JButton(new ImageIcon(tmp));
 		tmpBtn.setSize(132, 45);
@@ -96,7 +95,7 @@ public class LoggedInFrame extends JFrame {
 		tmpBtn.addActionListener(createLs);
 		add(tmpBtn);
 		
-		tmp = getClass().getClassLoader().getResource("profile.png");
+		tmp = Toolkit.getDefaultToolkit().getImage("images/profile.png");
 		
 		tmpBtn = new JButton(new ImageIcon(tmp));
 		tmpBtn.setSize(130, 45);
@@ -104,7 +103,7 @@ public class LoggedInFrame extends JFrame {
 		tmpBtn.setFocusable(false);
 		add(tmpBtn);
 		
-		tmp = getClass().getClassLoader().getResource("deleteLecture.png");
+		tmp = Toolkit.getDefaultToolkit().getImage("images/deleteLecture.png");
 		
 		tmpBtn = new JButton(new ImageIcon(tmp));
 		tmpBtn.setSize(135, 42);
@@ -112,7 +111,7 @@ public class LoggedInFrame extends JFrame {
 		tmpBtn.setFocusable(false);
 		add(tmpBtn);
 		
-		tmp = getClass().getClassLoader().getResource("logout.png");
+		tmp = Toolkit.getDefaultToolkit().getImage("images/logout.png");
 		
 		tmpBtn = new JButton(new ImageIcon(tmp));
 		tmpBtn.setSize(132, 45);
@@ -142,6 +141,7 @@ public class LoggedInFrame extends JFrame {
 		g.setColor(Color.black);
 		g.drawRect(298, 158, 600, 500);
 		g.drawRect(297, 157, 602, 502);
+		repaint();
 	}
 	
 }
@@ -227,6 +227,7 @@ class LecturePanel extends JPanel implements ActionListener{
 	final int TOPPADDING = 100;
 	final int LECTUREHGAP = 60;
 	int lectureCnt = 0;
+	boolean isConnectErr = false;
 	public int getLectureCnt() {
 		return lectureCnt;
 	}
@@ -284,55 +285,61 @@ class LecturePanel extends JPanel implements ActionListener{
 		catch(Exception e)
 		{
 		    System.out.println("연결 에러");
+		    isConnectErr = true;
 		}
 		finally
 		{
 		    if(sHtml.equals("")) sHtml = "Data가 존재하지 않습니다";
 		    try {
-				in.close();
+		    	if(in != null)
+		    		in.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		System.out.println(sHtml);
-		ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
-		Lecture tmpLecture;
-		Gson gson = new Gson();
-		
-		Type type = new TypeToken<ArrayLecture>() {
-		}.getType();
-		ArrayLecture jonResultlecturelist = (ArrayLecture) gson
-				.fromJson(sHtml, type);
-		lectureList = jonResultlecturelist.getLectures();
-		
-		Font midF = new Font("Serif", Font.BOLD, 30);
-		JButton tmpBtn;
-		lectureMap = new HashMap<String, String>();
-		
-		for(lectureCnt = 0; lectureCnt < lectureList.size(); lectureCnt++){
-			tmpLecture = lectureList.get(lectureCnt);
-			tmpBtn = new JButton(tmpLecture.getLectureName());
-			lectureMap.put(tmpLecture.getLectureName(), tmpLecture.getLectureId() + "");
-			tmpBtn.addActionListener(this);
-			tmpBtn.setFont(lagf);
-			tmpBtn.setSize(220, 50);
-			tmpBtn.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
-			add(tmpBtn);
-			
-			tmpLb = new JLabel(registered[lectureCnt % 18]);
-			tmpLb.setSize(100, 50);
-			tmpLb.setFont(midF);
-			tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
-			add(tmpLb);
-			
-			tmpLb = new JLabel(latestDay[lectureCnt % 18]);
-			tmpLb.setSize(140, 50);
-			tmpLb.setFont(midF);
-			tmpLb.setLocation(440, TOPPADDING + LECTUREHGAP * lectureCnt);
-			add(tmpLb);
+		if(!isConnectErr){
+			ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
+			Lecture tmpLecture;
+			Gson gson = new Gson();
+
+			Type type = new TypeToken<ArrayLecture>() {
+			}.getType();
+			ArrayLecture jonResultlecturelist = (ArrayLecture) gson.fromJson(
+					sHtml, type);
+			lectureList = jonResultlecturelist.getLectures();
+
+			Font midF = new Font("Serif", Font.BOLD, 30);
+			JButton tmpBtn;
+			lectureMap = new HashMap<String, String>();
+
+			for (lectureCnt = 0; lectureCnt < lectureList.size(); lectureCnt++) {
+				tmpLecture = lectureList.get(lectureCnt);
+				tmpBtn = new JButton(tmpLecture.getLectureName());
+				lectureMap.put(tmpLecture.getLectureName(),
+						tmpLecture.getLectureId() + "");
+				tmpBtn.addActionListener(this);
+				tmpBtn.setFont(lagf);
+				tmpBtn.setSize(220, 50);
+				tmpBtn.setLocation(25, TOPPADDING + LECTUREHGAP * lectureCnt);
+				add(tmpBtn);
+
+				tmpLb = new JLabel(registered[lectureCnt % 18]);
+				tmpLb.setSize(100, 50);
+				tmpLb.setFont(midF);
+				tmpLb.setLocation(325, TOPPADDING + LECTUREHGAP * lectureCnt);
+				add(tmpLb);
+
+				tmpLb = new JLabel(latestDay[lectureCnt % 18]);
+				tmpLb.setSize(140, 50);
+				tmpLb.setFont(midF);
+				tmpLb.setLocation(440, TOPPADDING + LECTUREHGAP * lectureCnt);
+				add(tmpLb);
+			}
+			setPreferredSize(new Dimension(550, 20 + TOPPADDING + LECTUREHGAP
+					* lectureCnt));
 		}
-		setPreferredSize(new Dimension(550, 20 + TOPPADDING + LECTUREHGAP * lectureCnt));
 	}
 		
 	public void paint(Graphics g) {

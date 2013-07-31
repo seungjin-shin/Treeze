@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -47,13 +48,12 @@ public class LoginFrame extends JFrame {
 	MindMapController mc;
 	
 	private Image logo;
-	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
 	public LoginFrame(MindMapController mc) {
 		this.mc = mc;
 		setSize(300, 250);
 		setLayout(null);
 		getContentPane().setBackground(new Color(141, 198, 63));
-		logo = new ImageIcon(logoURL).getImage();
+		logo = Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png");
 		
 		btnListner = new UploadListner(this);
 
@@ -93,6 +93,7 @@ public class LoginFrame extends JFrame {
 		
 		g.setColor(Color.white);
 		g.drawLine(20, 120, 240, 120);
+		repaint();
 		
 	}
 	class UploadListner implements ActionListener{

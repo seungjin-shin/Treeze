@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -50,12 +51,10 @@ public class LecturePageFrame extends JFrame {
 
 	JPanel classPanel;
 	private Image profileImg;
-	private URL profileImgURL = getClass().getClassLoader().getResource("minsuk.jpg");
 	private Image logo;
-	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
 	ActionListener btnListener;
 	MindMapController mc;
-	private URL tmp;
+	private Image tmp;
 	String lectureName;
 	JScrollPane sPanel;
 	String lectureId;
@@ -63,8 +62,8 @@ public class LecturePageFrame extends JFrame {
 		this.mc = mc;
 		this.lectureId = lectureId;
 		lectureName = lectName;
-		profileImg = new ImageIcon(profileImgURL).getImage();
-		logo = new ImageIcon(logoURL).getImage();
+		profileImg = Toolkit.getDefaultToolkit().getImage("images/minsuk.jpg");
+		logo = Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png");
 		btnListener = new BtnListener(this);
 		classPanel = new ClassPanel(this, mc);
 		
@@ -101,7 +100,7 @@ public class LecturePageFrame extends JFrame {
 		address2.setLocation(50, 370);
 		add(address2);
 		
-		tmp = getClass().getClassLoader().getResource("CreateLecture.png");
+		tmp = Toolkit.getDefaultToolkit().getImage("images/CreateLecture.png");
 		
 		JButton tmpBtn = new JButton(new ImageIcon(tmp));
 		tmpBtn.setSize(132, 45);
@@ -109,7 +108,7 @@ public class LecturePageFrame extends JFrame {
 		tmpBtn.setFocusable(false);
 		add(tmpBtn);
 		
-		tmp = getClass().getClassLoader().getResource("profile.png");
+		tmp = Toolkit.getDefaultToolkit().getImage("images/profile.png");
 		
 		tmpBtn = new JButton(new ImageIcon(tmp));
 		tmpBtn.setSize(130, 45);
@@ -117,7 +116,7 @@ public class LecturePageFrame extends JFrame {
 		tmpBtn.setFocusable(false);
 		add(tmpBtn);
 		
-		tmp = getClass().getClassLoader().getResource("deleteLecture.png");
+		tmp = Toolkit.getDefaultToolkit().getImage("images/deleteLecture.png");
 		
 		tmpBtn = new JButton(new ImageIcon(tmp));
 		tmpBtn.setSize(135, 42);
@@ -125,7 +124,7 @@ public class LecturePageFrame extends JFrame {
 		tmpBtn.setFocusable(false);
 		add(tmpBtn);
 		
-		tmp = getClass().getClassLoader().getResource("logout.png");
+		tmp = Toolkit.getDefaultToolkit().getImage("images/logout.png");
 		
 		tmpBtn = new JButton(new ImageIcon(tmp));
 		tmpBtn.setSize(132, 45);
@@ -157,19 +156,19 @@ public class LecturePageFrame extends JFrame {
 		g.setColor(Color.black);
 		g.drawRect(298, 158, 600, 500);
 		g.drawRect(297, 157, 602, 502);
-		
+		repaint();
 	}
 	
 	class ClassTopBarPanel extends JPanel implements ActionListener{
 		ClassPanel frame;
-		URL tmpURL;
+		Image tmpURL;
 		public ClassTopBarPanel(ClassPanel frame) {
 			this.frame = frame;
 			setSize(450, 500);
 			setLayout(null);
 			setBackground(new Color(141, 198, 63));
 			
-			tmpURL = getClass().getClassLoader().getResource("addClass.png");
+			tmpURL = Toolkit.getDefaultToolkit().getImage("images/addClass.png");
 			JButton tmpBtn = new JButton(new ImageIcon(tmpURL));
 			tmpBtn.setSize(88, 30);
 			tmpBtn.setLocation(360, 10);
@@ -177,7 +176,7 @@ public class LecturePageFrame extends JFrame {
 			tmpBtn.addActionListener(this);
 			add(tmpBtn);
 			
-			tmpURL = getClass().getClassLoader().getResource("deleteClass.png");
+			tmpURL = Toolkit.getDefaultToolkit().getImage("images/deleteClass.png");
 			tmpBtn = new JButton(new ImageIcon(tmpURL));
 			tmpBtn.setSize(89, 30);
 			tmpBtn.setLocation(460, 10);
@@ -251,7 +250,7 @@ public class LecturePageFrame extends JFrame {
 		Image onBookMark, offBookMark;
 		Image onState, offState;
 		JFrame frame;
-		URL slideShowURL, mindmapURL;
+		Image slideShowURL, mindmapURL;
 		
 		MindMapController mc;
 		final int TOPPADDING = 130;
@@ -267,8 +266,8 @@ public class LecturePageFrame extends JFrame {
 			setSize(450, 500);
 			setLayout(null);
 			
-			slideShowURL = getClass().getClassLoader().getResource("slideShow.png");
-			mindmapURL = getClass().getClassLoader().getResource("mindmap.png");
+			slideShowURL = Toolkit.getDefaultToolkit().getImage("images/slideShow.png");
+			mindmapURL = Toolkit.getDefaultToolkit().getImage("images/mindmap.png");
 			
 			tmpLb = new JLabel("Class Title");
 			tmpLb.setSize(200, 50);
@@ -300,6 +299,7 @@ public class LecturePageFrame extends JFrame {
 			String sHtml = "";
 			BufferedReader in = null;
 			String buf = "";
+			boolean isConnectErr = false;
 			try
 			{
 				URL url = new URL("http://61.43.139.10:8080/treeze/getClasses?lectureId=" + lectureId);
@@ -313,63 +313,70 @@ public class LecturePageFrame extends JFrame {
 			}
 			catch(Exception e)
 			{
+				isConnectErr = true;
 			    System.out.println("연결 에러");
 			}
 			finally
 			{
 			    if(sHtml.equals("")) sHtml = "Data가 존재하지 않습니다";
 			    try {
-					in.close();
+			    	if(in != null)
+			    		in.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			System.out.println(sHtml);
-			ArrayList<freemind.json.ClassInfo> classList = new ArrayList<freemind.json.ClassInfo>();
-			freemind.json.ClassInfo tmpClass;
-			FreemindGson myGson = new FreemindGson();
-			Gson gson = new Gson();
-			
-			java.lang.reflect.Type type = new TypeToken<ArrayClass>() {
-			}.getType();
-			ArrayClass jonResultClasslist = (ArrayClass) gson
-					.fromJson(sHtml, type);
-			classList = jonResultClasslist.getClasses();
-			
-			JLabel tmpLb;
-			JButton slideBtn;
-			JButton mindmapBtn;
-			Font midf = new Font("Serif", Font.BOLD, 20);
-			for(classCnt = 0; classCnt < classList.size(); classCnt++){
-				tmpClass = classList.get(classCnt);
-				tmpLb = new JLabel(tmpClass.getClassName());
-				tmpLb.setFont(midf);
-				tmpLb.setSize(240, 50);
-				tmpLb.setLocation(40, TOPPADDING + classCnt * CLASSHGAP);
-				add(tmpLb);
-				
-				tmpLb = new JLabel(latestDay[classCnt % 18]);
-				tmpLb.setFont(midf);
-				tmpLb.setSize(240, 50);
-				tmpLb.setLocation(295, TOPPADDING + classCnt * CLASSHGAP);
-				add(tmpLb);
-				
-				slideBtn = new JButton(new ImageIcon(slideShowURL));
-				mindmapBtn = new JButton(tmpClass.getClassId() + "", new ImageIcon(mindmapURL));
-				
-				slideBtn.setSize(100, 24);
-				slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
-				slideBtn.setFocusable(false);
-				add(slideBtn);
-				
-				mindmapBtn.setSize(100, 24);
-				mindmapBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP + 25);
-				mindmapBtn.setFocusable(false);
-				mindmapBtn.addActionListener(this);
-				add(mindmapBtn);
+			if (!isConnectErr) {
+				System.out.println(sHtml);
+				ArrayList<freemind.json.ClassInfo> classList = new ArrayList<freemind.json.ClassInfo>();
+				freemind.json.ClassInfo tmpClass;
+				FreemindGson myGson = new FreemindGson();
+				Gson gson = new Gson();
+
+				java.lang.reflect.Type type = new TypeToken<ArrayClass>() {
+				}.getType();
+				ArrayClass jonResultClasslist = (ArrayClass) gson.fromJson(
+						sHtml, type);
+				classList = jonResultClasslist.getClasses();
+
+				JLabel tmpLb;
+				JButton slideBtn;
+				JButton mindmapBtn;
+				Font midf = new Font("Serif", Font.BOLD, 20);
+				for (classCnt = 0; classCnt < classList.size(); classCnt++) {
+					tmpClass = classList.get(classCnt);
+					tmpLb = new JLabel(tmpClass.getClassName());
+					tmpLb.setFont(midf);
+					tmpLb.setSize(240, 50);
+					tmpLb.setLocation(40, TOPPADDING + classCnt * CLASSHGAP);
+					add(tmpLb);
+
+					tmpLb = new JLabel(latestDay[classCnt % 18]);
+					tmpLb.setFont(midf);
+					tmpLb.setSize(240, 50);
+					tmpLb.setLocation(295, TOPPADDING + classCnt * CLASSHGAP);
+					add(tmpLb);
+
+					slideBtn = new JButton(new ImageIcon(slideShowURL));
+					mindmapBtn = new JButton(tmpClass.getClassId() + "",
+							new ImageIcon(mindmapURL));
+
+					slideBtn.setSize(100, 24);
+					slideBtn.setLocation(472, TOPPADDING + classCnt * CLASSHGAP);
+					slideBtn.setFocusable(false);
+					add(slideBtn);
+
+					mindmapBtn.setSize(100, 24);
+					mindmapBtn.setLocation(472, TOPPADDING + classCnt
+							* CLASSHGAP + 25);
+					mindmapBtn.setFocusable(false);
+					mindmapBtn.addActionListener(this);
+					add(mindmapBtn);
+				}
+				setPreferredSize(new Dimension(550, 20 + TOPPADDING + classCnt
+						* CLASSHGAP));
 			}
-			setPreferredSize(new Dimension(550, 20 + TOPPADDING + classCnt * CLASSHGAP));
 		}
 
 		public void paint(Graphics g) {
