@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -48,10 +49,8 @@ public class LoggedInFrame extends JFrame {
 
 	LecturePanel lecturePanel;
 	private Image profileImg;
-	private URL profileImgURL = getClass().getClassLoader().getResource("minsuk.jpg");
 	private Image logo;
-	private URL tmp;
-	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
+	private Image tmp;
 	CreateBtn createLs;
 	MindMapController mc;
 	public LoggedInFrame(MindMapController mc) {
@@ -60,8 +59,8 @@ public class LoggedInFrame extends JFrame {
 		JScrollPane sPanel = new JScrollPane(lecturePanel);
 		createLs = new CreateBtn(lecturePanel, sPanel);
 		
-		profileImg = new ImageIcon(profileImgURL).getImage();
-		logo = new ImageIcon(logoURL).getImage();
+		profileImg = Toolkit.getDefaultToolkit().getImage("images/minsuk.jpg");
+		logo = Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png");
 		
 		setSize(950, 800);
 		setLayout(null);
@@ -95,26 +94,26 @@ public class LoggedInFrame extends JFrame {
 		ltPanel.setLocation(300, 75);
 		ltPanel.setBackground(new Color(141, 198, 63));
 		
-		tmp = getClass().getClassLoader().getResource("CreateLecture.png");
+		tmp = Toolkit.getDefaultToolkit().getImage("images/CreateLecture.png");
 		
 		JButton tmpBtn = new JButton(new ImageIcon(tmp));
 		tmpBtn.setFocusable(false);
 		tmpBtn.addActionListener(createLs);
 		ltPanel.add(tmpBtn);
 		
-		tmp = getClass().getClassLoader().getResource("profile.png");
+		tmp = Toolkit.getDefaultToolkit().getImage("images/profile.png");
 		
 		tmpBtn = new JButton(new ImageIcon(tmp));
 		tmpBtn.setFocusable(false);
 		ltPanel.add(tmpBtn);
 		
-		tmp = getClass().getClassLoader().getResource("deleteLecture.png");
+		tmp = Toolkit.getDefaultToolkit().getImage("images/deleteLecture.png");
 		
 		tmpBtn = new JButton(new ImageIcon(tmp));
 		tmpBtn.setFocusable(false);
 		ltPanel.add(tmpBtn);
 		
-		tmp = getClass().getClassLoader().getResource("logout.png");
+		tmp = Toolkit.getDefaultToolkit().getImage("images/logout.png");
 		
 		tmpBtn = new JButton(new ImageIcon(tmp));
 		tmpBtn.setFocusable(false);
@@ -177,6 +176,7 @@ public class LoggedInFrame extends JFrame {
 		g.setColor(Color.black);
 		g.drawRect(298, 158, 600, 500);
 		g.drawRect(297, 157, 602, 502);
+		repaint();
 	}
 	
 }
@@ -318,7 +318,8 @@ class LecturePanel extends JPanel implements ActionListener{
 		    }
 		    
 		    try {
-				in.close();
+		    	if(in != null)
+		    		in.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

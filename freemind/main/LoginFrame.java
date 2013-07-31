@@ -48,13 +48,12 @@ public class LoginFrame extends JFrame {
 	MindMapController mc;
 	
 	private Image logo;
-	URL logoURL = getClass().getClassLoader().getResource("treezeLogo.png");
 	public LoginFrame(MindMapController mc) {
 		this.mc = mc;
 		setSize(300, 250);
 		setLayout(null);
 		getContentPane().setBackground(new Color(141, 198, 63));
-		logo = Toolkit.getDefaultToolkit().getImage("images/addClass.png");
+		logo = Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png");
 		
 		btnListner = new UploadListner(this);
 

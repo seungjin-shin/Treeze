@@ -205,8 +205,7 @@ public class NodeKeyListener implements KeyListener {
 			}
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F10){
-			java.awt.Image img = java.awt.Toolkit.getDefaultToolkit().getImage("addClass.png");
-			System.out.println("dd");
+			
 		}
 		
 		if (mListener != null)
