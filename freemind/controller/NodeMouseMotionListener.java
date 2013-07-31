@@ -26,6 +26,7 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import freemind.modes.MindMapNode;
+import freemind.modes.NodeAdapter;
 
 /**
  * The MouseMotionListener which belongs to every NodeView
@@ -41,11 +42,13 @@ public class NodeMouseMotionListener implements MouseMotionListener,
     }
 
     private final Controller c;
+    private FreemindManager fManager;
 
     private NodeMouseMotionObserver mListener;
 
     public NodeMouseMotionListener(Controller controller) {
         c = controller;
+        fManager = FreemindManager.getInstance();
     }
 
     public void register(NodeMouseMotionObserver listener) {
@@ -56,43 +59,62 @@ public class NodeMouseMotionListener implements MouseMotionListener,
     public void deregister() {
         mListener = null;
     }
-
+    
+    
     public void mouseClicked(MouseEvent e) {
+//    	if(e.getClickCount() == 2){
+//    		System.out.println("NodeMouseMotion double click");
+//    		
+//    	}
+    		
+    	
         if (mListener != null)
             mListener.mouseClicked(e);
         
-		MindMapNode questionNode = c.getModeController().getSelected();
+		MindMapNode selNode = c.getMc().getSelected();
 		
-		if (questionNode.isHaveQuestion()) {
-			questionNode.removeIcon(0);
-			questionNode.setHaveQuestion(false);
-			c.getModeController().nodeChanged(questionNode); // 아이콘 지우기
+		if (selNode.isQuestion()) { // at Q node
+			if (selNode.isHaveQuestion()) {
+				selNode.removeIcon(0);
+				selNode.setHaveQuestion(false);
+				c.getModeController().nodeChanged(selNode); // 아이콘 지우기
+			}
+			
+			//show frame
+			
+		}
+		else if(selNode.getTicketTitle() == null){ // at slide Node
+			MindMapNode selNodeParent;
+			//set focus
+			if (fManager.isSlideShowInfo()) {
+				c.getSlideShow().setfocus((NodeAdapter) selNode);
+				c.getSlideShow().show();
+			}
+			
+			//get node idx
+			ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
+			int idx;
+			String idxStr = "root";
+			
+			if (!selNode.isRoot())
+				idxStr = "";
+			
+			while (!selNode.isRoot()) {
+				selNodeParent = selNode.getParentNode();
+				idx = selNodeParent.getChildPosition(selNode);
+				idxReverseList.add(idx);
+				selNode = selNodeParent;
+			}
+			
+			for (int i = idxReverseList.size(); i > 0; i--) {
+				if (i == 1)
+					idxStr = idxStr + idxReverseList.get(i - 1);
+				else
+					idxStr = idxStr + idxReverseList.get(i - 1) + "/";
+			}
+			System.out.println(idxStr);
 		}
 		
-		
-		
-//		MindMapNode questionNodeParent;//
-//		ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
-//		int idx;
-//		String idxStr = "root";
-//
-//		if (!questionNode.isRoot())
-//			idxStr = "";
-//
-//		while (!questionNode.isRoot()) {
-//			questionNodeParent = questionNode.getParentNode();
-//			idx = questionNodeParent.getChildPosition(questionNode);
-//			idxReverseList.add(idx);
-//			questionNode = questionNodeParent;
-//		}
-//		for (int i = idxReverseList.size(); i > 0; i--) {
-//			if (i == 1)
-//				idxStr = idxStr + idxReverseList.get(i - 1);
-//			else
-//				idxStr = idxStr + idxReverseList.get(i - 1) + "/";
-//			System.out.print(idxReverseList.get(i - 1));
-//		}
-        
       //before QuestionFrame
 //        String nodeText = c.getModeController().getSelected().getText();
 //        MindMapNode questionNode = c.getModeController().getSelected();
@@ -140,22 +162,21 @@ public class NodeMouseMotionListener implements MouseMotionListener,
         if (mListener != null)
             mListener.mouseExited(e);
     }
-
     public void mouseMoved(MouseEvent e) {
         if (mListener != null)
             mListener.mouseMoved(e);
     }
-
     public void mousePressed(MouseEvent e) {
         if (mListener != null)
             mListener.mousePressed(e);
     }
-
     public void mouseReleased(MouseEvent e) {
+    	if(!c.getMc().getSelected().hasChildren()) // last node remove edit event
+    		return;
+    	
         if (mListener != null)
-            mListener.mouseReleased(e);
+            mListener.mouseReleased(e); // 여기서 클릭
     }
-
     public void updateSelectionMethod() {
         if (mListener != null)
             mListener.updateSelectionMethod();

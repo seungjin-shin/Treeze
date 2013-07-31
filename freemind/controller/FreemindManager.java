@@ -12,7 +12,10 @@ public class FreemindManager {
 	
 	private boolean isQuestion = false;
 	private boolean addQuestionNode = false;
-	
+	private boolean isSlideShowInfo = false;
+	private boolean isAddQuestionNodeInfo = false;
+
+
 	private String ticketTitle;
 	private String ticketContent;
 	private String ticketWriter;
@@ -22,8 +25,20 @@ public class FreemindManager {
 	
 	
 	
+	public boolean isAddQuestionNodeInfo() {
+		return isAddQuestionNodeInfo;
+	}
 	
+	public void setAddQuestionNodeInfo(boolean isAddQuestionNodeInfo) {
+		this.isAddQuestionNodeInfo = isAddQuestionNodeInfo;
+	}
+	public boolean isSlideShowInfo() {
+		return isSlideShowInfo;
+	}
 	
+	public void setSlideShowInfo(boolean isSlideShowInfo) {
+		this.isSlideShowInfo = isSlideShowInfo;
+	}
 	public String getFilePath() {
 		return filePath;
 	}

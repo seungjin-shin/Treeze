@@ -77,16 +77,18 @@ public class NodeColorAction extends FreemindAction implements ActorXml {
     }
     
     public void act(XmlAction action) {
-		if (action instanceof NodeColorFormatAction) {
-			NodeColorFormatAction nodeColorAction = (NodeColorFormatAction) action;
-			Color color = Tools.xmlToColor(nodeColorAction.getColor());
-			MindMapNode node = controller.getNodeFromID(nodeColorAction.getNode());
-			Color oldColor = node.getColor() ;
-			if (!Tools.safeEquals(color, oldColor)) {
-                node.setColor(color); // null
-                controller.nodeChanged(node);
-            }
-		}
+    	//dewlit
+    	//remove node color
+//		if (action instanceof NodeColorFormatAction) {
+//			NodeColorFormatAction nodeColorAction = (NodeColorFormatAction) action;
+//			Color color = Tools.xmlToColor(nodeColorAction.getColor());
+//			MindMapNode node = controller.getNodeFromID(nodeColorAction.getNode());
+//			Color oldColor = node.getColor() ;
+//			if (!Tools.safeEquals(color, oldColor)) {
+//                node.setColor(color); // null
+//                controller.nodeChanged(node);
+//            }
+//		}
    }
 
     public Class getDoActionClass() {

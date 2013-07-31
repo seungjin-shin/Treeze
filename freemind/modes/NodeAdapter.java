@@ -80,10 +80,6 @@ public abstract class NodeAdapter implements MindMapNode {
 	private String ticketWriter;
 	
 	private NodeAdapter prev;
-	
-
-
-
 	private NodeAdapter next;
 	
 	private String imgPath;
@@ -1058,7 +1054,19 @@ freemind.main.Resources.getInstance().logException(			e);
     	//node.setAttribute("dewlit",	"dewlit");
     	//dewlit
     	//node.set
-
+    	if(imgPath != null)
+    		node.setAttribute("IMGPATH", imgPath);
+    	if(ticketTitle != null)
+    		node.setAttribute("TICKETTITLE", ticketTitle);
+    	if(ticketContent != null)
+    		node.setAttribute("TICKETCONTENT", ticketContent);
+    	if(ticketWriter != null)
+    		node.setAttribute("TICKETWRITER", ticketWriter);
+    	if(isQuestion)
+    		node.setAttribute("ISQUESTION", "TRUE");
+    	if(haveQuestion)
+    		node.setAttribute("HAVEQUESTION", "TRUE");
+    	
         /** fc, 12.6.2005: XML must not contain any zero characters. */
         String text = this.toString().replace('\0', ' ');
         if(!HtmlTools.isHtmlNode(text)) {

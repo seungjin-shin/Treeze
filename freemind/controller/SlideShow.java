@@ -62,28 +62,66 @@ public class SlideShow {
 
 	public void setfocusnext() {
 		// TODO Auto-generated method stub
-		if (focus.getNext() != null)
-			this.setfocus(focus.getNext());
-		else {
-			System.out.println("마지막슬라이드입니다.");
-			imgFrame.setVisible(false);
+		
+		NodeAdapter next;
+		NodeAdapter cur = focus.getNext();
+		while (true) {
+			
+			next = cur;
+
+			if (next != null){ // modify for do not have img
+				
+				if(!next.getImgPath().equals("")){
+					this.setfocus(next);
+					show();
+					break;
+				}
+				else{
+					cur = cur.getNext();
+					continue;
+				}
+			}
+			else {
+				System.out.println("마지막슬라이드입니다.");
+				imgFrame.setVisible(false);
+				break;
+			}
 		}
 	}
 	
 	public void setfocusprev() {
 		// TODO Auto-generated method stub
-		if (focus.getPrev() != null)
-			this.setfocus(focus.getPrev());
-		else {
-			System.out.println("첫 슬라이드입니다.");
-			imgFrame.setVisible(false);
+		
+		NodeAdapter prev;
+		NodeAdapter cur = focus.getPrev();
+		while (true) {
+			
+			prev = cur;
+
+			if (prev != null){ // modify for do not have img
+				
+				if(!prev.getImgPath().equals("")){
+					this.setfocus(prev);
+					show();
+					break;
+				}
+				else{
+					cur = cur.getPrev();
+					continue;
+				}
+			}
+			else {
+				System.out.println("첫 슬라이드입니다.");
+				imgFrame.setVisible(false);
+				break;
+			}
 		}
 	}
 
 	public void show() {
 		// TODO Auto-generated method stub
-
-		imgFrame.show();
+		if(!focus.getImgPath().equals(""))
+			imgFrame.show();
 
 	}
 
@@ -210,11 +248,9 @@ public class SlideShow {
 		private void nextShow() {
 			// TODO Auto-generated method stub
 			this.slideShow.setfocusnext();
-			slideShow.show();
 		}
 		private void prevShow(){
 			this.slideShow.setfocusprev();
-			slideShow.show();
 		}
 
 		@Override

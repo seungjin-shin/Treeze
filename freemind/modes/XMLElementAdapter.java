@@ -391,6 +391,20 @@ public abstract class XMLElementAdapter extends XMLElement {
     	 //dewlit
     	 node.setImgPath(sValue);
      }
+     else if(name.equals("TICKETTITLE"))
+    	 node.setTicketTitle(sValue);
+     else if(name.equals("TICKETCONTENT"))
+    	 node.setTicketContent(sValue);
+     else if(name.equals("TiCKETWRITER"))
+    	 node.setTicketWriter(sValue);
+     else if(name.equals("ISQUESTION")){
+    	 if(sValue.equals("TRUE"))
+    		 node.setQuestion(true);
+     }
+     else if(name.equals("HAVEQUESTION")){
+    	 if(sValue.equals("TRUE"))
+    		 node.setHaveQuestion(true);
+     }
 	 else if (name.equals(XML_NODE_ENCRYPTED_CONTENT)) {
 	     // we change the node implementation to EncryptedMindMapNode.
 	     node = createEncryptedNode(sValue);

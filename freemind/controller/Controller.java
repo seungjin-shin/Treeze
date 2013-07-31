@@ -1569,84 +1569,18 @@ public class Controller  implements MapModuleChangeObserver {
         public SlideShowAction() {
            super("Slide Show"); }
         public void actionPerformed(ActionEvent e) {
-        	NodeAdapter root = (NodeAdapter)mc.getRootNode();
-        	//prev;// 
-        	//next;// = (NodeAdapter)mc.getRootNode();
         	
-        	//set root
-        	root.setPrev(null);
-        	if(root.hasChildren()){
-        		next = (NodeAdapter)root.getChildAt(0);
-        		root.setNext(next);
-//        		prev = cur;
-//        		cur = (NodeAdapter)cur.getChildAt(0);
-        		
-        		for(int i = 0; i < root.getChildCount(); i++){ // root direct childs set
-            		recurSetSlideShowInfo((NodeAdapter)root.getChildAt(i));
-            	}
-        	}
-        	else{
-        		System.out.println("only root");
-        		return;
-        	}
         	
         	//set the others
         	
         	
-           	System.out.println("dd");
-        	//0/0/0
-//        	int position[] = {0,0,0};
-//        	int i;
-//        	FreemindManager fManager = FreemindManager.getInstance();
-//        	MindMapNode targetNode = null;
-//        	MindMapNode tmp = mc.getRootNode();
-//        	for(i = 0; i < position.length; i++){
-//       			tmp = (MindMapNode)tmp.getChildAt(position[i]);
-//        	}
+        	//0/0/0 
+           	//receive question
 //        	
-//        	if(tmp.hasChildren()){
-//        		for(i = 0; i < tmp.getChildCount(); i++){// Q에다가만 질무문 달기 여기 고쳐야대
-//        			MindMapNode forSearchQNode;
-//        			forSearchQNode = (MindMapNode)tmp.getChildAt(i);
-//        			if(forSearchQNode.getText().equals("Q"))
-//        				break;
-//        		}
-//        		targetNode = (MindMapNode) tmp.getChildAt(i); 
-//        		
-//        	}
-//        	else{
-//        		System.out.println("not have Question Node!");
-//        		return;
-//        	}
-//        	
-//        	fManager.setQuestion(true); // 질문 받았을 때 newChildAction에서 처리하려고
-//        	fManager.setTicketContent("content test");
-//        	fManager.setTicketTitle("Title test");
-//        	fManager.setTicketWriter("write t");
-//        	
-//        	mc.addNew(targetNode, MindMapController.NEW_CHILD, null);
-//        	fManager.setQuestion(false);
-//        	fManager.setTicketContent("");
-//        	fManager.setTicketTitle("");
-//        	fManager.setTicketWriter("");
-//        	
-//        	//mc.edit.stopEditing();
-//        	//targetNode.setFolded(true);
-//        	
-//        	mc._setFolded(targetNode, true);
-//        	
-//        	MindIcon icon = MindIcon.factory("help");
-//			if(!targetNode.isHaveQuestion()){
-//				targetNode.addIcon(icon, -1); // ? 아이콘 한번만
-//				targetNode.setHaveQuestion(true);
-//			}
-//        	
-//			mc.nodeChanged(targetNode);
         	
-        	//fManager.setAddQuestionNode(true);
-        	//mc.addQuestionNode(mc, mc.getRootNode());
-        	//fManager.setAddQuestionNode(false);
+           	
         	
+           	//before
 //        	final String NAVINUM = "0";
 //
 //        	if(getSlideList().size() == 0)

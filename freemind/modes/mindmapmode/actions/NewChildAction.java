@@ -72,8 +72,10 @@ public class NewChildAction extends AbstractAction implements ActorXml {
 		MindMapNode newNode;
 		int index = addNodeAction.getIndex();
 		
-		if(fManager.isAddQuestionNode())
+		if(fManager.isAddQuestionNode()){
 			newNode = c.newNode("Q", parent.getMap());
+			newNode.setQuestion(true);
+		}
 		else if(fManager.isQuestion()){
 			String ticketTitle = fManager.getTicketTitle();
 			String ticketContent = fManager.getTicketContent();

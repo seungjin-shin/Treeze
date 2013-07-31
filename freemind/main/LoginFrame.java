@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -53,7 +54,7 @@ public class LoginFrame extends JFrame {
 		setSize(300, 250);
 		setLayout(null);
 		getContentPane().setBackground(new Color(141, 198, 63));
-		logo = new ImageIcon(logoURL).getImage();
+		logo = Toolkit.getDefaultToolkit().getImage("images/addClass.png");
 		
 		btnListner = new UploadListner(this);
 
@@ -94,7 +95,7 @@ public class LoginFrame extends JFrame {
 		
 		g.setColor(Color.white);
 		g.drawLine(20, 120, 240, 120);
-		
+		repaint();
 	}
 	class UploadListner implements ActionListener{
 		JFrame frame;

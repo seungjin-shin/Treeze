@@ -22,18 +22,15 @@ package freemind.controller;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
 
-import freemind.json.CurrentPositionOfNav;
-import freemind.json.FreemindGson;
+import com.itextpdf.text.Image;
+import com.sun.media.sound.Toolkit;
+
 import freemind.modes.MindIcon;
 import freemind.modes.MindMapNode;
 import freemind.modes.NodeAdapter;
-import freemind.modes.UploadToServer;
+import freemind.modes.mindmapmode.MindMapController;
 
 /**
  * The KeyListener which belongs to the node and cares for Events like C-D
@@ -42,11 +39,12 @@ import freemind.modes.UploadToServer;
 public class NodeKeyListener implements KeyListener {
 
 	private Controller c;
-
 	private KeyListener mListener;
-
+	private FreemindManager fManager;
 	public NodeKeyListener(Controller controller) {
 		c = controller;
+		fManager = FreemindManager.getInstance();
+		
 	}
 
 	public void register(KeyListener listener) {
@@ -61,13 +59,15 @@ public class NodeKeyListener implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		final String NAVINUM = "0";
 		OutputStream os;
-
-		if (e.getKeyCode() == KeyEvent.VK_TAB) {
+ 		if (e.getKeyCode() == KeyEvent.VK_F5) {
 			
 			//c.setFocus((NodeAdapter)c.getMc().getRootNode());
 			
 			c.getSlideShow().setfocus((NodeAdapter)c.getMc().getRootNode());
 			c.getSlideShow().show();
+			
+			
+			//return; // search the other loc
 			
 //			for(int i = 0; i < c.getNaviOs().size(); i++){
 //				os = c.getNaviOs().get(i);
@@ -81,7 +81,7 @@ public class NodeKeyListener implements KeyListener {
 //			}
 //			System.out.println("start");
 			
-		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+		} else if (e.getKeyCode() == KeyEvent.VK_F6) {
 			if(c.getSlideShow().getfocus() == null)
 				return;
 			
@@ -115,6 +115,98 @@ public class NodeKeyListener implements KeyListener {
 		else if(e.getKeyCode() == KeyEvent.VK_F4){
 			new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
 			//new SurveyResultFrame(31, 9);
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_F7){
+			//set slide show
+			NodeAdapter root = (NodeAdapter)c.getMc().getRootNode();
+        	NodeAdapter next;// = (NodeAdapter)mc.getRootNode();
+        	
+        	//set FreemindManager isSlideshow 
+        	fManager.setSlideShowInfo(true);
+        	
+        	//set root
+        	root.setPrev(null);
+        	if(root.hasChildren()){
+        		next = (NodeAdapter)root.getChildAt(0);
+        		root.setNext(next);
+//        		prev = cur;
+//        		cur = (NodeAdapter)cur.getChildAt(0);
+        		
+        		for(int i = 0; i < root.getChildCount(); i++){ // root direct childs set
+            		c.recurSetSlideShowInfo((NodeAdapter)root.getChildAt(i));
+            	}
+        	}
+        	else{
+        		System.out.println("only root");
+        		return;
+        	}
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_F8){
+			//if receive q
+			int position[] = {1,0};
+        	int i;
+        	FreemindManager fManager = FreemindManager.getInstance();
+        	MindMapNode targetNode = null;
+        	MindMapNode tmp = c.getMc().getRootNode();
+        	for(i = 0; i < position.length; i++){
+       			tmp = (MindMapNode)tmp.getChildAt(position[i]);
+        	}
+        	
+        	if(tmp.hasChildren()){
+        		for(i = 0; i < tmp.getChildCount(); i++){// 완료
+        			MindMapNode forSearchQNode;
+        			forSearchQNode = (MindMapNode)tmp.getChildAt(i);
+        			if(forSearchQNode.getText().equals("Q"))
+        				break;
+        		}
+        		targetNode = (MindMapNode) tmp.getChildAt(i); 
+        		
+        	}
+        	else{
+        		System.out.println("not have Question Node!");
+        		return;
+        	}
+        	
+        	fManager.setQuestion(true); // 질문 받았을 때 newChildAction에서 처리하려고
+        	fManager.setTicketContent("content test");
+        	fManager.setTicketTitle("Title test");
+        	fManager.setTicketWriter("write t");
+        	
+        	c.getMc().addNew(targetNode, MindMapController.NEW_CHILD, null);
+        	fManager.setQuestion(false);
+        	fManager.setTicketContent("");
+        	fManager.setTicketTitle("");
+        	fManager.setTicketWriter("");
+        	
+        	//mc.edit.stopEditing();
+        	//targetNode.setFolded(true);
+        	
+        	c.getMc()._setFolded(targetNode, true);
+        	
+        	MindIcon icon = MindIcon.factory("help");
+			if(!targetNode.isHaveQuestion()){
+				targetNode.addIcon(icon, -1); // ? 아이콘 한번만
+				targetNode.setHaveQuestion(true);
+			}
+        	
+			c.getMc().nodeChanged(targetNode);
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_F9){
+			//set Q node
+			
+			
+			if (!fManager.isAddQuestionNodeInfo()) {
+				fManager.setAddQuestionNodeInfo(true);
+				
+				fManager.setAddQuestionNode(true);
+				c.getMc().addQuestionNode(c.getMc(), c.getMc().getRootNode());
+				fManager.setAddQuestionNode(false);
+				c.getMc().edit.stopEditing();
+			}
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_F10){
+			java.awt.Image img = java.awt.Toolkit.getDefaultToolkit().getImage("addClass.png");
+			System.out.println("dd");
 		}
 		
 		if (mListener != null)
