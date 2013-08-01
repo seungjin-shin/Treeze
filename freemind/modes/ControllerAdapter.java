@@ -756,6 +756,9 @@ public abstract class ControllerAdapter implements ModeController {
     	int cnt = forAddingQuestionNode.getChildCount();
     	
     	mc.addNew(forAddingQuestionNode, MindMapController.NEW_CHILD, null);
+//    	NodeAdapter newNode = (NodeAdapter)node;
+//    	
+//    	getModel().insertNodeInto(newNode, mc.getSelected(), 0);
     	
     	for(i = 0; i < cnt; i++){
     		addQuestionNode(mc, (MindMapNode)forAddingQuestionNode.getChildAt(i));
@@ -806,7 +809,7 @@ public abstract class ControllerAdapter implements ModeController {
 		if(!mkDirFile.exists())
 			mkDirFile.mkdir();
 		
-		mkDirPath += "\\";
+		mkDirPath += "/";
 
 		File file = new File(filePath);
         

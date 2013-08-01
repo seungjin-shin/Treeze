@@ -119,6 +119,7 @@ import freemind.main.ExampleFileFilter;
 import freemind.main.FixedHTMLWriter;
 import freemind.main.HtmlTools;
 import freemind.main.LoginFrame;
+import freemind.main.ProfileFrame;
 import freemind.main.Resources;
 import freemind.main.Tools;
 import freemind.main.XMLElement;
@@ -421,7 +422,7 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
 	}
 	
 	if(FIRST == 1){ // 클래스를 두번 만듬, 한번만 호출하게
-		new LoginFrame(this);
+		new ProfileFrame(this);
 		FIRST++;
 	}
     // create action factory:

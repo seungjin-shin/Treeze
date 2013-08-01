@@ -141,8 +141,9 @@ public class NodeMouseMotionListener implements MouseMotionListener,
 				c.getModeController().nodeChanged(selNode); // 아이콘 지우기
 			}
 			
-			//show Q frame
-			
+			//show Q Frame
+			if(!selNode.isFolded())
+				new TicketFrame((NodeAdapter)selNode, c);
 		}
 		else if(selNode.getTicketTitle() == null){ // at slide Node
 			MindMapNode selNodeParent;

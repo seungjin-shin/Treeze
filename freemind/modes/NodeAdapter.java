@@ -83,6 +83,12 @@ public abstract class NodeAdapter implements MindMapNode {
 	private NodeAdapter next;
 	
 	private String imgPath;
+	
+	
+	
+	public NodeAdapter() {
+		// TODO Auto-generated constructor stub
+	}
 
 	final static int SHIFT = -2;//height of the vertical shift between node and its closest child
     public final static int HGAP = 20;//width of the horizontal gap that contains the edges

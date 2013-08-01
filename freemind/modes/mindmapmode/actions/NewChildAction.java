@@ -66,6 +66,7 @@ public class NewChildAction extends AbstractAction implements ActorXml {
     	//String childName = c.getChildName(); // 양식없는거 만들때 제목으로
     	//if(childName.equals(""))
     		//childName = "";
+    	
 		FreemindManager fManager = FreemindManager.getInstance();
     	NewNodeAction addNodeAction = (NewNodeAction) action;
 		NodeAdapter parent = this.c.getNodeFromID(addNodeAction.getNode());
@@ -73,6 +74,7 @@ public class NewChildAction extends AbstractAction implements ActorXml {
 		int index = addNodeAction.getIndex();
 		
 		if(fManager.isAddQuestionNode()){
+			
 			newNode = c.newNode("Q", parent.getMap());
 			newNode.setQuestion(true);
 		}
@@ -85,7 +87,6 @@ public class NewChildAction extends AbstractAction implements ActorXml {
 			newNode.setTicketTitle(ticketTitle);
 			newNode.setTicketContent(ticketContent);
 			newNode.setTicketWriter(ticketWriter);
-			newNode.setQuestion(true);
 		}
 		else
 			newNode = c.newNode("", parent.getMap());

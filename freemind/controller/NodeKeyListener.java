@@ -20,16 +20,34 @@
 
 package freemind.controller;
 
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import com.google.gson.Gson;
 import com.itextpdf.text.Image;
 import com.sun.media.sound.Toolkit;
 
+import freemind.json.Ticket;
+import freemind.json.TicketInfo;
 import freemind.modes.MindIcon;
 import freemind.modes.MindMapNode;
 import freemind.modes.NodeAdapter;
+import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
 
 /**
@@ -44,12 +62,10 @@ public class NodeKeyListener implements KeyListener {
 	public NodeKeyListener(Controller controller) {
 		c = controller;
 		fManager = FreemindManager.getInstance();
-		
 	}
 
 	public void register(KeyListener listener) {
 		this.mListener = listener;
-
 	}
 
 	public void deregister() {
@@ -144,7 +160,7 @@ public class NodeKeyListener implements KeyListener {
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F8){
 			//if receive q
-			int position[] = {1,0};
+			int position[] = {2,0};
         	int i;
         	FreemindManager fManager = FreemindManager.getInstance();
         	MindMapNode targetNode = null;
@@ -207,7 +223,6 @@ public class NodeKeyListener implements KeyListener {
 			}
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F10){
-			
 		}
 		
 		if (mListener != null)
@@ -223,5 +238,7 @@ public class NodeKeyListener implements KeyListener {
 		if (mListener != null)
 			mListener.keyTyped(e);
 	}
-
+	
 }
+	
+

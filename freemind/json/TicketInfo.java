@@ -1,5 +1,7 @@
 package freemind.json;
 
+import freemind.modes.NodeAdapter;
+
 public class TicketInfo {
 	
 	private String position;
@@ -7,6 +9,10 @@ public class TicketInfo {
 	private String ticketTitle;
 	private String contents;
 	private String userName;
+	
+	public TicketInfo() {
+		// TODO Auto-generated constructor stub
+	}
 	public String getPosition() {
 		return position;
 	}

@@ -200,7 +200,6 @@ public class SlideShow {
 						showpause();
 					} else if(e.getKeyCode() == KeyEvent.VK_PAGE_DOWN){
 						nextShow();
-						
 //						ArrayList<Integer> idxList = focus.getIdxList();
 //						
 //						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
@@ -272,7 +271,7 @@ public class SlideShow {
 			// TODO Auto-generated method stub
 			BufferedImage i = null;
 			try {
-					i = ImageIO.read(new File("/Users/dewlit/Desktop/test/" + slideShow.getfocus().getImgPath())); 
+					i = ImageIO.read(new File("/Users/dewlit/Desktop/test/Linux/" + slideShow.getfocus().getImgPath() + ".jpg")); 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
