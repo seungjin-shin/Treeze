@@ -22,6 +22,7 @@ import freemind.modes.NodeAdapter;
 
 public class SlideShow {
 	NodeAdapter focus;
+	FreemindManager fManager = FreemindManager.getInstance();
 	ImgFrame imgFrame = new ImgFrame(this);
 
 	String str = new String();
@@ -84,7 +85,7 @@ public class SlideShow {
 
 			if (next != null){ // modify for do not have img
 				
-				if(!next.getImgPath().equals("")){
+				if(next.getImgPath() != null){
 					this.setfocus(next);
 					show();
 					break;
@@ -113,7 +114,7 @@ public class SlideShow {
 
 			if (prev != null){ // modify for do not have img
 				
-				if(!prev.getImgPath().equals("")){
+				if(prev.getImgPath() != null){
 					this.setfocus(prev);
 					show();
 					break;
@@ -133,7 +134,7 @@ public class SlideShow {
 
 	public void show() {
 		// TODO Auto-generated method stub
-		if(!focus.getImgPath().equals("")){
+		if(focus.getImgPath() != null){
 			imgFrame.show();
 		}
 
@@ -271,7 +272,7 @@ public class SlideShow {
 			// TODO Auto-generated method stub
 			BufferedImage i = null;
 			try {
-					i = ImageIO.read(new File("/Users/dewlit/Desktop/test/Linux/" + slideShow.getfocus().getImgPath() + ".jpg")); 
+					i = ImageIO.read(new File(fManager.getFilePath() + slideShow.getfocus().getImgPath())); 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

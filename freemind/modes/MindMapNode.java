@@ -59,10 +59,6 @@ public interface MindMapNode extends MutableTreeNode {
 		STYLE_COMBINED };
 
 	
-	public boolean isQuestion();
-	public void setQuestion(boolean isQuestion);
-	public boolean isHaveQuestion();
-	public void setHaveQuestion(boolean haveQuestion);
 	public String getTicketTitle();
 	public void setTicketTitle(String ticketTitle);
 	public String getTicketContent();

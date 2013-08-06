@@ -467,18 +467,6 @@ final class TestMindMapNode implements MindMapNode {
 	}
 
 	@Override
-	public boolean isQuestion() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setQuestion(boolean isQuestion) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public String getTicketTitle() {
 		// TODO Auto-generated method stub
 		return null;
@@ -510,18 +498,6 @@ final class TestMindMapNode implements MindMapNode {
 
 	@Override
 	public void setTicketWriter(String ticketWriter) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isHaveQuestion() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setHaveQuestion(boolean haveQuestion) {
 		// TODO Auto-generated method stub
 		
 	}

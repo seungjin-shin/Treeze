@@ -40,7 +40,6 @@ import freemind.modes.Mode;
 import freemind.modes.ModeController;
 import freemind.modes.common.actions.NewMapAction;
 import freemind.modes.mindmapmode.MindMapController;
-import freemind.modes.mindmapmode.actions.OpenAction;
 import freemind.modes.viewmodes.ViewControllerAdapter;
 
 public class SchemeController extends ViewControllerAdapter {

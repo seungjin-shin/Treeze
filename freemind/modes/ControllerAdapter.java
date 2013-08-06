@@ -92,6 +92,7 @@ import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 
+import freemind.controller.AddQuestionNode;
 import freemind.controller.Controller;
 import freemind.controller.FreemindManager;
 import freemind.controller.MapModuleManager;
@@ -143,7 +144,17 @@ public abstract class ControllerAdapter implements ModeController {
     private TOCClickVersion toc;
     private UploadMM upload;
     private MindMapController mc;
-    /** Instantiation order: first me and then the model.
+    
+    
+    public MindMapController getMc() {
+		return mc;
+	}
+
+	public void setMc(MindMapController mc) {
+		this.mc = mc;
+	}
+
+	/** Instantiation order: first me and then the model.
      */
     public ControllerAdapter(Mode mode) {
         this.setMode(mode);
@@ -648,7 +659,7 @@ public abstract class ControllerAdapter implements ModeController {
 	
 	
 	//dewlit
-    public void open(MindMapController mc, String classId) {
+    public void open() {
     	
         JFileChooser chooser = getFileChooser();
         // fc, 24.4.2008: multi selection has problems as setTitle in Controller doesn't works
@@ -656,7 +667,7 @@ public abstract class ControllerAdapter implements ModeController {
         int returnVal = chooser.showOpenDialog(getView());
         String filePath = "";
         String mmFilePath = null;
-        this.mc = mc;
+        FreemindManager fManager = FreemindManager.getInstance();
         
         if (returnVal==JFileChooser.APPROVE_OPTION) {
         	File[] selectedFiles;
@@ -677,6 +688,8 @@ public abstract class ControllerAdapter implements ModeController {
 						
 
 						filePath = theFile.getCanonicalPath();
+//						fManager.setFilePath(mmFilePath)
+//						mkDirPath = filePath.substring(0, filePath.indexOf(fileName.toString()));
 						pdf2img(filePath, theFile.getName());
 						
 						//tempateChk == true pdf에 양식 있는거
@@ -694,8 +707,8 @@ public abstract class ControllerAdapter implements ModeController {
 									filePath.length() - 4);
 							pdf2mm(filePath, theFile.getName());
 							UploadToServer UTS = new UploadToServer();
-							UTS.doFileUpload(getController()
-									.getSlideList(), filePath, theFile.getName(), classId);
+//							UTS.doFileUpload(getController()
+//									.getSlideList(), filePath, theFile.getName(), "1");
 
 							theFile = new File(mmFilePath + ".mm");
 						}
@@ -733,52 +746,31 @@ public abstract class ControllerAdapter implements ModeController {
     	//set QuestionNodeInfo
     	NodeAdapter root = (NodeAdapter)getRootNode();
     	NodeAdapter checkNode;
-    	FreemindManager fManager = FreemindManager.getInstance();
+    	
     	int i;
     	System.out.println("ControllerAdapter check : QuestionNodeInfo");
     	for(i = 0; i < root.getChildCount(); i++){
     		checkNode = (NodeAdapter)root.getChildAt(i);
-    		if(checkNode.isQuestion()){
-    			fManager.setAddQuestionNodeInfo(true);
-    			System.out.println("ControllerAdapter : set QuestionNodeInfo");
-    			break;
-    		}
+//    		if(checkNode.isQuestion()){
+//    			fManager.setAddQuestionNodeInfo(true);
+//    			System.out.println("ControllerAdapter : set QuestionNodeInfo");
+//    			break;
+//    		}
     	}
     	
     	
     }
     
-    public void addQuestionNode(MindMapController mc, MindMapNode node){
-    	
-    	MindMapNode forAddingQuestionNode = node;
-    	int i;
-    	//Question 노드 추가 하기 전 카운트
-    	int cnt = forAddingQuestionNode.getChildCount();
-    	
-    	mc.addNew(forAddingQuestionNode, MindMapController.NEW_CHILD, null);
-//    	NodeAdapter newNode = (NodeAdapter)node;
-//    	
-//    	getModel().insertNodeInto(newNode, mc.getSelected(), 0);
-    	
-    	for(i = 0; i < cnt; i++){
-    		addQuestionNode(mc, (MindMapNode)forAddingQuestionNode.getChildAt(i));
-    	}
-    	
-//    	do{
-//    		oldHaveChild = !forAddingQuestionNode.hasChildren();
-//    		
-//    		mc.addNew(forAddingQuestionNode, MindMapController.NEW_CHILD, null);
-//    		
-//    		if(oldHaveChild)
-//    			return;
-//    		
-//    		if(forAddingQuestionNode.hasChildren()){
-//    			addQuestionNode((MindMapNode)forAddingQuestionNode.getChildAt(i));
-//    			i++;
-//    			forAddingQuestionNode = (MindMapNode)forAddingQuestionNode.getChildAt(i);
-//    		}
-//    	}while(i < cnt);
-    	
+    public class OpenAction extends AbstractAction {
+        ControllerAdapter mc;
+        public OpenAction(ControllerAdapter modeController) {
+            super(getText("open"), new ImageIcon(getResource("images/fileopen.png")));
+            mc = modeController;
+        }
+        public void actionPerformed(ActionEvent e) {
+            mc.open();
+			getController().setTitle(); // Possible update of read-only
+        }
     }
     
     // dewlit
@@ -809,7 +801,7 @@ public abstract class ControllerAdapter implements ModeController {
 		if(!mkDirFile.exists())
 			mkDirFile.mkdir();
 		
-		mkDirPath += "/";
+		mkDirPath += "/"; // 윈도우에서는 \\
 
 		File file = new File(filePath);
         

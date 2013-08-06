@@ -62,7 +62,6 @@ import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -78,9 +77,10 @@ import javax.swing.text.html.HTMLEditorKit;
 import org.jibx.runtime.IUnmarshallingContext;
 import org.jibx.runtime.JiBXException;
 
-import sun.security.jgss.LoginConfigImpl;
-
+import freemind.NodeType.SlideType;
 import freemind.common.XmlBindingTools;
+import freemind.controller.AddQuestionNode;
+import freemind.controller.CheckNodeType;
 import freemind.controller.MenuBar;
 import freemind.controller.MenuItemEnabledListener;
 import freemind.controller.MindMapNodesSelection;
@@ -109,15 +109,16 @@ import freemind.controller.actions.generated.instance.PatternNodeText;
 import freemind.controller.actions.generated.instance.WindowConfigurationStorage;
 import freemind.controller.actions.generated.instance.XmlAction;
 import freemind.extensions.HookFactory;
+import freemind.extensions.HookFactory.RegistrationContainer;
 import freemind.extensions.HookRegistration;
 import freemind.extensions.ModeControllerHook;
 import freemind.extensions.NodeHook;
 import freemind.extensions.PermanentNodeHook;
 import freemind.extensions.UndoEventReceiver;
-import freemind.extensions.HookFactory.RegistrationContainer;
 import freemind.main.ExampleFileFilter;
 import freemind.main.FixedHTMLWriter;
 import freemind.main.HtmlTools;
+import freemind.main.LoggedInFrame;
 import freemind.main.LoginFrame;
 import freemind.main.ProfileFrame;
 import freemind.main.Resources;
@@ -140,13 +141,12 @@ import freemind.modes.attributes.Attribute;
 import freemind.modes.attributes.AttributeController;
 import freemind.modes.attributes.NodeAttributeTableModel;
 import freemind.modes.common.CommonNodeKeyListener;
-import freemind.modes.common.GotoLinkNodeAction;
 import freemind.modes.common.CommonNodeKeyListener.EditHandler;
+import freemind.modes.common.GotoLinkNodeAction;
 import freemind.modes.common.actions.FindAction;
-import freemind.modes.common.actions.NewMapAction;
 import freemind.modes.common.actions.FindAction.FindNextAction;
+import freemind.modes.common.actions.NewMapAction;
 import freemind.modes.common.listeners.CommonNodeMouseMotionListener;
-import freemind.modes.common.listeners.MindMapMouseWheelEventHandler;
 import freemind.modes.mindmapmode.actions.AddArrowLinkAction;
 import freemind.modes.mindmapmode.actions.AddLocalLinkAction;
 import freemind.modes.mindmapmode.actions.ApplyPatternAction;
@@ -181,13 +181,13 @@ import freemind.modes.mindmapmode.actions.NewChildAction;
 import freemind.modes.mindmapmode.actions.NewPreviousSiblingAction;
 import freemind.modes.mindmapmode.actions.NewSiblingAction;
 import freemind.modes.mindmapmode.actions.NodeBackgroundColorAction;
+import freemind.modes.mindmapmode.actions.NodeBackgroundColorAction.RemoveNodeBackgroundColorAction;
 import freemind.modes.mindmapmode.actions.NodeColorAction;
 import freemind.modes.mindmapmode.actions.NodeColorBlendAction;
 import freemind.modes.mindmapmode.actions.NodeGeneralAction;
 import freemind.modes.mindmapmode.actions.NodeHookAction;
 import freemind.modes.mindmapmode.actions.NodeStyleAction;
 import freemind.modes.mindmapmode.actions.NodeUpAction;
-import freemind.modes.mindmapmode.actions.OpenAction;
 import freemind.modes.mindmapmode.actions.PasteAction;
 import freemind.modes.mindmapmode.actions.RedoAction;
 import freemind.modes.mindmapmode.actions.RemoveAllIconsAction;
@@ -204,7 +204,6 @@ import freemind.modes.mindmapmode.actions.UnderlinedAction;
 import freemind.modes.mindmapmode.actions.UndoAction;
 import freemind.modes.mindmapmode.actions.UsePlainTextAction;
 import freemind.modes.mindmapmode.actions.UseRichFormattingAction;
-import freemind.modes.mindmapmode.actions.NodeBackgroundColorAction.RemoveNodeBackgroundColorAction;
 import freemind.modes.mindmapmode.actions.xml.ActionFactory;
 import freemind.modes.mindmapmode.actions.xml.ActionPair;
 import freemind.modes.mindmapmode.actions.xml.NodeHookUndoableContentActor;
@@ -375,8 +374,14 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
 	static int FIRST = 1;
 	private int lectureId;
 	private String lectureTitle;
+	public AddQuestionNode addQNode;
+	public CheckNodeType chkNodeType;
 	//dewlit
 	
+	public AddQuestionNode getAddQNode() {
+		return addQNode;
+	}
+
 	public String getLectureTitle() {
 		return lectureTitle;
 	}
@@ -417,12 +422,14 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
 	
     public MindMapController(Mode mode) {
 	super(mode);
+	super.setMc(this);
 	if(logger == null) {
 		logger = getFrame().getLogger(this.getClass().getName());
 	}
 	
 	if(FIRST == 1){ // 클래스를 두번 만듬, 한번만 호출하게
-		new ProfileFrame(this);
+		//new ProfileFrame(this);
+		//new LoggedInFrame(this);
 		FIRST++;
 	}
     // create action factory:
@@ -556,7 +563,15 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
         selectAllAction = new SelectAllAction(this);
         
         undoableHookContentActor = new NodeHookUndoableContentActor(this);
+        
+        //dewlit
+        addQNode = new AddQuestionNode(this);
+        chkNodeType = new CheckNodeType(this);
     }
+
+	public CheckNodeType getChkNodeType() {
+		return chkNodeType;
+	}
 
 	/**
 	 * Tries to load the user patterns and proposes an update to the new format,

@@ -38,6 +38,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.http.client.ClientProtocolException;
+
 import com.google.gson.Gson;
 import com.itextpdf.text.Image;
 import com.sun.media.sound.Toolkit;
@@ -184,27 +186,27 @@ public class NodeKeyListener implements KeyListener {
         		return;
         	}
         	
-        	fManager.setQuestion(true); // 질문 받았을 때 newChildAction에서 처리하려고
-        	fManager.setTicketContent("content test");
-        	fManager.setTicketTitle("Title test");
-        	fManager.setTicketWriter("write t");
-        	
-        	c.getMc().addNew(targetNode, MindMapController.NEW_CHILD, null);
-        	fManager.setQuestion(false);
-        	fManager.setTicketContent("");
-        	fManager.setTicketTitle("");
-        	fManager.setTicketWriter("");
+//        	fManager.setQuestion(true); // 질문 받았을 때 newChildAction에서 처리하려고
+//        	fManager.setTicketContent("content test");
+//        	fManager.setTicketTitle("Title test");
+//        	fManager.setTicketWriter("write t");
+//        	
+//        	c.getMc().addNew(targetNode, MindMapController.NEW_CHILD, null);
+//        	fManager.setQuestion(false);
+//        	fManager.setTicketContent("");
+//        	fManager.setTicketTitle("");
+//        	fManager.setTicketWriter("");
         	
         	//mc.edit.stopEditing();
         	//targetNode.setFolded(true);
         	
         	c.getMc()._setFolded(targetNode, true);
         	
-        	MindIcon icon = MindIcon.factory("help");
-			if(!targetNode.isHaveQuestion()){
-				targetNode.addIcon(icon, -1); // ? 아이콘 한번만
-				targetNode.setHaveQuestion(true);
-			}
+//        	MindIcon icon = MindIcon.factory("help");
+//			if(!targetNode.isHaveQuestion()){
+//				targetNode.addIcon(icon, -1); // ? 아이콘 한번만
+//				targetNode.setHaveQuestion(true);
+//			}
         	
 			c.getMc().nodeChanged(targetNode);
 		}
@@ -214,16 +216,44 @@ public class NodeKeyListener implements KeyListener {
 			
 			if (!fManager.isAddQuestionNodeInfo()) {
 				fManager.setAddQuestionNodeInfo(true);
-				
-				fManager.setAddQuestionNode(true);
-				c.getMc().addQuestionNode(c.getMc(), c.getMc().getRootNode());
-				fManager.setAddQuestionNode(false);
+
+				c.getMc().addQNode.addNodeForQuestion(c.getMc().getRootNode());
+
+				// modify Q node
+				c.getMc().addQNode.modifyForQuestion(c.getMc().getRootNode());
 				c.getMc().edit.stopEditing();
+
+				/*
+				modify last node, why not change
+				in modifyForQuestion() method?????
+				*/
+				NodeAdapter tmp = (NodeAdapter)c.getMc().getSelected();
+				tmp.setText("Q");
+				tmp.setNodeTypeStr("Question");
+				c.getMap().nodeChanged(tmp);
+
 				System.out.println("NodeKeyListener : set QuestionNodeInfo");
+
 			}
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F10){
+			
+			c.getMc().chkNodeType.checkNodeType((NodeAdapter)c.getMc().getRootNode());
+			System.out.println("KeyListener : check node type");
+			
 		}
+//		else if(e.getKeyCode() == KeyEvent.VK_F16){
+//			UploadToServer uts = new UploadToServer();
+//			try {
+//				uts.dd();
+//			} catch (ClientProtocolException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		}
 		
 		if (mListener != null)
 			mListener.keyPressed(e);

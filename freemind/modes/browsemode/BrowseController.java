@@ -49,6 +49,7 @@ import freemind.modes.Mode;
 import freemind.modes.ModeController;
 import freemind.modes.common.GotoLinkNodeAction;
 import freemind.modes.common.plugins.NodeNoteBase;
+import freemind.modes.mindmapmode.MindMapController;
 import freemind.modes.viewmodes.ViewControllerAdapter;
 import freemind.view.mindmapview.MainView;
 

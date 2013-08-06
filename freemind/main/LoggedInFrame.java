@@ -46,7 +46,7 @@ import java.lang.reflect.Type;
 
 public class LoggedInFrame extends JFrame {
 	private Container ct;
-
+	
 	LecturePanel lecturePanel;
 	private Image profileImg;
 	private Image logo;
@@ -254,6 +254,8 @@ class InputLectureFrame extends JFrame implements ActionListener{
 }
 
 class LecturePanel extends JPanel implements ActionListener{
+	final String SERVERIP = "113.198.84.80";
+	
 	JLabel tmpLb;
 	Image onBookMark, offBookMark;
 	Image onState, offState;
@@ -308,7 +310,7 @@ class LecturePanel extends JPanel implements ActionListener{
 		boolean isConnecError = false;
 		try
 		{
-		    URL url = new URL("http://61.43.139.10:8080/treeze/getMyLectures?professorEmail=" + "minsuk@hansung.ac.kr");
+		    URL url = new URL("http://" + SERVERIP + ":8080/treeze/getMyLectures?professorEmail=" + "minsuk@hansung.ac.kr");
 		    URLConnection urlconn = url.openConnection();
 		    in = new BufferedReader(new InputStreamReader(urlconn.getInputStream(),"UTF-8"));
 

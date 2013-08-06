@@ -82,7 +82,7 @@ public interface ModeController extends TextTranslator  {
      */
     boolean save();
     boolean saveAs();
-    void open(MindMapController mc, String classId);
+    void open();
     boolean close(boolean force, MapModuleManager mapModuleManager);
     /** Given a valid Xml parameterization of a node (tree),
      * this method returns freshly created nodes.

@@ -71,11 +71,11 @@ public class TicketFrame extends JFrame{
 	JPanel grid = new JPanel();
 	
 	NodeAdapter selNode;
-	Controller c;
+	MindMapController mc;
 	
-	public TicketFrame(NodeAdapter node, Controller c) {
+	public TicketFrame(NodeAdapter node, MindMapController c) {
 		selNode = node;
-		this.c = c;
+		this.mc = c;
 		nodeTitle = selNode.getParentNode().getText();
 		// TODO Auto-generated constructor stub
 		this.setSize(1000, 600);
@@ -465,18 +465,18 @@ public class TicketFrame extends JFrame{
 				NodeAdapter parent = (NodeAdapter)node.getParentNode();
 				int pos = node.getChildCount();
 				
-				fManager.setQuestion(true); // 질문 받았을 때 newChildAction에서 처리하려고
-	        	fManager.setTicketContent(rpStr);
-	        	fManager.setTicketTitle("[Re]" + node.getTicketTitle());
-	        	fManager.setTicketWriter(node.getTicketWriter());
-	        	
-	        	//c.getMc().addNew(selNode, MindMapController.NEW_CHILD, null);
-	        	c.getMc().addNewNode(node, pos, parent.isNewChildLeft());
-	        	fManager.setQuestion(false);
-	        	fManager.setTicketContent("");
-	        	fManager.setTicketTitle("");
-	        	fManager.setTicketWriter("");
-	        	c.getMc().edit.stopEditing();
+//				fManager.setQuestion(true); // 질문 받았을 때 newChildAction에서 처리하려고
+//	        	fManager.setTicketContent(rpStr);
+//	        	fManager.setTicketTitle("[Re]" + node.getTicketTitle());
+//	        	fManager.setTicketWriter(node.getTicketWriter());
+//	        	
+//	        	//c.getMc().addNew(selNode, MindMapController.NEW_CHILD, null);
+//	        	c.getMc().addNewNode(node, pos, parent.isNewChildLeft());
+//	        	fManager.setQuestion(false);
+//	        	fManager.setTicketContent("");
+//	        	fManager.setTicketTitle("");
+//	        	fManager.setTicketWriter("");
+//	        	c.getMc().edit.stopEditing();
 	        	
 	        	ticketCnt = 0;
 	        	grid.removeAll();

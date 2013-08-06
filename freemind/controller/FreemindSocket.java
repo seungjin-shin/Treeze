@@ -207,10 +207,10 @@ class Start extends Thread {
 							MindMapNode questionNode = tmp;
 							System.out.println(questionNode.getText() + "에 질문 받음");
 							MindIcon icon = MindIcon.factory("help");
-							if(!questionNode.isQuestion()){
-								questionNode.addIcon(icon, -1); // ? 아이콘 한번만
-								questionNode.setQuestion(true);
-							}
+//							if(!questionNode.isQuestion()){
+//								questionNode.addIcon(icon, -1); // ? 아이콘 한번만
+//								questionNode.setQuestion(true);
+//							}
 							c.getModeController().nodeChanged(questionNode);
 							
 							UploadToServer uts = new UploadToServer();

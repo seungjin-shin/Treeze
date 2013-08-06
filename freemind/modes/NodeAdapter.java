@@ -48,6 +48,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import freemind.NodeType.NodeType;
 import freemind.controller.Controller;
 import freemind.controller.filter.Filter;
 import freemind.controller.filter.FilterInfo;
@@ -72,8 +73,6 @@ import freemind.view.mindmapview.NodeViewVisitor;
 public abstract class NodeAdapter implements MindMapNode {
 	
 	private String dewlit = "dd";
-	private boolean isQuestion = false;
-	private boolean haveQuestion = false;
 
 	private String ticketTitle;
 	private String ticketContent;
@@ -82,14 +81,32 @@ public abstract class NodeAdapter implements MindMapNode {
 	private NodeAdapter prev;
 	private NodeAdapter next;
 	
-	private String imgPath;
+	private NodeType nodeType;
+	private String nodeTypeStr = "";
 	
-	
-	
-	public NodeAdapter() {
-		// TODO Auto-generated constructor stub
+
+
+
+	public String getNodeTypeStr() {
+		return nodeTypeStr;
 	}
 
+	public void setNodeTypeStr(String nodeTypeStr) {
+		this.nodeTypeStr = nodeTypeStr;
+	}
+
+	public NodeType getNodeType() {
+		return nodeType;
+	}
+
+	public void setNodeType(NodeType nodeType) {
+		this.nodeType = nodeType;
+	}
+
+
+
+	private String imgPath;
+	
 	final static int SHIFT = -2;//height of the vertical shift between node and its closest child
     public final static int HGAP = 20;//width of the horizontal gap that contains the edges
     public final static int VGAP = 3;//height of the vertical gap between nodes
@@ -177,21 +194,6 @@ public abstract class NodeAdapter implements MindMapNode {
 		this.next = next;
 	}
 	
-	public boolean isHaveQuestion() {
-		return haveQuestion;
-	}
-
-	public void setHaveQuestion(boolean haveQuestion) {
-		this.haveQuestion = haveQuestion;
-	}
-	
-	public boolean isQuestion() {
-		return isQuestion;
-	}
-
-	public void setQuestion(boolean isQuestion) {
-		this.isQuestion = isQuestion;
-	}
 	public String getTicketTitle() {
 		return ticketTitle;
 	}
@@ -233,7 +235,7 @@ public abstract class NodeAdapter implements MindMapNode {
 	protected NodeAdapter(Object userObject, FreeMindMain frame, MindMap map) {
         this.frame = frame;
         setText((String) userObject);
-        imgPath = "";
+        //imgPath = "";
         
 		hooks = null; // lazy, fc, 30.6.2005.
 		activatedHooks = null; //lazy, fc, 30.6.2005
@@ -1068,10 +1070,8 @@ freemind.main.Resources.getInstance().logException(			e);
     		node.setAttribute("TICKETCONTENT", ticketContent);
     	if(ticketWriter != null)
     		node.setAttribute("TICKETWRITER", ticketWriter);
-    	if(isQuestion)
-    		node.setAttribute("ISQUESTION", "TRUE");
-    	if(haveQuestion)
-    		node.setAttribute("HAVEQUESTION", "TRUE");
+    	if(!nodeTypeStr.equals(""))
+    		node.setAttribute("NODETYPESTR", nodeTypeStr);
     	
         /** fc, 12.6.2005: XML must not contain any zero characters. */
         String text = this.toString().replace('\0', ' ');

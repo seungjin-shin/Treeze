@@ -1520,7 +1520,9 @@ public class Controller  implements MapModuleChangeObserver {
     	int i;
     	
     	int cnt = curNode.getChildCount();
-    	int myPos;
+    	
+    	if(!cur.getNodeTypeStr().equals("Slide"))
+    		return;
 
     	prev = recurGetPrev(root, root);
     	next = recurGetNext(root, root);
@@ -1534,13 +1536,16 @@ public class Controller  implements MapModuleChangeObserver {
     }
     
     public NodeAdapter recurGetPrev(NodeAdapter prevNode, NodeAdapter curNode){
-    	cur = curNode;
-    	prev = prevNode;
+   		cur = curNode;
+   		
+    	if(prevNode.getNodeTypeStr().equals("Slide"))
+    		prev = prevNode;
+    	
     	int i;
 
     	int cnt = curNode.getChildCount();
 
-    	if(cur.getPrev() == null && cur.getNext() == null)
+    	if(cur.getNodeTypeStr().equals("Slide") && cur.getPrev() == null && cur.getNext() == null)
     		return prev;
     	
     	for(i = 0; i < cnt; i++){
@@ -1553,13 +1558,16 @@ public class Controller  implements MapModuleChangeObserver {
     }
     
     public NodeAdapter recurGetNext(NodeAdapter prevNode, NodeAdapter curNode){
-    	cur = curNode;
-    	prev = prevNode;
+   		cur = curNode;
+   		
+    	if(prevNode.getNodeTypeStr().equals("Slide"))
+    		prev = prevNode;
+    	
     	int i;
 
     	int cnt = curNode.getChildCount();
     	
-    	if(prev.getNext() == null)
+    	if(cur.getNodeTypeStr().equals("Slide") && prev.getNext() == null)
     		return cur;
     	
     	for(i = 0; i < cnt; i++){

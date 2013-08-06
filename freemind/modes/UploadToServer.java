@@ -4,7 +4,9 @@ package freemind.modes;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -13,6 +15,7 @@ import java.util.Random;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -28,6 +31,8 @@ public class UploadToServer {
 	ArrayList<SlideData> sList;
 	SlideData tmp;
 	String classId;
+	final String SERVERIP = "113.198.84.80";
+	
 	  public void doFileUpload(ArrayList<SlideData> sList, String fileFullPath, String fileName, String classId) {
           try {
         	  this.classId = classId;
@@ -45,7 +50,7 @@ public class UploadToServer {
                 if(saveFile.exists())
                	 bin =  new FileBody(saveFile, "UTF-8");
            HttpClient httpClient = new DefaultHttpClient();  
-           HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/upload/img"); 
+           HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/upload/img"); 
            String path = "";
            
            StringBody classBody = new StringBody(classId, Charset.forName("UTF-8"));
@@ -67,11 +72,11 @@ public class UploadToServer {
         	   
         	 httpClient = new DefaultHttpClient();  
         	 tmp = sList.get(i);
-        	 imgFileName = dirPath + "\\" + tmp.getNodeName() + ".jpg"; 
+        	 imgFileName = dirPath + "//" + tmp.getNodeName() + ".jpg"; 
              saveFile = new File(imgFileName);
              if(saveFile.exists()){
             	 bin =  new FileBody(saveFile, "UTF-8");
-            	 post = new HttpPost("http://61.43.139.10:8080/treeze/upload/img"); 
+            	 post = new HttpPost("http://" + SERVERIP + ":8080/treeze/upload/img"); 
 
 					multipart = new MultipartEntity(
 		  					HttpMultipartMode.BROWSER_COMPATIBLE, null,
@@ -94,7 +99,7 @@ public class UploadToServer {
 		  	String jsonStr;
           try {
         	  HttpClient httpClient = new DefaultHttpClient();  
-        	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/createLecture");
+        	  HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createLecture");
         	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
         	  
         	  StringBody lectureTitle = new StringBody(lectureName, Charset.forName("UTF-8"));
@@ -119,7 +124,7 @@ public class UploadToServer {
 		  	String jsonStr;
         try {
       	  HttpClient httpClient = new DefaultHttpClient();  
-      	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/createClass"); 
+      	  HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createClass"); 
       	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
       	  String ipStr = null;
       	  try {
@@ -155,7 +160,7 @@ public class UploadToServer {
 		  	
       try {
     	  HttpClient httpClient = new DefaultHttpClient();  
-    	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/createTicket"); 
+    	  HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createTicket"); 
     	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
     	  StringBody classIdBody = new StringBody(classId, Charset.forName("UTF-8"));
     	  StringBody ticketTitleBody = new StringBody(ticketTitle, Charset.forName("UTF-8"));
@@ -178,4 +183,55 @@ public class UploadToServer {
       }catch(Exception e){e.printStackTrace();
       }
 	  }
+	  
+//	  public void dd() throws ClientProtocolException, IOException{
+//		  String dirPath;
+//    	  String imgFileName;
+//    	  String xml ="";
+//    	  
+//    	  File saveFile;//
+//    	  FileBody bin = null;
+//    	  
+//    	  
+//    	  BufferedReader br;
+//    	  String filename = "/Users/dewlit/Desktop/test" + "/Linux add Q.mm";
+//    	  String line = "";
+//          try {
+//                br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
+//                
+//                while ((line = br.readLine()) != null) {
+//                	xml += line;
+//                }
+//                br.close();        
+//          } catch (Exception e) {
+//                e.printStackTrace();
+//          }
+//          System.out.println(xml);
+//          
+//          
+//          //String jsonStr = 
+//    	  
+//    	  
+////    	  saveFile = new File(dirPath + ".mm");
+////            if(saveFile.exists())
+////           	 bin =  new FileBody(saveFile, "UTF-8");
+//       HttpClient httpClient = new DefaultHttpClient();  
+//       HttpPost post = new HttpPost("http://113.198.84.80:8080/treeze/createMindMap"); 
+//       String path = "";
+//       
+//       
+//       MultipartEntity multipart = new MultipartEntity(
+//				HttpMultipartMode.BROWSER_COMPATIBLE, null,
+//				Charset.forName("UTF-8"));  // xml, classId, LectureName ��� 蹂대�
+//		
+//       StringBody ipBody = new StringBody("1", Charset.forName("UTF-8"));
+//       StringBody ipBody2 = new StringBody(xml, Charset.forName("UTF-8"));
+//
+//		multipart.addPart("classId", ipBody);
+//		multipart.addPart("mindmapXML", ipBody2);
+//
+//		post.setEntity(multipart);
+//		HttpResponse response = httpClient.execute(post);
+//		HttpEntity resEntity = response.getEntity();
+//	  }
 }

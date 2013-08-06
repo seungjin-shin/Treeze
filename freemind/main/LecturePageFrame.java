@@ -48,7 +48,8 @@ import freemind.modes.mindmapmode.MindMapController;
 
 public class LecturePageFrame extends JFrame {
 	private Container ct;
-
+	final String SERVERIP = "113.198.84.80";
+	
 	JPanel classPanel;
 	private Image profileImg;
 	private Image logo;
@@ -302,7 +303,7 @@ public class LecturePageFrame extends JFrame {
 			boolean isConnectErr = false;
 			try
 			{
-				URL url = new URL("http://61.43.139.10:8080/treeze/getClasses?lectureId=" + lectureId);
+				URL url = new URL("http://" + SERVERIP + ":8080/treeze/getClasses?lectureId=" + lectureId);
 			    URLConnection urlconn = url.openConnection();
 			    in = new BufferedReader(new InputStreamReader(urlconn.getInputStream(),"UTF-8"));
 
@@ -391,10 +392,10 @@ public class LecturePageFrame extends JFrame {
 			String event = e.getActionCommand();
 			System.out.println("classId =" + event);
 			mc.getController().setClassId(Integer.parseInt(event));
-			mc.open(mc, event);
+			mc.open();
 			
 			HttpClient httpClient = new DefaultHttpClient();  
-	      	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/setStateOfLecture");
+	      	  HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/setStateOfLecture");
 	      	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
 	      	  
 	      	  

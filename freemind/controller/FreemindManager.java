@@ -17,8 +17,6 @@ public class FreemindManager {
 	SlideShow slideShow;
 	
 
-	private boolean isQuestion = false;
-	private boolean addQuestionNode = false;
 	private boolean isSlideShowInfo = false;
 	private boolean isAddQuestionNodeInfo = false;
 
@@ -85,21 +83,6 @@ public class FreemindManager {
 		this.ticketWriter = ticketWriter;
 	}
 
-	public boolean isAddQuestionNode() {
-		return addQuestionNode;
-	}
-
-	public void setAddQuestionNode(boolean addQuestionNode) {
-		this.addQuestionNode = addQuestionNode;
-	}
-
-	public boolean isQuestion() {
-		return isQuestion;
-	}
-
-	public void setQuestion(boolean isQuestion) {
-		this.isQuestion = isQuestion;
-	}
 	
 	
 	

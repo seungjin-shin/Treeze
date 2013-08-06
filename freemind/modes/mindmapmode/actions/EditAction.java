@@ -118,10 +118,10 @@ public class EditAction extends AbstractAction implements ActorXml {
     	System.out.println("EditAction에서 " + mMindMapController.getSelected().getText());
     	// 노드 텍스트 수정 action remove
     	
-    	if(mMindMapController.getSelected().isQuestion()){
-    		System.out.println(" EditAction, 질문 선택했을때");
-    		return;
-    	}
+//    	if(mMindMapController.getSelected().isQuestion()){
+//    		System.out.println(" EditAction, 질문 선택했을때");
+//    		return;
+//    	}
     	
         if (node == null) {
             return;

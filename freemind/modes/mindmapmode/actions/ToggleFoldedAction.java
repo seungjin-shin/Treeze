@@ -131,7 +131,7 @@ public class ToggleFoldedAction extends AbstractAction implements ActorXml {
 		if (action instanceof FoldAction) {
 			System.out.println("ToggleFoldedAction " + modeController.getSelected().getText()); // Æú´õ Á¢Èû action remove
 			
-			if (modeController.getSelected().isQuestion()) {
+//			if (modeController.getSelected().isQuestion()) {
 				FoldAction foldAction = (FoldAction) action;
 				MindMapNode node = modeController.getNodeFromID(foldAction
 						.getNode());
@@ -141,7 +141,7 @@ public class ToggleFoldedAction extends AbstractAction implements ActorXml {
 						FreeMind.RESOURCES_SAVE_FOLDING_STATE)) {
 					modeController.nodeChanged(node);
 				}
-			}
+//			}
 		}
 	}
 
