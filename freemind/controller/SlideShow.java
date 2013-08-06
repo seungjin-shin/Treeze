@@ -93,6 +93,7 @@ public class SlideShow {
 					break;
 				}
 				else{
+					cur.getNodeType().forSurveyAct(); // 설문 보내는 곳 
 					cur = cur.getNext();
 					continue;
 				}
@@ -122,6 +123,7 @@ public class SlideShow {
 					break;
 				}
 				else{
+					cur.getNodeType().forSurveyAct(); // 설문 보내는곳 
 					cur = cur.getPrev();
 					continue;
 				}
@@ -175,7 +177,6 @@ public class SlideShow {
 					
 					if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 						nextShow();
-						focus.getNodeType().forSurveyAct();
 						// 학생 보내야대
 						//ArrayList<Integer> idxList = focus.getIdxList();
 						

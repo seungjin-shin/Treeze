@@ -2,15 +2,8 @@ package freemind.NodeType;
 
 public class SurveyType extends NodeType{
 
-	SurveyType type;
-
-	private SurveyType getInstance(){
-		if(type == null)
-			type = new SurveyType();
-		return type;
-	}
 	
-	private SurveyType() {
+	public SurveyType() {
 	}
 	
 	@Override
@@ -20,13 +13,12 @@ public class SurveyType extends NodeType{
 
 	@Override
 	public NodeType getNodeType() {
-		return getInstance();
+		return this;
 	}
 
 	@Override
 	public void forSurveyAct() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Survey func");
 	}	
 
 }

@@ -1526,7 +1526,7 @@ public class Controller  implements MapModuleChangeObserver {
     	
     	int cnt = curNode.getChildCount();
     	
-    	if(!cur.getNodeTypeStr().equals("Slide") || !cur.getNodeType().equals("Survey"))
+    	if(cur.getNodeTypeStr().equals("Question") || cur.getNodeTypeStr().equals("Ticket"))
     		return;
 
     	prev = recurGetPrev(root, root);
