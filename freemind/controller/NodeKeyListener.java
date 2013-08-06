@@ -217,10 +217,10 @@ public class NodeKeyListener implements KeyListener {
 			if (!fManager.isAddQuestionNodeInfo()) {
 				fManager.setAddQuestionNodeInfo(true);
 
-				c.getMc().addQNode.addNodeForQuestion(c.getMc().getRootNode());
+				c.addQNode.addNodeForQuestion(c.getMc().getRootNode());
 
 				// modify Q node
-				c.getMc().addQNode.modifyForQuestion(c.getMc().getRootNode());
+				c.addQNode.modifyForQuestion(c.getMc().getRootNode());
 				c.getMc().edit.stopEditing();
 
 				/*
@@ -238,7 +238,7 @@ public class NodeKeyListener implements KeyListener {
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F10){
 			
-			c.getMc().chkNodeType.checkNodeType((NodeAdapter)c.getMc().getRootNode());
+			c.chkNodeType.checkNodeType((NodeAdapter)c.getMc().getRootNode());
 			System.out.println("KeyListener : check node type");
 			
 		}

@@ -374,14 +374,9 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
 	static int FIRST = 1;
 	private int lectureId;
 	private String lectureTitle;
-	public AddQuestionNode addQNode;
-	public CheckNodeType chkNodeType;
+	
 	//dewlit
 	
-	public AddQuestionNode getAddQNode() {
-		return addQNode;
-	}
-
 	public String getLectureTitle() {
 		return lectureTitle;
 	}
@@ -564,14 +559,8 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
         
         undoableHookContentActor = new NodeHookUndoableContentActor(this);
         
-        //dewlit
-        addQNode = new AddQuestionNode(this);
-        chkNodeType = new CheckNodeType(this);
+       
     }
-
-	public CheckNodeType getChkNodeType() {
-		return chkNodeType;
-	}
 
 	/**
 	 * Tries to load the user patterns and proposes an update to the new format,

@@ -21,6 +21,12 @@ public class SurveyType extends NodeType{
 	@Override
 	public NodeType getNodeType() {
 		return getInstance();
+	}
+
+	@Override
+	public void forSurveyAct() {
+		// TODO Auto-generated method stub
+		
 	}	
 
 }

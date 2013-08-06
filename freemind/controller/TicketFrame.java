@@ -71,11 +71,11 @@ public class TicketFrame extends JFrame{
 	JPanel grid = new JPanel();
 	
 	NodeAdapter selNode;
-	MindMapController mc;
+	Controller c;
 	
-	public TicketFrame(NodeAdapter node, MindMapController c) {
+	public TicketFrame(NodeAdapter node, Controller cr) {
 		selNode = node;
-		this.mc = c;
+		this.c = cr;
 		nodeTitle = selNode.getParentNode().getText();
 		// TODO Auto-generated constructor stub
 		this.setSize(1000, 600);
@@ -107,6 +107,8 @@ public class TicketFrame extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				c.getMc()._setFolded(selNode, true);
+				c.getMc().nodeChanged(selNode);
 				setVisible(false);
 			}
 		});
@@ -142,7 +144,7 @@ public class TicketFrame extends JFrame{
 		for(int i = 0; i < selNode.getChildCount(); i++) // add children
 			addTickets((NodeAdapter)selNode.getChildAt(i));
 		
-		this.setVisible(true);
+//		this.setVisible(true);
 	}
 	
 	public void addTickets(NodeAdapter node){

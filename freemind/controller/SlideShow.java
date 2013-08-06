@@ -22,9 +22,11 @@ import freemind.modes.NodeAdapter;
 
 public class SlideShow {
 	NodeAdapter focus;
-	FreemindManager fManager = FreemindManager.getInstance();
 	ImgFrame imgFrame = new ImgFrame(this);
-
+	FreemindManager fManager;
+	public SlideShow(FreemindManager f) {
+		fManager = f;
+	}
 	String str = new String();
 	Controller c;
 	
@@ -44,7 +46,7 @@ public class SlideShow {
 		this.imgFrame = imgFrame;
 	}
 	
-	void setfocus(NodeAdapter focus) {
+	public void setfocus(NodeAdapter focus) {
 //		if(focus.getPrev() == null){
 //			this.focus = focus;
 //			show();
@@ -83,7 +85,7 @@ public class SlideShow {
 			
 			next = cur;
 
-			if (next != null){ // modify for do not have img
+			if (next != null){ 
 				
 				if(next.getImgPath() != null){
 					this.setfocus(next);
@@ -173,6 +175,7 @@ public class SlideShow {
 					
 					if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 						nextShow();
+						focus.getNodeType().forSurveyAct();
 						// 학생 보내야대
 						//ArrayList<Integer> idxList = focus.getIdxList();
 						

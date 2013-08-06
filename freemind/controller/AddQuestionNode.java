@@ -6,10 +6,10 @@ import freemind.modes.NodeAdapter;
 import freemind.modes.mindmapmode.MindMapController;
 
 public class AddQuestionNode {
-	MindMapController mc;
+	Controller c;
 
-	public AddQuestionNode(MindMapController c) {
-		mc = c;
+	public AddQuestionNode(Controller c) {
+		this.c = c;
 	}
 
 	public void addNodeForQuestion(MindMapNode node) {
@@ -19,7 +19,7 @@ public class AddQuestionNode {
 		// Question 노드 추가 하기 전 카운트
 		int cnt = forNodeForQuestion.getChildCount();
 
-		mc.addNew(forNodeForQuestion, MindMapController.NEW_CHILD, null);
+		c.getMc().addNew(forNodeForQuestion, MindMapController.NEW_CHILD, null);
 
 		for (i = 0; i < cnt; i++) {
 			addNodeForQuestion((MindMapNode) forNodeForQuestion.getChildAt(i));
@@ -37,7 +37,7 @@ public class AddQuestionNode {
 			forModifyNodeName = (NodeAdapter)modifyForQuestion.getChildAt(cnt - 1);
 			forModifyNodeName.setText("Q");
 			forModifyNodeName.setNodeTypeStr("Question");
-			mc.nodeChanged(forModifyNodeName);
+			c.getMc().nodeChanged(forModifyNodeName);
 		}
 		
 		for (i = 0; i < cnt; i++) {

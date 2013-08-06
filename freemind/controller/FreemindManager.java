@@ -11,7 +11,7 @@ public class FreemindManager {
 	}
 	
 	private FreemindManager(){
-		slideShow = new SlideShow();
+		slideShow = new SlideShow(this);
 	}
 	
 	SlideShow slideShow;

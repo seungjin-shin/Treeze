@@ -6,10 +6,10 @@ import freemind.modes.NodeAdapter;
 import freemind.modes.mindmapmode.MindMapController;
 
 public class CheckNodeType {
-	MindMapController mc;
+	Controller c;
 	
-	public CheckNodeType(MindMapController c) {
-		mc = c;
+	public CheckNodeType(Controller c) {
+		this.c = c;
 	}
 	
 	public void checkNodeType(NodeAdapter node){
@@ -22,11 +22,10 @@ public class CheckNodeType {
 		nodeChkStr = forCheckNodeType.getNodeTypeStr();
 		if(nodeChkStr != null){
 			if (nodeChkStr.equals("Slide"))
-				forCheckNodeType.setNodeType(new SlideType(forCheckNodeType));
+				forCheckNodeType.setNodeType(new SlideType(forCheckNodeType, c));
 			else if (nodeChkStr.equals("Question"))
 				forCheckNodeType.setNodeType(new QuestionType(forCheckNodeType,
-						mc));
-
+						c));
 		}
 //		mc.addNew(forAddingQuestionNode, MindMapController.NEW_CHILD, null);
 

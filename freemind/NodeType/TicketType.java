@@ -23,4 +23,10 @@ public class TicketType extends NodeType{
 		return getInstance();
 	}
 
+	@Override
+	public void forSurveyAct() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

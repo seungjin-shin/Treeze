@@ -62,13 +62,13 @@ public class NodeMouseMotionListener implements MouseMotionListener,
     
     
     public void mouseClicked(MouseEvent e) {
-//    	if(e.getClickCount() == 2){
-//    		System.out.println("NodeMouseMotion double click");
-//    		
-//    	}
+    	if(e.getClickCount() == 2){
+    		System.out.println("NodeMouseMotion double click");
+    		return;
+    	}
         if (mListener != null)
             mListener.mouseClicked(e);
-        System.out.println(c.getMc().getSelected().getText());
+//        System.out.println(c.getMc().getSelected().getText());
 				
       //before QuestionFrame
 //        String nodeText = c.getModeController().getSelected().getText();
@@ -129,8 +129,8 @@ public class NodeMouseMotionListener implements MouseMotionListener,
 //    	if(!c.getMc().getSelected().hasChildren()) // last node remove edit event
 //    		return;
     	
-        if (mListener != null)
-            mListener.mouseReleased(e); // 여기서 클릭
+//        if (mListener != null)
+//            mListener.mouseReleased(e); // 여기서 클릭
         
         NodeAdapter tmp = (NodeAdapter)c.getMc().getSelected();
         

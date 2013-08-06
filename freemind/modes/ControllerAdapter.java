@@ -144,6 +144,7 @@ public abstract class ControllerAdapter implements ModeController {
     private TOCClickVersion toc;
     private UploadMM upload;
     private MindMapController mc;
+    FreemindManager fManager = FreemindManager.getInstance();
     
     
     public MindMapController getMc() {
@@ -667,7 +668,7 @@ public abstract class ControllerAdapter implements ModeController {
         int returnVal = chooser.showOpenDialog(getView());
         String filePath = "";
         String mmFilePath = null;
-        FreemindManager fManager = FreemindManager.getInstance();
+       
         
         if (returnVal==JFileChooser.APPROVE_OPTION) {
         	File[] selectedFiles;
@@ -680,20 +681,20 @@ public abstract class ControllerAdapter implements ModeController {
 				File theFile = selectedFiles[i];
 				String fileName;
 				fileName = theFile.getName();
+				String foldName;
 				
-				if (fileName.substring(fileName.length() - 4,
-						fileName.length()).equals(".pdf")) {
-
-					try {
-						
-
-						filePath = theFile.getCanonicalPath();
-//						fManager.setFilePath(mmFilePath)
-//						mkDirPath = filePath.substring(0, filePath.indexOf(fileName.toString()));
+				try {
+					filePath = theFile.getCanonicalPath();
+					foldName = filePath;
+					
+					if (fileName.substring(fileName.length() - 4,
+							fileName.length()).equals(".pdf")) { // selected pdf
+																	// file
+						fManager.setFilePath(foldName.substring(0, foldName.length() - 4) + "/"); // 리눅스라 /
 						pdf2img(filePath, theFile.getName());
-						
-						//tempateChk == true pdf에 양식 있는거
-						
+
+						// tempateChk == true pdf에 양식 있는거
+
 						if (!templateChk) {
 							toc = new TOCClickVersion(getController()
 									.getSlideList(), mc);
@@ -707,15 +708,19 @@ public abstract class ControllerAdapter implements ModeController {
 									filePath.length() - 4);
 							pdf2mm(filePath, theFile.getName());
 							UploadToServer UTS = new UploadToServer();
-//							UTS.doFileUpload(getController()
-//									.getSlideList(), filePath, theFile.getName(), "1");
+							// UTS.doFileUpload(getController()
+							// .getSlideList(), filePath, theFile.getName(),
+							// "1");
 
 							theFile = new File(mmFilePath + ".mm");
 						}
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+
+					} else { // selected mm file
+						fManager.setFilePath(foldName.substring(0, foldName.length() - 3) + "/"); // 리눅스라 /
 					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				
 				

@@ -211,6 +211,8 @@ public class Controller  implements MapModuleChangeObserver {
     public NodeAdapter prev;
     public NodeAdapter next;
     public NodeAdapter focus;
+    public AddQuestionNode addQNode;
+	public CheckNodeType chkNodeType;
     
     
 
@@ -315,6 +317,9 @@ public class Controller  implements MapModuleChangeObserver {
         fManager = FreemindManager.getInstance();
         slideShow = fManager.getSlideShow();
         slideShow.setC(this);
+        //dewlit
+        addQNode = new AddQuestionNode(this);
+        chkNodeType = new CheckNodeType(this);
     	
         //dewlit
         
@@ -1521,7 +1526,7 @@ public class Controller  implements MapModuleChangeObserver {
     	
     	int cnt = curNode.getChildCount();
     	
-    	if(!cur.getNodeTypeStr().equals("Slide"))
+    	if(!cur.getNodeTypeStr().equals("Slide") || !cur.getNodeType().equals("Survey"))
     		return;
 
     	prev = recurGetPrev(root, root);
@@ -1538,14 +1543,14 @@ public class Controller  implements MapModuleChangeObserver {
     public NodeAdapter recurGetPrev(NodeAdapter prevNode, NodeAdapter curNode){
    		cur = curNode;
    		
-    	if(prevNode.getNodeTypeStr().equals("Slide"))
+    	if(prevNode.getNodeTypeStr().equals("Slide") || prevNode.getNodeTypeStr().equals("Survey"))
     		prev = prevNode;
     	
     	int i;
 
     	int cnt = curNode.getChildCount();
 
-    	if(cur.getNodeTypeStr().equals("Slide") && cur.getPrev() == null && cur.getNext() == null)
+    	if( (cur.getNodeTypeStr().equals("Slide") || cur.getNodeTypeStr().equals("Survey")) && cur.getPrev() == null && cur.getNext() == null)
     		return prev;
     	
     	for(i = 0; i < cnt; i++){
@@ -1560,14 +1565,14 @@ public class Controller  implements MapModuleChangeObserver {
     public NodeAdapter recurGetNext(NodeAdapter prevNode, NodeAdapter curNode){
    		cur = curNode;
    		
-    	if(prevNode.getNodeTypeStr().equals("Slide"))
+    	if(prevNode.getNodeTypeStr().equals("Slide") || prevNode.getNodeTypeStr().equals("Survey"))
     		prev = prevNode;
     	
     	int i;
 
     	int cnt = curNode.getChildCount();
     	
-    	if(cur.getNodeTypeStr().equals("Slide") && prev.getNext() == null)
+    	if( (cur.getNodeTypeStr().equals("Slide") || cur.getNodeTypeStr().equals("Survey")) && prev.getNext() == null)
     		return cur;
     	
     	for(i = 0; i < cnt; i++){
