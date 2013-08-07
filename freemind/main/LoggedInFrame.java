@@ -332,13 +332,13 @@ class LecturePanel extends JPanel implements ActionListener{
 		{
 			isConnecError = true;
 		    System.out.println("연결 에러");
-		    mc.getController().getFmSck().write("Server 연결 에러");
+//		    mc.getController().getFmSck().write("Server 연결 에러");
 		}
 		finally
 		{
 		    if(sHtml.equals("")){
 		    	sHtml = "Data가 존재하지 않습니다";
-		    	mc.getController().getFmSck().write("Data가 존재하지 않습니다");
+//		    	mc.getController().getFmSck().write("Data가 존재하지 않습니다");
 		    }
 		}
 		

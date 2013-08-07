@@ -1,41 +1,28 @@
 package freemind.json;
-public class Mindmap{
-	/**
-	 */ 
-	
-	private String mindmapName;
-	private int classId;
-	private String mindmapXML;
-	
-	public Mindmap(){
-		
-	}
-	
-	public Mindmap(String mindmapXML){
-		this.mindmapXML = mindmapXML;
-	}
-	
-	public String getmindmapXML() {
-		return mindmapXML;
-	}
-	public void setmindmap(String mindmapXML) {
-		this.mindmapXML = mindmapXML;
-	}
 
-	public int getClassId() {
+
+public class Mindmap   {
+
+	private Long classId; 
+	//@Column(columnDefinition="LONGTEXT") 
+	private String mindmapXML;
+	Mindmap mindmap;
+	public Mindmap getMindmap() {
+		return mindmap;
+	}
+	public void setMindmap(Mindmap mindmap) {
+		this.mindmap = mindmap;
+	}
+	public Long getClassId() {
 		return classId;
 	}
-
-	public void setClassId(int classId) {
+	public void setClassId(Long classId) {
 		this.classId = classId;
 	}
-
-	public String getMindmapName() {
-		return mindmapName;
+	public String getMindmapXML() {
+		return mindmapXML;
 	}
-
-	public void setMindmapName(String mindmapName) {
-		this.mindmapName = mindmapName;
+	public void setMindmapXML(String mindmapXML) {
+		this.mindmapXML = mindmapXML;
 	}
-
 }

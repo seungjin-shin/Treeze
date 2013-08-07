@@ -1,7 +1,6 @@
 package freemind.main;
 
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -21,15 +20,19 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Handler;
 
-import javax.jws.Oneway;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -40,29 +43,33 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import freemind.controller.FreemindManager;
 import freemind.json.ArrayClass;
 import freemind.json.ArrayLecture;
 import freemind.json.ClassInfo;
 import freemind.json.Lecture;
+import freemind.json.Mindmap;
+import freemind.json.TreezeData;
+import freemind.json.User;
 import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
-//import com.thoughtworks.xstream.io.json.AbstractJsonWriter.Type;
 
 
 public class ProfileFrame extends JFrame {
 	final String SERVERIP = "113.198.84.80";
+	final int PORT = 2141;
 	String myEmail = "minsuk@hansung.ac.kr";
+	final String DOWNPATH = "/Users/dewlit/Desktop/TreezeIMG";
 	
 	JButton createLtBtn;
 	ActionListener addLtListener = new AddLtListener();
+	FreemindManager fManager;
 	
 	BtnPanel btnPanel;
 	JPanel profilePanel;
@@ -98,6 +105,8 @@ public class ProfileFrame extends JFrame {
 	
 	public ProfileFrame(MindMapController mc) {
 		this.mc = mc;
+		fManager = FreemindManager.getInstance();
+		fManager.setFilePath(DOWNPATH + "/");
 		// TODO Auto-generated constructor stub
 		this.setSize(1000, 600);
 		this.setLocation(300, 200);
@@ -526,6 +535,21 @@ public class ProfileFrame extends JFrame {
 			this.setLayout(gbl);
 			setBackground(Color.white);
 			classNm = new JLabel(classInfo.getClassName(), JLabel.CENTER);
+			goBtn.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					classId = classInfo.getClassId();
+					
+					DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(classId);
+					downLoadNetworkThread.start();
+					
+					setMainFramevisible(false);
+					
+					MakeXMLFileThread makeXMLThread = new MakeXMLFileThread(classInfo);
+					makeXMLThread.start();
+				}
+			});
 			
 			insets.top = 0;
 			insets.bottom = 0;
@@ -570,19 +594,13 @@ public class ProfileFrame extends JFrame {
 				public void mousePressed(MouseEvent e) {
 					// TODO Auto-generated method stub
 					setBackground(new Color(10, 10, 100, 100));
-					classId = classInfo.getClassId();
 					
-				
-//					DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(classId);
-//					downLoadNetworkThread.start();
 //					lectureId  = lecture.getLectureId();
-					networkFlag = NETWORK_FLAG_GET_MINDMAP;
-					//NetworkThread networkThread = new NetworkThread();
-					//networkThread.start();
-//				lectureHead.setVisible(false);
-				//grid.removeAll();
-				//invalidate();
-					//System.out.println(ticket.getContents());
+//					networkFlag = NETWORK_FLAG_GET_MINDMAP;
+//					NetworkThread networkThread = new NetworkThread();
+//					networkThread.start();
+//					lectureHead.setVisible(false);
+//					grid.removeAll();
 				}
 			});
 
@@ -596,6 +614,7 @@ public class ProfileFrame extends JFrame {
 					this.getHeight() - 1);
 		}
 	}
+	
 	class ListPanel extends JScrollPane {
 
 		public ListPanel() {
@@ -632,11 +651,7 @@ public class ProfileFrame extends JFrame {
 			HttpURLConnection connection;
 			sbResult.delete(0, sbResult.capacity());
 			try {
-				if(networkFlag ==NETWORK_FLAG_GET_MINDMAP){
-					url = new URL(
-							"http://113.198.84.80:8080/treeze/getMindMap?classId="+classId);
-				}
-			else if (networkFlag == NETWORK_FLAG_GET_LECTURELIST) {
+				if (networkFlag == NETWORK_FLAG_GET_LECTURELIST) {
 					url = new URL(
 							"http://" + SERVERIP + ":8080/treeze/getMyLectures?professorEmail=" + myEmail);
 					
@@ -651,7 +666,8 @@ public class ProfileFrame extends JFrame {
 				if (connection != null) {
 					connection.setConnectTimeout(5000); // Set Timeout
 					connection.setUseCaches(false);
-
+					
+					
 					if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 						BufferedReader br = new BufferedReader(
 								new InputStreamReader(
@@ -691,6 +707,118 @@ public class ProfileFrame extends JFrame {
 		}
 
 	}
+	
+	class MakeXMLFileThread extends Thread{
+		InputStream is;
+		URL url = null;
+		//Message msg = new Message();
+		ClassInfo cInfo;
+		public MakeXMLFileThread(ClassInfo cInfo) {
+			// TODO Auto-generated constructor stub
+			this.cInfo = cInfo;
+		}
+		
+		@Override
+		public void run() {
+
+			HttpURLConnection connection;
+			sbResult.delete(0, sbResult.capacity());
+			try {
+				url = new URL(
+					"http://113.198.84.80:8080/treeze/getMindMap?classId="+classId);
+				
+				connection = (HttpURLConnection) url.openConnection();
+				
+				if (connection != null) {
+					connection.setConnectTimeout(5000); // Set Timeout
+					connection.setUseCaches(false);
+					
+					if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+						BufferedReader br = new BufferedReader(
+								new InputStreamReader(
+										connection.getInputStream(), "UTF-8"));
+						
+						String strLine = null;
+						
+						while ((strLine = br.readLine()) != null) {
+							sbResult.append(strLine + "\n");
+						}
+						
+						br.close();
+					}
+					
+					connection.disconnect();
+					System.out.println(sbResult.toString());
+				}			
+				
+				java.lang.reflect.Type type = new TypeToken<Mindmap>() {
+				}.getType();
+				System.out.println(sbResult.toString());
+				Mindmap jsonResultMindmaps = (Mindmap) gson.fromJson(
+						sbResult.toString(), (java.lang.reflect.Type) type);
+				
+				File dirPath = new File(DOWNPATH);
+				if(!dirPath.exists())
+					dirPath.mkdir();
+				
+				File file = new File(DOWNPATH, classId + ".mm");
+				
+				FileOutputStream fileOutput = new FileOutputStream(file);
+				InputStream inputStream = connection.getInputStream();
+
+				byte[] buffer = new byte[1024];
+
+				int bufferLength = 0;
+
+				fileOutput.write(jsonResultMindmaps.getMindmap().getMindmapXML().getBytes());
+
+				fileOutput.close();
+				inputStream.close();
+				
+				
+				mc.load(new File(DOWNPATH + "/" + classId + ".mm"));
+				
+				Socket socket = new Socket(SERVERIP, PORT);
+				
+				Gson gson = new Gson();
+				User user = new User();
+//				ClassInfo classInfo = new ClassInfo();
+				TreezeData treezeData = new TreezeData();
+				
+				user.setUserType(User.PROFESSOR);
+				user.setUserEmail("minsuk@hansung.ac.kr");
+
+				// classInfo 데이터 세팅
+				
+
+				// treezeData 데이터 세팅
+				treezeData.setDataType(TreezeData.CONNECTIONINFO);
+				treezeData.getArgList().add(gson.toJson(user));
+				treezeData.getArgList().add(gson.toJson(cInfo));
+				
+				OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
+				PrintWriter pw = new PrintWriter(osw);
+				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				
+				System.out.println(gson.toJson(treezeData));
+				pw.println(gson.toJson(treezeData));
+				pw.flush();
+				
+				System.out.println("server 응답 : " + in.readLine());
+				
+				fManager.setPw(pw);
+				fManager.setIn(in);
+				fManager.getC().startFreemindSocket();
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+	}
+	
 	void updateGetallLectureList(){
 		java.lang.reflect.Type type = new TypeToken<ArrayLecture>(){}.getType();
 		ArrayLecture jonResultlecturelist = (ArrayLecture) gson.fromJson(sbResult.toString(), (java.lang.reflect.Type) type);
@@ -715,5 +843,9 @@ public class ProfileFrame extends JFrame {
 		lectureListPanel.update(lectureListPanel.getGraphics());
 		listPanel.updateUI();
 	}
+	public void setMainFramevisible(boolean bool){
+		setVisible(bool);
+	}
+	
 }
 // http://manic.tistory.com/99

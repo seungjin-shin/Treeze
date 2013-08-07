@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -18,6 +19,7 @@ import org.json.simple.JSONObject;
 
 import freemind.json.CurrentPositionOfNav;
 import freemind.json.FreemindGson;
+import freemind.json.TreezeData;
 import freemind.modes.NodeAdapter;
 
 public class SlideShow {
@@ -174,6 +176,10 @@ public class SlideShow {
 					// TODO Auto-generated method stub
 					OutputStream os;
 					final String NAVINUM = "0";
+					PrintWriter pw = fManager.getPw();
+					TreezeData treezeData = new TreezeData();
+					String jsonString;
+					FreemindGson myGson = new FreemindGson();
 					
 					if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 						nextShow();
@@ -200,6 +206,56 @@ public class SlideShow {
 //								e1.printStackTrace();
 //							}
 //						}
+						
+						ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
+						int idx;
+						ArrayList<Integer> idxList = new ArrayList<Integer>();
+						NodeAdapter selNode = c.getSlideShow().getfocus();
+						NodeAdapter selNodeParent;
+						
+						if (selNode.isRoot()){
+							treezeData.setDataType(TreezeData.NAVI);
+							treezeData.getArgList().clear();
+							treezeData.getArgList().add("start");
+							
+							//return; // search the other loc
+
+							jsonString = myGson.toJson(treezeData);
+									
+							pw.println(jsonString);
+							pw.flush();
+							
+							System.out.println("start");
+							return;
+						}
+						
+						while (!selNode.isRoot()) {
+							selNodeParent = (NodeAdapter) selNode.getParentNode();
+							idx = selNodeParent.getChildPosition(selNode);
+							idxReverseList.add(idx);
+							selNode = selNodeParent;
+						}
+						
+						for (int i = idxReverseList.size(); i > 0; i--) {
+							idxList.add(idxReverseList.get(i - 1));
+						}
+						
+						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
+
+						sendPs.setPosition(idxList);
+
+						jsonString = myGson.toJson(sendPs);
+						
+						treezeData.setDataType(TreezeData.NAVI);
+						treezeData.getArgList().clear();
+						treezeData.getArgList().add(jsonString);
+						
+						jsonString = myGson.toJson(treezeData);
+						System.out.println(jsonString);
+						
+						pw.println(jsonString);
+						pw.flush();
+						
 						
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						showpause();
@@ -276,7 +332,7 @@ public class SlideShow {
 			// TODO Auto-generated method stub
 			BufferedImage i = null;
 			try {
-					i = ImageIO.read(new File(fManager.getFilePath() + slideShow.getfocus().getImgPath())); 
+					i = ImageIO.read(new File(fManager.getFilePath() + slideShow.getfocus().getImgPath() + ".jpg")); 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

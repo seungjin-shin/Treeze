@@ -272,11 +272,14 @@ public class Controller  implements MapModuleChangeObserver {
 		this.totalCnt = totalCnt;
 	}
 
-	public FreemindSocket fmSck = new FreemindSocket(this);
+	public FreemindSocket fmSck;// = new FreemindSocket(this, getMc());
     
-    public FreemindSocket getFmSck() {
-		return fmSck;
+	public void startFreemindSocket(){
+		fmSck = new FreemindSocket(this, getMc(), fManager.getIn());
+		fmSck.start();
+		System.out.println("Controller startFreemindSocket");
 	}
+	
 	public ArrayList<OutputStream> getNaviOs() {
 		return naviOs;
 	}
@@ -311,10 +314,11 @@ public class Controller  implements MapModuleChangeObserver {
             logger = frame.getLogger(this.getClass().getName());
         }
         //dewlit
-        Thread t = new Thread(fmSck);
-    	t.start();
+//        Thread t = new Thread(fmSck);
+//    	t.start();
     	
         fManager = FreemindManager.getInstance();
+        fManager.setC(this);
         slideShow = fManager.getSlideShow();
         slideShow.setC(this);
         //dewlit

@@ -20,39 +20,20 @@
 
 package freemind.controller;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
-import org.apache.http.client.ClientProtocolException;
-
-import com.google.gson.Gson;
-import com.itextpdf.text.Image;
-import com.sun.media.sound.Toolkit;
-
-import freemind.json.Ticket;
-import freemind.json.TicketInfo;
-import freemind.modes.MindIcon;
+import freemind.json.CurrentPositionOfNav;
+import freemind.json.FreemindGson;
+import freemind.json.TreezeData;
 import freemind.modes.MindMapNode;
 import freemind.modes.NodeAdapter;
-import freemind.modes.UploadToServer;
-import freemind.modes.mindmapmode.MindMapController;
 
 /**
  * The KeyListener which belongs to the node and cares for Events like C-D
@@ -77,29 +58,32 @@ public class NodeKeyListener implements KeyListener {
 	}
 
 	public void keyPressed(KeyEvent e) {
-		final String NAVINUM = "0";
-		OutputStream os;
+		PrintWriter pw = fManager.getPw();
+		
+		TreezeData treezeData = new TreezeData();
+		String jsonString;
+		FreemindGson myGson = new FreemindGson();
+		
  		if (e.getKeyCode() == KeyEvent.VK_F5) {
 			
 			//c.setFocus((NodeAdapter)c.getMc().getRootNode());
-			
+ 			
 			c.getSlideShow().setfocus((NodeAdapter)c.getMc().getRootNode());
 			c.getSlideShow().show();
 			
+			treezeData.setDataType(TreezeData.NAVI);
+			treezeData.getArgList().clear();
+			treezeData.getArgList().add("start");
 			
 			//return; // search the other loc
+
+			jsonString = myGson.toJson(treezeData);
+					
+			pw.println(jsonString);
+			pw.flush();
 			
-//			for(int i = 0; i < c.getNaviOs().size(); i++){
-//				os = c.getNaviOs().get(i);
-//				try {
-//					if(os != null)
-//						os.write((NAVINUM + "start").getBytes());
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//			}
-//			System.out.println("start");
+			System.out.println("start");
+	
 			
 		} else if (e.getKeyCode() == KeyEvent.VK_F6) {
 			if(c.getSlideShow().getfocus() == null)
@@ -131,6 +115,54 @@ public class NodeKeyListener implements KeyListener {
 //			}
 //			
 //			System.out.println(jsonString);
+			
+			ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
+			int idx;
+			ArrayList<Integer> idxList = new ArrayList<Integer>();
+			NodeAdapter selNode = c.getSlideShow().getfocus();
+			NodeAdapter selNodeParent;
+			
+			if (selNode.isRoot()){
+				treezeData.setDataType(TreezeData.NAVI);
+				treezeData.getArgList().clear();
+				treezeData.getArgList().add("start");
+				
+				jsonString = myGson.toJson(treezeData);
+				System.out.println(jsonString);
+				
+				pw.println(jsonString);
+				pw.flush();
+				return;
+			}
+			
+			while (!selNode.isRoot()) {
+				selNodeParent = (NodeAdapter) selNode.getParentNode();
+				idx = selNodeParent.getChildPosition(selNode);
+				idxReverseList.add(idx);
+				selNode = selNodeParent;
+			}
+			
+			for (int i = idxReverseList.size(); i > 0; i--) {
+				idxList.add(idxReverseList.get(i - 1));
+			}
+			
+			CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
+
+			sendPs.setPosition(idxList);
+
+			jsonString = myGson.toJson(sendPs);
+			
+			treezeData.setDataType(TreezeData.NAVI);
+			treezeData.getArgList().clear();
+			treezeData.getArgList().add(jsonString);
+			
+			jsonString = myGson.toJson(treezeData);
+			System.out.println(jsonString);
+			
+			pw.println(jsonString);
+			pw.flush();
+			
+			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F4){
 			new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
@@ -246,16 +278,16 @@ public class NodeKeyListener implements KeyListener {
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F16){
 			
-			try {
-				
-				fManager.getMc().load(new File("/Users/dewlit/Desktop/test/Linux.mm"));
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+//			try {
+//				
+//				fManager.getMc().load(new File("/Users/dewlit/Desktop/test/Linux.mm"));
+//			} catch (FileNotFoundException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 			
 		}
 		
