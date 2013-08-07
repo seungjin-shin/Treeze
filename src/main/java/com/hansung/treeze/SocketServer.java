@@ -16,73 +16,131 @@ import javax.servlet.http.HttpServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.hansung.treeze.model.ClassInfo;
+import com.hansung.treeze.model.User;
+
 @SuppressWarnings("serial")
 public class SocketServer extends HttpServlet implements Runnable {
-	
-	private static final Logger logger = LoggerFactory.getLogger(SocketServer.class);
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(SocketServer.class);
 	private Thread daemon;
-	private ArrayList <Socket> socketList;
-	
-	public void init()throws ServletException{
+	private ArrayList<ClassManager> classManagerList;
+
+	final String PROFESSOR = "Professor";
+	final String STUDENT = "Student";
+
+	public void init() throws ServletException {
 		daemon = new Thread(this);
 		daemon.start();
 	}
-	public void destroy(){
+
+	public void destroy() {
 		daemon.interrupt();
 	}
+
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		try{
+		try {
 			logger.info("==========================");
 			logger.info("Treeze SocketServer RUN");
 			logger.info("==========================");
-			warningInit();
-		} catch(Exception e){
+			startServerSocket();
+		} catch (Exception e) {
 			logger.info("ServerSocket failed : " + e.getMessage());
 		}
-		
+
 	}
-	public void warningInit(){
-		
+
+	public void startServerSocket() {
+		BufferedReader in;
+		PrintWriter out;
+		String reqMsg;
+		Socket userSocket;
+		ClassManager classManager = null;
+		Gson gson = new Gson();
+
 		try {
 			@SuppressWarnings("resource")
 			ServerSocket SocketServer = new ServerSocket(8888);
+
 			while (true) {
 				try {
-					logger.info("Watting Client");
-					Socket warningSocket = SocketServer.accept(); // Ŭ���̾������Ҷ����� ���
-					
-					logger.info("Client IP : " + warningSocket.getInetAddress());
-					
-					BufferedReader in = new BufferedReader(new InputStreamReader(warningSocket.getInputStream()));
-					PrintWriter out = new PrintWriter(new OutputStreamWriter(warningSocket.getOutputStream()));
-					
-					String reqMsg = in.readLine();
-					
+
+					logger.info("Watting Professor");
+					userSocket = SocketServer.accept();
+
+					logger.info("Client IP : " + userSocket.getInetAddress());
+
+					in = new BufferedReader(new InputStreamReader(
+							userSocket.getInputStream()));
+					out = new PrintWriter(new OutputStreamWriter(
+							userSocket.getOutputStream()));
+
+					reqMsg = in.readLine();
+
 					logger.info("Client Request Message : " + reqMsg);
+
+					TreezeData treezedata =  gson.fromJson(reqMsg,TreezeData.class);
+					
+					User user = gson.fromJson(treezedata.getArgList().get(0), User.class);
+					ClassInfo classInfo = gson.fromJson(treezedata.getArgList().get(1), ClassInfo.class);
 					
 					out.println(reqMsg);
 					out.flush();
-					socketList.add(warningSocket);
-					
-					//warningSocket.close();
-					
+
+					if (user.getUserType().equals(PROFESSOR)) {
+
+						classManager = new ClassManager(user, userSocket,
+								classInfo, classManagerList);
+						classManagerList.add(classManager);
+
+						try {
+							classManager.init();
+						} catch (ServletException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					} else if (user.getUserType().equals(STUDENT)) {
+
+						for (int i = 0; i < classManagerList.size(); i++) {
+							classManager = classManagerList.get(i);
+							if (classManagerList.get(i).getClassInfo()
+									.equals(classInfo))
+								break;
+						}
+
+						ArrayList<StudentSocketManager> studentSocketManagerList = classManager
+								.getStudentSocketManagerList();
+						StudentSocketManager studentSocketManager = new StudentSocketManager(
+								user, userSocket, classInfo,
+								studentSocketManagerList, classManager);
+						studentSocketManagerList.add(studentSocketManager);
+
+						try {
+							studentSocketManager.init();
+						} catch (ServletException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
 				} catch (IOException e) {
 					// TODO: handle exception
 					e.printStackTrace();
 				}
-				
+
 			}
 		} catch (MalformedURLException e) {
 			// TODO: handle exception
 			logger.info(e.toString());
-		}catch (IOException e) {
+		} catch (IOException e) {
 			// TODO: handle exception
 			logger.info(e.toString());
 		}
 	}
-	
-	
-	
+
 }

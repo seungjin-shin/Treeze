@@ -30,5 +30,6 @@
 	<classpathentry kind="lib" path="src/main/resources/META-INF/lib/xstream-1.4.4.jar"/>
 	<classpathentry kind="lib" path="src/main/resources/META-INF/lib/xstream-benchmark-1.4.4.jar"/>
 	<classpathentry kind="lib" path="src/main/resources/META-INF/lib/xstream-hibernate-1.4.4.jar"/>
+	<classpathentry kind="lib" path="/Users/Taeung/git/Treeze/src/main/resources/META-INF/lib/gson-2.2.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
