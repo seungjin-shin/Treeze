@@ -75,28 +75,28 @@ public class ClassManager extends HttpServlet implements Runnable {
 		
 	}
 
-	public void startClassManager(){
-		String reqMsg = "";
+	public void startClassManager() throws IOException{
 		
-		while (!(reqMsg.equals(QUIT))) {
+		String reqMsg = "";
+		reqMsg = in.readLine();
+		
+		do{
 			try {
-
-				reqMsg = in.readLine();
 
 				logger.info("Client Request Message : " + reqMsg);
 
 				broadcast(reqMsg);
-				 
-				out.println(reqMsg);
 				out.flush();
-
+				
+				reqMsg = in.readLine();
+				
 			} catch (IOException e) {
 					// TODO: handle exception
 				e.printStackTrace();
 			}
 
-		}
-
+		}while (!(reqMsg.equals(QUIT)));
+		
 		destroyClassManager();
 	}
 

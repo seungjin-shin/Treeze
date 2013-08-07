@@ -76,13 +76,12 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 		
 	}
 
-	public void startStudentSocketManager(){
+	public void startStudentSocketManager() throws IOException{
 		String reqMsg = "";
-
-		while (!(reqMsg.equals(QUIT))) {
+		reqMsg = in.readLine();
+		
+		do{
 			try {
-
-				reqMsg = in.readLine();
 
 				logger.info("Client Request Message : " + reqMsg);
 
@@ -90,13 +89,16 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 
 				out.println(reqMsg);
 				out.flush();
-
+				
+				reqMsg = in.readLine();
+				
+				
 			} catch (IOException e) {
 					// TODO: handle exception
 				e.printStackTrace();
 			}
 
-		}
+		}while (!(reqMsg.equals(QUIT)));
 
 	}
 

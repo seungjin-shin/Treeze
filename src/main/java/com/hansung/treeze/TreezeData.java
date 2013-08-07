@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 public class TreezeData {
 
-	final String NAVI = "navi";
-	final String TICKET = "ticket";
-
-	final String SURVEY = "survey";
-	final String SURVEYVALUE = "surveyValue";
-	final String SURVEYRESULT = "surveyResult";
+	public static final String CONNECTIONINFO = "connectionInfo"; //User + ClassInfo
+	public static final String NAVI = "navi";
+	public static final String TICKET = "ticket";
+    
+	public static final String SURVEY = "survey";
+	public static final String SURVEYVALUE = "surveyValue";
+	public static final String SURVEYRESULT = "surveyResult";
 
 	private String dataType;
 	private ArrayList<String> argList;

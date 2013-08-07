@@ -26,10 +26,7 @@ public class SocketServer extends HttpServlet implements Runnable {
 	private static final Logger logger = LoggerFactory
 			.getLogger(SocketServer.class);
 	private Thread daemon;
-	private ArrayList<ClassManager> classManagerList;
-
-	final String PROFESSOR = "Professor";
-	final String STUDENT = "Student";
+	private ArrayList<ClassManager> classManagerList = new ArrayList<ClassManager>();
 
 	public void init() throws ServletException {
 		daemon = new Thread(this);
@@ -64,12 +61,12 @@ public class SocketServer extends HttpServlet implements Runnable {
 
 		try {
 			@SuppressWarnings("resource")
-			ServerSocket SocketServer = new ServerSocket(8888);
+			ServerSocket SocketServer = new ServerSocket(2141);
 
 			while (true) {
 				try {
 
-					logger.info("Watting Professor");
+					logger.info("Watting");
 					userSocket = SocketServer.accept();
 
 					logger.info("Client IP : " + userSocket.getInetAddress());
@@ -80,7 +77,11 @@ public class SocketServer extends HttpServlet implements Runnable {
 							userSocket.getOutputStream()));
 
 					reqMsg = in.readLine();
-
+					
+					if(reqMsg == null){
+						System.out.println("Client Socket failed");
+						continue;
+					}
 					logger.info("Client Request Message : " + reqMsg);
 
 					TreezeData treezedata =  gson.fromJson(reqMsg,TreezeData.class);
@@ -90,8 +91,14 @@ public class SocketServer extends HttpServlet implements Runnable {
 					
 					out.println(reqMsg);
 					out.flush();
+					
+					/*int count = classManagerList.size();
+					
+					for (int i = 0; i < count; i++) {
+						if(classInfo.equals(classManagerList.get(i)))
+					}*/
 
-					if (user.getUserType().equals(PROFESSOR)) {
+					if (user.getUserType().equals(User.PROFESSOR)) {
 
 						classManager = new ClassManager(user, userSocket,
 								classInfo, classManagerList);
@@ -104,9 +111,10 @@ public class SocketServer extends HttpServlet implements Runnable {
 							e.printStackTrace();
 						}
 
-					} else if (user.getUserType().equals(STUDENT)) {
-
-						for (int i = 0; i < classManagerList.size(); i++) {
+					} else if (user.getUserType().equals(User.STUDENT)) {
+						int count = classManagerList.size();
+						
+						for (int i = 0; i < count; i++) {
 							classManager = classManagerList.get(i);
 							if (classManagerList.get(i).getClassInfo()
 									.equals(classInfo))

@@ -11,7 +11,9 @@ public class User extends AbstractPersistable<Long>  {
 	 * 
 	 */
 	private static final long serialVersionUID = 8670230733755158882L;
-
+	public static final String STUDENT = "student";
+	public static final String PROFESSOR = "professor";
+	
 	private int userImgId;  
 	private String userType;
 	private String userName;
