@@ -81,6 +81,7 @@ import freemind.NodeType.SlideType;
 import freemind.common.XmlBindingTools;
 import freemind.controller.AddQuestionNode;
 import freemind.controller.CheckNodeType;
+import freemind.controller.FreemindManager;
 import freemind.controller.MenuBar;
 import freemind.controller.MenuItemEnabledListener;
 import freemind.controller.MindMapNodesSelection;
@@ -374,6 +375,7 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
 	static int FIRST = 1;
 	private int lectureId;
 	private String lectureTitle;
+	FreemindManager fManager;
 	
 	//dewlit
 	
@@ -418,12 +420,14 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
     public MindMapController(Mode mode) {
 	super(mode);
 	super.setMc(this);
+	fManager = FreemindManager.getInstance();
+	fManager.setMc(this);
 	if(logger == null) {
 		logger = getFrame().getLogger(this.getClass().getName());
 	}
 	
 	if(FIRST == 1){ // 클래스를 두번 만듬, 한번만 호출하게
-		//new ProfileFrame(this);
+		new ProfileFrame(this);
 		//new LoggedInFrame(this);
 		FIRST++;
 	}

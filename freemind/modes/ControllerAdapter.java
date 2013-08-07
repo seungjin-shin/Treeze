@@ -708,9 +708,9 @@ public abstract class ControllerAdapter implements ModeController {
 									filePath.length() - 4);
 							pdf2mm(filePath, theFile.getName());
 							UploadToServer UTS = new UploadToServer();
-							// UTS.doFileUpload(getController()
-							// .getSlideList(), filePath, theFile.getName(),
-							// "1");
+							 UTS.doFileUpload(getController()
+							 .getSlideList(), filePath, theFile.getName(),
+							 "1");
 
 							theFile = new File(mmFilePath + ".mm");
 						}

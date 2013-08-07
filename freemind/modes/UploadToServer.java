@@ -47,6 +47,7 @@ public class UploadToServer {
         	  dirPath = fileFullPath.substring(0, fileFullPath.length() - 4);
 
         	  saveFile = new File(dirPath + ".mm");
+//        	  saveFile = new File("/Users/dewlit/Desktop/test/Linux.mm");
                 if(saveFile.exists())
                	 bin =  new FileBody(saveFile, "UTF-8");
            HttpClient httpClient = new DefaultHttpClient();  

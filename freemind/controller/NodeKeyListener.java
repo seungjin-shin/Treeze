@@ -27,6 +27,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -242,18 +244,20 @@ public class NodeKeyListener implements KeyListener {
 			System.out.println("KeyListener : check node type");
 			
 		}
-//		else if(e.getKeyCode() == KeyEvent.VK_F16){
-//			UploadToServer uts = new UploadToServer();
-//			try {
-//				uts.dd();
-//			} catch (ClientProtocolException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//		}
+		else if(e.getKeyCode() == KeyEvent.VK_F16){
+			
+			try {
+				
+				fManager.getMc().load(new File("/Users/dewlit/Desktop/test/Linux.mm"));
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
 		
 		if (mListener != null)
 			mListener.keyPressed(e);

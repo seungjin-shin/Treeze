@@ -1,5 +1,7 @@
 package freemind.controller;
 
+import freemind.modes.mindmapmode.MindMapController;
+
 public class FreemindManager {
 	private static FreemindManager fInstance;
 	
@@ -15,7 +17,9 @@ public class FreemindManager {
 	}
 	
 	SlideShow slideShow;
+	MindMapController mc;
 	
+
 
 	private boolean isSlideShowInfo = false;
 	private boolean isAddQuestionNodeInfo = false;
@@ -30,6 +34,13 @@ public class FreemindManager {
 	
 	
 	
+	public MindMapController getMc() {
+		return mc;
+	}
+	
+	public void setMc(MindMapController mc) {
+		this.mc = mc;
+	}
 	public SlideShow getSlideShow() {
 		return slideShow;
 	}
