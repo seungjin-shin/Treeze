@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +21,7 @@ public class SocketServer extends HttpServlet implements Runnable {
 	
 	private static final Logger logger = LoggerFactory.getLogger(SocketServer.class);
 	private Thread daemon;
+	private ArrayList <Socket> socketList;
 	
 	public void init()throws ServletException{
 		daemon = new Thread(this);
@@ -49,7 +51,7 @@ public class SocketServer extends HttpServlet implements Runnable {
 			while (true) {
 				try {
 					logger.info("Watting Client");
-					Socket warningSocket = SocketServer.accept(); // Å¬¶óÀÌ¾ðÁ¢¼ÓÇÒ¶§±îÁö ´ë±â
+					Socket warningSocket = SocketServer.accept(); // Å¬ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 					
 					logger.info("Client IP : " + warningSocket.getInetAddress());
 					
@@ -62,8 +64,9 @@ public class SocketServer extends HttpServlet implements Runnable {
 					
 					out.println(reqMsg);
 					out.flush();
+					socketList.add(warningSocket);
 					
-					warningSocket.close();
+					//warningSocket.close();
 					
 				} catch (IOException e) {
 					// TODO: handle exception
@@ -79,5 +82,7 @@ public class SocketServer extends HttpServlet implements Runnable {
 			logger.info(e.toString());
 		}
 	}
+	
+	
 	
 }
