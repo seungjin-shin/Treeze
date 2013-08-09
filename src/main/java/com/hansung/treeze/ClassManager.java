@@ -32,22 +32,11 @@ public class ClassManager extends HttpServlet implements Runnable {
 	private BufferedReader in;
 	private PrintWriter out; 
 
-	public ClassManager(User professorInfo, Socket professorSocket,ClassInfo classInfo,ArrayList <ClassManager> classManagerList){
+	public ClassManager(ClassInfo classInfo,ArrayList <ClassManager> classManagerList){
 
-		this.professorInfo = professorInfo;
-		this.professorSocket = professorSocket;
+
 		this.classInfo = classInfo;
 		this.classManagerList = classManagerList;
-
-		try {
-			in = new BufferedReader(new InputStreamReader(professorSocket.getInputStream()));
-			out = new PrintWriter(new OutputStreamWriter(professorSocket.getOutputStream()));
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 
 
@@ -70,7 +59,8 @@ public class ClassManager extends HttpServlet implements Runnable {
 			logger.info("==========================");
 			startClassManager();
 		} catch(Exception e){
-			logger.info("Class Manager failed : " + e.getMessage());
+			logger.info("Class Manager failed 오류 : " + e.getMessage());
+			destroyClassManager();
 		}
 		
 	}
@@ -78,17 +68,27 @@ public class ClassManager extends HttpServlet implements Runnable {
 	public void startClassManager() throws IOException{
 		
 		String reqMsg = "";
+		
+		while(true)
+			if(professorSocket != null)
+				break;
+		
 		reqMsg = in.readLine();
 		
 		do{
 			try {
 
-				logger.info("Client Request Message : " + reqMsg);
-
-				broadcast(reqMsg);
-				out.flush();
+				logger.info("Professor Request Message : " + reqMsg);
 				
-				reqMsg = in.readLine();
+				if(reqMsg == null){
+					destroyClassManager();
+					System.out.println("Professor Socket failed");
+					break;
+				}
+				
+			    broadcast(reqMsg);
+			    
+			    reqMsg = in.readLine();
 				
 			} catch (IOException e) {
 					// TODO: handle exception
@@ -146,6 +146,30 @@ public class ClassManager extends HttpServlet implements Runnable {
 	}
 	public void setClassInfo(ClassInfo classInfo) {
 		this.classInfo = classInfo;
+	}
+
+	public User getProfessorInfo() {
+		return professorInfo;
+	}
+	public void setProfessorInfo(User professorInfo) {
+		this.professorInfo = professorInfo;
+	}
+	
+	public Socket getProfessorSocket() {
+		return professorSocket;
+	}
+	public void setProfessorSocket(Socket professorSocket) {
+		this.professorSocket = professorSocket;
+		
+		try {
+			in = new BufferedReader(new InputStreamReader(professorSocket.getInputStream()));
+			out = new PrintWriter(new OutputStreamWriter(professorSocket.getOutputStream()));
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	

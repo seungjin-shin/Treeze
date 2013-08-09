@@ -24,7 +24,7 @@ import com.hansung.treeze.model.User;
 public class SocketServer extends HttpServlet implements Runnable {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(SocketServer.class);
+	.getLogger(SocketServer.class);
 	private Thread daemon;
 	private ArrayList<ClassManager> classManagerList = new ArrayList<ClassManager>();
 
@@ -72,9 +72,9 @@ public class SocketServer extends HttpServlet implements Runnable {
 					logger.info("Client IP : " + userSocket.getInetAddress());
 
 					in = new BufferedReader(new InputStreamReader(
-							userSocket.getInputStream()));
+						userSocket.getInputStream()));
 					out = new PrintWriter(new OutputStreamWriter(
-							userSocket.getOutputStream()));
+						userSocket.getOutputStream()));
 
 					reqMsg = in.readLine();
 					
@@ -84,6 +84,7 @@ public class SocketServer extends HttpServlet implements Runnable {
 					}
 					logger.info("Client Request Message : " + reqMsg);
 
+					//setting data..
 					TreezeData treezedata =  gson.fromJson(reqMsg,TreezeData.class);
 					
 					User user = gson.fromJson(treezedata.getArgList().get(0), User.class);
@@ -92,16 +93,20 @@ public class SocketServer extends HttpServlet implements Runnable {
 					out.println(reqMsg);
 					out.flush();
 					
-					/*int count = classManagerList.size();
-					
+					//setting classManager..
+					classManager = null; //initialization
+					int count = classManagerList.size();
 					for (int i = 0; i < count; i++) {
-						if(classInfo.equals(classManagerList.get(i)))
-					}*/
+						ClassManager existentClassManager = classManagerList.get(i);
 
-					if (user.getUserType().equals(User.PROFESSOR)) {
+						if(classInfo.getClassId() == (existentClassManager.getClassInfo().getClassId()))
+							classManager = existentClassManager; 
+							//Because classManager already exist, 'existentClassManager'must substitute for current 'classManager'
+					}
 
-						classManager = new ClassManager(user, userSocket,
-								classInfo, classManagerList);
+					// When classManager must be first made. 
+					if(classManager == null){
+						classManager = new ClassManager(classInfo, classManagerList);
 						classManagerList.add(classManager);
 
 						try {
@@ -110,22 +115,23 @@ public class SocketServer extends HttpServlet implements Runnable {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						logger.info("클래스 매니저 새로 생성");
+					}
 
+					//When User to be in classManger is professor. 
+					if (user.getUserType().equals(User.PROFESSOR)) {
+						classManager.setProfessorInfo(user);
+						classManager.setProfessorSocket(userSocket);
+
+					//When User to be in classManger is student. 
 					} else if (user.getUserType().equals(User.STUDENT)) {
-						int count = classManagerList.size();
-						
-						for (int i = 0; i < count; i++) {
-							classManager = classManagerList.get(i);
-							if (classManagerList.get(i).getClassInfo()
-									.equals(classInfo))
-								break;
-						}
 
 						ArrayList<StudentSocketManager> studentSocketManagerList = classManager
-								.getStudentSocketManagerList();
+						.getStudentSocketManagerList();
+
 						StudentSocketManager studentSocketManager = new StudentSocketManager(
-								user, userSocket, classInfo,
-								studentSocketManagerList, classManager);
+							user, userSocket, classInfo,
+							studentSocketManagerList, classManager);
 						studentSocketManagerList.add(studentSocketManager);
 
 						try {

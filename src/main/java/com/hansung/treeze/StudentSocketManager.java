@@ -71,7 +71,8 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 			logger.info("==========================");
 			startStudentSocketManager();
 		} catch(Exception e){
-			logger.info(" Student Socket Manager failed : " + e.getMessage());
+			logger.info(" Student Socket Manager failed 오류 : " + e.getMessage());
+			destroyStudentSocketManager();
 		}
 		
 	}
@@ -83,12 +84,16 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 		do{
 			try {
 
-				logger.info("Client Request Message : " + reqMsg);
+				logger.info("Student Request Message : " + reqMsg);
 
+				
+				if(reqMsg == null){
+					destroyStudentSocketManager();
+					System.out.println("Student Socket Manager failed 접속단절 ");
+					break;
+				}
+				
 				classManager.broadcast(reqMsg);
-
-				out.println(reqMsg);
-				out.flush();
 				
 				reqMsg = in.readLine();
 				
