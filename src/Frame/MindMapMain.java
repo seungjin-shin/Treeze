@@ -76,20 +76,7 @@ public class MindMapMain extends JFrame {
 
 	private ArrayList<MindNode> nodes = new ArrayList<MindNode>();
 	MindNode root;
-	MindNode node;
-	MindNode node1_1;
-	MindNode node1_2;
-	MindNode node1_3;
-	MindNode node2;
-	MindNode node3;
-	MindNode node3_1;
-	MindNode node3_2;
-	MindNode node3_3;
-	MindNode node3_4;
-	MindNode node4;
-	MindNode node4_1;
-	MindNode node4_2;
-	MindNode node4_3;
+
 	JScrollPane jsp;
 	JButton j;
 	ScrollPanel nodeScrollPanel = new ScrollPanel();
@@ -157,7 +144,7 @@ public class MindMapMain extends JFrame {
 		xstream.processAnnotations(MindMaps.class);
 
 		// String xml = xstream.toXML(joe);
-		MindMaps map = (MindMaps) xstream.fromXML(xml2);
+		MindMaps map = (MindMaps) xstream.fromXML(xml);
 
 		root = new MindNode(map.nodes.get(0).getTEXT(),
 				(int) screenSize.getWidth(), (int) screenSize.getHeight());
@@ -358,15 +345,15 @@ public class MindMapMain extends JFrame {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
-		//new MindMapMain("");
-		 ProfileFrame p = new ProfileFrame();
+		ClassInfo classInfo = new ClassInfo();
+		new MindMapMain("",classInfo);
+		// ProfileFrame p = new ProfileFrame();
 		// LoginPageFrame l = new LoginPageFrame();
 		// System.out.println("zz");
 	}
 
 	public void nodetoMindNode(MindNode parent, node child) {
-		 if(child.getNODETYPESTR().equals("Question")) return;
+		// if(child.getNODETYPESTR().equals("Question")) return;
 		MindNode temp = new MindNode(parent, child.getTEXT(),
 				child.getPOSITION());
 		nodes.add(temp);
