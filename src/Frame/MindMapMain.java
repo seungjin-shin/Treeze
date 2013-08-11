@@ -117,8 +117,8 @@ public class MindMapMain extends JFrame {
 		this.setLayout(new BorderLayout());
 
 		String xml = new String();
-
-		File file = new File("/Users/Kunyoung/Desktop/do.mm");
+		//images/nodebg.png
+		File file = new File("mmFile/do.mm");
 
 		byte b[] = new byte[1024];
 
