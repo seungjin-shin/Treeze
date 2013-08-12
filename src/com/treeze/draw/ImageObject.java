@@ -2,8 +2,7 @@ package com.treeze.draw;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-
+import java.awt.Point;
 import javax.swing.JPanel;
 
 
@@ -42,6 +41,20 @@ public class ImageObject extends DrawableObject {
 		this.width = y;
 		this.height = height;
 		this.imagePath = imagePath;
+	}
+
+	@Override
+	public boolean isRemoveItem(int x, int y) {
+		// TODO Auto-generated method stub
+		Point largerPoint = new Point(x + width/2, y + height/2);
+		Point smallerPoint = new Point(x - width/2, y - height/2);
+		
+		if((largerPoint.x > x && x > smallerPoint.x) && (largerPoint.y > y && y > smallerPoint.y)) {
+			return true;
+		}else {
+			return false;
+		}
+		
 	}
 
 }

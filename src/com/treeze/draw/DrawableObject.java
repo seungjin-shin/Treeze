@@ -16,6 +16,8 @@ public abstract class DrawableObject {
 	
 	//graphic을 사용하여 그림을 그리는 방법
 	public abstract void draw(Graphics g, JPanel jpanel);
+	
+	public abstract boolean isRemoveItem(int x, int y);
 
 }
 

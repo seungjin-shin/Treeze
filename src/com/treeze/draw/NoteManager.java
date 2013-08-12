@@ -46,6 +46,7 @@ public class NoteManager {
 	
 	protected void makePathComplete() {
 		drawobjList.add(new LineObject(this.path));
+		System.out.println("drawobj size : " + drawobjList.size());
 	}
 	
 	protected void makeFigure(int x, int y, int width, int height, int type) {
@@ -56,6 +57,7 @@ public class NoteManager {
 	
 	protected void makeFigureComplete() {
 		drawobjList.add(this.figureObj);
+		System.out.println("drawobj size : " + drawobjList.size());
 	}
 	
 
@@ -65,6 +67,17 @@ public class NoteManager {
 			drawobjList.get(i).draw(g, jpanel);
 			System.out.println("list obj : " + drawobjList.get(i));
 		}
+	}
+	
+	protected void remove(int x, int y) {
+		for (int i = 0; i < drawobjList.size(); i++) {
+			if(drawobjList.get(i).isRemoveItem(x, y)) {
+				drawobjList.remove(i);
+				break;
+			}
+//			System.out.println("list obj : " + drawobjList.get(i));
+		}
+		repaint();
 	}
 
 	protected void drawLine(Path path) {
@@ -151,9 +164,16 @@ public class NoteManager {
 		
 	}
 	
-	protected void removeDrawableObj() {
+	protected void removeLastDrawableObj() {
 		
 		drawobjList.remove(drawobjList.size()-1);
+		
+	}
+	
+	
+	protected void removeObjByPosition(int x, int y) {
+		
+		
 		
 	}
 

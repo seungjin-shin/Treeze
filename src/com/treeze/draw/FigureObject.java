@@ -2,6 +2,7 @@ package com.treeze.draw;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -11,9 +12,7 @@ public class FigureObject extends DrawableObject {
 	// ArrayList<Figure> figures = new ArrayList<Figure>();
 	int type;
 
-//	public static final int FIGURE_TYPE_CIRCLE = 0;
-//	public static final int FIGURE_TYPE_RECT = 1;
-	
+
 	public FigureObject(int x, int y, int width, int height, int type) {
 		
 		this.x = x;
@@ -40,7 +39,7 @@ public class FigureObject extends DrawableObject {
 
 		Graphics2D g2;
 		g2 = (Graphics2D) g;
-		// g2.drawRect(x1, y1, width, height);
+
 		if (PPTPanel.FIGURE_TYPE_CIRCLE == type) {
 			g2.drawOval(x, y, width, height);
 		} else if (PPTPanel.FIGURE_TYPE_REC == type) {
@@ -48,5 +47,22 @@ public class FigureObject extends DrawableObject {
 		}
 
 	}
+
+	@Override
+	public boolean isRemoveItem(int x, int y) {
+		// TODO Auto-generated method stub	
+		
+		Point largerPoint = new Point(x + width/2, y + height/2);
+		Point smallerPoint = new Point(x - width/2, y - height/2);
+		
+		if((largerPoint.x > x && x > smallerPoint.x) && (largerPoint.y > y && y > smallerPoint.y)) {
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
+	
+	
 
 }

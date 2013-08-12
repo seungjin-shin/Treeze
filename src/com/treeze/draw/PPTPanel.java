@@ -54,6 +54,7 @@ public class PPTPanel extends JPanel {
 	// 필기 모드
 	public static final int NOTE_MODE_PEN = 0;
 	public static final int NOTE_MODE_FIGURE = 1;
+	public static final int NOTE_MODE_ERASER = 2;
 
 	// figure type
 	public static final int FIGURE_TYPE_STAR = 0;
@@ -70,11 +71,13 @@ public class PPTPanel extends JPanel {
 	// button
 	public static final int CLICK_BUTTON_LEFT = 1;
 	public static final int CLICK_BUTTON_RIGHT = 3;
+	
+	public static final int MOUSE_STATE_CLICK = 0;
 
 	private int curNoteMode;
 	private int curFigureMode;
 	private int curLineMode;
-	private boolean curRealTimeDrawMode;
+	private boolean curMouseState;
 
 	// this is for cursor
 	private Toolkit toolkit;
@@ -198,7 +201,7 @@ public class PPTPanel extends JPanel {
 					} else if (clickCount == 2) {
 						// 첫번째 클릭했던 내용을 지워버리면된다.
 						if (curNoteMode == NOTE_MODE_FIGURE) {
-							nm.removeDrawableObj();
+							nm.removeLastDrawableObj();
 						}
 						// 그다음 두번째에는 textarea를 넣어버리면됨.
 						nm.addTextField(x1, y1, 100, 100);

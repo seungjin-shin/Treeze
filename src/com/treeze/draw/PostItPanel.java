@@ -181,7 +181,7 @@ public class PostItPanel extends JPanel {
 					} else if (getCurFoldMode() == FOLD_MODE_UNFOLD) {
 
 						if (parentPanel.getCurNoteMode() == PPTPanel.NOTE_MODE_FIGURE) {
-							nm.removeDrawableObj();
+							nm.removeLastDrawableObj();
 						}
 						// 그다음 두번째에는 textarea를 넣어버리면됨.
 						nm.addTextField(x1, y1, 50, 50);
