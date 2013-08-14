@@ -19,6 +19,8 @@ import freemind.json.UploadedFile;
 
 public class DownLoadNetworkThread extends Thread {
 		final String DOWNPATH = "/Users/dewlit/Desktop/TreezeIMG";
+		final String SERVERIP = "113.198.84.74";
+		
 		Long classId;
 		InputStream is;
 		URL url = null;
@@ -47,14 +49,14 @@ public class DownLoadNetworkThread extends Thread {
 			try {
 				if (flag == NETWORK_UPLOADED_FILEINFO) {
 					url = new URL(
-							"http://113.198.84.80:8080/treeze/img/?classId="
+							"http://" + SERVERIP + ":8080/treeze/img/?classId="
 									+ classId);
 				} else if (flag == NETWORK_UPLOADED_IMG) {
 					for (int i = 0; i < uploadedFileList.size(); i++) {
 
 						// File file = new
 						// File("http://61.43.139.10:8080/treeze/img/"+uploadedFileList.get(i).getId());
-						url = new URL("http://113.198.84.80:8080/treeze/img/"
+						url = new URL("http://" + SERVERIP + ":8080/treeze/img/"
 								+ uploadedFileList.get(i).getId());
 						connection = (HttpURLConnection) url.openConnection();
 						File SDCardRoot = new File(DOWNPATH);

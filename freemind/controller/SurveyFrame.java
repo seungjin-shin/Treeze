@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ import javax.swing.JTextField;
 
 import freemind.json.FreemindGson;
 import freemind.json.Survey;
+import freemind.json.TreezeData;
 import freemind.modes.UploadToServer;
 
 
@@ -29,8 +31,9 @@ class SurveyFrame extends JFrame implements ActionListener{
 	ArrayList<OutputStream> naviOs = new ArrayList<OutputStream>();
 	JTextField surveyTf;
 	String surveyStr = null;
-	public SurveyFrame(ArrayList<OutputStream> naviOs) {
-		this.naviOs = naviOs;
+	OutputStream os;
+	public SurveyFrame(OutputStream o) {
+		os = o;
 		
 		setSize(450, 100);
 		setLayout(null);
@@ -60,8 +63,6 @@ class SurveyFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		this.setVisible(false);
 		
-		
-		
 		surveyStr = surveyTf.getText();
 		
 		JDialog dlg;
@@ -87,20 +88,36 @@ class SurveyFrame extends JFrame implements ActionListener{
 			Survey survey = new Survey();
 			survey.setContents(surveyStr);
 			jsonStr = myGson.toJson(survey);
-			OutputStream os;
-			for(int i = 0; i < naviOs.size(); i++){
-				os = naviOs.get(i);
-				try {
-					if(os != null){
-						os.write((SURVEYPNUM + jsonStr).getBytes("UTF-8")); // 다 보내
-						System.out.println(i + "번째 보냄");
-					}
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
+//			OutputStream os;
+//			for(int i = 0; i < naviOs.size(); i++){
+//				os = naviOs.get(i);
+//				try {
+//					if(os != null){
+//						os.write((SURVEYPNUM + jsonStr).getBytes("UTF-8")); // 다 보내
+//						System.out.println(i + "번째 보냄");
+//					}
+//				} catch (IOException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//			}
+			TreezeData t = new TreezeData();
+			t.setDataType(TreezeData.SURVEY);
+			t.getArgList().add(jsonStr);
 			
+			jsonStr = myGson.toJson(t);
+			
+			try {
+				os.write(jsonStr.getBytes("UTF-8"));
+				os.flush();
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			System.out.println("SurveyFrame : send survey");
 			this.setVisible(false);
 		}
 	}		
@@ -122,7 +139,6 @@ class SurveyResultFrame extends JFrame implements ActionListener{
 		setSize(600, 400);
 		setLayout(null);
 		setTitle("Survey result");
-		setVisible(true);
 		setLocation(350, 200);
 		
 		getContentPane().setBackground(Color.white);
@@ -157,15 +173,14 @@ class SurveyResultFrame extends JFrame implements ActionListener{
 		resultPn.setLocation(10, 120);
 		add(resultPn);
 		
-		
+		setVisible(true);
 	}
 	public void paint(Graphics g){
-		
-		g.setColor(new Color(141, 198, 63));
-		g.drawLine(20, 85, 500, 85);
-		g.drawLine(20, 86, 500, 86);
-		g.drawLine(20, 87, 500, 87);
 		super.paint(g);
+		g.setColor(new Color(141, 198, 63));
+		g.drawLine(10, 85, 490, 85);
+		g.drawLine(10, 86, 490, 86);
+		g.drawLine(10, 87, 490, 87);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

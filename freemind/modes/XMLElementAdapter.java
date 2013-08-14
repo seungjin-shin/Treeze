@@ -399,6 +399,8 @@ public abstract class XMLElementAdapter extends XMLElement {
     	 node.setTicketWriter(sValue);
      else if(name.equals("NODETYPESTR"))
    		 node.setNodeTypeStr(sValue);
+     else if(name.equals("SURVEYCONTENTS"))
+    	 node.setSurveyContents(sValue);
 	 else if (name.equals(XML_NODE_ENCRYPTED_CONTENT)) {
 	     // we change the node implementation to EncryptedMindMapNode.
 	     node = createEncryptedNode(sValue);

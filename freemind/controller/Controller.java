@@ -314,17 +314,22 @@ public class Controller  implements MapModuleChangeObserver {
             logger = frame.getLogger(this.getClass().getName());
         }
         //dewlit
-//        Thread t = new Thread(fmSck);
-//    	t.start();
+//        Thread t = new tmpSocketThread();
+    	//t.start();
     	
         fManager = FreemindManager.getInstance();
         fManager.setC(this);
+        
+        fManager.setFilePath("/Users/dewlit/Desktop/TreezeIMG/");
+        
         slideShow = fManager.getSlideShow();
         slideShow.setC(this);
         //dewlit
         addQNode = new AddQuestionNode(this);
         chkNodeType = new CheckNodeType(this);
-    	
+        
+//        Thread t = new tmpSocketThread();
+//       	t.start();
         //dewlit
         
         /** 

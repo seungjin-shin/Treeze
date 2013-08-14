@@ -1,6 +1,8 @@
 package freemind.controller;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import freemind.modes.mindmapmode.MindMapController;
@@ -23,9 +25,8 @@ public class FreemindManager {
 	MindMapController mc;
 	Controller c;
 
-	PrintWriter pw;
-
-	BufferedReader in;
+	OutputStream os;
+	InputStream in;
 
 	private boolean isSlideShowInfo = false;
 	private boolean isAddQuestionNodeInfo = false;
@@ -38,22 +39,23 @@ public class FreemindManager {
 	private String filePath;
 	
 	
-	
-	public PrintWriter getPw() {
-		return pw;
+	public OutputStream getOs() {
+		return os;
 	}
 	
-	public void setPw(PrintWriter pw) {
-		this.pw = pw;
+	public void setOs(OutputStream os) {
+		this.os = os;
 	}
 	
-	public BufferedReader getIn() {
+	
+	public InputStream getIn() {
 		return in;
 	}
 	
-	public void setIn(BufferedReader in) {
+	public void setIn(InputStream in) {
 		this.in = in;
 	}
+	
 	public Controller getC() {
 		return c;
 	}

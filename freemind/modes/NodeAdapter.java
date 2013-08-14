@@ -78,6 +78,11 @@ public abstract class NodeAdapter implements MindMapNode {
 	private String ticketContent;
 	private String ticketWriter;
 	
+	private String surveyContents;
+	
+
+
+
 	private NodeAdapter prev;
 	private NodeAdapter next;
 	
@@ -86,6 +91,13 @@ public abstract class NodeAdapter implements MindMapNode {
 	
 
 
+	public String getSurveyContents() {
+		return surveyContents;
+	}
+	
+	public void setSurveyContents(String surveyContents) {
+		this.surveyContents = surveyContents;
+	}
 
 	public String getNodeTypeStr() {
 		return nodeTypeStr;
@@ -1072,6 +1084,8 @@ freemind.main.Resources.getInstance().logException(			e);
     		node.setAttribute("TICKETWRITER", ticketWriter);
     	if(!nodeTypeStr.equals(""))
     		node.setAttribute("NODETYPESTR", nodeTypeStr);
+    	if(surveyContents != null)
+    		node.setAttribute("SURVEYCONTENTS", surveyContents);
     	
         /** fc, 12.6.2005: XML must not contain any zero characters. */
         String text = this.toString().replace('\0', ' ');

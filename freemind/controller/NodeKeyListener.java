@@ -27,13 +27,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
+import org.apache.http.client.ClientProtocolException;
 
 import freemind.json.CurrentPositionOfNav;
 import freemind.json.FreemindGson;
 import freemind.json.TreezeData;
 import freemind.modes.MindMapNode;
 import freemind.modes.NodeAdapter;
+import freemind.modes.UploadToServer;
 
 /**
  * The KeyListener which belongs to the node and cares for Events like C-D
@@ -58,7 +62,7 @@ public class NodeKeyListener implements KeyListener {
 	}
 
 	public void keyPressed(KeyEvent e) {
-		PrintWriter pw = fManager.getPw();
+		OutputStream os = fManager.getOs();
 		
 		TreezeData treezeData = new TreezeData();
 		String jsonString;
@@ -79,8 +83,16 @@ public class NodeKeyListener implements KeyListener {
 
 			jsonString = myGson.toJson(treezeData);
 					
-			pw.println(jsonString);
-			pw.flush();
+			try {
+				os.write(jsonString.getBytes("UTF-8"));
+				os.flush();
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 			System.out.println("start");
 	
@@ -130,8 +142,16 @@ public class NodeKeyListener implements KeyListener {
 				jsonString = myGson.toJson(treezeData);
 				System.out.println(jsonString);
 				
-				pw.println(jsonString);
-				pw.flush();
+				try {
+					os.write(jsonString.getBytes("UTF-8"));
+					os.flush();
+				} catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				return;
 			}
 			
@@ -159,13 +179,21 @@ public class NodeKeyListener implements KeyListener {
 			jsonString = myGson.toJson(treezeData);
 			System.out.println(jsonString);
 			
-			pw.println(jsonString);
-			pw.flush();
+			try {
+				os.write(jsonString.getBytes("UTF-8"));
+				os.flush();
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F4){
-			new SurveyFrame(c.getNaviOs()); // c 넘겨서 소켓 다 보내야대
+			new SurveyFrame(fManager.getOs()); // c 넘겨서 소켓 다 보내야대
 			//new SurveyResultFrame(31, 9);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F3){
@@ -277,7 +305,19 @@ public class NodeKeyListener implements KeyListener {
 			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F16){
+			UploadToServer uts = new UploadToServer();
+			try {
+				uts.dd();
+			} catch (ClientProtocolException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
+			
+//			new SurveyResultFrame(0,1,"dd");
 //			try {
 //				
 //				fManager.getMc().load(new File("/Users/dewlit/Desktop/test/Linux.mm"));

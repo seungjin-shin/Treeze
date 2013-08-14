@@ -25,11 +25,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.logging.Handler;
 
@@ -57,12 +60,14 @@ import freemind.json.Lecture;
 import freemind.json.Mindmap;
 import freemind.json.TreezeData;
 import freemind.json.User;
+import freemind.main.LecturePageFrame.ClassPanel;
 import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
 
 
 public class ProfileFrame extends JFrame {
-	final String SERVERIP = "113.198.84.80";
+	final String SERVERIP = "113.198.84.74";
+//	final String SERVERIP = "223.194.158.55";
 	final int PORT = 2141;
 	String myEmail = "minsuk@hansung.ac.kr";
 	final String DOWNPATH = "/Users/dewlit/Desktop/TreezeIMG";
@@ -445,10 +450,10 @@ public class ProfileFrame extends JFrame {
 			lectureNm = new JLabel(lecture.getLectureName(), JLabel.CENTER);
 			professorNm = new JLabel(lecture.getProfessorEmail(), JLabel.CENTER);
 			if(lecture.getStateOfLecture()){
-				stateOfLecture = new JLabel("dd", JLabel.CENTER);
+				stateOfLecture = new JLabel("Online", JLabel.CENTER);
 			}
 			else {
-				stateOfLecture = new JLabel("d1", JLabel.CENTER);
+				stateOfLecture = new JLabel("Offline", JLabel.CENTER);
 			}
 			this.setBackground(new Color(0, 0, 0, 0));
 			// this.add(noPanel);
@@ -506,7 +511,7 @@ public class ProfileFrame extends JFrame {
 					
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						System.out.println("add class btn");
+						new InputClassFrame();
 					}
 				});
 				
@@ -526,6 +531,61 @@ public class ProfileFrame extends JFrame {
 					this.getHeight() - 1);
 		}
 	}
+	
+	class InputClassFrame extends JFrame implements ActionListener{
+		JTextField classtf;
+		
+		public InputClassFrame() {
+			
+			setSize(380, 100);
+			setLayout(null);
+			setTitle("Input your class title");
+			setVisible(true);
+			setLocation(350, 200);
+			
+			getContentPane().setBackground(new Color(141, 198, 63));
+			JLabel inputLb = new JLabel("Title :");
+			inputLb.setSize(50, 30);
+			inputLb.setLocation(10, 10);
+
+			classtf = new JTextField();
+			classtf.setSize(150, 25);
+			classtf.setLocation(60, 10);
+			JButton input = new JButton("Create class");
+			input.addActionListener(this);
+			input.setSize(110, 25);
+			input.setLocation(240, 10);
+			add(inputLb);
+			add(classtf);
+			add(input);
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String classTitle = classtf.getText();
+			classTitle = classTitle.trim();
+			JDialog dlg;
+			
+			if(classTitle.equals("")){
+				dlg = new JDialog(this, "Error", true);
+				JLabel errLb = new JLabel("Input your class!");
+				dlg.setLayout(new FlowLayout());
+				dlg.add(errLb);
+				dlg.setBounds(150,200,200,100);
+				dlg.setVisible(true);
+				return;
+			}
+			else{
+				UploadToServer UTS = new UploadToServer();
+				UTS.classPost(lectureId + "", "minsuk@hansung.ac.kr", classTitle);
+
+				this.setVisible(false);
+				
+				networkThread = new NetworkThread();
+				networkThread.start();
+			}
+		}
+	}
+	
 	class ClassListItem extends JPanel {
 		JLabel classNm;
 		JButton regBtn = new JButton("Reg Mindmap");
@@ -535,6 +595,15 @@ public class ProfileFrame extends JFrame {
 			this.setLayout(gbl);
 			setBackground(Color.white);
 			classNm = new JLabel(classInfo.getClassName(), JLabel.CENTER);
+			
+			regBtn.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					mc.open();
+				}
+			});
+			
 			goBtn.addActionListener(new ActionListener() {
 				
 				@Override
@@ -657,7 +726,7 @@ public class ProfileFrame extends JFrame {
 					
 				} else {
 					url = new URL(
-							"http://113.198.84.80:8080/treeze//getClasses?lectureId="
+							"http://" + SERVERIP + ":8080/treeze//getClasses?lectureId="
 									+ lectureId);
 					
 				}
@@ -725,7 +794,7 @@ public class ProfileFrame extends JFrame {
 			sbResult.delete(0, sbResult.capacity());
 			try {
 				url = new URL(
-					"http://113.198.84.80:8080/treeze/getMindMap?classId="+classId);
+					"http://" + SERVERIP + ":8080/treeze/getMindMap?classId="+classId);
 				
 				connection = (HttpURLConnection) url.openConnection();
 				
@@ -778,8 +847,6 @@ public class ProfileFrame extends JFrame {
 				
 				mc.load(new File(DOWNPATH + "/" + classId + ".mm"));
 				
-				Socket socket = new Socket(SERVERIP, PORT);
-				
 				Gson gson = new Gson();
 				User user = new User();
 //				ClassInfo classInfo = new ClassInfo();
@@ -796,19 +863,7 @@ public class ProfileFrame extends JFrame {
 				treezeData.getArgList().add(gson.toJson(user));
 				treezeData.getArgList().add(gson.toJson(cInfo));
 				
-				OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
-				PrintWriter pw = new PrintWriter(osw);
-				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				
-				System.out.println(gson.toJson(treezeData));
-				pw.println(gson.toJson(treezeData));
-				pw.flush();
-				
-				System.out.println("server 응답 : " + in.readLine());
-				
-				fManager.setPw(pw);
-				fManager.setIn(in);
-				fManager.getC().startFreemindSocket();
+				connectSocket(treezeData);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -816,6 +871,67 @@ public class ProfileFrame extends JFrame {
 			}
 			
 			
+		}
+	}
+	
+	void connectSocket(TreezeData t){
+		Socket socket;
+		try {
+			socket = new Socket(SERVERIP, PORT);
+//			OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
+//			PrintWriter pw = new PrintWriter(osw);
+//			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			OutputStream os = socket.getOutputStream();
+			InputStream in = socket.getInputStream();
+			
+			System.out.println(gson.toJson(t));
+			
+			try {
+				os.write(gson.toJson(t).getBytes("UTF-8"));
+				os.flush();
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			int cnt = -1;
+			byte[] b = new byte[1024];
+
+			cnt = in.read(b);
+
+			if (cnt == -1) {
+				System.out.println("server 응답 : Error");
+				// c.getNaviOs().remove(os); // remove Client at Err
+			} else {
+				String rcvStr = null;
+				try {
+					rcvStr = new String(b, 0, cnt, "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				System.out.println("FindMindSocket - rcvStr : " + rcvStr);
+			}
+		
+			
+			
+//			System.out.println("server 응답 : " + in.readLine());
+			
+			fManager.setOs(os);
+			fManager.setIn(in);
+			fManager.getC().startFreemindSocket();
+			fManager.getSlideShow().setOs(os);
+			
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	

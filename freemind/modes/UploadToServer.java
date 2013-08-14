@@ -31,7 +31,7 @@ public class UploadToServer {
 	ArrayList<SlideData> sList;
 	SlideData tmp;
 	String classId;
-	final String SERVERIP = "113.198.84.80";
+	final String SERVERIP = "113.198.84.74";
 	
 	  public void doFileUpload(ArrayList<SlideData> sList, String fileFullPath, String fileName, String classId) {
           try {
@@ -185,54 +185,55 @@ public class UploadToServer {
       }
 	  }
 	  
-//	  public void dd() throws ClientProtocolException, IOException{
-//		  String dirPath;
-//    	  String imgFileName;
-//    	  String xml ="";
-//    	  
-//    	  File saveFile;//
-//    	  FileBody bin = null;
-//    	  
-//    	  
-//    	  BufferedReader br;
-//    	  String filename = "/Users/dewlit/Desktop/test" + "/Linux add Q.mm";
-//    	  String line = "";
-//          try {
-//                br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
-//                
-//                while ((line = br.readLine()) != null) {
-//                	xml += line;
-//                }
-//                br.close();        
-//          } catch (Exception e) {
-//                e.printStackTrace();
-//          }
-//          System.out.println(xml);
-//          
-//          
-//          //String jsonStr = 
-//    	  
-//    	  
-////    	  saveFile = new File(dirPath + ".mm");
-////            if(saveFile.exists())
-////           	 bin =  new FileBody(saveFile, "UTF-8");
-//       HttpClient httpClient = new DefaultHttpClient();  
-//       HttpPost post = new HttpPost("http://113.198.84.80:8080/treeze/createMindMap"); 
-//       String path = "";
-//       
-//       
-//       MultipartEntity multipart = new MultipartEntity(
-//				HttpMultipartMode.BROWSER_COMPATIBLE, null,
-//				Charset.forName("UTF-8"));  // xml, classId, LectureName ��� 蹂대�
-//		
-//       StringBody ipBody = new StringBody("1", Charset.forName("UTF-8"));
-//       StringBody ipBody2 = new StringBody(xml, Charset.forName("UTF-8"));
-//
-//		multipart.addPart("classId", ipBody);
-//		multipart.addPart("mindmapXML", ipBody2);
-//
-//		post.setEntity(multipart);
-//		HttpResponse response = httpClient.execute(post);
-//		HttpEntity resEntity = response.getEntity();
-//	  }
+	  public void dd() throws ClientProtocolException, IOException{
+		  String dirPath;
+    	  String imgFileName;
+    	  String xml ="";
+    	  
+    	  File saveFile;//
+    	  FileBody bin = null;
+    	  
+    	  
+    	  BufferedReader br;
+    	  String filename = "/Users/dewlit/Desktop/test" + "/1.mm";
+    	  String line = "";
+          try {
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
+                
+                while ((line = br.readLine()) != null) {
+                	xml += line;
+                }
+                br.close();        
+          } catch (Exception e) {
+                e.printStackTrace();
+          }
+          System.out.println(xml);
+          
+          
+          //String jsonStr = 
+    	  
+    	  
+//    	  saveFile = new File(dirPath + ".mm");
+//            if(saveFile.exists())
+//           	 bin =  new FileBody(saveFile, "UTF-8");
+       HttpClient httpClient = new DefaultHttpClient();  
+       HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createMindMap"); 
+       String path = "";
+       
+       
+       MultipartEntity multipart = new MultipartEntity(
+				HttpMultipartMode.BROWSER_COMPATIBLE, null,
+				Charset.forName("UTF-8"));  // xml, classId, LectureName ��� 蹂대�
+		
+       StringBody ipBody = new StringBody("1", Charset.forName("UTF-8"));
+       StringBody ipBody2 = new StringBody(xml, Charset.forName("UTF-8"));
+
+		multipart.addPart("classId", ipBody);
+		multipart.addPart("mindmapXML", ipBody2);
+
+		post.setEntity(multipart);
+		HttpResponse response = httpClient.execute(post);
+		HttpEntity resEntity = response.getEntity();
+		System.out.println("UploadtoSErver : dd()");
+	  }
 }

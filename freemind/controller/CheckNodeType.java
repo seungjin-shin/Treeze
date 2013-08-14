@@ -27,7 +27,7 @@ public class CheckNodeType {
 				forCheckNodeType.setNodeType(new QuestionType(forCheckNodeType,
 						c));
 			else if(nodeChkStr.equals("Survey"))
-				forCheckNodeType.setNodeType(new SurveyType());
+				forCheckNodeType.setNodeType(new SurveyType(forCheckNodeType));
 		}
 //		mc.addNew(forAddingQuestionNode, MindMapController.NEW_CHILD, null);
 

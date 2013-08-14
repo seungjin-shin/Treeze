@@ -261,51 +261,72 @@ package freemind.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 
 import freemind.modes.mindmapmode.MindMapController;
 
-public class FreemindSocket extends Thread{
+public class FreemindSocket extends Thread {
 	Controller c;
 	MindMapController mc;
-	BufferedReader in;
-	
-	public FreemindSocket(Controller c, MindMapController mc, BufferedReader in) {
+	InputStream in;
+
+	public FreemindSocket(Controller c, MindMapController mc, InputStream in) {
 		this.c = c;
 		this.mc = mc;
 		this.in = in;
 	}
-	
+
 	@Override
 	public void run() {
-		String rcvStr;
-		
-		while(true){
+		final String SURVEYYES = "0";
+		final String SURVEYNO = "1";
+		String chkStr;
+
+		LectureInfo lectureInfo;
+		lectureInfo = FreemindLectureManager.getInstance();
+		int cnt = -1;
+		byte[] b = new byte[1024];
+
+		while (true) {
 			try {
-				rcvStr = in.readLine();
-				if(rcvStr == null)
+				cnt = in.read(b);
+				
+				if (cnt == -1) {
+					System.out.println("socket end");
+					// c.getNaviOs().remove(os); // remove Client at Err
 					break;
-				System.out.println("server : " + rcvStr);
+				} else {
+					String rcvStr = null;
+					try {
+						rcvStr = new String(b, 0, cnt, "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					chkStr = rcvStr.substring(0, 1);
+					
+					System.out.println("FindMindSocket - rcvStr : " + rcvStr);
+					
+					chkStr = rcvStr.substring(0, 1);
+					System.out.println("구분자 : " + chkStr);
+					
+					if (chkStr.equals(SURVEYYES)) {
+						new SurveyResultFrame(1, 0, lectureInfo.getSurverTitle());
+					} else if (chkStr.equals(SURVEYNO)) {
+						new SurveyResultFrame(0, 1, lectureInfo.getSurverTitle());
+					}
+					
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			} // 받는 부분
 			
+			
+			System.out.println("socket end");
 		}
-		System.out.println("socket end");
+
 	}
-	
-	
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
