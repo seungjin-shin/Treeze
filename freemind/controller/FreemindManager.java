@@ -6,9 +6,11 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import freemind.modes.mindmapmode.MindMapController;
+import freemind.modes.mindmapmode.MindMapMapModel;
 
 public class FreemindManager {
 	private static FreemindManager fInstance;
+	public static final String SERVERIP = "113.198.84.74"; 
 	
 	public static FreemindManager getInstance(){
 		if(fInstance == null){
@@ -36,9 +38,37 @@ public class FreemindManager {
 	private String ticketContent;
 	private String ticketWriter;
 	
-	private String filePath;
+	private String filePath = "/Users/dewlit/Desktop/test/Linux/";
+	private String serverIP = "113.198.84.74";
+	private String donwPath = "/Users/dewlit/Desktop/TreezeIMG";
+	private int classId = 1;
+	private MindMapMapModel mModel;
+
+	public MindMapMapModel getmModel() {
+		return mModel;
+	}
+
+	public void setmModel(MindMapMapModel mModel) {
+		this.mModel = mModel;
+	}
+
+	public String getDonwPath() {
+		return donwPath;
+	}
 	
+	public String getServerIP() {
+		return serverIP;
+	}
+
 	
+	public int getClassId() {
+		return classId;
+	}
+
+	public void setClassId(int classId) {
+		this.classId = classId;
+	}
+
 	public OutputStream getOs() {
 		return os;
 	}

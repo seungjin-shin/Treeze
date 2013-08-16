@@ -44,10 +44,18 @@ import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
@@ -95,6 +103,8 @@ import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.itextpdf.text.pdf.PdfReader;
+
 import freemind.common.BooleanProperty;
 import freemind.controller.MapModuleManager.MapModuleChangeObserver;
 import freemind.controller.filter.FilterController;
@@ -105,6 +115,7 @@ import freemind.main.FreeMindMain;
 import freemind.main.LoggedInFrame;
 import freemind.main.Resources;
 import freemind.main.Tools;
+import freemind.modes.MindIcon;
 import freemind.modes.MindMap;
 import freemind.modes.MindMapNode;
 import freemind.modes.Mode;
@@ -213,6 +224,7 @@ public class Controller  implements MapModuleChangeObserver {
     public NodeAdapter focus;
     public AddQuestionNode addQNode;
 	public CheckNodeType chkNodeType;
+	public ArrayList<NodeAdapter> nodeArr = new ArrayList<NodeAdapter>();
     
     
 
@@ -296,6 +308,106 @@ public class Controller  implements MapModuleChangeObserver {
     	return slideList;
     }
     //dewlit
+    
+    public void makeUploadXml(){
+    	File mmFile = new File("/Users/dewlit/Desktop/writertest.mm");
+		File forUpmmFile = new File("/Users/dewlit/Desktop/upload.mm");
+		OutputStreamWriter out = null;
+		OutputStreamWriter forUploadXmlOw = null;
+		String rdStr;
+		String nodeText;
+		String nodeImg;
+		String preStr = null;
+		int start, end;
+		String filePath = fManager.getFilePath();
+		
+		try {
+			out = new OutputStreamWriter(new FileOutputStream(mmFile), "UTF-8");
+			forUploadXmlOw = new OutputStreamWriter(new FileOutputStream(forUpmmFile), "UTF-8");
+			
+			FreemindManager.getInstance().getmModel().getXml(out, true, getMc().getRootNode());
+			
+			out.close();
+			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(mmFile),"UTF-8"));
+			
+			for(int i = 0; i < 3; i++){
+				preStr = in.readLine(); // 셋째 줄까지 읽어
+				forUploadXmlOw.write(preStr + "\n");
+			}
+			
+			while((rdStr = in.readLine()) != null){
+				
+				if(rdStr.indexOf("richcontent") >= 0){
+					start = rdStr.indexOf("<p>");
+					end = rdStr.indexOf("</p>");
+					nodeText = rdStr.substring(start + 3, end); // <p> 길이 더하
+					
+					start = rdStr.indexOf(filePath);
+					end = rdStr.indexOf(".jpg\"");
+					nodeImg = rdStr.substring(start + filePath.length(), end);
+					
+					preStr = preStr.substring(0, preStr.length() - 1); // 끝에 > 없애기 
+					
+					preStr += " NODETYPESTR=\"Slide\" TEXT=\"" + nodeText + "\" IMGPATH=\"" + nodeImg + "\">";
+					
+					forUploadXmlOw.write(preStr + "\n");
+				}
+				else{
+					preStr = rdStr;
+					
+					if(preStr.indexOf("<node") == -1)
+						forUploadXmlOw.write(preStr + "\n");
+						
+				}
+				
+			}
+			forUploadXmlOw.write("</map>");
+			
+			forUploadXmlOw.close();
+			System.out.println("NodeL : make mm");
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+    }
+    
+    public void removeAllIcon(NodeAdapter node){
+		NodeAdapter forRemoveIcon = node;
+		int i;
+		// Question 노드 추가 하기 전 카운트
+		int cnt = forRemoveIcon.getChildCount();
+
+		if(forRemoveIcon.getIcons().size() != 0){
+			forRemoveIcon.removeIcon(0);
+			getModeController().nodeChanged(forRemoveIcon);
+		}
+		
+		for (i = 0; i < cnt; i++) {
+			removeAllIcon((NodeAdapter) forRemoveIcon.getChildAt(i));
+		}
+    }
+    
+    public void setSequenceIcon(){
+    	NodeAdapter tmp;
+    	NodeAdapter root = (NodeAdapter) mc.getRootNode();
+    	
+    	for(int i = 0; i < root.getChildCount(); i++){
+    		if(i > 8) // 아이콘 9 까지만 추가
+    			break;
+    		
+    		tmp = (NodeAdapter) root.getChildAt(i);
+    		
+    		MindIcon icon = MindIcon.factory("full-" + (i + 1));
+    		tmp.addIcon(icon, -1); 
+    		
+			getModeController().nodeChanged(tmp); 
+    	}
+    	
+    }
+    
+    
 
 	public Action showSelectionAsRectangle;
     public PropertyAction propertyAction;
@@ -320,7 +432,7 @@ public class Controller  implements MapModuleChangeObserver {
         fManager = FreemindManager.getInstance();
         fManager.setC(this);
         
-        fManager.setFilePath("/Users/dewlit/Desktop/TreezeIMG/");
+//        fManager.setFilePath("/Users/dewlit/Desktop/TreezeIMG/");
         
         slideShow = fManager.getSlideShow();
         slideShow.setC(this);

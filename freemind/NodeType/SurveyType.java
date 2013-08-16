@@ -55,6 +55,7 @@ public class SurveyType extends NodeType{
 		
 		jsonStr = myGson.toJson(t);
 		try {
+			System.out.println("SurveyType : " + jsonStr);
 			os.write(jsonStr.getBytes("UTF-8"));
 			os.flush();
 		} catch (UnsupportedEncodingException e1) {

@@ -145,6 +145,8 @@ public abstract class ControllerAdapter implements ModeController {
     private UploadMM upload;
     private MindMapController mc;
     FreemindManager fManager = FreemindManager.getInstance();
+    private ArrayList<String> firstWordArr = new ArrayList<String>();
+    int classId = fManager.getClassId();
     
     
     public MindMapController getMc() {
@@ -667,7 +669,6 @@ public abstract class ControllerAdapter implements ModeController {
 //        chooser.setMultiSelectionEnabled(true);
         int returnVal = chooser.showOpenDialog(getView());
         String filePath = "";
-        String mmFilePath = null;
        
         
         if (returnVal==JFileChooser.APPROVE_OPTION) {
@@ -691,29 +692,12 @@ public abstract class ControllerAdapter implements ModeController {
 							fileName.length()).equals(".pdf")) { // selected pdf
 																	// file
 						fManager.setFilePath(foldName.substring(0, foldName.length() - 4) + "/"); // 리눅스라 /
+						
+						firstWordArr.clear();
+						
 						pdf2img(filePath, theFile.getName());
-
-						// tempateChk == true pdf에 양식 있는거
-
-						if (!templateChk) {
-							toc = new TOCClickVersion(getController()
-									.getSlideList(), mc);
-
-							templateChk = false;
-							return;
-						}
-						// pdf2img 텍스트 뽑고 이미지화
-						if (templateChk) {
-							mmFilePath = filePath.substring(0,
-									filePath.length() - 4);
-							pdf2mm(filePath, theFile.getName());
-							UploadToServer UTS = new UploadToServer();
-							 UTS.doFileUpload(getController()
-							 .getSlideList(), filePath, theFile.getName(),
-							 "1");
-
-							theFile = new File(mmFilePath + ".mm");
-						}
+						newpdf2mm(filePath, fileName);
+						theFile = new File(foldName.substring(0, foldName.length() - 4) + ".mm");
 
 					} else { // selected mm file
 						fManager.setFilePath(foldName.substring(0, foldName.length() - 3) + "/"); // 리눅스라 /
@@ -726,8 +710,6 @@ public abstract class ControllerAdapter implements ModeController {
 				
 				try {
 					lastCurrentDir = theFile.getParentFile();
-					
-					
 					
 					load(theFile);
 //					if(templateChk)
@@ -782,23 +764,10 @@ public abstract class ControllerAdapter implements ModeController {
     public void pdf2img(String filePath, String fileName) throws IOException{
     	PdfReader reader = new PdfReader(filePath);
 		int page = reader.getNumberOfPages();
-		String tmp[];
-		String temp[];
-		ArrayList<SlideData> slideList;
-		String newLine[];
-		slideList = getController().getSlideList();
-		SlideData sData = null;
-		String tmpStr = "";
-		String data = "";
-		String oldStr = "";
 		String mkDirPath;
-		int noTitle = 0;
-		int imgNum = 0;
-		int tmpNum = 0;
-		boolean dupChk;
-		boolean noTitleChk;
-		SlideData prev = null;
-
+		
+		String[] forFirstWordArray;
+				
 		mkDirPath = filePath.substring(0, filePath.indexOf(fileName.toString()));
 		mkDirPath = mkDirPath + fileName.substring(0, fileName.indexOf(".pdf"));
 		File mkDirFile = new File(mkDirPath);
@@ -806,170 +775,28 @@ public abstract class ControllerAdapter implements ModeController {
 		if(!mkDirFile.exists())
 			mkDirFile.mkdir();
 		
-		mkDirPath += "/"; // 윈도우에서는 \\
+//		mkDirPath += "/"; // 윈도우에서는 \\
 
 		File file = new File(filePath);
-        
+		
         RandomAccessFile raf = new RandomAccessFile(file, "r");
         FileChannel channel = raf.getChannel();
         ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
 		
+        
 		for (int i = 1; i <= page; i++) {
-			String str = PdfTextExtractor.getTextFromPage(reader, i);
-			System.out.flush();
-			
-			if(i == 1){
-				newLine = str.split("\n");
-				sData = new SlideData();
-
-				sData.setNodeName(newLine[0]);
-				sData.setImgPath(mkDirPath);
-				slideList.add(sData);
-				prev = sData;
-			}
-			
-			if (str.indexOf("<<table of contents>>") >= 0) {
-				templateChk = true;
-
-				newLine = str.split("\n");
-				for (int j = 1; j < newLine.length - 1; j++) {
-					data = "";
-					sData = new SlideData();
-
-					tmp = newLine[j].split(" ");
-					temp = tmp[0].split("\\.");
-					
-					for(int l = 0; l < temp.length; l++) // idx 정보 = depth 넣어
-						sData.getIdxList().add(Integer.parseInt(temp[l]));
-					
-					
-					for(int k = 1; k < tmp.length; k++){
-						data += tmp[k]; // 1부터니까 1. 리눅스 강의 // 리눅스, 강의 데이터에 넣어
-						if(k != tmp.length - 1 && !tmp[k].equals(""))
-							data += " ";
-					}
-					sData.setImgPath(prev.getImgPath());
-					sData.setNodeName(data);
-					sData.setPrev(prev);
-					prev.setNext(sData);
-					prev = prev.getNext();
-					slideList.add(sData);
-				}
-			break;
-			}
-		}
-		
-		//템플릿 없으면 다시 돌아서 sList 셋팅해야돼
-		if(!templateChk){
-			slideList.clear(); // template 없으면 클리어해
-			for (int i = 1; i <= page; i++) {
-				String str = PdfTextExtractor.getTextFromPage(reader, i);
-				System.out.flush();
-				
-				if(i == 1){
-					newLine = str.split("\n");
-					sData = new SlideData();
-
-					sData.setNodeName(newLine[0]);
-					sData.setImgPath(mkDirPath);
-					slideList.add(sData);
-				}
-				else{
-					newLine = str.split("\n");
-					dupChk = false;
-					for(int j = 0; j < slideList.size(); j++){
-						sData = slideList.get(j);
-						if(newLine[0].equals(sData.getNodeName())){ // 한 슬라이드에 이미지 여러개면 안만들고
-							dupChk = true;
-							break;
-						}
-					}
-					if(!dupChk){
-						sData = new SlideData(); // 없으면 새로 만들어
-						sData.setNodeName(newLine[0]);
-						slideList.add(sData);
-					}
-				}
-			}
-			
-			//이미지 수 셋팅해
-			for (int i = 1; i <= page; i++) {
-				String str = PdfTextExtractor.getTextFromPage(reader, i);
-				System.out.flush();
-				data = "";
-				newLine = str.split("\n");
-
-				data = newLine[0].replace(" ", "");
-
-				for (int j = 0; j < slideList.size(); j++) {
-					sData = slideList.get(j);
-					tmpStr = sData.getNodeName().replace(" ", ""); 
-					if (data.equals(tmpStr)) {
-						sData.setImgCnt(sData.getImgCnt() + 1);
-						break;
-					}
-				}
-			}
-		}
-		else { // template 있으면
-
-			for (int i = 1; i <= page; i++) {
-				String str = PdfTextExtractor.getTextFromPage(reader, i);
-				System.out.flush();
-				data = "";
-				newLine = str.split("\n");
-
-				tmp = newLine[0].split(" ");
-
-				for (int k = 0; k < tmp.length; k++)
-					data += tmp[k];
-
-				data = data.replace(" ", "");
-
-				for (int j = 0; j < slideList.size(); j++) {
-					sData = slideList.get(j);
-					tmpStr = sData.getNodeName().replace(" ", "");
-					if (data.equals(tmpStr)) {
-						sData.setImgCnt(sData.getImgCnt() + 1);
-						break;
-					}
-				}
-			}
-		}
-
-		for (int i = 1; i <= page; i++) {
-			data = "";
-			noTitleChk = false;
 			PDFFile pdffile = new PDFFile(buf);
 			String str = PdfTextExtractor.getTextFromPage(reader, i);
+			forFirstWordArray = str.split("\n");
+			forFirstWordArray = forFirstWordArray[0].split(" ");
+			System.out.println("Open : " + i + " " + forFirstWordArray[0]);
+			
+			if(forFirstWordArray[0].equals(""))
+				firstWordArr.add("undefine");
+			else
+				firstWordArr.add(forFirstWordArray[0]);
+				
 			System.out.flush();
-
-			newLine = str.split("\n");
-			if (newLine[0].equals("<<table of contents>>"))
-				continue;
-
-			if (newLine[0].equals("")) {
-				data += "undefined" + noTitle;
-				imgNum = 1;
-				noTitle++;
-				noTitleChk = true;
-			} else {
-
-				data = newLine[0].replace(" ", "");
-
-				for (int j = 0; j < slideList.size(); j++) {
-					sData = slideList.get(j);
-
-					tmpStr = sData.getNodeName().replace(" ", "");
-					if (data.equals(tmpStr)) {
-						if (oldStr.equals(tmpStr))
-							break;
-						oldStr = data;
-						tmpNum = imgNum = sData.getImgCnt();
-						break;
-					}
-				}
-			}
 
 			// draw the first page to an image
 			PDFPage pdfPage = pdffile.getPage(i);
@@ -997,30 +824,45 @@ public abstract class ControllerAdapter implements ModeController {
 			g2.drawImage(image, 0, 0, null);
 			g2.dispose();
 			try {
-				if (imgNum == 1){
-					if(noTitleChk)
 						ImageIO.write(bi, "jpg",
-								new File(mkDirPath + data + ".jpg"));
-					else
-						ImageIO.write(bi, "jpg",
-							new File(mkDirPath + sData.getNodeName() + ".jpg"));
+								new File(mkDirPath, classId + "_" + i + ".jpg"));
 					
-				}
-				else {
-					ImageIO.write(bi, "jpg",
-							new File(mkDirPath + sData.getNodeName()
-									+ (imgNum - tmpNum) + ".jpg"));
-					tmpNum--;
-				}
 			} catch (IOException ioe) {
 				System.out.println("write: " + ioe.getMessage());
 			}
-			data = "";
 		}
-		sData = slideList.get(0);
-		sData.setsCnt(page);
 		reader.close();
     }
+    
+    public void newpdf2mm(String filePath, String fileName) throws IOException{
+		String direction = "left";
+		String mmFilePath = filePath.substring(0, filePath.length() - 4);
+		String foldPath = filePath.substring(0, filePath.length() - 4);
+		fileName = fileName.substring(0, fileName.length() - 4);
+		mmFilePath += ".mm";
+		File mmFile = new File(mmFilePath);
+		
+		OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(mmFile), "UTF-8");
+		
+			PdfReader reader = new PdfReader(filePath);
+			int page = reader.getNumberOfPages();
+
+			out.write("<map version=\"0.9.0\">\n");
+			out.write("<node" + " TEXT=\"" + fileName + "\">\n");
+			
+			for (int i = 1; i <= page; i++) {
+				if(i > page / 2)
+					direction = "right";
+				out.write("<node POSITION=\"" + direction + "\">\n");
+				out.write("<richcontent TYPE=\"NODE\"><html><head></head><body><p>" + firstWordArr.get(i - 1) + "</p><p><img src=\"" + foldPath + "/" + classId + "_" + i + ".jpg\" width=\"100\" height=\"100\"/></p></body></html></richcontent>\n");
+				out.write("</node>\n");
+			}
+			
+		out.write("</node>\n</map>\n");
+		out.close();
+		reader.close();
+    }
+    
     //dewlit
     public void pdf2mm(String filePath, String fileName) throws IOException{
     	int depth = 0;

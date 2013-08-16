@@ -66,11 +66,10 @@ import freemind.modes.mindmapmode.MindMapController;
 
 
 public class ProfileFrame extends JFrame {
-	final String SERVERIP = "113.198.84.74";
-//	final String SERVERIP = "223.194.158.55";
+	final String SERVERIP = FreemindManager.getInstance().getServerIP();
 	final int PORT = 2141;
 	String myEmail = "minsuk@hansung.ac.kr";
-	final String DOWNPATH = "/Users/dewlit/Desktop/TreezeIMG";
+	final String DOWNPATH = FreemindManager.getInstance().getDonwPath();
 	
 	JButton createLtBtn;
 	ActionListener addLtListener = new AddLtListener();
@@ -111,7 +110,7 @@ public class ProfileFrame extends JFrame {
 	public ProfileFrame(MindMapController mc) {
 		this.mc = mc;
 		fManager = FreemindManager.getInstance();
-		fManager.setFilePath(DOWNPATH + "/");
+//		fManager.setFilePath(DOWNPATH + "/");
 		// TODO Auto-generated constructor stub
 		this.setSize(1000, 600);
 		this.setLocation(300, 200);

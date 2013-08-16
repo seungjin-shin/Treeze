@@ -30,6 +30,16 @@ public class SlideShow {
 	
 	OutputStream os;
 	
+	final String NAVINUM = "0";
+	
+	TreezeData treezeData = new TreezeData();
+	String jsonString;
+	FreemindGson myGson = new FreemindGson();
+	
+	public OutputStream getOs() {
+		return os;
+	}
+
 	public SlideShow(FreemindManager f) {
 		fManager = f;
 	}
@@ -156,13 +166,6 @@ public class SlideShow {
 		double xsize = tk.getScreenSize().getWidth();
 		double ysize = tk.getScreenSize().getHeight();
 		
-		OutputStream os;
-		final String NAVINUM = "0";
-		
-		TreezeData treezeData = new TreezeData();
-		String jsonString;
-		FreemindGson myGson = new FreemindGson();
-
 		public ImgFrame(SlideShow slideShow) {
 			// TODO Auto-generated constructor stub
 			
@@ -279,73 +282,6 @@ public class SlideShow {
 			});
 		}
 		
-		public void sendPosition(){
-			ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
-			int idx;
-			ArrayList<Integer> idxList = new ArrayList<Integer>();
-			NodeAdapter selNode = c.getSlideShow().getfocus();
-			NodeAdapter selNodeParent;
-			
-			if (selNode.isRoot()){
-				treezeData.setDataType(TreezeData.NAVI);
-				treezeData.getArgList().clear();
-				treezeData.getArgList().add("start");
-				
-				//return; // search the other loc
-
-				jsonString = myGson.toJson(treezeData);
-						
-				try {
-					os.write(jsonString.getBytes("UTF-8"));
-					os.flush();
-				} catch (UnsupportedEncodingException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				System.out.println("start");
-				return;
-			}
-			
-			while (!selNode.isRoot()) {
-				selNodeParent = (NodeAdapter) selNode.getParentNode();
-				idx = selNodeParent.getChildPosition(selNode);
-				idxReverseList.add(idx);
-				selNode = selNodeParent;
-			}
-			
-			for (int i = idxReverseList.size(); i > 0; i--) {
-				idxList.add(idxReverseList.get(i - 1));
-			}
-			
-			CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
-
-			sendPs.setPosition(idxList);
-
-			jsonString = myGson.toJson(sendPs);
-			
-			treezeData.setDataType(TreezeData.NAVI);
-			treezeData.getArgList().clear();
-			treezeData.getArgList().add(jsonString);
-			
-			jsonString = myGson.toJson(treezeData);
-			System.out.println(jsonString);
-			
-			try {
-				os.write(jsonString.getBytes("UTF-8"));
-				os.flush();
-			} catch (UnsupportedEncodingException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-
 		private void nextShow() {
 			// TODO Auto-generated method stub
 			this.slideShow.setfocusnext();
@@ -370,6 +306,74 @@ public class SlideShow {
 
 		}
 
+	}
+	
+	public void sendPosition(){
+		ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
+		int idx;
+		ArrayList<Integer> idxList = new ArrayList<Integer>();
+		NodeAdapter selNode = c.getSlideShow().getfocus();
+		NodeAdapter selNodeParent;
+		
+		if (selNode.isRoot()){
+			treezeData.setDataType(TreezeData.NAVI);
+			treezeData.getArgList().clear();
+			treezeData.getArgList().add("start");
+			
+			//return; // search the other loc
+
+			jsonString = myGson.toJson(treezeData);
+					
+			try {
+				os.write(jsonString.getBytes("UTF-8"));
+				os.flush();
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			System.out.println("start");
+			return;
+		}
+		
+		while (!selNode.isRoot()) {
+			selNodeParent = (NodeAdapter) selNode.getParentNode();
+			idx = selNodeParent.getChildPosition(selNode);
+			idxReverseList.add(idx);
+			selNode = selNodeParent;
+		}
+		
+		for (int i = idxReverseList.size(); i > 0; i--) {
+			idxList.add(idxReverseList.get(i - 1));
+		}
+		
+		CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
+
+		sendPs.setPosition(idxList);
+
+		jsonString = myGson.toJson(sendPs);
+		
+		treezeData.setDataType(TreezeData.NAVI);
+		treezeData.getArgList().clear();
+		treezeData.getArgList().add(jsonString);
+		
+		jsonString = myGson.toJson(treezeData);
+		
+		try {
+			if (os != null) {
+				os.write(jsonString.getBytes("UTF-8"));
+				os.flush();
+			}
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	public void setOs(OutputStream os){

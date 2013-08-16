@@ -55,6 +55,7 @@ import javax.swing.JOptionPane;
 
 import freemind.common.OptionalDontShowMeAgainDialog;
 import freemind.common.UnicodeReader;
+import freemind.controller.FreemindManager;
 import freemind.main.FreeMind;
 import freemind.main.FreeMindMain;
 import freemind.main.HtmlTools;
@@ -77,6 +78,8 @@ public class MindMapMapModel extends MapAdapter  {
 	LockManager lockManager;
     private MindMapLinkRegistry linkRegistry;
     private Timer timerForAutomaticSaving;
+    
+    
     /** The current version and all other version that don't need 
      * XML update for sure. */
     public static final String EXPECTED_START_STRINGS[] = {
@@ -99,6 +102,9 @@ public class MindMapMapModel extends MapAdapter  {
 
         // register new LinkRegistryAdapter
         linkRegistry = new LinkRegistryAdapter();
+        
+        //dewlit
+        FreemindManager.getInstance().setmModel(this);
 
         if(root == null)
             root = new MindMapNodeModel( frame.getResourceString("new_mindmap"), frame, this);

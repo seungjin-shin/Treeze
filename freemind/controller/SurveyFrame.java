@@ -108,6 +108,7 @@ class SurveyFrame extends JFrame implements ActionListener{
 			jsonStr = myGson.toJson(t);
 			
 			try {
+				System.out.println("SurveyFrame : " + jsonStr);
 				os.write(jsonStr.getBytes("UTF-8"));
 				os.flush();
 			} catch (UnsupportedEncodingException e1) {

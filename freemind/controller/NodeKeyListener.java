@@ -22,15 +22,22 @@ package freemind.controller;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.ArrayList;
 
 import org.apache.http.client.ClientProtocolException;
+import org.jibx.runtime.impl.InputStreamWrapper;
 
 import freemind.json.CurrentPositionOfNav;
 import freemind.json.FreemindGson;
@@ -38,6 +45,7 @@ import freemind.json.TreezeData;
 import freemind.modes.MindMapNode;
 import freemind.modes.NodeAdapter;
 import freemind.modes.UploadToServer;
+import freemind.modes.mindmapmode.MindMapMapModel;
 
 /**
  * The KeyListener which belongs to the node and cares for Events like C-D
@@ -75,26 +83,30 @@ public class NodeKeyListener implements KeyListener {
 			c.getSlideShow().setfocus((NodeAdapter)c.getMc().getRootNode());
 			c.getSlideShow().show();
 			
-			treezeData.setDataType(TreezeData.NAVI);
-			treezeData.getArgList().clear();
-			treezeData.getArgList().add("start");
+			c.getSlideShow().sendPosition();
 			
-			//return; // search the other loc
-
-			jsonString = myGson.toJson(treezeData);
-					
-			try {
-				os.write(jsonString.getBytes("UTF-8"));
-				os.flush();
-			} catch (UnsupportedEncodingException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-			System.out.println("start");
+//			treezeData.setDataType(TreezeData.NAVI);
+//			treezeData.getArgList().clear();
+//			treezeData.getArgList().add("start");
+//			
+//			//return; // search the other loc
+//
+//			jsonString = myGson.toJson(treezeData);
+//					
+//			try {
+//				if(os != null){
+//					os.write(jsonString.getBytes("UTF-8"));
+//					os.flush();
+//				}
+//			} catch (UnsupportedEncodingException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			
+//			System.out.println("start");
 	
 			
 		} else if (e.getKeyCode() == KeyEvent.VK_F6) {
@@ -128,68 +140,7 @@ public class NodeKeyListener implements KeyListener {
 //			
 //			System.out.println(jsonString);
 			
-			ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
-			int idx;
-			ArrayList<Integer> idxList = new ArrayList<Integer>();
-			NodeAdapter selNode = c.getSlideShow().getfocus();
-			NodeAdapter selNodeParent;
-			
-			if (selNode.isRoot()){
-				treezeData.setDataType(TreezeData.NAVI);
-				treezeData.getArgList().clear();
-				treezeData.getArgList().add("start");
-				
-				jsonString = myGson.toJson(treezeData);
-				System.out.println(jsonString);
-				
-				try {
-					os.write(jsonString.getBytes("UTF-8"));
-					os.flush();
-				} catch (UnsupportedEncodingException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				return;
-			}
-			
-			while (!selNode.isRoot()) {
-				selNodeParent = (NodeAdapter) selNode.getParentNode();
-				idx = selNodeParent.getChildPosition(selNode);
-				idxReverseList.add(idx);
-				selNode = selNodeParent;
-			}
-			
-			for (int i = idxReverseList.size(); i > 0; i--) {
-				idxList.add(idxReverseList.get(i - 1));
-			}
-			
-			CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
-
-			sendPs.setPosition(idxList);
-
-			jsonString = myGson.toJson(sendPs);
-			
-			treezeData.setDataType(TreezeData.NAVI);
-			treezeData.getArgList().clear();
-			treezeData.getArgList().add(jsonString);
-			
-			jsonString = myGson.toJson(treezeData);
-			System.out.println(jsonString);
-			
-			try {
-				os.write(jsonString.getBytes("UTF-8"));
-				os.flush();
-			} catch (UnsupportedEncodingException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
+			c.getSlideShow().sendPosition();			
 			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F4){
@@ -305,16 +256,18 @@ public class NodeKeyListener implements KeyListener {
 			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F16){
-			UploadToServer uts = new UploadToServer();
-			try {
-				uts.dd();
-			} catch (ClientProtocolException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+				c.makeUploadXml();
+				
+//			UploadToServer uts = new UploadToServer();
+//			try {
+//				uts.dd();
+//			} catch (ClientProtocolException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 			
 			
 //			new SurveyResultFrame(0,1,"dd");
@@ -330,7 +283,12 @@ public class NodeKeyListener implements KeyListener {
 //			}
 			
 		}
-		
+		else if(e.getKeyCode() == KeyEvent.VK_F15){
+			c.removeAllIcon((NodeAdapter) c.getMc().getRootNode());
+			c.setSequenceIcon();
+			System.out.println("KeyL : F15");
+		}
+ 		
 		if (mListener != null)
 			mListener.keyPressed(e);
 	}

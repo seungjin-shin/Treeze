@@ -14,12 +14,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sun.xml.internal.rngom.digested.DOptionalPattern;
 
+import freemind.controller.FreemindManager;
 import freemind.json.ArrayUploadedFile;
 import freemind.json.UploadedFile;
 
 public class DownLoadNetworkThread extends Thread {
-		final String DOWNPATH = "/Users/dewlit/Desktop/TreezeIMG";
-		final String SERVERIP = "113.198.84.74";
+		final String DOWNPATH = FreemindManager.getInstance().getDonwPath();
+		final String SERVERIP = FreemindManager.getInstance().getServerIP();
 		
 		Long classId;
 		InputStream is;
@@ -41,6 +42,7 @@ public class DownLoadNetworkThread extends Thread {
 			this.flag = flag;
 			this.uploadedFileList = uploadedFileList;
 		}
+		
 		@Override
 		public void run() {
 

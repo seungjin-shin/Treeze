@@ -321,11 +321,11 @@ public class FreemindSocket extends Thread {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				break;
 			} // 받는 부분
 			
-			
-			System.out.println("socket end");
 		}
+		System.out.println("socket end");
 
 	}
 
