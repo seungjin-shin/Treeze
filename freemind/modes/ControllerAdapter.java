@@ -146,8 +146,6 @@ public abstract class ControllerAdapter implements ModeController {
     private MindMapController mc;
     FreemindManager fManager = FreemindManager.getInstance();
     private ArrayList<String> firstWordArr = new ArrayList<String>();
-    int classId = fManager.getClassId();
-    
     
     public MindMapController getMc() {
 		return mc;
@@ -691,7 +689,7 @@ public abstract class ControllerAdapter implements ModeController {
 					if (fileName.substring(fileName.length() - 4,
 							fileName.length()).equals(".pdf")) { // selected pdf
 																	// file
-						fManager.setFilePath(foldName.substring(0, foldName.length() - 4) + "/"); // 리눅스라 /
+						fManager.setFilePath(foldName.substring(0, foldName.length() - 4));
 						
 						firstWordArr.clear();
 						
@@ -700,7 +698,7 @@ public abstract class ControllerAdapter implements ModeController {
 						theFile = new File(foldName.substring(0, foldName.length() - 4) + ".mm");
 
 					} else { // selected mm file
-						fManager.setFilePath(foldName.substring(0, foldName.length() - 3) + "/"); // 리눅스라 /
+						fManager.setFilePath(foldName.substring(0, foldName.length() - 3)); 
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -764,6 +762,9 @@ public abstract class ControllerAdapter implements ModeController {
     public void pdf2img(String filePath, String fileName) throws IOException{
     	PdfReader reader = new PdfReader(filePath);
 		int page = reader.getNumberOfPages();
+		
+		fManager.setPdfPage(page);
+		
 		String mkDirPath;
 		
 		String[] forFirstWordArray;
@@ -775,8 +776,6 @@ public abstract class ControllerAdapter implements ModeController {
 		if(!mkDirFile.exists())
 			mkDirFile.mkdir();
 		
-//		mkDirPath += "/"; // 윈도우에서는 \\
-
 		File file = new File(filePath);
 		
         RandomAccessFile raf = new RandomAccessFile(file, "r");
@@ -825,7 +824,7 @@ public abstract class ControllerAdapter implements ModeController {
 			g2.dispose();
 			try {
 						ImageIO.write(bi, "jpg",
-								new File(mkDirPath, classId + "_" + i + ".jpg"));
+								new File(mkDirPath, fManager.getClassId() + "_" + i + ".jpg"));
 					
 			} catch (IOException ioe) {
 				System.out.println("write: " + ioe.getMessage());
@@ -854,7 +853,7 @@ public abstract class ControllerAdapter implements ModeController {
 				if(i > page / 2)
 					direction = "right";
 				out.write("<node POSITION=\"" + direction + "\">\n");
-				out.write("<richcontent TYPE=\"NODE\"><html><head></head><body><p>" + firstWordArr.get(i - 1) + "</p><p><img src=\"" + foldPath + "/" + classId + "_" + i + ".jpg\" width=\"100\" height=\"100\"/></p></body></html></richcontent>\n");
+				out.write("<richcontent TYPE=\"NODE\"><html><head></head><body><p>" + firstWordArr.get(i - 1) + "</p><p><img src=\"" + foldPath + "/" + fManager.getClassId() + "_" + i + ".jpg\" width=\"100\" height=\"100\"/></p></body></html></richcontent>\n");
 				out.write("</node>\n");
 			}
 			

@@ -24,6 +24,7 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import freemind.controller.FreemindManager;
 import freemind.controller.SlideData;
 
 
@@ -31,66 +32,40 @@ public class UploadToServer {
 	ArrayList<SlideData> sList;
 	SlideData tmp;
 	String classId;
-	final String SERVERIP = "113.198.84.74";
+	FreemindManager fManager = FreemindManager.getInstance();
+	final String SERVERIP = fManager.getServerIP();
 	
-	  public void doFileUpload(ArrayList<SlideData> sList, String fileFullPath, String fileName, String classId) {
+	  public void doFileUpload() {
           try {
-        	  this.classId = classId;
-        	  this.sList = sList;
-        	  
-        	  String dirPath;
-        	  String imgFileName;
-        	  String xml ="";
-        	  
         	  File saveFile;//
         	  FileBody bin = null;
-        	  dirPath = fileFullPath.substring(0, fileFullPath.length() - 4);
+        	  
+			for (int i = 1; i <= fManager.getPdfPage(); i++) {
+				saveFile = new File(fManager.getFilePath(),
+						fManager.getClassId() + "_" + i + ".jpg");
 
-        	  saveFile = new File(dirPath + ".mm");
-//        	  saveFile = new File("/Users/dewlit/Desktop/test/Linux.mm");
-                if(saveFile.exists())
-               	 bin =  new FileBody(saveFile, "UTF-8");
-           HttpClient httpClient = new DefaultHttpClient();  
-           HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/upload/img"); 
-           String path = "";
-           
-           StringBody classBody = new StringBody(classId, Charset.forName("UTF-8"));
-           
-           MultipartEntity multipart = new MultipartEntity(
-					HttpMultipartMode.BROWSER_COMPATIBLE, null,
-					Charset.forName("UTF-8"));  // xml, classId, LectureName ��� 蹂대�
-			
+				if (saveFile.exists())
+					bin = new FileBody(saveFile, "UTF-8");
+				HttpClient httpClient = new DefaultHttpClient();
+				HttpPost post = new HttpPost("http://" + SERVERIP
+						+ ":8080/treeze/upload/img");
 
-           multipart.addPart("classId", classBody);
-			multipart.addPart("upload", bin);
+				StringBody classBody = new StringBody(fManager.getClassId() + "",
+						Charset.forName("UTF-8"));
 
-			post.setEntity(multipart);
-			HttpResponse response = httpClient.execute(post);
-			HttpEntity resEntity = response.getEntity();
+				MultipartEntity multipart = new MultipartEntity(
+						HttpMultipartMode.BROWSER_COMPATIBLE, null,
+						Charset.forName("UTF-8")); // xml, classId, LectureName
+													// ��� 蹂대�
 
-			FileBody imgBody;//
-           for(int i = 0; i < sList.size(); i++){
-        	   
-        	 httpClient = new DefaultHttpClient();  
-        	 tmp = sList.get(i);
-        	 imgFileName = dirPath + "//" + tmp.getNodeName() + ".jpg"; 
-             saveFile = new File(imgFileName);
-             if(saveFile.exists()){
-            	 bin =  new FileBody(saveFile, "UTF-8");
-            	 post = new HttpPost("http://" + SERVERIP + ":8080/treeze/upload/img"); 
+				multipart.addPart("classId", classBody);
+				multipart.addPart("upload", bin);
 
-					multipart = new MultipartEntity(
-		  					HttpMultipartMode.BROWSER_COMPATIBLE, null,
-		  					Charset.forName("UTF-8"));
-					
-					multipart.addPart("classId", classBody);
-					multipart.addPart("upload", bin);
+				post.setEntity(multipart);
+				HttpResponse response = httpClient.execute(post);
+				HttpEntity resEntity = response.getEntity();
+			}
 
-					post.setEntity(multipart);
-					response = httpClient.execute(post);
-					resEntity = response.getEntity(); // ����댄����
-				}
-           }
            System.out.println("postXmlImg");
        }catch(Exception e){e.printStackTrace();
        }
@@ -185,21 +160,17 @@ public class UploadToServer {
       }
 	  }
 	  
-	  public void dd() throws ClientProtocolException, IOException{
-		  String dirPath;
-    	  String imgFileName;
+	  public void doXmlUpload() throws IOException{
     	  String xml ="";
-    	  
-    	  File saveFile;//
-    	  FileBody bin = null;
-    	  
-    	  
     	  BufferedReader br;
-    	  String filename = "/Users/dewlit/Desktop/test" + "/1.mm";
+    	  String fileName = fManager.getDownPath() + System.getProperty("file.separator") + "upload.mm";
     	  String line = "";
+    	  
           try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
-                
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF-8"));
+                // 왜 파일인풋스트림 안에 new File(폴더, 이름) 이렇게 하면 안되는지 알수없는에러.....
+                //똑같이 xml은 읽히는데 왜?????????
+                //물어봐 
                 while ((line = br.readLine()) != null) {
                 	xml += line;
                 }
@@ -209,31 +180,23 @@ public class UploadToServer {
           }
           System.out.println(xml);
           
-          
-          //String jsonStr = 
-    	  
-    	  
-//    	  saveFile = new File(dirPath + ".mm");
-//            if(saveFile.exists())
-//           	 bin =  new FileBody(saveFile, "UTF-8");
        HttpClient httpClient = new DefaultHttpClient();  
        HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createMindMap"); 
-       String path = "";
-       
        
        MultipartEntity multipart = new MultipartEntity(
 				HttpMultipartMode.BROWSER_COMPATIBLE, null,
 				Charset.forName("UTF-8"));  // xml, classId, LectureName ��� 蹂대�
 		
-       StringBody ipBody = new StringBody("1", Charset.forName("UTF-8"));
-       StringBody ipBody2 = new StringBody(xml, Charset.forName("UTF-8"));
+       StringBody classBody = new StringBody(fManager.getClassId() + "", Charset.forName("UTF-8"));
+       StringBody xmlBody = new StringBody(xml, Charset.forName("UTF-8"));
 
-		multipart.addPart("classId", ipBody);
-		multipart.addPart("mindmapXML", ipBody2);
+		multipart.addPart("classId", classBody);
+		multipart.addPart("mindmapXML", xmlBody);
 
 		post.setEntity(multipart);
 		HttpResponse response = httpClient.execute(post);
 		HttpEntity resEntity = response.getEntity();
-		System.out.println("UploadtoSErver : dd()");
+		System.out.println("UploadtoSErver : douploadXml()");
 	  }
+	  
 }

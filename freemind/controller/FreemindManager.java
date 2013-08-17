@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import javax.swing.JFrame;
+
 import freemind.modes.mindmapmode.MindMapController;
 import freemind.modes.mindmapmode.MindMapMapModel;
 
@@ -38,11 +40,38 @@ public class FreemindManager {
 	private String ticketContent;
 	private String ticketWriter;
 	
-	private String filePath = "/Users/dewlit/Desktop/test/Linux/";
-	private String serverIP = "113.198.84.74";
-	private String donwPath = "/Users/dewlit/Desktop/TreezeIMG";
+	private String filePath;// = "/Users/dewlit/Desktop/test/Linux/";
+//	private String serverIP = "113.198.84.74";
+	private String serverIP = "14.63.215.88";
+	private String downPath = System.getProperty("user.home") + "/Treeze";
+
 	private int classId = 1;
+	private int pdfPage;
 	private MindMapMapModel mModel;
+	private JFrame profileFrame;
+	
+	
+	
+	public JFrame getProfileFrame() {
+		return profileFrame;
+	}
+
+	public void setProfileFrame(JFrame profileFrame) {
+		this.profileFrame = profileFrame;
+	}
+
+	public String getDownPath() {
+		return downPath;
+	}
+	
+	public int getPdfPage() {
+		return pdfPage;
+	}
+
+	public void setPdfPage(int pdfPage) {
+		this.pdfPage = pdfPage;
+	}
+
 
 	public MindMapMapModel getmModel() {
 		return mModel;
@@ -52,10 +81,6 @@ public class FreemindManager {
 		this.mModel = mModel;
 	}
 
-	public String getDonwPath() {
-		return donwPath;
-	}
-	
 	public String getServerIP() {
 		return serverIP;
 	}

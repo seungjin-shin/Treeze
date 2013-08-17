@@ -69,10 +69,13 @@ public class ProfileFrame extends JFrame {
 	final String SERVERIP = FreemindManager.getInstance().getServerIP();
 	final int PORT = 2141;
 	String myEmail = "minsuk@hansung.ac.kr";
-	final String DOWNPATH = FreemindManager.getInstance().getDonwPath();
+	final String DOWNPATH = FreemindManager.getInstance().getDownPath();
 	
 	JButton createLtBtn;
+	JButton logoutBtn;
 	ActionListener addLtListener = new AddLtListener();
+	ActionListener addCsListener = new AddCsListener();
+	ActionListener backListener = new BackListener();
 	FreemindManager fManager;
 	
 	BtnPanel btnPanel;
@@ -314,10 +317,36 @@ public class ProfileFrame extends JFrame {
 		
 	}
 	
+	class AddCsListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			new InputClassFrame();
+		}
+		
+	}
+	
+	class BackListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			networkFlag = NETWORK_FLAG_GET_LECTURELIST;
+			networkThread = new NetworkThread();
+			networkThread.start();
+			createLtBtn.setText("add Lecture");
+			
+			createLtBtn.removeActionListener(addCsListener);
+			createLtBtn.addActionListener(addLtListener);
+			
+			logoutBtn.setText("");
+			logoutBtn.removeActionListener(backListener);
+		}
+		
+	}
+	
 	class BtnPanel extends JPanel {
 		JButton lectureBtn = new JButton();
 		JButton downBtn = new JButton();
-		JButton logoutBtn = new JButton();
 		ImageIcon imgIcon, resizeIcon;
 		Image img, scaledImage;
 		BufferedImage imageBuff;
@@ -325,6 +354,7 @@ public class ProfileFrame extends JFrame {
 
 		public BtnPanel(JPanel f) {
 			createLtBtn = new JButton("add Lecture");
+			logoutBtn = new JButton();
 			parentPanel = f;
 			createLtBtn.addActionListener(addLtListener);
 			
@@ -506,13 +536,11 @@ public class ProfileFrame extends JFrame {
 				
 				createLtBtn.setText("add Class");
 				createLtBtn.removeActionListener(addLtListener);
-				createLtBtn.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						new InputClassFrame();
-					}
-				});
+				
+				logoutBtn.setText("back");
+				logoutBtn.addActionListener(backListener);
+				
+				createLtBtn.addActionListener(addCsListener);
 				
 				//grid.removeAll();
 				//invalidate();
@@ -599,7 +627,9 @@ public class ProfileFrame extends JFrame {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					fManager.setClassId(classInfo.getClassId());
 					mc.open();
+					setMainFramevisible(false);
 				}
 			});
 			
@@ -608,6 +638,7 @@ public class ProfileFrame extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					classId = classInfo.getClassId();
+					fManager.setClassId((int) classId);
 					
 					DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(classId);
 					downLoadNetworkThread.start();
@@ -829,22 +860,28 @@ public class ProfileFrame extends JFrame {
 				if(!dirPath.exists())
 					dirPath.mkdir();
 				
-				File file = new File(DOWNPATH, classId + ".mm");
+				dirPath = new File(DOWNPATH + System.getProperty("file.separator") + fManager.getClassId());
+				if(!dirPath.exists())
+					dirPath.mkdir();
 				
-				FileOutputStream fileOutput = new FileOutputStream(file);
+				File file = new File(DOWNPATH + System.getProperty("file.separator") + fManager.getClassId(), classId + ".mm");
+				
+				OutputStreamWriter fileOutput;
+				fileOutput = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+				
 				InputStream inputStream = connection.getInputStream();
 
 				byte[] buffer = new byte[1024];
 
 				int bufferLength = 0;
 
-				fileOutput.write(jsonResultMindmaps.getMindmap().getMindmapXML().getBytes());
+				fileOutput.write(jsonResultMindmaps.getMindmap().getMindmapXML());
 
 				fileOutput.close();
 				inputStream.close();
 				
 				
-				mc.load(new File(DOWNPATH + "/" + classId + ".mm"));
+				mc.load(file);
 				
 				Gson gson = new Gson();
 				User user = new User();
@@ -937,6 +974,10 @@ public class ProfileFrame extends JFrame {
 	void updateGetallLectureList(){
 		java.lang.reflect.Type type = new TypeToken<ArrayLecture>(){}.getType();
 		ArrayLecture jonResultlecturelist = (ArrayLecture) gson.fromJson(sbResult.toString(), (java.lang.reflect.Type) type);
+		if(jonResultlecturelist == null){
+			netErr();
+			return;
+		}
 		ArrayList<Lecture> lectureList = jonResultlecturelist.getLectures();
 		grid.removeAll();
 		for(int i=0;i<lectureList.size();i++){
@@ -949,6 +990,10 @@ public class ProfileFrame extends JFrame {
 	void updateGetallClassList(){
 		java.lang.reflect.Type type = new TypeToken<ArrayClass>(){}.getType();
 		ArrayClass jonResultlecturelist = (ArrayClass) gson.fromJson(sbResult.toString(), (java.lang.reflect.Type) type);
+		if(jonResultlecturelist == null){
+			netErr();
+			return;
+		}
 		ArrayList<ClassInfo> classList = jonResultlecturelist.getClasses();
 		grid.removeAll();
 		for(int i=0;i<classList.size();i++){
@@ -958,6 +1003,12 @@ public class ProfileFrame extends JFrame {
 		lectureListPanel.update(lectureListPanel.getGraphics());
 		listPanel.updateUI();
 	}
+	
+	public void netErr(){
+		networkThread = new NetworkThread();
+		networkThread.start();
+	}
+	
 	public void setMainFramevisible(boolean bool){
 		setVisible(bool);
 	}

@@ -63,6 +63,7 @@ import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -428,7 +429,8 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
 	}
 	
 	if(FIRST == 1){ // 클래스를 두번 만듬, 한번만 호출하게
-		new ProfileFrame(this);
+		JFrame pFrame = new ProfileFrame(this);
+		fManager.setProfileFrame(pFrame);
 		//new LoggedInFrame(this);
 		FIRST++;
 	}

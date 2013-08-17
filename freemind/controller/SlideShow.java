@@ -216,6 +216,7 @@ public class SlideShow {
 //						}
 						
 						sendPosition();
+						System.out.println("Sldie Space");
 						
 						
 						
@@ -295,7 +296,7 @@ public class SlideShow {
 			// TODO Auto-generated method stub
 			BufferedImage i = null;
 			try {
-					i = ImageIO.read(new File(fManager.getFilePath() + slideShow.getfocus().getImgPath() + ".jpg")); 
+					i = ImageIO.read(new File(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId(), slideShow.getfocus().getImgPath() + ".jpg")); 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -325,8 +326,10 @@ public class SlideShow {
 			jsonString = myGson.toJson(treezeData);
 					
 			try {
-				os.write(jsonString.getBytes("UTF-8"));
-				os.flush();
+				if (os != null) {
+					os.write(jsonString.getBytes("UTF-8"));
+					os.flush();
+				}
 			} catch (UnsupportedEncodingException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

@@ -80,7 +80,7 @@ public class NodeKeyListener implements KeyListener {
 			
 			//c.setFocus((NodeAdapter)c.getMc().getRootNode());
  			
-			c.getSlideShow().setfocus((NodeAdapter)c.getMc().getRootNode());
+			c.getSlideShow().setfocus((NodeAdapter)c.getMc().getRootNode().getChildAt(0));
 			c.getSlideShow().show();
 			
 			c.getSlideShow().sendPosition();
@@ -258,16 +258,17 @@ public class NodeKeyListener implements KeyListener {
 		else if(e.getKeyCode() == KeyEvent.VK_F16){
 				c.makeUploadXml();
 				
-//			UploadToServer uts = new UploadToServer();
-//			try {
-//				uts.dd();
-//			} catch (ClientProtocolException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
+			UploadToServer uts = new UploadToServer();
+			try {
+				uts.doFileUpload();
+				uts.doXmlUpload();
+			} catch (ClientProtocolException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 			
 //			new SurveyResultFrame(0,1,"dd");
@@ -287,6 +288,23 @@ public class NodeKeyListener implements KeyListener {
 			c.removeAllIcon((NodeAdapter) c.getMc().getRootNode());
 			c.setSequenceIcon();
 			System.out.println("KeyL : F15");
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_F14){
+			
+			
+			
+//			UploadToServer uts = new UploadToServer();
+//			try {
+//				uts.dd();
+//			} catch (ClientProtocolException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			System.out.println(fManager.getClassId());
+			System.out.println("KeyL : F14");
 		}
  		
 		if (mListener != null)

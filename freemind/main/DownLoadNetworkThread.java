@@ -19,8 +19,9 @@ import freemind.json.ArrayUploadedFile;
 import freemind.json.UploadedFile;
 
 public class DownLoadNetworkThread extends Thread {
-		final String DOWNPATH = FreemindManager.getInstance().getDonwPath();
-		final String SERVERIP = FreemindManager.getInstance().getServerIP();
+		FreemindManager fManager = FreemindManager.getInstance();
+		final String DOWNPATH = fManager.getDownPath();
+		final String SERVERIP = fManager.getServerIP();
 		
 		Long classId;
 		InputStream is;
@@ -62,6 +63,12 @@ public class DownLoadNetworkThread extends Thread {
 								+ uploadedFileList.get(i).getId());
 						connection = (HttpURLConnection) url.openConnection();
 						File SDCardRoot = new File(DOWNPATH);
+
+						// SDCardRoot.mkdir();
+						if(!SDCardRoot.exists())
+							SDCardRoot.mkdir();
+						
+						SDCardRoot = new File(DOWNPATH, fManager.getClassId() + "");
 
 						// SDCardRoot.mkdir();
 						if(!SDCardRoot.exists())

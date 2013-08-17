@@ -215,7 +215,7 @@ public class Controller  implements MapModuleChangeObserver {
     public ArrayList<SlideData> slideList = new ArrayList<SlideData>();
     FreemindManager fManager;
     public SlideShow slideShow;
-    public Action selectLecture;
+    public Action closeLecture;
     public Action slideShowAction;
     private MindMapController mc;
     public NodeAdapter cur;
@@ -310,8 +310,12 @@ public class Controller  implements MapModuleChangeObserver {
     //dewlit
     
     public void makeUploadXml(){
-    	File mmFile = new File("/Users/dewlit/Desktop/writertest.mm");
-		File forUpmmFile = new File("/Users/dewlit/Desktop/upload.mm");
+    	File downFold = new File(fManager.getDownPath());
+    	if(!downFold.exists())
+    		downFold.mkdir();
+    	
+    	File mmFile = new File(fManager.getDownPath(), "tmp.mm");
+		File forUpmmFile = new File(fManager.getDownPath(), "upload.mm");
 		OutputStreamWriter out = null;
 		OutputStreamWriter forUploadXmlOw = null;
 		String rdStr;
@@ -330,10 +334,15 @@ public class Controller  implements MapModuleChangeObserver {
 			out.close();
 			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(mmFile),"UTF-8"));
 			
-			for(int i = 0; i < 3; i++){
-				preStr = in.readLine(); // 셋째 줄까지 읽어
+			for(int i = 0; i < 2; i++){
+				preStr = in.readLine(); // 둘째 줄까지 읽어
 				forUploadXmlOw.write(preStr + "\n");
 			}
+			
+			preStr = in.readLine(); // 루트 
+			preStr = preStr.substring(0, preStr.length() - 1); // 끝에 > 없애기
+			preStr += " NODETYPESTR=\"Slide\">";
+			forUploadXmlOw.write(preStr + "\n"); 
 			
 			while((rdStr = in.readLine()) != null){
 				
@@ -344,7 +353,7 @@ public class Controller  implements MapModuleChangeObserver {
 					
 					start = rdStr.indexOf(filePath);
 					end = rdStr.indexOf(".jpg\"");
-					nodeImg = rdStr.substring(start + filePath.length(), end);
+					nodeImg = rdStr.substring(start + filePath.length() + 1, end); // 마지막 폴더 구분자 / or \ 때문에 + 1
 					
 					preStr = preStr.substring(0, preStr.length() - 1); // 끝에 > 없애기 
 					
@@ -361,10 +370,10 @@ public class Controller  implements MapModuleChangeObserver {
 				}
 				
 			}
-			forUploadXmlOw.write("</map>");
 			
 			forUploadXmlOw.close();
 			System.out.println("NodeL : make mm");
+			
 			
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -510,7 +519,7 @@ public class Controller  implements MapModuleChangeObserver {
         zoomOut = new ZoomOutAction(this);
         propertyAction = new PropertyAction(this);
         
-        selectLecture = new SelectLectureAction(this);
+        closeLecture = new CloseLectureAction(this);
         slideShowAction = new SlideShowAction();
 
         showSelectionAsRectangle = new ShowSelectionAsRectangleAction(this);
@@ -1190,8 +1199,8 @@ public class Controller  implements MapModuleChangeObserver {
     // program/map control
     //
     
-    protected class SelectLectureAction extends AbstractAction {
-        public SelectLectureAction(Controller controller) {
+    protected class CloseLectureAction extends AbstractAction {
+        public CloseLectureAction(Controller controller) {
            super("Close lecture"); }
         public void actionPerformed(ActionEvent e) {
         	final String CLOSELECTURE = "3";
@@ -1202,7 +1211,7 @@ public class Controller  implements MapModuleChangeObserver {
         	String lectureId = lectureInfo.getLectureId() + "";
 
         	HttpClient httpClient = new DefaultHttpClient();  
-      	  HttpPost post = new HttpPost("http://61.43.139.10:8080/treeze/setStateOfLecture");
+      	  HttpPost post = new HttpPost("http://" + fManager.getServerIP() + ":8080/treeze/setStateOfLecture");
       	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
       	  
       	  StringBody lectureTitleBody = null;
@@ -1243,8 +1252,7 @@ public class Controller  implements MapModuleChangeObserver {
 				e1.printStackTrace();
 			}
 		}
-      	  
-        	new LoggedInFrame(mc);
+      	  fManager.getProfileFrame().setVisible(true);
            }}
     
 
