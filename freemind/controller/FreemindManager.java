@@ -15,11 +15,10 @@ import freemind.modes.mindmapmode.MindMapMapModel;
 
 public class FreemindManager {
 	private static FreemindManager fInstance;
-	public String SERVERIP = "113.198.84.80";
-//	public String SERVERIP = "14.63.215.88";
+//	public String SERVERIP = "113.198.84.80";
+	public String SERVERIP = "14.63.215.88";
 	
 	public int PORT = 2141;
-	
 
 	public static FreemindManager getInstance(){
 		if(fInstance == null){
@@ -48,7 +47,7 @@ public class FreemindManager {
 	private String ticketWriter;
 	
 	private String filePath;// = "/Users/dewlit/Desktop/test/Linux/";
-	private String downPath = System.getProperty("user.home") + "/Treeze";
+	private String downPath = System.getProperty("user.home") + System.getProperty("file.separator") + "Treeze";
 
 	private int classId = 1;
 	private int pdfPage;

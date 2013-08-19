@@ -96,6 +96,7 @@ import javax.swing.WindowConstants;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -122,6 +123,7 @@ import freemind.modes.Mode;
 import freemind.modes.ModeController;
 import freemind.modes.ModesCreator;
 import freemind.modes.NodeAdapter;
+import freemind.modes.UploadToServer;
 import freemind.modes.attributes.AttributeRegistry;
 import freemind.modes.attributes.AttributeTableLayoutModel;
 import freemind.modes.browsemode.BrowseMode;
@@ -219,6 +221,8 @@ public class Controller  implements MapModuleChangeObserver {
     public Action slideShowAction;
     public Action checkNodeAction;
     public Action setSlideSequenceAction;
+    public Action setSlideSequenceIconAction;
+    public Action uploadLectureAction;
     private MindMapController mc;
     public NodeAdapter cur;
     public NodeAdapter prev;
@@ -325,6 +329,10 @@ public class Controller  implements MapModuleChangeObserver {
 		String preStr = null;
 		int start, end;
 		String filePath = fManager.getFilePath();
+		
+		if(System.getProperty("file.separator").equals("\\"))
+			filePath = filePath.substring(2, filePath.length());
+		//in freemind, can't read such as "C:" windows file separator
 		
 		try {
 			out = new OutputStreamWriter(new FileOutputStream(mmFile), "UTF-8");
@@ -519,13 +527,15 @@ public class Controller  implements MapModuleChangeObserver {
         zoomIn = new ZoomInAction(this);
         zoomOut = new ZoomOutAction(this);
         propertyAction = new PropertyAction(this);
+        showSelectionAsRectangle = new ShowSelectionAsRectangleAction(this);
         
         //dewlit
-        closeLecture = new CloseLectureAction(this);
+        closeLecture = new CloseLectureAction();
         slideShowAction = new SlideShowAction();
-        checkNodeAction = new CheckNodeTypeAction(this);
-        setSlideSequenceAction = new SetSlideSequence(this);
-        showSelectionAsRectangle = new ShowSelectionAsRectangleAction(this);
+        checkNodeAction = new CheckNodeTypeAction();
+        setSlideSequenceAction = new SetSlideSequence();
+        setSlideSequenceIconAction = new SetSlideSequenceIconAction();
+        uploadLectureAction = new UploadLectureAction();
 
         moveToRoot = new MoveToRootAction(this);
 
@@ -1202,24 +1212,49 @@ public class Controller  implements MapModuleChangeObserver {
     // program/map control
     //
     protected class CheckNodeTypeAction extends AbstractAction {
-    	Controller c;
-        public CheckNodeTypeAction(Controller controller) {
+        public CheckNodeTypeAction() {
         	super("Check Node Type"); 
-        	c = controller;
         }
         public void actionPerformed(ActionEvent e) {
-        	c.chkNodeType.checkNodeType((NodeAdapter)c.getMc().getRootNode());
+        	chkNodeType.checkNodeType((NodeAdapter)getMc().getRootNode());
         	System.out.println("Controller : check node type");
            }}
     
-    protected class SetSlideSequence extends AbstractAction {
-    	Controller c;
-        public SetSlideSequence(Controller controller) {
-        	super("Set Slide Sequence"); 
-        	c = controller;
+    protected class SetSlideSequenceIconAction extends AbstractAction {
+        public SetSlideSequenceIconAction() {
+        	super("Set Slide Sequence Icon"); 
         }
         public void actionPerformed(ActionEvent e) {
-        	NodeAdapter root = (NodeAdapter)c.getMc().getRootNode();
+        	removeAllIcon((NodeAdapter) getMc().getRootNode());
+			setSequenceIcon();
+           }}
+    
+    protected class UploadLectureAction extends AbstractAction {
+        public UploadLectureAction() {
+        	super("Upload Lecture"); 
+        }
+        public void actionPerformed(ActionEvent e) {
+    		makeUploadXml();
+			
+			UploadToServer uts = new UploadToServer();
+			try {
+				uts.doFileUpload();
+				uts.doXmlUpload();
+			} catch (ClientProtocolException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+           }}
+    
+    protected class SetSlideSequence extends AbstractAction {
+        public SetSlideSequence() {
+        	super("Set Slide Sequence"); 
+        }
+        public void actionPerformed(ActionEvent e) {
+        	NodeAdapter root = (NodeAdapter)getMc().getRootNode();
         	NodeAdapter next;// = (NodeAdapter)mc.getRootNode();
         	
         	//set FreemindManager isSlideshow 
@@ -1234,7 +1269,7 @@ public class Controller  implements MapModuleChangeObserver {
 //        		cur = (NodeAdapter)cur.getChildAt(0);
         		
         		for(int i = 0; i < root.getChildCount(); i++){ // root direct childs set
-            		c.recurSetSlideShowInfo((NodeAdapter)root.getChildAt(i));
+            		recurSetSlideShowInfo((NodeAdapter)root.getChildAt(i));
             	}
         		System.out.println("Controller : set slideShowInfo");
         	}
@@ -1245,7 +1280,7 @@ public class Controller  implements MapModuleChangeObserver {
            }}
     
     protected class CloseLectureAction extends AbstractAction {
-        public CloseLectureAction(Controller controller) {
+        public CloseLectureAction() {
            super("Close lecture"); }
         public void actionPerformed(ActionEvent e) {
         	final String CLOSELECTURE = "3";

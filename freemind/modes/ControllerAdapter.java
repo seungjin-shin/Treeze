@@ -666,7 +666,6 @@ public abstract class ControllerAdapter implements ModeController {
         // fc, 24.4.2008: multi selection has problems as setTitle in Controller doesn't works
 //        chooser.setMultiSelectionEnabled(true);
         int returnVal = chooser.showOpenDialog(getView());
-        System.out.println("open : " + returnVal); // 0 sel, 1 cancel
         
         String filePath = "";
        
@@ -793,7 +792,6 @@ public abstract class ControllerAdapter implements ModeController {
 			String str = PdfTextExtractor.getTextFromPage(reader, i);
 			forFirstWordArray = str.split("\n");
 			forFirstWordArray = forFirstWordArray[0].split(" ");
-			System.out.println("Open : " + i + " " + forFirstWordArray[0]);
 			
 			if(forFirstWordArray[0].equals(""))
 				firstWordArr.add("undefine");
@@ -846,6 +844,10 @@ public abstract class ControllerAdapter implements ModeController {
 		mmFilePath += ".mm";
 		File mmFile = new File(mmFilePath);
 		
+		if(System.getProperty("file.separator").equals("\\"))
+			foldPath = foldPath.substring(2, foldPath.length());
+		//in freemind, can't read such as "C:" windows file separator
+		
 		OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(mmFile), "UTF-8");
 		
 			PdfReader reader = new PdfReader(filePath);
@@ -858,7 +860,7 @@ public abstract class ControllerAdapter implements ModeController {
 				if(i > page / 2)
 					direction = "right";
 				out.write("<node POSITION=\"" + direction + "\">\n");
-				out.write("<richcontent TYPE=\"NODE\"><html><head></head><body><p>" + firstWordArr.get(i - 1) + "</p><p><img src=\"" + foldPath + "/" + fManager.getClassId() + "_" + i + ".jpg\" width=\"100\" height=\"100\"/></p></body></html></richcontent>\n");
+				out.write("<richcontent TYPE=\"NODE\"><html><head></head><body><p>" + firstWordArr.get(i - 1) + "</p><p><img src=\"" + foldPath + System.getProperty("file.separator") + fManager.getClassId() + "_" + i + ".jpg\" width=\"100\" height=\"100\"/></p></body></html></richcontent>\n");
 				out.write("</node>\n");
 			}
 			

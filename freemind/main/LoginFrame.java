@@ -176,7 +176,7 @@ public class LoginFrame extends JFrame{
 		this.setLayout(gbl);
 		this.setLocation(400, 100);
 		setResizable(false);
-		
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		gbc.fill = GridBagConstraints.BOTH;
 		setInsets(40, 0, 120, 120);
 		addGrid(gbl, gbc, lPanel, 0, 0, 1, 1, 1, 30, mPanel);

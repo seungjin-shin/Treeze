@@ -341,6 +341,8 @@ public class MenuBar extends JMenuBar {
 		JMenuItem slideShow = menuHolder.addAction(c.slideShowAction, VIEW_MENU+"Slide Show");
 		JMenuItem checkNodeType = menuHolder.addAction(c.checkNodeAction, VIEW_MENU+"Check Node Type");
 		JMenuItem setSlideSequnece = menuHolder.addAction(c.setSlideSequenceAction, VIEW_MENU+"Setting Slide Sequence");
+		JMenuItem setSlideSequneceIcon = menuHolder.addAction(c.setSlideSequenceIconAction, VIEW_MENU+"Setting Slide Sequence Icon");
+		JMenuItem uploadLecture = menuHolder.addAction(c.uploadLectureAction, VIEW_MENU+"Upload Lecture");
 		
 		JMenuItem zoomOut = menuHolder.addAction(c.zoomOut, VIEW_MENU+"zoom/zoomOut");
 		zoomOut.setAccelerator(KeyStroke.getKeyStroke(c.getFrame().getAdjustableProperty("keystroke_zoom_out")));
