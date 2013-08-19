@@ -429,8 +429,7 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
 	}
 	
 	if(FIRST == 1){ // 클래스를 두번 만듬, 한번만 호출하게
-		JFrame pFrame = new ProfileFrame(this);
-		fManager.setProfileFrame(pFrame);
+		JFrame lFrame = new LoginFrame(this);
 		//new LoggedInFrame(this);
 		FIRST++;
 	}

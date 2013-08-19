@@ -217,6 +217,8 @@ public class Controller  implements MapModuleChangeObserver {
     public SlideShow slideShow;
     public Action closeLecture;
     public Action slideShowAction;
+    public Action checkNodeAction;
+    public Action setSlideSequenceAction;
     private MindMapController mc;
     public NodeAdapter cur;
     public NodeAdapter prev;
@@ -224,7 +226,6 @@ public class Controller  implements MapModuleChangeObserver {
     public NodeAdapter focus;
     public AddQuestionNode addQNode;
 	public CheckNodeType chkNodeType;
-	public ArrayList<NodeAdapter> nodeArr = new ArrayList<NodeAdapter>();
     
     
 
@@ -519,9 +520,11 @@ public class Controller  implements MapModuleChangeObserver {
         zoomOut = new ZoomOutAction(this);
         propertyAction = new PropertyAction(this);
         
+        //dewlit
         closeLecture = new CloseLectureAction(this);
         slideShowAction = new SlideShowAction();
-
+        checkNodeAction = new CheckNodeTypeAction(this);
+        setSlideSequenceAction = new SetSlideSequence(this);
         showSelectionAsRectangle = new ShowSelectionAsRectangleAction(this);
 
         moveToRoot = new MoveToRootAction(this);
@@ -1198,6 +1201,48 @@ public class Controller  implements MapModuleChangeObserver {
     //
     // program/map control
     //
+    protected class CheckNodeTypeAction extends AbstractAction {
+    	Controller c;
+        public CheckNodeTypeAction(Controller controller) {
+        	super("Check Node Type"); 
+        	c = controller;
+        }
+        public void actionPerformed(ActionEvent e) {
+        	c.chkNodeType.checkNodeType((NodeAdapter)c.getMc().getRootNode());
+        	System.out.println("Controller : check node type");
+           }}
+    
+    protected class SetSlideSequence extends AbstractAction {
+    	Controller c;
+        public SetSlideSequence(Controller controller) {
+        	super("Set Slide Sequence"); 
+        	c = controller;
+        }
+        public void actionPerformed(ActionEvent e) {
+        	NodeAdapter root = (NodeAdapter)c.getMc().getRootNode();
+        	NodeAdapter next;// = (NodeAdapter)mc.getRootNode();
+        	
+        	//set FreemindManager isSlideshow 
+        	fManager.setSlideShowInfo(true);
+        	
+        	//set root
+        	root.setPrev(null);
+        	if(root.hasChildren()){
+        		next = (NodeAdapter)root.getChildAt(0);
+        		root.setNext(next);
+//        		prev = cur;
+//        		cur = (NodeAdapter)cur.getChildAt(0);
+        		
+        		for(int i = 0; i < root.getChildCount(); i++){ // root direct childs set
+            		c.recurSetSlideShowInfo((NodeAdapter)root.getChildAt(i));
+            	}
+        		System.out.println("Controller : set slideShowInfo");
+        	}
+        	else{
+        		System.out.println("Controller : only root");
+        		return;
+        	}
+           }}
     
     protected class CloseLectureAction extends AbstractAction {
         public CloseLectureAction(Controller controller) {
@@ -1211,7 +1256,7 @@ public class Controller  implements MapModuleChangeObserver {
         	String lectureId = lectureInfo.getLectureId() + "";
 
         	HttpClient httpClient = new DefaultHttpClient();  
-      	  HttpPost post = new HttpPost("http://" + fManager.getServerIP() + ":8080/treeze/setStateOfLecture");
+      	  HttpPost post = new HttpPost("http://" + fManager.SERVERIP + ":8080/treeze/setStateOfLecture");
       	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
       	  
       	  StringBody lectureTitleBody = null;
@@ -1253,6 +1298,7 @@ public class Controller  implements MapModuleChangeObserver {
 			}
 		}
       	  fManager.getProfileFrame().setVisible(true);
+      	  fManager.getFreemindMainFrame().setVisible(false);
            }}
     
 
@@ -1718,7 +1764,10 @@ public class Controller  implements MapModuleChangeObserver {
            super("Slide Show"); }
         public void actionPerformed(ActionEvent e) {
         	
-        	
+        	getSlideShow().setfocus((NodeAdapter)getMc().getRootNode().getChildAt(0));
+			getSlideShow().show();
+			
+			getSlideShow().sendPosition();
         	//set the others
         	
         	

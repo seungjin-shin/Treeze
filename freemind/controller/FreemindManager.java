@@ -1,19 +1,26 @@
 package freemind.controller;
 
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
+import freemind.main.ProfileFrame;
 import freemind.modes.mindmapmode.MindMapController;
 import freemind.modes.mindmapmode.MindMapMapModel;
 
 public class FreemindManager {
 	private static FreemindManager fInstance;
-	public static final String SERVERIP = "113.198.84.74"; 
+	public String SERVERIP = "113.198.84.80";
+//	public String SERVERIP = "14.63.215.88";
 	
+	public int PORT = 2141;
+	
+
 	public static FreemindManager getInstance(){
 		if(fInstance == null){
 			fInstance = new FreemindManager();
@@ -41,23 +48,50 @@ public class FreemindManager {
 	private String ticketWriter;
 	
 	private String filePath;// = "/Users/dewlit/Desktop/test/Linux/";
-//	private String serverIP = "113.198.84.74";
-	private String serverIP = "14.63.215.88";
 	private String downPath = System.getProperty("user.home") + "/Treeze";
 
 	private int classId = 1;
 	private int pdfPage;
 	private MindMapMapModel mModel;
-	private JFrame profileFrame;
+	private ProfileFrame profileFrame;
+	private JFrame freemindMainFrame;
+	//(Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png"));
+	public Image treezeLogo = new ImageIcon(getClass().getClassLoader().getResource("images/treezeLogo.png")).getImage();
+	public Image loginInputBar = new ImageIcon(getClass().getClassLoader().getResource("images/LoginInputBar.png")).getImage();
+	public Image login = new ImageIcon(getClass().getClassLoader().getResource("images/login.png")).getImage();
+	public Image professorImg = new ImageIcon(getClass().getClassLoader().getResource("images/minsuk.jpg")).getImage();
 	
 	
 	
-	public JFrame getProfileFrame() {
+	
+	
+	public int getPORT() {
+		return PORT;
+	}
+	
+	public void setPORT(int pORT) {
+		PORT = pORT;
+	}
+	public void setSERVERIP(String sERVERIP) {
+		SERVERIP = sERVERIP;
+	}
+	public String getSERVERIP() {
+		return SERVERIP;
+	}
+	public JFrame getFreemindMainFrame() {
+		return freemindMainFrame;
+	}
+
+	public void setFreemindMainFrame(JFrame freemindMainFrame) {
+		this.freemindMainFrame = freemindMainFrame;
+	}
+
+	public ProfileFrame getProfileFrame() {
 		return profileFrame;
 	}
 
 	public void setProfileFrame(JFrame profileFrame) {
-		this.profileFrame = profileFrame;
+		this.profileFrame = (ProfileFrame) profileFrame;
 	}
 
 	public String getDownPath() {
@@ -81,11 +115,6 @@ public class FreemindManager {
 		this.mModel = mModel;
 	}
 
-	public String getServerIP() {
-		return serverIP;
-	}
-
-	
 	public int getClassId() {
 		return classId;
 	}

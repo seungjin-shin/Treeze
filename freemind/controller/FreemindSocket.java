@@ -293,7 +293,6 @@ public class FreemindSocket extends Thread {
 				cnt = in.read(b);
 				
 				if (cnt == -1) {
-					System.out.println("socket end");
 					// c.getNaviOs().remove(os); // remove Client at Err
 					break;
 				} else {
@@ -309,7 +308,6 @@ public class FreemindSocket extends Thread {
 					System.out.println("FindMindSocket - rcvStr : " + rcvStr);
 					
 					chkStr = rcvStr.substring(0, 1);
-					System.out.println("±¸ºÐÀÚ : " + chkStr);
 					
 					if (chkStr.equals(SURVEYYES)) {
 						new SurveyResultFrame(1, 0, lectureInfo.getSurverTitle());

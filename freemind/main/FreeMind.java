@@ -72,6 +72,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import freemind.controller.Controller;
+import freemind.controller.FreemindManager;
 import freemind.controller.MapModuleManager;
 import freemind.controller.MenuBar;
 import freemind.controller.MapModuleManager.MapModuleChangeObserver;
@@ -197,9 +198,12 @@ public class FreeMind extends JFrame implements FreeMindMain {
 	private ImageIcon mWindowIcon;
 
 	private Vector mTabbedPaneMapModules;
+	
+	
 
 	public FreeMind(Properties pDefaultPreferences, Properties pUserPreferences, File pAutoPropertiesFile) {
 		super("FreeMind");
+		
 		// Focus searcher
 //		FocusSearch search = new FocusSearch();
 //		search.start();
@@ -236,6 +240,8 @@ public class FreeMind extends JFrame implements FreeMindMain {
 		}
 		mFreeMindCommon = new FreeMindCommon(this);
 		Resources.createInstance(this);
+		
+		//dewlit
 	}
 
 	
@@ -709,7 +715,8 @@ public class FreeMind extends JFrame implements FreeMindMain {
 		// change here, if you don't like the splash
 		if (true) {
 			splash = new FreeMindSplashModern(frame);
-			splash.setVisible(true);
+			//dewlit
+			splash.setVisible(false);
 			feedBack = splash.getFeedBack();
 			frame.mWindowIcon = splash.getWindowIcon();
 		} else {
@@ -764,7 +771,8 @@ public class FreeMind extends JFrame implements FreeMindMain {
 				frame.removeWindowFocusListener(this);
 			}
 		});
-		frame.setVisible(true);
+		frame.setVisible(false);
+		FreemindManager.getInstance().setFreemindMainFrame(frame);
 		if (splash != null) {
 			splash.setVisible(false);
 		}

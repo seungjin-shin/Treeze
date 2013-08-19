@@ -33,7 +33,7 @@ public class UploadToServer {
 	SlideData tmp;
 	String classId;
 	FreemindManager fManager = FreemindManager.getInstance();
-	final String SERVERIP = fManager.getServerIP();
+	final String SERVERIP = fManager.SERVERIP;
 	
 	  public void doFileUpload() {
           try {

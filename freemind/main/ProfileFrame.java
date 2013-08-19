@@ -66,8 +66,8 @@ import freemind.modes.mindmapmode.MindMapController;
 
 
 public class ProfileFrame extends JFrame {
-	final String SERVERIP = FreemindManager.getInstance().getServerIP();
-	final int PORT = 2141;
+	final String SERVERIP = FreemindManager.getInstance().getSERVERIP();
+	final int PORT = FreemindManager.getInstance().getPORT();
 	String myEmail = "minsuk@hansung.ac.kr";
 	final String DOWNPATH = FreemindManager.getInstance().getDownPath();
 	
@@ -88,7 +88,7 @@ public class ProfileFrame extends JFrame {
 	PersonalInfo personalInfo = new PersonalInfo("Hansung Univ", "Professor", "Computer engineering");
 //	ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
 	ListPanel listPanel;
-	PicturePanel picturePanel = new PicturePanel(Toolkit.getDefaultToolkit().getImage("images/minsuk.jpg"));
+	PicturePanel picturePanel = new PicturePanel(FreemindManager.getInstance().professorImg);
 	private static final Insets insets = new Insets(10, 10, 10, 10);
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
@@ -131,7 +131,7 @@ public class ProfileFrame extends JFrame {
 		// C:\Users\ÄÄ°ø\Desktop
 		setLayout(gbl);
 		
-		logoPanel = new LogoPanel(Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png"));
+		logoPanel = new LogoPanel(fManager.treezeLogo);
 
 		lectureListPanel = new JPanel();
 		
@@ -350,12 +350,10 @@ public class ProfileFrame extends JFrame {
 		ImageIcon imgIcon, resizeIcon;
 		Image img, scaledImage;
 		BufferedImage imageBuff;
-		JPanel parentPanel;
 
 		public BtnPanel(JPanel f) {
 			createLtBtn = new JButton("add Lecture");
 			logoutBtn = new JButton();
-			parentPanel = f;
 			createLtBtn.addActionListener(addLtListener);
 			
 			// TODO Auto-generated constructor stub
@@ -467,8 +465,8 @@ public class ProfileFrame extends JFrame {
 			g2.drawLine(0, this.getHeight() - 1, this.getWidth(),
 					this.getHeight() - 1);
 		}
-
 	}
+	
 	class LectureListItem extends JPanel {
 		JLabel lectureNm;
 		JLabel professorNm;
@@ -568,7 +566,7 @@ public class ProfileFrame extends JFrame {
 			setLayout(null);
 			setTitle("Input your class title");
 			setVisible(true);
-			setLocation(350, 200);
+			setLocation(400, 100);
 			
 			getContentPane().setBackground(new Color(141, 198, 63));
 			JLabel inputLb = new JLabel("Title :");
@@ -629,7 +627,6 @@ public class ProfileFrame extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					fManager.setClassId(classInfo.getClassId());
 					mc.open();
-					setMainFramevisible(false);
 				}
 			});
 			
@@ -644,6 +641,7 @@ public class ProfileFrame extends JFrame {
 					downLoadNetworkThread.start();
 					
 					setMainFramevisible(false);
+					FreemindManager.getInstance().getFreemindMainFrame().setVisible(true);
 					
 					MakeXMLFileThread makeXMLThread = new MakeXMLFileThread(classInfo);
 					makeXMLThread.start();
@@ -905,8 +903,6 @@ public class ProfileFrame extends JFrame {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
 		}
 	}
 	
@@ -1004,7 +1000,7 @@ public class ProfileFrame extends JFrame {
 		listPanel.updateUI();
 	}
 	
-	public void netErr(){
+	public void netErr(){ // receive
 		networkThread = new NetworkThread();
 		networkThread.start();
 	}

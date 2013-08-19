@@ -364,6 +364,7 @@ public class SlideShow {
 		treezeData.getArgList().add(jsonString);
 		
 		jsonString = myGson.toJson(treezeData);
+		System.out.println(jsonString);
 		
 		try {
 			if (os != null) {

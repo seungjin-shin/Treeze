@@ -21,7 +21,7 @@ import freemind.json.UploadedFile;
 public class DownLoadNetworkThread extends Thread {
 		FreemindManager fManager = FreemindManager.getInstance();
 		final String DOWNPATH = fManager.getDownPath();
-		final String SERVERIP = fManager.getServerIP();
+		final String SERVERIP = fManager.SERVERIP;
 		
 		Long classId;
 		InputStream is;

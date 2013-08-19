@@ -666,6 +666,8 @@ public abstract class ControllerAdapter implements ModeController {
         // fc, 24.4.2008: multi selection has problems as setTitle in Controller doesn't works
 //        chooser.setMultiSelectionEnabled(true);
         int returnVal = chooser.showOpenDialog(getView());
+        System.out.println("open : " + returnVal); // 0 sel, 1 cancel
+        
         String filePath = "";
        
         
@@ -722,7 +724,10 @@ public abstract class ControllerAdapter implements ModeController {
 					break;
 				}
 			}
+			FreemindManager.getInstance().getProfileFrame().setMainFramevisible(false);
+			FreemindManager.getInstance().getFreemindMainFrame().setVisible(true);
         }
+        
 //        templateChk = false;
         getController().setTitle();
     }

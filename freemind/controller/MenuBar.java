@@ -339,12 +339,13 @@ public class MenuBar extends JMenuBar {
 		
 		JMenuItem closeLecture = menuHolder.addAction(c.closeLecture, VIEW_MENU+"Close lecture");
 		JMenuItem slideShow = menuHolder.addAction(c.slideShowAction, VIEW_MENU+"Slide Show");
+		JMenuItem checkNodeType = menuHolder.addAction(c.checkNodeAction, VIEW_MENU+"Check Node Type");
+		JMenuItem setSlideSequnece = menuHolder.addAction(c.setSlideSequenceAction, VIEW_MENU+"Setting Slide Sequence");
 		
 		JMenuItem zoomOut = menuHolder.addAction(c.zoomOut, VIEW_MENU+"zoom/zoomOut");
 		zoomOut.setAccelerator(KeyStroke.getKeyStroke(c.getFrame().getAdjustableProperty("keystroke_zoom_out")));
 	
-		menuHolder.addSeparator(VIEW_MENU);
-        menuHolder.addCategory(VIEW_MENU+"note_window");
+		menuHolder.addSeparator(VIEW_MENU);        menuHolder.addCategory(VIEW_MENU+"note_window");
         menuHolder.addSeparator(VIEW_MENU);
         JMenu attributes = menuHolder.addMenu(new JMenu(c.getResourceString("menu_attributes")), VIEW_MENU+"attributes/.");
         ButtonGroup buttonGroup = new ButtonGroup();

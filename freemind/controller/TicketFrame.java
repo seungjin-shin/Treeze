@@ -82,7 +82,7 @@ public class TicketFrame extends JFrame{
 		
 		this.getContentPane().setBackground(new Color(141, 198, 63));
 		ticketTitleLabel = new TicketTitleLabel();
-		gbc.fill = GridBagConstraints.BOTH;
+		gbc.fill = GridBagConstraints.BOTH; //
 		this.setLayout(gbl);
 		insets.set(0, 20, 0, 20);
 		addGrid(gbl, gbc, ticketTitleLabel, 0, 0, 1, 1, 1, 1, this);
