@@ -2,9 +2,12 @@ package com.hansung.treeze;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -19,131 +22,167 @@ import com.hansung.treeze.model.User;
 
 @SuppressWarnings("serial")
 public class ClassManager extends HttpServlet implements Runnable {
-	
-	private static final Logger logger = LoggerFactory.getLogger(ClassManager.class);
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(ClassManager.class);
 	private Thread classManager;
 	private User professorInfo;
-	private Socket professorSocket;
+	private Socket professorSocket = null;
+	private int professorCheck = 0;
 	private ClassInfo classInfo;
-	private ArrayList <ClassManager> classManagerList; // this is necessary to function "destroyClassManager"
+	private ArrayList<ClassManager> classManagerList; // this is necessary to
+														// function
+														// "destroyClassManager"
 
-	private ArrayList <StudentSocketManager> studentSocketManagerList = new  ArrayList <StudentSocketManager>();
+	private ArrayList<StudentSocketManager> studentSocketManagerList = new ArrayList<StudentSocketManager>();
 
-	private BufferedReader in;
-	private PrintWriter out; 
+	// private BufferedReader in;
+	// private PrintWriter out;
+	private InputStream in;
+	private OutputStream out;
 
-	public ClassManager(ClassInfo classInfo,ArrayList <ClassManager> classManagerList){
-
+	public ClassManager(ClassInfo classInfo,
+			ArrayList<ClassManager> classManagerList) {
 
 		this.classInfo = classInfo;
 		this.classManagerList = classManagerList;
 	}
 
-
 	final String QUIT = "quit";
-	
-	public void init()throws ServletException{
+
+	public void init() throws ServletException {
 		classManager = new Thread(this);
 		classManager.start();
 	}
-	public void destroy(){
+
+	public void destroy() {
 		classManager.interrupt();
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		try{
+		try {
 			logger.info("==========================");
-			logger.info("Treeze Class Manager ("+classInfo.getClassName()+") RUN" );
+			logger.info("Treeze Class Manager (" + classInfo.getClassName()
+					+ ") RUN");
 			logger.info("==========================");
 			startClassManager();
-		} catch(Exception e){
+		} catch (Exception e) {
 			logger.info("Class Manager failed 오류 : " + e.getMessage());
 			destroyClassManager();
 		}
-		
+
 	}
 
-	public void startClassManager() throws IOException{
-		
+	public void startClassManager() throws IOException {
+
 		String reqMsg = "";
-		
-		while(true)
-			if(professorSocket != null)
-				break;
-		
-		reqMsg = in.readLine();
-		
-		do{
+
+
+		do {
+			if (professorCheck == 0) {
+				while (true) {
+					if (professorCheck == 0) {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						logger.info("서버 소켓 아직비었음 ");
+						if(studentSocketManagerList.size() == 0){
+							destroyClassManager();
+							return;
+						}
+						continue;
+					} else {
+						logger.info("서버 소켓 채워져서 탈출");
+						break;
+					}
+				}
+			}
 			try {
 
-				logger.info("Professor Request Message : " + reqMsg);
-				
-				if(reqMsg == null){
-					destroyClassManager();
+				logger.info("서버 소켓 채워져서 받기시작 ");
+				// reqMsg = in.readLine();
+				int cnt = -1;
+				byte[] b = new byte[1024];
+
+				cnt = in.read(b);
+
+				if (cnt == -1) {
+					// destroyClassManager();
 					System.out.println("Professor Socket failed");
-					break;
+					try {
+						professorSocket.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					professorCheck = 0;
+
+				} else {
+					reqMsg = new String(b, 0, cnt, "UTF-8");
 				}
-				
-			    broadcast(reqMsg);
-			    
-			    reqMsg = in.readLine();
-				
+				logger.info("Professor Request Message : " + reqMsg);
+
+				broadcast(reqMsg);
+
 			} catch (IOException e) {
-					// TODO: handle exception
+				// TODO: handle exception
 				e.printStackTrace();
+				destroyClassManager();
 			}
 
-		}while (!(reqMsg.equals(QUIT)));
-		
-		destroyClassManager();
+		} while (!(reqMsg.equals(QUIT)));
+
 	}
 
-	public void destroyClassManager(){
+	public void destroyClassManager() {
 
-		int count = studentSocketManagerList.size() -1;
 
+		logger.info("==========================");
+		logger.info("Treeze Class Manager (" + classInfo.getClassName()
+				+ ") CLOSE");
+		logger.info("==========================");
+
+		classManagerList.remove(this);
+		destroy();
+	}
+
+	public void broadcast(String treezeData) {
+
+		// first : to professor
 		try {
-			professorSocket.close();
+			out.write(treezeData.getBytes("UTF-8"));
+			out.flush();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		for (int i = 0; i < studentSocketManagerList.size(); i++)
+			// second: to student
+			studentSocketManagerList.get(i).send(treezeData);
 
-		for(int i = count; i >= 0 ; i--){
-			studentSocketManagerList.get(i).socketClose();
-			studentSocketManagerList.remove(i);
-		}
-
-		logger.info("==========================");
-		logger.info("Treeze Class Manager ("+classInfo.getClassName()+") CLOSE" );
-		logger.info("==========================");
-
-		classManagerList.remove(this);
 	}
-	
-	public void broadcast(String treezeData){
 
-		out.println(treezeData); // first : to professor
-		out.flush();
-
-		for(int i = 0; i < studentSocketManagerList.size(); i++) // second: to student
-			 studentSocketManagerList.get(i).send(treezeData);
-		
-	}
-	
 	public ArrayList<StudentSocketManager> getStudentSocketManagerList() {
 		return studentSocketManagerList;
 	}
+
 	public void setStudentSocketManagerList(
 			ArrayList<StudentSocketManager> studentSocketManagerList) {
 		this.studentSocketManagerList = studentSocketManagerList;
 	}
-	
+
 	public ClassInfo getClassInfo() {
 		return classInfo;
 	}
+
 	public void setClassInfo(ClassInfo classInfo) {
 		this.classInfo = classInfo;
 	}
@@ -151,27 +190,29 @@ public class ClassManager extends HttpServlet implements Runnable {
 	public User getProfessorInfo() {
 		return professorInfo;
 	}
+
 	public void setProfessorInfo(User professorInfo) {
 		this.professorInfo = professorInfo;
 	}
-	
+
 	public Socket getProfessorSocket() {
 		return professorSocket;
 	}
+
 	public void setProfessorSocket(Socket professorSocket) {
 		this.professorSocket = professorSocket;
-		
+		professorCheck = 1;
+		logger.info("점검 : 교수 소켓 연결됨 ");
+
 		try {
-			in = new BufferedReader(new InputStreamReader(professorSocket.getInputStream()));
-			out = new PrintWriter(new OutputStreamWriter(professorSocket.getOutputStream()));
-			
+			in = professorSocket.getInputStream();
+			out = professorSocket.getOutputStream();
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
-	
-	
 }

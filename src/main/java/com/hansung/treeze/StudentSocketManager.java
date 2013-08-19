@@ -2,11 +2,10 @@
 
 package com.hansung.treeze;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -30,8 +29,10 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 	private ArrayList <StudentSocketManager> studentSocketManagerList; // this is necessary to function "destroyStudentSocketManager"
 	private ClassManager classManager;
 
-	private BufferedReader in;
-	private PrintWriter out; 
+	//private BufferedReader in;
+//	private PrintWriter out; 
+	private InputStream in;
+	private OutputStream out; 
 
 	final String QUIT = "quit";
 
@@ -44,8 +45,10 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 		this.classManager = classManager;
 
 		try {
-			in = new BufferedReader(new InputStreamReader(this.studentSocket.getInputStream()));
-			out = new PrintWriter(new OutputStreamWriter(this.studentSocket.getOutputStream()));
+			//in = new BufferedReader(new InputStreamReader(this.studentSocket.getInputStream()));
+			//out = new PrintWriter(new OutputStreamWriter(this.studentSocket.getOutputStream()));
+			in = this.studentSocket.getInputStream();
+			out  = this.studentSocket.getOutputStream();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,28 +82,43 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 
 	public void startStudentSocketManager() throws IOException{
 		String reqMsg = "";
-		reqMsg = in.readLine();
 		
 		do{
 			try {
+				//reqMsg = in.readLine();
+				int cnt = -1;
+				byte[] b = new byte[1024];
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				cnt = in.read(b);
 
-				logger.info("Student Request Message : " + reqMsg);
-
-				
-				if(reqMsg == null){
+				if (cnt == -1) {
 					destroyStudentSocketManager();
 					System.out.println("Student Socket Manager failed 접속단절 ");
 					break;
+
+				} else {
+					try {
+						reqMsg = new String(b, 0, cnt, "UTF-8");
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
+				logger.info("Student Request Message : " + reqMsg);
+
 				
 				classManager.broadcast(reqMsg);
-				
-				reqMsg = in.readLine();
-				
+
 				
 			} catch (IOException e) {
 					// TODO: handle exception
 				e.printStackTrace();
+				destroyStudentSocketManager();
 			}
 
 		}while (!(reqMsg.equals(QUIT)));
@@ -116,17 +134,28 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		studentSocketManagerList.remove(this);
-
 		logger.info("==========================");
 		logger.info("Treeze Student Socket Manager ("+classInfo.getClassName()+") CLOSE" );
 		logger.info("==========================");
+		studentSocketManagerList.remove(this);
+		destroy();
 	}
 	
 	public void send(String treezeData){
 		
-		out.println(treezeData); 
-		out.flush();
+		//out.println(treezeData); 
+		//out.flush();
+		try {
+			out.write(treezeData.getBytes("UTF-8"));
+			out.flush();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void socketClose(){

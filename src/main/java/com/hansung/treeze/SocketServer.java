@@ -1,10 +1,8 @@
 package com.hansung.treeze;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -52,9 +50,12 @@ public class SocketServer extends HttpServlet implements Runnable {
 	}
 
 	public void startServerSocket() {
-		BufferedReader in;
-		PrintWriter out;
-		String reqMsg;
+		//BufferedReader in;
+		//PrintWriter out;
+		InputStream in;
+		OutputStream out;
+		
+		String reqMsg = "";
 		Socket userSocket;
 		ClassManager classManager = null;
 		Gson gson = new Gson();
@@ -71,17 +72,39 @@ public class SocketServer extends HttpServlet implements Runnable {
 
 					logger.info("Client IP : " + userSocket.getInetAddress());
 
-					in = new BufferedReader(new InputStreamReader(
-						userSocket.getInputStream()));
-					out = new PrintWriter(new OutputStreamWriter(
-						userSocket.getOutputStream()));
+					//in = new BufferedReader(new InputStreamReader(
+					//	userSocket.getInputStream()));
+					//out = new PrintWriter(new OutputStreamWriter(
+					//	userSocket.getOutputStream()));
+					
+					in = userSocket.getInputStream();
+					out  = userSocket.getOutputStream();
+					
+					int cnt = -1;
+					byte[] b = new byte[1024];
 
+					cnt = in.read(b);
+
+					if (cnt == -1) {
+						System.out.println("Client Socket failed");
+						continue;
+						// c.getNaviOs().remove(os); // remove Client at Err
+					} else {
+						try {
+							reqMsg = new String(b, 0, cnt, "UTF-8");
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					/*
 					reqMsg = in.readLine();
 					
 					if(reqMsg == null){
 						System.out.println("Client Socket failed");
 						continue;
 					}
+					*/
 					logger.info("Client Request Message : " + reqMsg);
 
 					//setting data..
@@ -90,7 +113,9 @@ public class SocketServer extends HttpServlet implements Runnable {
 					User user = gson.fromJson(treezedata.getArgList().get(0), User.class);
 					ClassInfo classInfo = gson.fromJson(treezedata.getArgList().get(1), ClassInfo.class);
 					
-					out.println(reqMsg);
+					//out.println(reqMsg);
+					//out.flush();
+					out.write(reqMsg.getBytes("UTF-8"));
 					out.flush();
 					
 					//setting classManager..

@@ -16,6 +16,7 @@ public class User extends AbstractPersistable<Long>  {
 	
 	private int userImgId;  
 	private String userType;
+	private int studentIdentificatinNumber;
 	private String userName;
 	private String userEmail;
 	private int password;
@@ -50,6 +51,12 @@ public class User extends AbstractPersistable<Long>  {
 	}
 	public void setPassword(int password) {
 		this.password = password;
+	}
+	public int getStudentIdentificatinNumber() {
+		return studentIdentificatinNumber;
+	}
+	public void setStudentIdentificatinNumber(int studentIdentificatinNumber) {
+		this.studentIdentificatinNumber = studentIdentificatinNumber;
 	}
 	
 }

@@ -16,21 +16,21 @@ import com.hansung.treeze.service.MindmapService;
 
 
 /*
-2-2. 교수가 마인드맵 송신한다.(송신)
+2-2. 援��媛�留����㏊ �≪����.(�≪�)
 
-- Rest : POST방식
+- Rest : POST諛⑹�
 - URL : http://113.198.84.74:8080/treeze/createMindMap
 - Format : JSON
 - Class name : MindMap
 - Return Value : Boolean 
 
-4-2. 학생이 마인드맵을 갖고온다.(수신)
+4-2. �����留����㏊��媛���⑤�.(���)
 
-- Rest : GET방식
+- Rest : GET諛⑹�
 - URL 1 : http://113.198.84.74:8080/treeze/getMindMap?{classId}
 - Format : JSON
 - Class name : MindMap
-- Return Value : MindMap `
+- Return Value : MindMap
  * */
 
 @Controller
@@ -41,6 +41,15 @@ public class MindmapController {
 
 	@RequestMapping(value="/createMindMap", method=RequestMethod.POST)
 	public String createMindMap(Mindmap model, ModelMap map) {
+		logger.info("xml::::"+model.getMindmapXML());
+		mindmapService.saveMindmap(model);
+		map.put("result", "success");
+
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/updateMindMap", method=RequestMethod.POST)
+	public String updateMindMap(Mindmap model, ModelMap map) {
 		logger.info("xml::::"+model.getMindmapXML());
 		mindmapService.saveMindmap(model);
 		map.put("result", "success");
