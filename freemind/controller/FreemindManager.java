@@ -1,5 +1,6 @@
 package freemind.controller;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -54,12 +55,19 @@ public class FreemindManager {
 	private MindMapMapModel mModel;
 	private ProfileFrame profileFrame;
 	private JFrame freemindMainFrame;
+	
+	public Color treezeColor = new Color(141, 198, 63);
+	
 	//(Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png"));
 	public Image treezeLogo = new ImageIcon(getClass().getClassLoader().getResource("images/treezeLogo.png")).getImage();
 	public Image loginInputBar = new ImageIcon(getClass().getClassLoader().getResource("images/LoginInputBar.png")).getImage();
 	public Image login = new ImageIcon(getClass().getClassLoader().getResource("images/login.png")).getImage();
 	public Image professorImg = new ImageIcon(getClass().getClassLoader().getResource("images/minsuk.jpg")).getImage();
-	
+	public Image addLecture = new ImageIcon(getClass().getClassLoader().getResource("images/addlecture1.png")).getImage();
+	public Image deleteLecture = new ImageIcon(getClass().getClassLoader().getResource("images/deletelecture1.png")).getImage();
+	public Image lectureList = new ImageIcon(getClass().getClassLoader().getResource("images/lecturelist1.png")).getImage();
+	public Image addClass = new ImageIcon(getClass().getClassLoader().getResource("images/addclass1.png")).getImage();
+	public Image deleteClass = new ImageIcon(getClass().getClassLoader().getResource("images/deleteclass1.png")).getImage();
 	
 	
 	

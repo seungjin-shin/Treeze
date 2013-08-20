@@ -40,7 +40,7 @@ public class SurveyType extends NodeType{
 		System.out.println("Survey func");
 		Survey survey = new Survey();
 		
-		survey.setContents(node.getSurveyContents());
+		survey.setSurveyContent(node.getSurveyContents());
 		
 		LectureInfo lectureInfo;
 		lectureInfo = FreemindLectureManager.getInstance();

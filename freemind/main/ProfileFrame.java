@@ -75,8 +75,14 @@ public class ProfileFrame extends JFrame {
 	JButton logoutBtn;
 	ActionListener addLtListener = new AddLtListener();
 	ActionListener addCsListener = new AddCsListener();
-	ActionListener backListener = new BackListener();
+	ActionListener ltListListener = new LtListListener();
 	FreemindManager fManager;
+	
+	public Image addLtBtnImg;
+	public Image delLtBtnImg;
+	public Image ltListBtnImg;
+	public Image addCsBtnImg;
+	public Image delCsBtnImg;
 	
 	BtnPanel btnPanel;
 	JPanel profilePanel;
@@ -113,6 +119,13 @@ public class ProfileFrame extends JFrame {
 	public ProfileFrame(MindMapController mc) {
 		this.mc = mc;
 		fManager = FreemindManager.getInstance();
+		
+		addLtBtnImg = fManager.addLecture;
+		delLtBtnImg = fManager.deleteLecture;
+		ltListBtnImg = fManager.lectureList;
+		addCsBtnImg = fManager.addClass;
+		delCsBtnImg = fManager.deleteClass;
+		
 //		fManager.setFilePath(DOWNPATH + "/");
 		// TODO Auto-generated constructor stub
 		this.setSize(1000, 600);
@@ -136,26 +149,25 @@ public class ProfileFrame extends JFrame {
 		lectureListPanel = new JPanel();
 		
 		profilePanel = new JPanel();
-		btnPanel = new BtnPanel(lectureListPanel);
+		btnPanel = new BtnPanel(this);
 		
 		profilePanel.setLayout(gbl);
 		logoPanel.setBackground(new Color(0, 0, 0, 0));
 		
-		btnPanel.setBackground(new Color(0, 0, 0, 0));
+		btnPanel.setBackground(new Color(0,0,0,0));
 		profilePanel.setBackground(new Color(0,0,0,0));
 		
 		lectureListPanel.setBackground(Color.WHITE);
 		
 		
-		btnPanel.setLayout(new GridLayout(1, 4, 30, 5));
-
+		btnPanel.setLayout(new GridLayout(1, 4, 0, 5));
 
 		lectureListPanel.setBorder(new LineBorder(Color.BLACK, 2, false));
 
 		addGrid(gbl, gbc, logoPanel,        0, 0, 1, 1, 1, 3, this);
-		addGrid(gbl, gbc, btnPanel,         1, 1, 1, 1, 5, 1, this);
+		addGrid(gbl, gbc, btnPanel,         1, 1, 1, 1, 4, 1, this);
 		addGrid(gbl, gbc, profilePanel,     0, 2, 1, 1, 1, 15, this);
-		addGrid(gbl, gbc, lectureListPanel, 1, 2, 1, 1, 5, 15, this);
+		addGrid(gbl, gbc, lectureListPanel, 1, 2, 1, 1, 4, 15, this);
 		
 		
 		
@@ -168,13 +180,13 @@ public class ProfileFrame extends JFrame {
 		insets.left = 10;
 		insets.top = 0;
 		insets.bottom = 0;
-		JLabel noPanel = new JLabel("N o",JLabel.CENTER);
-		JLabel subjectPanel = new JLabel("Subject",JLabel.CENTER);
-		JLabel whritePane = new JLabel("State",JLabel.CENTER);
+		JLabel noPanel = new JLabel("N o", JLabel.CENTER);
+		JLabel subjectPanel = new JLabel("Subject", JLabel.LEFT);
+//		JLabel whritePane = new JLabel("State",JLabel.CENTER);
 		lectureHead.setLayout(gbl);
 		addGrid(gbl, gbc, noPanel,      0, 0, 1, 1, 1, 1, lectureHead);
 		addGrid(gbl, gbc, subjectPanel, 1, 0, 1, 1, 1, 1, lectureHead);
-		addGrid(gbl, gbc, whritePane,   2, 0, 1, 1, 1, 1, lectureHead);
+//		addGrid(gbl, gbc, whritePane,   2, 0, 1, 1, 1, 1, lectureHead);
 		lectureListPanel.setLayout(gbl);
 		
 		// lecture List ÆÐ³Î 
@@ -326,61 +338,99 @@ public class ProfileFrame extends JFrame {
 		
 	}
 	
-	class BackListener implements ActionListener{
+	class LtListListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			networkFlag = NETWORK_FLAG_GET_LECTURELIST;
 			networkThread = new NetworkThread();
 			networkThread.start();
-			createLtBtn.setText("add Lecture");
-			
-			createLtBtn.removeActionListener(addCsListener);
-			createLtBtn.addActionListener(addLtListener);
-			
-			logoutBtn.setText("");
-			logoutBtn.removeActionListener(backListener);
+			btnPanel.setLecturePage();
+			lectureHead.setVisible(true);
 		}
 		
 	}
 	
 	class BtnPanel extends JPanel {
-		JButton lectureBtn = new JButton();
-		JButton downBtn = new JButton();
 		ImageIcon imgIcon, resizeIcon;
 		Image img, scaledImage;
 		BufferedImage imageBuff;
 
-		public BtnPanel(JPanel f) {
-			createLtBtn = new JButton("add Lecture");
-			logoutBtn = new JButton();
-			createLtBtn.addActionListener(addLtListener);
+		JButton addLtBtn;
+		JButton delLtBtn;
+		JButton ltListBtn;
+		JButton addCsBtn;
+		JButton delCsBtn;
+		JButton nullBtn, nullBtn2;
+		
+		JFrame parentFrame;
+		
+		public BtnPanel(JFrame f) {
+			parentFrame = f;
 			
-			// TODO Auto-generated constructor stub
-			// setBtnImg();
-			add(createLtBtn);
-			add(lectureBtn);
-			add(downBtn);
-			add(logoutBtn);
-			// setBtnImg(logoutBtn.getWidth(),logoutBtn.geth)
-
+			
+			addLtBtn = new JButton(new ImageIcon(addLtBtnImg));
+			addLtBtn.setBorder(null);
+			addLtBtn.setBackground(new Color(0, 0, 0, 0));
+			addLtBtn.setBorderPainted(false);
+			addLtBtn.setContentAreaFilled(false);
+			addLtBtn.setFocusable(false);
+			addLtBtn.addActionListener(addLtListener);
+			delLtBtn = new JButton(new ImageIcon(delLtBtnImg));
+			delLtBtn.setBackground(new Color(0, 0, 0, 0));
+			delLtBtn.setBorderPainted(false);
+			delLtBtn.setContentAreaFilled(false);
+			delLtBtn.setFocusable(false);
+			delLtBtn.setBorder(null);
+			ltListBtn = new JButton(new ImageIcon(ltListBtnImg));
+			ltListBtn.setBackground(new Color(0, 0, 0, 0));
+			ltListBtn.setBorderPainted(false);
+			ltListBtn.setContentAreaFilled(false);
+			ltListBtn.setFocusable(false);
+			ltListBtn.setBorder(null);
+			ltListBtn.addActionListener(ltListListener);
+			addCsBtn = new JButton(new ImageIcon(addCsBtnImg));
+			addCsBtn.setBorder(null);
+			addCsBtn.setBackground(new Color(0, 0, 0, 0));
+			addCsBtn.setBorderPainted(false);
+			addCsBtn.setContentAreaFilled(false);
+			addCsBtn.setFocusable(false);
+			addCsBtn.addActionListener(addCsListener);
+			delCsBtn = new JButton(new ImageIcon(delCsBtnImg));
+			delCsBtn.setBackground(new Color(0, 0, 0, 0));
+			delCsBtn.setBorderPainted(false);
+			delCsBtn.setContentAreaFilled(false);
+			delCsBtn.setFocusable(false);
+			delCsBtn.setBorder(null);
+			
+			nullBtn = new JButton();
+			nullBtn.setVisible(false);
+			nullBtn2 = new JButton();
+			nullBtn2.setVisible(false);
+			
+			setLecturePage();
 		}
 
-		void setBtnImg(int whdth, int height) {
-			// downBtn.setSize(this.getWidth()/10, this.getHeight()/2);
-//			scaledImage = img.getScaledInstance(whdth, height,
-//					Image.SCALE_SMOOTH);
-			imageBuff = new BufferedImage(whdth, height,
-					BufferedImage.TYPE_INT_RGB);
-			Graphics g = imageBuff.createGraphics();
-			g.drawImage(scaledImage, 0, 0, new Color(0, 0, 0), null);
-			g.dispose();
-			resizeIcon = new ImageIcon(scaledImage);
-			createLtBtn.setIcon(resizeIcon);
-			lectureBtn.setIcon(resizeIcon);
-			downBtn.setIcon(resizeIcon);
-			logoutBtn.setIcon(resizeIcon);
-
+		void setLecturePage(){
+			removeAll();
+			
+			add(addLtBtn);
+			add(delLtBtn);
+			add(nullBtn);
+			add(nullBtn2);
+			
+			parentFrame.repaint();
+		}
+		
+		void setClassPage(){
+			removeAll();
+			add(ltListBtn);
+			add(addCsBtn);
+			add(delCsBtn);
+			add(nullBtn);
+			
+			parentFrame.repaint();
+			
 		}
 
 		@Override
@@ -468,28 +518,28 @@ public class ProfileFrame extends JFrame {
 	}
 	
 	class LectureListItem extends JPanel {
-		JLabel lectureNm;
+		JLabel lectureNo;
 		JLabel professorNm;
-		JLabel stateOfLecture;
+//		JLabel stateOfLecture;
 
-		public LectureListItem(final Lecture lecture) {
+		public LectureListItem(int no, final Lecture lecture) {
 			// TODO Auto-generated constructor stub
-			lectureNm = new JLabel(lecture.getLectureName(), JLabel.CENTER);
-			professorNm = new JLabel(lecture.getProfessorEmail(), JLabel.CENTER);
-			if(lecture.getStateOfLecture()){
-				stateOfLecture = new JLabel("Online", JLabel.CENTER);
-			}
-			else {
-				stateOfLecture = new JLabel("Offline", JLabel.CENTER);
-			}
+			lectureNo = new JLabel(no + "", JLabel.CENTER);
+			professorNm = new JLabel(lecture.getLectureName(), JLabel.LEFT);
+//			if(lecture.getStateOfLecture()){
+//				stateOfLecture = new JLabel("Online", JLabel.CENTER);
+//			}
+//			else {
+//				stateOfLecture = new JLabel("Offline", JLabel.CENTER);
+//			}
 			this.setBackground(new Color(0, 0, 0, 0));
 			// this.add(noPanel);
 			this.setLayout(gbl);
 			insets.bottom = 5;
 			insets.top = 5;
-			addGrid(gbl, gbc, lectureNm, 0, 0, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, lectureNo, 0, 0, 1, 1, 1, 1, this);
 			addGrid(gbl, gbc, professorNm, 1, 0, 1, 1, 1, 1, this);
-			addGrid(gbl, gbc, stateOfLecture, 2, 0, 1, 1, 1, 1, this);
+//			addGrid(gbl, gbc, stateOfLecture, 2, 0, 1, 1, 1, 1, this);
 
 			this.addMouseListener(new MouseListener() {
 
@@ -532,13 +582,7 @@ public class ProfileFrame extends JFrame {
 				networkThread = new NetworkThread();
 				networkThread.start();
 				
-				createLtBtn.setText("add Class");
-				createLtBtn.removeActionListener(addLtListener);
-				
-				logoutBtn.setText("back");
-				logoutBtn.addActionListener(backListener);
-				
-				createLtBtn.addActionListener(addCsListener);
+				btnPanel.setClassPage();
 				
 				//grid.removeAll();
 				//invalidate();
@@ -977,10 +1021,8 @@ public class ProfileFrame extends JFrame {
 		ArrayList<Lecture> lectureList = jonResultlecturelist.getLectures();
 		grid.removeAll();
 		for(int i=0;i<lectureList.size();i++){
-			grid.add(new LectureListItem(lectureList.get(i)));
+			grid.add(new LectureListItem(i + 1, lectureList.get(i)));
 		}
-		
-		lectureListPanel.update(lectureListPanel.getGraphics());
 		listPanel.updateUI();
 	}
 	void updateGetallClassList(){
@@ -995,12 +1037,11 @@ public class ProfileFrame extends JFrame {
 		for(int i=0;i<classList.size();i++){
 			grid.add(new ClassListItem(classList.get(i)));
 		}
-		
-		lectureListPanel.update(lectureListPanel.getGraphics());
 		listPanel.updateUI();
+		
 	}
 	
-	public void netErr(){ // receive
+	public void netErr(){ // not receive
 		networkThread = new NetworkThread();
 		networkThread.start();
 	}

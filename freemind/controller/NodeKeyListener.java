@@ -58,6 +58,8 @@ public class NodeKeyListener implements KeyListener {
 	private Controller c;
 	private KeyListener mListener;
 	private FreemindManager fManager;
+	private boolean pressedShiftKey = false; 
+	
 	public NodeKeyListener(Controller controller) {
 		c = controller;
 		fManager = FreemindManager.getInstance();
@@ -78,14 +80,22 @@ public class NodeKeyListener implements KeyListener {
 		String jsonString;
 		FreemindGson myGson = new FreemindGson();
 		
- 		if (e.getKeyCode() == KeyEvent.VK_F5) {
+		if(e.getKeyCode() == KeyEvent.VK_SHIFT){
+			pressedShiftKey = true;
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_F5) {
 			
 			//c.setFocus((NodeAdapter)c.getMc().getRootNode());
- 			
-			c.getSlideShow().setfocus((NodeAdapter)c.getMc().getRootNode().getChildAt(0));
-			c.getSlideShow().show();
-			
-			c.getSlideShow().sendPosition();
+			if(pressedShiftKey){
+				if(c.getSlideShow().getfocus() == null)
+					return;
+				
+				c.getSlideShow().show();
+				
+				c.getSlideShow().sendPosition();
+				return;
+			}
+ 			c.startSlideShow();
 			
 //			treezeData.setDataType(TreezeData.NAVI);
 //			treezeData.getArgList().clear();
@@ -112,37 +122,7 @@ public class NodeKeyListener implements KeyListener {
 	
 			
 		} else if (e.getKeyCode() == KeyEvent.VK_F6) {
-			if(c.getSlideShow().getfocus() == null)
-				return;
-			
-			c.getSlideShow().show();
-			
-//			ArrayList<Integer> idxList = c.getSlideShow().getfocus().getIdxList();
-//			
-//			CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
-//			
-//			String jsonString;
-//			FreemindGson myGson = new FreemindGson();
-//
-//			sendPs.setPosition(idxList);
-//
-//			jsonString = myGson.toJson(sendPs);
-//			System.out.println(jsonString);
-//			
-//			for(int i = 0; i < c.getNaviOs().size(); i++){
-//				os = c.getNaviOs().get(i);
-//				try {
-//					if(os != null)
-//						os.write((NAVINUM + jsonString).getBytes()); // 다 보내
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//			}
-//			
-//			System.out.println(jsonString);
-			
-			c.getSlideShow().sendPosition();			
+						
 			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F4){
@@ -150,30 +130,6 @@ public class NodeKeyListener implements KeyListener {
 			//new SurveyResultFrame(31, 9);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F3){
-			//set slide show
-			NodeAdapter root = (NodeAdapter)c.getMc().getRootNode();
-        	NodeAdapter next;// = (NodeAdapter)mc.getRootNode();
-        	
-        	//set FreemindManager isSlideshow 
-        	fManager.setSlideShowInfo(true);
-        	
-        	//set root
-        	root.setPrev(null);
-        	if(root.hasChildren()){
-        		next = (NodeAdapter)root.getChildAt(0);
-        		root.setNext(next);
-//        		prev = cur;
-//        		cur = (NodeAdapter)cur.getChildAt(0);
-        		
-        		for(int i = 0; i < root.getChildCount(); i++){ // root direct childs set
-            		c.recurSetSlideShowInfo((NodeAdapter)root.getChildAt(i));
-            	}
-        		System.out.println("NodeKeyListener : set slideShowInfo");
-        	}
-        	else{
-        		System.out.println("only root");
-        		return;
-        	}
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F8){
 			//if receive q
@@ -201,33 +157,12 @@ public class NodeKeyListener implements KeyListener {
         		return;
         	}
         	
-//        	fManager.setQuestion(true); // 질문 받았을 때 newChildAction에서 처리하려고
-//        	fManager.setTicketContent("content test");
-//        	fManager.setTicketTitle("Title test");
-//        	fManager.setTicketWriter("write t");
-//        	
-//        	c.getMc().addNew(targetNode, MindMapController.NEW_CHILD, null);
-//        	fManager.setQuestion(false);
-//        	fManager.setTicketContent("");
-//        	fManager.setTicketTitle("");
-//        	fManager.setTicketWriter("");
-        	
-        	//mc.edit.stopEditing();
-        	//targetNode.setFolded(true);
-        	
         	c.getMc()._setFolded(targetNode, true);
-        	
-//        	MindIcon icon = MindIcon.factory("help");
-//			if(!targetNode.isHaveQuestion()){
-//				targetNode.addIcon(icon, -1); // ? 아이콘 한번만
-//				targetNode.setHaveQuestion(true);
-//			}
         	
 			c.getMc().nodeChanged(targetNode);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F9){
 			//set Q node
-			
 			
 			if (!fManager.isAddQuestionNodeInfo()) {
 				fManager.setAddQuestionNodeInfo(true);
@@ -253,9 +188,6 @@ public class NodeKeyListener implements KeyListener {
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F10){
 			
-			c.chkNodeType.checkNodeType((NodeAdapter)c.getMc().getRootNode());
-			System.out.println("KeyListener : check node type");
-			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F16){
 				c.makeUploadXml();
@@ -272,19 +204,6 @@ public class NodeKeyListener implements KeyListener {
 				e1.printStackTrace();
 			}
 			
-			
-//			new SurveyResultFrame(0,1,"dd");
-//			try {
-//				
-//				fManager.getMc().load(new File("/Users/dewlit/Desktop/test/Linux.mm"));
-//			} catch (FileNotFoundException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F15){
 			c.removeAllIcon((NodeAdapter) c.getMc().getRootNode());
@@ -292,18 +211,6 @@ public class NodeKeyListener implements KeyListener {
 			System.out.println("KeyL : F15");
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F14){
-//			System.out.println(getClass().getClassLoader().getResource("").getPath());
-//			UploadToServer uts = new UploadToServer();
-//			try {
-//				uts.dd();
-//			} catch (ClientProtocolException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//			System.out.println(fManager.getClassId());
 			System.out.println("KeyL : F14");
 		}
  		
@@ -314,6 +221,8 @@ public class NodeKeyListener implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		if (mListener != null)
 			mListener.keyReleased(e);
+		if(e.getKeyCode() == KeyEvent.VK_SHIFT)
+			pressedShiftKey = false;
 	}
 
 	public void keyTyped(KeyEvent e) {

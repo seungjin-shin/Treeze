@@ -339,8 +339,6 @@ public class MenuBar extends JMenuBar {
 		
 		JMenuItem closeLecture = menuHolder.addAction(c.closeLecture, VIEW_MENU+"Close lecture");
 		JMenuItem slideShow = menuHolder.addAction(c.slideShowAction, VIEW_MENU+"Slide Show");
-		JMenuItem checkNodeType = menuHolder.addAction(c.checkNodeAction, VIEW_MENU+"Check Node Type");
-		JMenuItem setSlideSequnece = menuHolder.addAction(c.setSlideSequenceAction, VIEW_MENU+"Setting Slide Sequence");
 		JMenuItem setSlideSequneceIcon = menuHolder.addAction(c.setSlideSequenceIconAction, VIEW_MENU+"Setting Slide Sequence Icon");
 		JMenuItem uploadLecture = menuHolder.addAction(c.uploadLectureAction, VIEW_MENU+"Upload Lecture");
 		

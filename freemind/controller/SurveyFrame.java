@@ -86,7 +86,7 @@ class SurveyFrame extends JFrame implements ActionListener{
     		lectureInfo.setSurverTitle(surveyStr);
         	
 			Survey survey = new Survey();
-			survey.setContents(surveyStr);
+			survey.setSurveyContent(surveyStr);
 			jsonStr = myGson.toJson(survey);
 //			OutputStream os;
 //			for(int i = 0; i < naviOs.size(); i++){

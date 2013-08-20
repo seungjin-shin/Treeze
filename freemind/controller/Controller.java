@@ -219,8 +219,6 @@ public class Controller  implements MapModuleChangeObserver {
     public SlideShow slideShow;
     public Action closeLecture;
     public Action slideShowAction;
-    public Action checkNodeAction;
-    public Action setSlideSequenceAction;
     public Action setSlideSequenceIconAction;
     public Action uploadLectureAction;
     private MindMapController mc;
@@ -532,8 +530,6 @@ public class Controller  implements MapModuleChangeObserver {
         //dewlit
         closeLecture = new CloseLectureAction();
         slideShowAction = new SlideShowAction();
-        checkNodeAction = new CheckNodeTypeAction();
-        setSlideSequenceAction = new SetSlideSequence();
         setSlideSequenceIconAction = new SetSlideSequenceIconAction();
         uploadLectureAction = new UploadLectureAction();
 
@@ -1211,15 +1207,6 @@ public class Controller  implements MapModuleChangeObserver {
     //
     // program/map control
     //
-    protected class CheckNodeTypeAction extends AbstractAction {
-        public CheckNodeTypeAction() {
-        	super("Check Node Type"); 
-        }
-        public void actionPerformed(ActionEvent e) {
-        	chkNodeType.checkNodeType((NodeAdapter)getMc().getRootNode());
-        	System.out.println("Controller : check node type");
-           }}
-    
     protected class SetSlideSequenceIconAction extends AbstractAction {
         public SetSlideSequenceIconAction() {
         	super("Set Slide Sequence Icon"); 
@@ -1249,89 +1236,98 @@ public class Controller  implements MapModuleChangeObserver {
 			}
            }}
     
-    protected class SetSlideSequence extends AbstractAction {
-        public SetSlideSequence() {
-        	super("Set Slide Sequence"); 
-        }
+    
+    protected class SlideShowAction extends AbstractAction {
+        public SlideShowAction() {
+           super("Slide Show"); }
         public void actionPerformed(ActionEvent e) {
-        	NodeAdapter root = (NodeAdapter)getMc().getRootNode();
-        	NodeAdapter next;// = (NodeAdapter)mc.getRootNode();
-        	
-        	//set FreemindManager isSlideshow 
-        	fManager.setSlideShowInfo(true);
-        	
-        	//set root
-        	root.setPrev(null);
-        	if(root.hasChildren()){
-        		next = (NodeAdapter)root.getChildAt(0);
-        		root.setNext(next);
-//        		prev = cur;
-//        		cur = (NodeAdapter)cur.getChildAt(0);
-        		
-        		for(int i = 0; i < root.getChildCount(); i++){ // root direct childs set
-            		recurSetSlideShowInfo((NodeAdapter)root.getChildAt(i));
-            	}
-        		System.out.println("Controller : set slideShowInfo");
+        	startSlideShow();
+        }}
+    
+    public void startSlideShow(){
+    	chkNodeType.checkNodeType((NodeAdapter)getMc().getRootNode());
+    	System.out.println("Controller : check node type");
+    	
+    	NodeAdapter root = (NodeAdapter)getMc().getRootNode();
+    	NodeAdapter next;// = (NodeAdapter)mc.getRootNode();
+    	
+    	//set FreemindManager isSlideshow 
+    	fManager.setSlideShowInfo(true);
+    	
+    	//set root
+    	root.setPrev(null);
+    	if(root.hasChildren()){
+    		next = (NodeAdapter)root.getChildAt(0);
+    		root.setNext(next);
+    		
+    		for(int i = 0; i < root.getChildCount(); i++){ // root direct childs set
+        		recurSetSlideShowInfo((NodeAdapter)root.getChildAt(i));
         	}
-        	else{
-        		System.out.println("Controller : only root");
-        		return;
-        	}
-           }}
+    		System.out.println("Controller : set slideShowInfo");
+    	}
+    	else{
+    		System.out.println("Controller : only root");
+    		return;
+    	}
+    	
+    	getSlideShow().setfocus((NodeAdapter)getMc().getRootNode().getChildAt(0));
+		getSlideShow().show();
+		getSlideShow().sendPosition();
+    }
     
     protected class CloseLectureAction extends AbstractAction {
         public CloseLectureAction() {
            super("Close lecture"); }
         public void actionPerformed(ActionEvent e) {
-        	final String CLOSELECTURE = "3";
-        	LectureInfo lectureInfo;
-    		lectureInfo = FreemindLectureManager.getInstance();
-    		
-        	String lectureTitle = lectureInfo.getLectureTitle();
-        	String lectureId = lectureInfo.getLectureId() + "";
-
-        	HttpClient httpClient = new DefaultHttpClient();  
-      	  HttpPost post = new HttpPost("http://" + fManager.SERVERIP + ":8080/treeze/setStateOfLecture");
-      	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
-      	  
-      	  StringBody lectureTitleBody = null;
-      	  StringBody profEmailBody = null;
-      	  StringBody lectureState = null;
-      	  
-		try {
-			lectureTitleBody = new StringBody("tmp", Charset.forName("UTF-8"));
-			profEmailBody = new StringBody("minsuk@hansung.ac.kr", Charset.forName("UTF-8"));
-			lectureState = new StringBody("false", Charset.forName("UTF-8"));
-			StringBody lectureIdBody = new StringBody(lectureId, Charset.forName("UTF-8"));
-			
-			multipart.addPart("lectureName", lectureTitleBody);  
-			multipart.addPart("professorEmail", profEmailBody);
-			multipart.addPart("stateOfLecture", lectureState);
-			multipart.addPart("lectureId", lectureIdBody);
-			
-			post.setEntity(multipart);  
-			HttpResponse response = httpClient.execute(post);  
-			HttpEntity resEntity = response.getEntity();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-         
-      	  System.out.println("set state false");
-      	  getSlideList().clear();
-      	  
-      	OutputStream tmpOs;
-		for(int i = 0; i < getNaviOs().size(); i++){
-			tmpOs = getNaviOs().get(i);
-			try {
-				if(tmpOs != null){
-					tmpOs.write(CLOSELECTURE.getBytes("UTF-8"));
-				}
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
+//        	final String CLOSELECTURE = "3";
+//        	LectureInfo lectureInfo;
+//    		lectureInfo = FreemindLectureManager.getInstance();
+//    		
+//        	String lectureTitle = lectureInfo.getLectureTitle();
+//        	String lectureId = lectureInfo.getLectureId() + "";
+//
+//        	HttpClient httpClient = new DefaultHttpClient();  
+//      	  HttpPost post = new HttpPost("http://" + fManager.SERVERIP + ":8080/treeze/setStateOfLecture");
+//      	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
+//      	  
+//      	  StringBody lectureTitleBody = null;
+//      	  StringBody profEmailBody = null;
+//      	  StringBody lectureState = null;
+//      	  
+//		try {
+//			lectureTitleBody = new StringBody("tmp", Charset.forName("UTF-8"));
+//			profEmailBody = new StringBody("minsuk@hansung.ac.kr", Charset.forName("UTF-8"));
+//			lectureState = new StringBody("false", Charset.forName("UTF-8"));
+//			StringBody lectureIdBody = new StringBody(lectureId, Charset.forName("UTF-8"));
+//			
+//			multipart.addPart("lectureName", lectureTitleBody);  
+//			multipart.addPart("professorEmail", profEmailBody);
+//			multipart.addPart("stateOfLecture", lectureState);
+//			multipart.addPart("lectureId", lectureIdBody);
+//			
+//			post.setEntity(multipart);  
+//			HttpResponse response = httpClient.execute(post);  
+//			HttpEntity resEntity = response.getEntity();
+//		} catch (Exception e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//         
+//      	  System.out.println("set state false");
+//      	  getSlideList().clear();
+//      	  
+//      	OutputStream tmpOs;
+//		for(int i = 0; i < getNaviOs().size(); i++){
+//			tmpOs = getNaviOs().get(i);
+//			try {
+//				if(tmpOs != null){
+//					tmpOs.write(CLOSELECTURE.getBytes("UTF-8"));
+//				}
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		}
       	  fManager.getProfileFrame().setVisible(true);
       	  fManager.getFreemindMainFrame().setVisible(false);
            }}
@@ -1794,47 +1790,7 @@ public class Controller  implements MapModuleChangeObserver {
     	return null; // last node
     }
     
-    protected class SlideShowAction extends AbstractAction {
-        public SlideShowAction() {
-           super("Slide Show"); }
-        public void actionPerformed(ActionEvent e) {
-        	
-        	getSlideShow().setfocus((NodeAdapter)getMc().getRootNode().getChildAt(0));
-			getSlideShow().show();
-			
-			getSlideShow().sendPosition();
-        	//set the others
-        	
-        	
-        	//0/0/0 
-           	//receive question
-//        	
-        	
-           	
-        	
-           	//before
-//        	final String NAVINUM = "0";
-//
-//        	if(getSlideList().size() == 0)
-//				return;
-//        	
-//			getSlideShow().setfocus(getSlideList().get(0));
-//			getSlideShow().show();
-//			
-//			OutputStream os;
-//			
-//			for(int i = 0; i < getNaviOs().size(); i++){
-//				os = getNaviOs().get(i);
-//				try {
-//					if(os != null)
-//						os.write((NAVINUM + "start").getBytes());
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//			}
-//			System.out.println("start");
-        }}
+    
 
     protected class ZoomInAction extends AbstractAction {
         public ZoomInAction(Controller controller) {

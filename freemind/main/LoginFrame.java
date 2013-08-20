@@ -306,6 +306,10 @@ public class LoginFrame extends JFrame{
 			
 			icon = new ImageIcon(loginImg);
 			loginBtn = new JButton(icon);
+			loginBtn.setBackground(new Color(0, 0, 0, 0));
+			loginBtn.setBorderPainted(false);
+			loginBtn.setContentAreaFilled(false);
+			loginBtn.setFocusable(false);
 			loginBtn.setBorder(null);
 			loginBtn.addFocusListener(new FocusListener() {
 				

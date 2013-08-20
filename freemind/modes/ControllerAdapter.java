@@ -668,7 +668,6 @@ public abstract class ControllerAdapter implements ModeController {
         int returnVal = chooser.showOpenDialog(getView());
         
         String filePath = "";
-       
         
         if (returnVal==JFileChooser.APPROVE_OPTION) {
         	File[] selectedFiles;

@@ -203,7 +203,6 @@ public class FreeMind extends JFrame implements FreeMindMain {
 
 	public FreeMind(Properties pDefaultPreferences, Properties pUserPreferences, File pAutoPropertiesFile) {
 		super("FreeMind");
-		
 		// Focus searcher
 //		FocusSearch search = new FocusSearch();
 //		search.start();
