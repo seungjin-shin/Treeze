@@ -20,11 +20,11 @@ public class TicketServiceImpl implements TicketService{
 	}
 
 	@Override
-	public Object getTickets(Long classId, String position) {
+	public Object getTickets(Long classId, String parentNodeId) {
 		// TODO Auto-generated method stub
 		//Specifications<Ticket> spec = Specifications.where(TicketSpecifications.isclassId(classId);
 		
-		return ticketRepository.findAll(TicketSpecifications.isTicketsOnPosition(classId,position));
+		return ticketRepository.findAll(TicketSpecifications.isTicketsOnParentNodeId(classId,parentNodeId));
 	}
 	
 	@Override
@@ -33,5 +33,12 @@ public class TicketServiceImpl implements TicketService{
 		//Specifications<Ticket> spec = Specifications.where(TicketSpecifications.isclassId(classId);
 		
 		return ticketRepository.findAll(TicketSpecifications.isTicketsOnClass(classId));
+	}
+
+	@Override
+	public void deleteTicket(Ticket ticket) {
+		// TODO Auto-generated method stub
+		ticketRepository.delete(ticket);
+		
 	}
 }

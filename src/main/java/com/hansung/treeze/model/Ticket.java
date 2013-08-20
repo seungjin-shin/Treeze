@@ -13,8 +13,7 @@ public class Ticket extends AbstractPersistable<Long>{
 	private static final long serialVersionUID = -7428221965877371943L;
 
 	private Long classId;
-	private String ticketPosition;
-	private String position;
+	private String parentNodeId;
 	private String contents;
 	private String userName;
 	private String ticketTitle;
@@ -24,12 +23,6 @@ public class Ticket extends AbstractPersistable<Long>{
 	}
 	public void setContents(String contents) {
 		this.contents = contents;
-	}
-	public String getPosition() {
-		return position;
-	}
-	public void setPosition(String position) {
-		this.position = position;
 	}
 	public Long getClassId() {
 		return classId;
@@ -49,10 +42,10 @@ public class Ticket extends AbstractPersistable<Long>{
 	public void setTicketTitle(String ticketTitle) {
 		this.ticketTitle = ticketTitle;
 	}
-	public String getTicketPosition() {
-		return ticketPosition;
+	public String getParentNodeId() {
+		return parentNodeId;
 	}
-	public void setTicketPosition(String ticketPosition) {
-		this.ticketPosition = ticketPosition;
+	public void setParentNodeId(String parentNodeId) {
+		this.parentNodeId = parentNodeId;
 	}
 }

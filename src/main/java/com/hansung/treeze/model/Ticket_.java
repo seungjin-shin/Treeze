@@ -7,7 +7,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public class Ticket_ {
 	
 	public static volatile SingularAttribute<Ticket, Long> classId;
-	public static volatile SingularAttribute<Ticket, String> position;
+	public static volatile SingularAttribute<Ticket, String> parentNodeId;
 	public static volatile SingularAttribute<Ticket, String> contents;
 	public static volatile SingularAttribute<Ticket, String> userName;
 	public static volatile SingularAttribute<Ticket, String> ticketTitle;

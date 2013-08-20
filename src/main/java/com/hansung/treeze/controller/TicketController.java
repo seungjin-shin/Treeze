@@ -38,16 +38,23 @@ public class TicketController {
 	
 	@RequestMapping(value="/createTicket", method=RequestMethod.POST)
 	public String createTicket(Ticket model, ModelMap map) {
-		ticketService.saveTicket(model);
+
+		map.put("Ticket",ticketService.saveTicket(model));
+
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/deleteTicket", method=RequestMethod.POST)
+	public String updateTicket(Ticket model, ModelMap map) {
+		ticketService.deleteTicket(model);
 		map.put("result", "success");
 
 		return "jsonView";
 	}
-
 		@RequestMapping(value="/getTickets", method=RequestMethod.GET)
-	public String getTickets(@RequestParam("classId") Long classId,@RequestParam("position") String position, ModelMap map) {
+	public String getTickets(@RequestParam("classId") Long classId,@RequestParam("parentNodeId") String parentNodeId, ModelMap map) {
 
-		map.put("Ticket", ticketService.getTickets(classId,position));
+		map.put("Ticket", ticketService.getTickets(classId,parentNodeId));
 		return "jsonView";	
 	}
 		
