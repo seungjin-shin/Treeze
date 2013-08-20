@@ -1024,6 +1024,7 @@ public class ProfileFrame extends JFrame {
 			grid.add(new LectureListItem(i + 1, lectureList.get(i)));
 		}
 		listPanel.updateUI();
+		lectureListPanel.repaint();
 	}
 	void updateGetallClassList(){
 		java.lang.reflect.Type type = new TypeToken<ArrayClass>(){}.getType();
@@ -1037,7 +1038,9 @@ public class ProfileFrame extends JFrame {
 		for(int i=0;i<classList.size();i++){
 			grid.add(new ClassListItem(classList.get(i)));
 		}
+		
 		listPanel.updateUI();
+		lectureListPanel.repaint();
 		
 	}
 	

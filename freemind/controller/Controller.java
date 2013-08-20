@@ -377,10 +377,8 @@ public class Controller  implements MapModuleChangeObserver {
 				}
 				
 			}
-			
+			in.close();
 			forUploadXmlOw.close();
-			System.out.println("NodeL : make mm");
-			
 			
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -388,6 +386,21 @@ public class Controller  implements MapModuleChangeObserver {
 		}
     	
     }
+    
+    
+	public void recurSetUploadXmlID(NodeAdapter node) {
+		NodeAdapter forSetID = node;
+		int i;
+		int cnt;
+
+		forSetID.setNodeID(System.nanoTime() + "");
+		
+		cnt = forSetID.getChildCount();
+
+		for (i = 0; i < cnt; i++) {
+			recurSetUploadXmlID((NodeAdapter) forSetID.getChildAt(i));
+		}
+	}
     
     public void removeAllIcon(NodeAdapter node){
 		NodeAdapter forRemoveIcon = node;
@@ -1221,6 +1234,7 @@ public class Controller  implements MapModuleChangeObserver {
         	super("Upload Lecture"); 
         }
         public void actionPerformed(ActionEvent e) {
+        	recurSetUploadXmlID((NodeAdapter) getMc().getRootNode());
     		makeUploadXml();
 			
 			UploadToServer uts = new UploadToServer();

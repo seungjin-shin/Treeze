@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import org.apache.http.client.ClientProtocolException;
 import org.jibx.runtime.impl.InputStreamWrapper;
 
+import freemind.Frame.TicketAnswerFrame;
 import freemind.json.CurrentPositionOfNav;
 import freemind.json.FreemindGson;
 import freemind.json.TreezeData;
@@ -84,8 +85,6 @@ public class NodeKeyListener implements KeyListener {
 			pressedShiftKey = true;
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_F5) {
-			
-			//c.setFocus((NodeAdapter)c.getMc().getRootNode());
 			if(pressedShiftKey){
 				if(c.getSlideShow().getfocus() == null)
 					return;
@@ -97,33 +96,8 @@ public class NodeKeyListener implements KeyListener {
 			}
  			c.startSlideShow();
 			
-//			treezeData.setDataType(TreezeData.NAVI);
-//			treezeData.getArgList().clear();
-//			treezeData.getArgList().add("start");
-//			
-//			//return; // search the other loc
-//
-//			jsonString = myGson.toJson(treezeData);
-//					
-//			try {
-//				if(os != null){
-//					os.write(jsonString.getBytes("UTF-8"));
-//					os.flush();
-//				}
-//			} catch (UnsupportedEncodingException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//			
-//			System.out.println("start");
-	
-			
 		} else if (e.getKeyCode() == KeyEvent.VK_F6) {
-						
-			
+			new TicketAnswerFrame();
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F4){
 			new SurveyFrame(fManager.getOs()); // c 넘겨서 소켓 다 보내야대
@@ -190,7 +164,8 @@ public class NodeKeyListener implements KeyListener {
 			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F16){
-				c.makeUploadXml();
+			c.recurSetUploadXmlID((NodeAdapter) c.getMc().getRootNode());
+			c.makeUploadXml();
 				
 			UploadToServer uts = new UploadToServer();
 			try {

@@ -393,6 +393,8 @@ public abstract class XMLElementAdapter extends XMLElement {
      }
      else if(name.equals("TICKETTITLE"))
     	 node.setTicketTitle(sValue);
+     else if(name.equals("TREEZEID"))
+    	 node.setNodeID(sValue);
      else if(name.equals("TICKETCONTENT"))
     	 node.setTicketContent(sValue);
      else if(name.equals("TiCKETWRITER"))

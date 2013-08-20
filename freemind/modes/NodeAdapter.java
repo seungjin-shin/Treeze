@@ -72,8 +72,6 @@ import freemind.view.mindmapview.NodeViewVisitor;
  */
 public abstract class NodeAdapter implements MindMapNode {
 	
-	private String dewlit = "dd";
-
 	private String ticketTitle;
 	private String ticketContent;
 	private String ticketWriter;
@@ -82,14 +80,23 @@ public abstract class NodeAdapter implements MindMapNode {
 	
 
 
-
 	private NodeAdapter prev;
 	private NodeAdapter next;
 	
 	private NodeType nodeType;
 	private String nodeTypeStr = "";
+	private String nodeID;
 	
 
+
+
+	public String getNodeID() {
+		return nodeID;
+	}
+
+	public void setNodeID(String nodeID) {
+		this.nodeID = nodeID;
+	}
 
 	public String getSurveyContents() {
 		return surveyContents;
@@ -1076,6 +1083,8 @@ freemind.main.Resources.getInstance().logException(			e);
     	//node.set
     	if(imgPath != null)
     		node.setAttribute("IMGPATH", imgPath);
+    	if(nodeID != null)
+    		node.setAttribute("TREEZEID", nodeID);
     	if(ticketTitle != null)
     		node.setAttribute("TICKETTITLE", ticketTitle);
     	if(ticketContent != null)

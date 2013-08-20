@@ -178,7 +178,6 @@ public class UploadToServer {
           } catch (Exception e) {
                 e.printStackTrace();
           }
-          System.out.println(xml);
           
        HttpClient httpClient = new DefaultHttpClient();  
        HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createMindMap"); 
