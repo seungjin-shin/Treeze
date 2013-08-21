@@ -79,7 +79,6 @@ public class ClassManager extends HttpServlet implements Runnable {
 
 		String reqMsg = "";
 
-
 		do {
 			if (professorCheck == 0) {
 				while (true) {
@@ -91,7 +90,7 @@ public class ClassManager extends HttpServlet implements Runnable {
 							e.printStackTrace();
 						}
 						logger.info("서버 소켓 아직비었음 ");
-						if(studentSocketManagerList.size() == 0){
+						if (studentSocketManagerList.size() == 0) {
 							destroyClassManager();
 							return;
 						}
@@ -141,7 +140,6 @@ public class ClassManager extends HttpServlet implements Runnable {
 
 	public void destroyClassManager() {
 
-
 		logger.info("==========================");
 		logger.info("Treeze Class Manager (" + classInfo.getClassName()
 				+ ") CLOSE");
@@ -154,15 +152,17 @@ public class ClassManager extends HttpServlet implements Runnable {
 	public void broadcast(String treezeData) {
 
 		// first : to professor
-		try {
-			out.write(treezeData.getBytes("UTF-8"));
-			out.flush();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (professorCheck != 0) {
+			try {
+				out.write(treezeData.getBytes("UTF-8"));
+				out.flush();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		for (int i = 0; i < studentSocketManagerList.size(); i++)
 			// second: to student

@@ -18,6 +18,7 @@ public class MindmapServiceImpl implements MindmapService{
 	@Override
 	public Mindmap saveMindmap(Mindmap mindmap) {
 		// TODO Auto-generated method stub
+
 		return mindmapRepository.save(mindmap);
 	}
 

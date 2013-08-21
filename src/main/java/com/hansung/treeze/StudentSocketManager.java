@@ -98,8 +98,8 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 
 				if (cnt == -1) {
 					destroyStudentSocketManager();
-					System.out.println("Student Socket Manager failed 접속단절 ");
-					break;
+					System.out.println("Student Socket Manager failed 접속종료  ");
+					return;
 
 				} else {
 					try {

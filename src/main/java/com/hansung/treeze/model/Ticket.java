@@ -16,7 +16,6 @@ public class Ticket extends AbstractPersistable<Long>{
 	private String parentNodeId;
 	private String contents;
 	private String userName;
-	private String ticketTitle;
 	
 	public String getContents() {
 		return contents;
@@ -35,12 +34,6 @@ public class Ticket extends AbstractPersistable<Long>{
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-	public String getTicketTitle() {
-		return ticketTitle;
-	}
-	public void setTicketTitle(String ticketTitle) {
-		this.ticketTitle = ticketTitle;
 	}
 	public String getParentNodeId() {
 		return parentNodeId;

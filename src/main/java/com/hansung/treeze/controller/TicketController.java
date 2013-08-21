@@ -38,9 +38,9 @@ public class TicketController {
 	
 	@RequestMapping(value="/createTicket", method=RequestMethod.POST)
 	public String createTicket(Ticket model, ModelMap map) {
-
-		map.put("Ticket",ticketService.saveTicket(model));
-
+		ticketService.saveTicket(model);
+		//map.put("Ticket",ticketService.saveTicket(model));
+		//map.put("result", "success");
 		return "jsonView";
 	}
 	
