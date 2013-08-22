@@ -89,7 +89,7 @@ public class ClassManager extends HttpServlet implements Runnable {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						logger.info("서버 소켓 아직비었음 ");
+						//logger.info("서버 소켓 아직비었음 ");
 						if (studentSocketManagerList.size() == 0) {
 							destroyClassManager();
 							return;

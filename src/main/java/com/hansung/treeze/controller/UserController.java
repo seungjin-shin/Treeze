@@ -3,6 +3,7 @@ package com.hansung.treeze.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ public class UserController {
 			.getLogger(UserController.class);
 	@Autowired
 	private UserService userService;
+	//@Autowired private PasswordEncoder passwordEncoder;
 
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
 	public String addUser(User model, ModelMap map) {
@@ -41,12 +43,22 @@ public class UserController {
 	public String addUser(@RequestParam("userEmail") String userEmail,
 			@RequestParam("password") String password, ModelMap map) {
 
-		User user = userService.findByEmail(userEmail);
+		User user = null;
+		user = userService.findByEmail(userEmail);
 
 		if (user == null)
-			return "false";
+			return "emailFalse";
+		
+		else if(!user.getPassword().equals(password))
+			return "passwordFalse";
+		
+		//String currentPassword = passwordEncoder.encodePassword(password, user.getUserName());
+		
+	//	if(!user.getPassword().equals(currentPassword)){
+		//	return "passwordFalse";
+		//}
 
-		map.put("user", user);
+		//map.put("user", user);
 
 		return "jsonView";
 	}

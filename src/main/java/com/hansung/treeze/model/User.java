@@ -1,7 +1,9 @@
 package com.hansung.treeze.model;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
@@ -15,11 +17,20 @@ public class User extends AbstractPersistable<Long>  {
 	public static final String PROFESSOR = "professor";
 	
 	private int userImgId;  
+	
+	 @NotEmpty
 	private String userType;
-	private int studentIdentificatinNumber;
+	
+	 @NotEmpty
+	private int identificatinNumber;
+	 
+	 @NotEmpty
 	private String userName;
+	 @NotEmpty
 	private String userEmail;
-	private int password;
+	
+	 @Size(min = 6, message = "must be at least 6 characters")
+	private String password;
 	
 	
 	public String getUserEmail() {
@@ -46,17 +57,16 @@ public class User extends AbstractPersistable<Long>  {
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
-	public int getPassword() {
+	public String getPassword() {
 		return password;
 	}
-	public void setPassword(int password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
-	public int getStudentIdentificatinNumber() {
-		return studentIdentificatinNumber;
+	public int getIdentificatinNumber() {
+		return identificatinNumber;
 	}
-	public void setStudentIdentificatinNumber(int studentIdentificatinNumber) {
-		this.studentIdentificatinNumber = studentIdentificatinNumber;
+	public void setIdentificatinNumber(int identificatinNumber) {
+		this.identificatinNumber = identificatinNumber;
 	}
-	
 }
