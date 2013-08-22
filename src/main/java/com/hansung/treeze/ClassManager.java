@@ -113,6 +113,14 @@ public class ClassManager extends HttpServlet implements Runnable {
 				if (cnt == -1) {
 					// destroyClassManager();
 					System.out.println("Professor Socket failed");
+					logger.info("==========================");
+					logger.info("Treeze Professor Manager ("
+							+ classInfo.getClassName() + ") CLOSE");
+					logger.info("존재하는 클래스" + getClassInfo().getClassName()
+							+ "[교수 수:" + (getProfessorSocket() != null)
+							+ "][학생수 :" + getStudentSocketManagerList().size()
+							+ "]");
+					logger.info("==========================");
 					try {
 						professorSocket.close();
 					} catch (IOException e) {

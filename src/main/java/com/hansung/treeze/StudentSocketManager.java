@@ -134,10 +134,14 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		studentSocketManagerList.remove(this);
 		logger.info("==========================");
 		logger.info("Treeze Student Socket Manager ("+classInfo.getClassName()+") CLOSE" );
+		logger.info("존재하는 클래스" + classManager.getClassInfo().getClassName()
+				+ "[교수 수:" + (classManager.getProfessorSocket() != null)
+				+ "][학생수 :" + classManager.getStudentSocketManagerList().size()
+				+ "]");
 		logger.info("==========================");
-		studentSocketManagerList.remove(this);
 		destroy();
 	}
 	
