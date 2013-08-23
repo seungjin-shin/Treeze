@@ -18,18 +18,16 @@ public class User extends AbstractPersistable<Long>  {
 	
 	private int userImgId;  
 	
-	 @NotEmpty
 	private String userType;
 	
-	 @NotEmpty
-	private int identificatinNumber;
-	 
-	 @NotEmpty
+	
+	private int identificationNumber;
+	
 	private String userName;
-	 @NotEmpty
+	 
 	private String userEmail;
 	
-	 @Size(min = 6, message = "must be at least 6 characters")
+	 
 	private String password;
 	
 	
@@ -63,10 +61,10 @@ public class User extends AbstractPersistable<Long>  {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public int getIdentificatinNumber() {
-		return identificatinNumber;
+	public int getIdentificationNumber() {
+		return identificationNumber;
 	}
-	public void setIdentificatinNumber(int identificatinNumber) {
-		this.identificatinNumber = identificatinNumber;
+	public void setIdentificationNumber(int identificationNumber) {
+		this.identificationNumber = identificationNumber;
 	}
 }

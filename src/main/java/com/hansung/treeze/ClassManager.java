@@ -1,12 +1,8 @@
 package com.hansung.treeze;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -17,8 +13,11 @@ import javax.servlet.http.HttpServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
 import com.hansung.treeze.model.ClassInfo;
 import com.hansung.treeze.model.User;
+import com.hansung.treeze.survey.Survey;
+import com.hansung.treeze.survey.SurveyManager;
 
 @SuppressWarnings("serial")
 public class ClassManager extends HttpServlet implements Runnable {
@@ -26,6 +25,7 @@ public class ClassManager extends HttpServlet implements Runnable {
 	private static final Logger logger = LoggerFactory
 			.getLogger(ClassManager.class);
 	private Thread classManager;
+	private SurveyManager surveyManager;
 	private User professorInfo;
 	private Socket professorSocket = null;
 	private int professorCheck = 0;
@@ -78,6 +78,7 @@ public class ClassManager extends HttpServlet implements Runnable {
 	public void startClassManager() throws IOException {
 
 		String reqMsg = "";
+		Gson gson = new Gson();
 
 		do {
 			if (professorCheck == 0) {
@@ -89,7 +90,7 @@ public class ClassManager extends HttpServlet implements Runnable {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						//logger.info("서버 소켓 아직비었음 ");
+						// logger.info("서버 소켓 아직비었음 ");
 						if (studentSocketManagerList.size() == 0) {
 							destroyClassManager();
 							return;
@@ -113,6 +114,15 @@ public class ClassManager extends HttpServlet implements Runnable {
 				if (cnt == -1) {
 					// destroyClassManager();
 					System.out.println("Professor Socket failed");
+
+					try {
+						professorSocket.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					setProfessorSocket(null);
+					professorCheck = 0;
 					logger.info("==========================");
 					logger.info("Treeze Professor Manager ("
 							+ classInfo.getClassName() + ") CLOSE");
@@ -121,18 +131,36 @@ public class ClassManager extends HttpServlet implements Runnable {
 							+ "][학생수 :" + getStudentSocketManagerList().size()
 							+ "]");
 					logger.info("==========================");
-					try {
-						professorSocket.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					professorCheck = 0;
 
 				} else {
 					reqMsg = new String(b, 0, cnt, "UTF-8");
 				}
 				logger.info("Professor Request Message : " + reqMsg);
+
+				TreezeData treezedata = gson.fromJson(reqMsg, TreezeData.class);
+
+				if (treezedata.getDataType().equals(TreezeData.SURVEY)) {
+					logger.info("==========================");
+					logger.info("설문이 들어왔습니다.");
+					logger.info("==========================");
+					if (studentSocketManagerList.size() != 0) {
+						try {
+							surveyManager = new SurveyManager();
+							surveyManager.setProfessorSocket(professorSocket);
+							surveyManager
+									.setStudentSocketManagerList(studentSocketManagerList);
+							surveyManager.setSurvey(gson.fromJson(treezedata
+									.getArgList().get(0), Survey.class));
+							surveyManager.init();
+						} catch (ServletException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}else{
+						logger.info("학생이 없습니다.");
+					}
+
+				}
 
 				broadcast(reqMsg);
 
@@ -144,6 +172,14 @@ public class ClassManager extends HttpServlet implements Runnable {
 
 		} while (!(reqMsg.equals(QUIT)));
 
+	}
+
+	public SurveyManager getSurveyManager() {
+		return surveyManager;
+	}
+
+	public void setSurveyManager(SurveyManager surveyManager) {
+		this.surveyManager = surveyManager;
 	}
 
 	public void destroyClassManager() {

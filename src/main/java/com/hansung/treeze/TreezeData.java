@@ -13,7 +13,7 @@ public class TreezeData {
 	public static final String SURVEYRESULT = "surveyResult";
 
 	private String dataType;
-	private ArrayList<String> argList;
+	private ArrayList<String> argList = new ArrayList<String>();
 	
 	
 	public String getDataType() {

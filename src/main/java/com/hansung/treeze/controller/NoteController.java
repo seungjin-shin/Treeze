@@ -45,9 +45,17 @@ public class NoteController {
 	}
 
 	@RequestMapping(value="/getNotes", method=RequestMethod.GET)
-	public String getNotes(@RequestParam("classId") Long classId, @RequestParam("userEmail") String userEmail, @RequestParam("position") String position, ModelMap map) {
+	public String getNotes(@RequestParam("classId") Long classId, @RequestParam("userEmail") String userEmail, ModelMap map) {
 
-		map.put("Note", noteService.getNotes(classId, userEmail,position));
+		map.put("Notes", noteService.getNotes(classId, userEmail));
 		return "jsonView";	
 	}
+	
+	@RequestMapping(value="/getNote", method=RequestMethod.GET)
+	public String getNotes(@RequestParam("classId") Long classId, @RequestParam("userEmail") String userEmail, @RequestParam("nodeId") String nodeId, ModelMap map) {
+
+		map.put("Note", noteService.getNote(classId, userEmail,nodeId));
+		return "jsonView";	
+	}
+	
 }

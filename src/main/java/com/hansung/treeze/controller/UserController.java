@@ -58,7 +58,7 @@ public class UserController {
 		//	return "passwordFalse";
 		//}
 
-		//map.put("user", user);
+		map.put("user", user);
 
 		return "jsonView";
 	}

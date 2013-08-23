@@ -21,9 +21,15 @@ public class NoteServiceImpl implements NoteService{
 	}
 
 	@Override
-	public Object getNotes(Long classId,String userEmail,String position) {
+	public Object getNotes(Long classId, String userEmail) {
 		// TODO Auto-generated method stub
-		return noteRepository.findAll(Specifications.where(NoteSpecifications.isMyNote(classId, userEmail, position)));
+		return noteRepository.findAll(Specifications.where(NoteSpecifications.isMyNote(classId, userEmail)));
+	}
+
+	@Override
+	public Object getNote(Long classId, String userEmail, String nodeId) {
+		// TODO Auto-generated method stub
+		return noteRepository.findOne(Specifications.where(NoteSpecifications.isMyNote(classId, userEmail, nodeId)));
 	}
 
 }

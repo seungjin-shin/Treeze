@@ -15,8 +15,10 @@ import javax.servlet.http.HttpServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
 import com.hansung.treeze.model.ClassInfo;
 import com.hansung.treeze.model.User;
+import com.hansung.treeze.survey.Survey;
 
 @SuppressWarnings("serial")
 public class StudentSocketManager extends HttpServlet implements Runnable {
@@ -82,6 +84,7 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 
 	public void startStudentSocketManager() throws IOException{
 		String reqMsg = "";
+		Gson gson  = new Gson();
 		
 		do{
 			try {
@@ -111,8 +114,24 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 				}
 				logger.info("Student Request Message : " + reqMsg);
 
+				TreezeData treezedata = gson.fromJson(reqMsg,
+						TreezeData.class);
 				
-				classManager.broadcast(reqMsg);
+				if(treezedata.getDataType().equals(TreezeData.SURVEYVALUE)){
+					logger.info("==========================");
+					logger.info("학생의 답변이 도착");
+					logger.info("==========================");
+					Survey surveyOfStudent = gson.fromJson(treezedata.getArgList().get(0),Survey.class);
+					Survey survey = classManager.getSurveyManager().getSurvey();
+					
+					survey.getSurveyType().setTrueCount(surveyOfStudent.getSurveyType().getTrueCount());
+					survey.getSurveyType().setFalseCount(surveyOfStudent.getSurveyType().getFalseCount());
+					survey.getSurveyType().collectAnswerofSurvey();
+					survey.increaseNumberOfStudents();
+					
+				}else {
+					classManager.broadcast(reqMsg);
+				}
 
 				
 			} catch (IOException e) {
