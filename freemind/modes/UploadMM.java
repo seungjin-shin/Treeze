@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import freemind.controller.FreemindManager;
 import freemind.controller.SlideData;
 import freemind.modes.mindmapmode.MindMapController;
 
@@ -89,7 +90,7 @@ public class UploadMM extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			UploadToServer UTS = new UploadToServer();
+			UploadToServer UTS = FreemindManager.getInstance().uploadToServer;
 			mc.removeUploadMM();
 		}
 		

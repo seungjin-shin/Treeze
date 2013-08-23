@@ -12,6 +12,4 @@ public class ArrayTicket {
 	public void setTickets(ArrayList<Ticket> tickets) {
 		this.Ticket = tickets;
 	}
-	
-	
 }

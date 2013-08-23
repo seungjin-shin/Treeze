@@ -120,11 +120,11 @@ public class ProfileFrame extends JFrame {
 		this.mc = mc;
 		fManager = FreemindManager.getInstance();
 		
-		addLtBtnImg = fManager.addLecture;
-		delLtBtnImg = fManager.deleteLecture;
-		ltListBtnImg = fManager.lectureList;
-		addCsBtnImg = fManager.addClass;
-		delCsBtnImg = fManager.deleteClass;
+		addLtBtnImg = fManager.addLectureDefault;
+		delLtBtnImg = fManager.deleteClassDefault;
+		ltListBtnImg = fManager.lectureListDefault;
+		addCsBtnImg = fManager.addClassDefault;
+		delCsBtnImg = fManager.deleteClassDefault;
 		
 //		fManager.setFilePath(DOWNPATH + "/");
 		// TODO Auto-generated constructor stub
@@ -486,7 +486,7 @@ public class ProfileFrame extends JFrame {
 				return;
 			}
 			else{
-				UploadToServer UTS = new UploadToServer();
+				UploadToServer UTS = fManager.uploadToServer;
 				UTS.lecturePost(lectureTitle, "minsuk@hansung.ac.kr", "false");
 				
 				this.setVisible(false);
@@ -644,7 +644,7 @@ public class ProfileFrame extends JFrame {
 				return;
 			}
 			else{
-				UploadToServer UTS = new UploadToServer();
+				UploadToServer UTS = fManager.uploadToServer;
 				UTS.classPost(lectureId + "", "minsuk@hansung.ac.kr", classTitle);
 
 				this.setVisible(false);
@@ -807,7 +807,6 @@ public class ProfileFrame extends JFrame {
 				if (connection != null) {
 					connection.setConnectTimeout(5000); // Set Timeout
 					connection.setUseCaches(false);
-					
 					
 					if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 						BufferedReader br = new BufferedReader(

@@ -12,26 +12,51 @@ public class QuestionType extends NodeType{
 
 	NodeAdapter node;
 	Controller c;
-	JFrame fm;
+	TicketFrame fm;
+
 	public QuestionType(NodeAdapter node, Controller c) {
 		this.node = node;
 		this.c = c;
 		fm = new TicketFrame((NodeAdapter) node, c);
 	}
 	
+	public TicketFrame getFm() {
+		return fm;
+	}
 	@Override
 	public void act() {
-		if (node.hasChildren()) {
-			if (node.isFolded()) {
-				c.getMc()._setFolded(node, false);
-				c.getMc().nodeChanged(node);
-				fm.setVisible(true);
-			} else {
+		
+		if(fm.isVisible()){
+			fm.setVisible(false);
+			
+			if(node.hasChildren()){
 				c.getMc()._setFolded(node, true);
 				c.getMc().nodeChanged(node);
-				fm.setVisible(false);
 			}
 		}
+		else{
+			fm.updateTickets();
+			fm.setVisible(true);
+			if(node.hasChildren()){
+				c.getMc()._setFolded(node, false);
+				c.getMc().nodeChanged(node);
+			}
+		}
+		
+		
+		
+
+//		if (node.isFolded()) { // 접혀있어
+//			c.getMc()._setFolded(node, false);
+//			c.getMc().nodeChanged(node);
+//		} else {
+//			if (node.hasChildren()) {
+//				c.getMc()._setFolded(node, true);
+//				c.getMc().nodeChanged(node);
+//			}
+//			
+//			fm.setVisible(false);
+//		}
 	}
 
 	@Override

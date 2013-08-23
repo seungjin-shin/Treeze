@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -12,8 +13,8 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,6 +24,11 @@ import javax.swing.border.EmptyBorder;
 
 import freemind.controller.FreemindManager;
 import freemind.controller.ImgBtn;
+import freemind.controller.TicketFrame;
+import freemind.json.Ticket;
+import freemind.modes.NodeAdapter;
+import freemind.modes.UploadToServer;
+import freemind.modes.mindmapmode.MindMapController;
 
 public class TicketAnswerFrame extends JFrame{
 	GridBagLayout gbl = new GridBagLayout();
@@ -32,14 +38,21 @@ public class TicketAnswerFrame extends JFrame{
 	LogoPanel logoPanel = new LogoPanel();
 	Image logoimg;
 	FreemindManager fManager;
-	public TicketAnswerFrame() {
+	NodeAdapter selNode;
+	TicketFrame tFrame;
+	WriteTextArea answerTa;
+	public TicketAnswerFrame(NodeAdapter node, TicketFrame t) {
+		tFrame = t;
+		selNode = node;
+		
 		fManager = FreemindManager.getInstance();
+		answerTa = new WriteTextArea();
 		// TODO Auto-generated constructor stub
 		this.setBackground(fManager.treezeColor);
 		this.setSize(800,1000);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.setLayout(gbl);
-		logoimg =  Toolkit.getDefaultToolkit().getImage("images/loginlogo.png");
+		logoimg =  fManager.treezeLogo;
 		//fullPanel.setBackground(Color.BLUE);
 		addGrid(gbl, gbc, new RoundPanel(), 0, 1, 1, 1, 1, 1, this);
 		//fullPanel.setLayout(gbl);
@@ -90,7 +103,7 @@ public class TicketAnswerFrame extends JFrame{
 			
 			addGrid(gbl, gbc, logoPanel, 0, 0, 1, 1,1, 2, this);
 			insets.set(10, 20, 5, 20);
-			addGrid(gbl, gbc, new WriteField("dd"), 0, 1, 1, 1,1, 8, this);
+			addGrid(gbl, gbc, new WriteField(selNode.getTicketContent()), 0, 1, 1, 1,1, 8, this);
 			insets.set(5, 20, 5, 20);
 			addGrid(gbl, gbc, new WriteField(), 0, 2, 1, 1,1, 12, this);
 			addGrid(gbl, gbc, new ButtonField(), 0, 3, 1, 1,1, 1, this);
@@ -175,7 +188,7 @@ public class TicketAnswerFrame extends JFrame{
 			this.setLayout(gbl);
 			addGrid(gbl, gbc, new UnderLineJLabel(" Answer "), 1, 1, 1, 1, 1, 1, this);
 			addGrid(gbl, gbc, new JLabel(), 1, 2, 1, 1, 1, 10, this);
-			addGrid(gbl, gbc, new WriteTextArea(), 2, 1, 1, 2, 8, 1, this);
+			addGrid(gbl, gbc, answerTa, 2, 1, 1, 2, 8, 1, this);
 		}
 	}
 	class WriteTextArea extends JScrollPane{
@@ -193,6 +206,12 @@ public class TicketAnswerFrame extends JFrame{
 		protected int strokeSize = 1;
 		protected Dimension arcs = new Dimension(30, 30);
 		Color textAreaBgColor;
+		JTextArea textArea;
+		
+		public JTextArea getTextArea() {
+			return textArea;
+		}
+
 		public WriteTextArea() {
 		// TODO Auto-generated constructor stub
 		this.setBackground(new Color(0, 0, 0, 0));
@@ -200,7 +219,7 @@ public class TicketAnswerFrame extends JFrame{
 		
 		//this.setSize(10, 10);
 		//this.setLayout(new BorderLayout());
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setBackground(textAreaBgColor);
 		//textArea.setBackground(new Color(0,0,0,0));
 		this.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -296,7 +315,7 @@ public class TicketAnswerFrame extends JFrame{
 			j.setLayout(gbl);
 			insets.set(0,0, 0,0);
 			addGrid(gbl, gbc, new JLabel(), 1, 1, 1, 2, 2, 1, j);
-			addGrid(gbl, gbc, new WriteBtn(fManager.treezeLogo,fManager.treezeLogo,fManager.treezeLogo), 2, 1, 1, 1, 1, 1, j);
+			addGrid(gbl, gbc, new WriteBtn(fManager.writeDefault,fManager.writePress,fManager.writeOver), 2, 1, 1, 1, 1, 1, j);
 			addGrid(gbl, gbc, new JLabel(), 2, 2, 1, 1, 1, 1, j);
 			addGrid(gbl, gbc, new JLabel(), 3, 1, 1, 2, 2, 1, j);
 			insets.set(10, 10, 10, 10);
@@ -307,21 +326,68 @@ public class TicketAnswerFrame extends JFrame{
 		public WriteBtn(final Image defaultImg, final Image pressImg, final Image enterImg) {
 			// TODO Auto-generated constructor stub
 			super(defaultImg, pressImg, enterImg);
-			
-			
 		}
 		@Override
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
-			
-			
-			
 		}
 		@Override
 		protected void Action(){
+			if(answerTa.getTextArea().getText().trim().equals("")){
+				JDialog dlg = new JDialog(tFrame, "Error", true);
+				JLabel errLb = new JLabel("Input your reply!");
+				dlg.setLayout(new FlowLayout());
+				dlg.add(errLb);
+				dlg.setBounds(150,200,200,100);
+				dlg.setVisible(true);
+				return;
+			}
 			
+			String parentID = ((NodeAdapter)selNode).getNodeID();
+			NodeAdapter tmp;
 			
+			String reStr = "";
+			
+			while(true){
+				if(!selNode.getNodeTypeStr().equals("Ticket")){
+					break;
+				}
+				reStr += "[Re]";
+				selNode = (NodeAdapter) selNode.getParent();
+			}
+			
+			Ticket t = new Ticket();
+			t.setParentNodeId(parentID);
+			t.setContents(reStr + answerTa.getTextArea().getText());
+			t.setUserName("교수");
+			UploadToServer uts = fManager.uploadToServer;
+			
+			uts.ticketPost(t);
+			
+//			fManager.getMc().addNew(selNode, MindMapController.NEW_CHILD, null);
+//			fManager.getMc().edit.stopEditing();
+//			
+//			NodeAdapter tmp = (NodeAdapter)fManager.getMc().getSelected();
+//			
+//			if(answerTa.getTextArea().getText().length() > 14)
+//				tmp.setText("[Re]" + answerTa.getTextArea().getText().substring(0, 12) + "...");
+//			else
+//				tmp.setText("[Re]" + answerTa.getTextArea().getText());
+//			
+//			tmp.setNodeTypeStr("Ticket");
+////			tmp.setNodeID(fManager.getTicket().getId() + "");
+//			tmp.setTicketContent("[Re]" + answerTa.getTextArea().getText());
+//			tmp.setTicketWriter("교수");
+//			
+//			fManager.getMc().nodeChanged(tmp);
+			
+//			tFrame.updateTickets();
+			setVisibleTicketAnswerFrame(false);
 		}
+	}
+	
+	public void setVisibleTicketAnswerFrame(boolean visible){
+		setVisible(false);
 	}
 }

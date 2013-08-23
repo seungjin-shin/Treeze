@@ -2,26 +2,29 @@ package freemind.json;
 
 public class User  {
 	
+	private long  id;
 	public static final String STUDENT = "student";
 	public static final String PROFESSOR = "professor";
-	
+
 	private int userImgId;  
 	private String userType;
+	private int identificatinNumber;
 	private String userName;
 	private String userEmail;
-	private int password;
+	private String password;
 	
-	public String getUserEmail() {
-		return userEmail;
+	
+	public String getPassword() {
+		return password;
 	}
-	public void setUserEmail(String userEmail) {
-		this.userEmail = userEmail;
+	public void setPassword(String password) {
+		this.password = password;
 	}
-	public String getUserName() {
-		return userName;
+	public long getId() {
+		return id;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setId(long id) {
+		this.id = id;
 	}
 	public int getUserImgId() {
 		return userImgId;
@@ -35,11 +38,24 @@ public class User  {
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
-	public int getPassword() {
-		return password;
+	public int getIdentificatinNumber() {
+		return identificatinNumber;
 	}
-	public void setPassword(int password) {
-		this.password = password;
+	public void setIdentificatinNumber(int identificatinNumber) {
+		this.identificatinNumber = identificatinNumber;
 	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getUserEmail() {
+		return userEmail;
+	}
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+	
 	
 }

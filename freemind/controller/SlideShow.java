@@ -327,6 +327,7 @@ public class SlideShow {
 					
 			try {
 				if (os != null) {
+					System.out.println("sendPosition");
 					os.write(jsonString.getBytes("UTF-8"));
 					os.flush();
 				}
@@ -368,6 +369,7 @@ public class SlideShow {
 		
 		try {
 			if (os != null) {
+				System.out.println("sendPosition");
 				os.write(jsonString.getBytes("UTF-8"));
 				os.flush();
 			}

@@ -40,6 +40,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import freemind.controller.FreemindManager;
 import freemind.json.ArrayClass;
 import freemind.json.FreemindGson;
 import freemind.modes.UploadToServer;
@@ -235,7 +236,7 @@ public class LecturePageFrame extends JFrame {
 				return;
 			}
 			else{
-				UploadToServer UTS = new UploadToServer();
+				UploadToServer UTS = FreemindManager.getInstance().uploadToServer;
 				UTS.classPost(lectureId, "minsuk@hansung.ac.kr", classTitle);
 
 				frame.init();

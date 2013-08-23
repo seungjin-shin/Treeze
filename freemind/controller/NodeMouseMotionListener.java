@@ -131,11 +131,12 @@ public class NodeMouseMotionListener implements MouseMotionListener,
     	
 //        if (mListener != null)
 //            mListener.mouseReleased(e); // 여기서 클릭
+    	c.checkNodeType();
+    	
+        NodeAdapter sel = (NodeAdapter)c.getMc().getSelected();
         
-        NodeAdapter tmp = (NodeAdapter)c.getMc().getSelected();
-        
-        if(tmp.getNodeType() != null)
-        	tmp.getNodeType().act();
+        if(sel.getNodeType() != null)
+        	sel.getNodeType().act();
         
 //        MindMapNode selNode = c.getMc().getSelected();
 //		

@@ -35,10 +35,11 @@ public class SurveyFrame extends JFrame{
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
 	Insets insets = new Insets(20, 20, 20, 20);
+	FreemindManager fManager = FreemindManager.getInstance();
 	JPanel fullPanel =new JPanel();
 	LogoPanel logoPanel = new LogoPanel();
 	Image logoimg;
-	FreemindManager fManager;
+	
 	
 	Survey survey = new Survey();
 	HintTextField answer1 = new HintTextField(survey.getAnswer1());
@@ -46,15 +47,16 @@ public class SurveyFrame extends JFrame{
 	HintTextField answer3 = new HintTextField(survey.getAnswer3());
 	HintTextField answer4 = new HintTextField(survey.getAnswer4());
 	HintTextField answer5 = new HintTextField(survey.getAnswer5());
+	WriteTextArea surveyTa = new WriteTextArea();
+	
 	
 	public SurveyFrame() {
-		fManager = FreemindManager.getInstance();
 		// TODO Auto-generated constructor stub
 		this.setBackground(fManager.treezeColor);
-		this.setSize(800,1000);
+		this.setSize(800,500);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.setLayout(gbl);
-		logoimg =  Toolkit.getDefaultToolkit().getImage("images/loginlogo.png");
+		logoimg =  fManager.treezeLogo;
 		//fullPanel.setBackground(Color.BLUE);
 		addGrid(gbl, gbc, new RoundPanel(), 0, 1, 1, 1, 1, 1, this);
 		//fullPanel.setLayout(gbl);
@@ -171,7 +173,7 @@ public class SurveyFrame extends JFrame{
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			//super.paint(g);
-			g.drawImage(fManager.treezeLogo, 0, 0, this.getWidth()/3,
+			g.drawImage(fManager.treezeLogo, 0, 0, this.getWidth()/5,
 					this.getHeight(), null);
 		}
 	}
@@ -180,17 +182,21 @@ public class SurveyFrame extends JFrame{
 			// TODO Auto-generated constructor stub
 			this.setBackground(fManager.treezeColor);
 			this.setLayout(gbl);
-			addGrid(gbl, gbc, new UnderLineJLabel("Question"), 1, 1, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, new UnderLineJLabel("Survey Contents"), 1, 1, 1, 1, 1, 1, this);
 			addGrid(gbl, gbc, new JLabel(),                    1, 2, 1, 1, 1, 10, this);
-			addGrid(gbl, gbc, new WriteTextArea(question),     2, 1, 1, 2, 8, 1, this);
+			addGrid(gbl, gbc, surveyTa,     2, 1, 1, 2, 8, 1, this);
 		}
 		public WriteField() {
 			// TODO Auto-generated constructor stub
 			this.setBackground(fManager.treezeColor);
 			this.setLayout(gbl);
-			addGrid(gbl, gbc, new UnderLineJLabel(" Answer "), 1, 1, 1, 1, 1, 1, this);
-			addGrid(gbl, gbc, new JLabel(), 1, 2, 1, 1, 1, 10, this);
-			addGrid(gbl, gbc, new WriteTextArea(), 2, 1, 1, 2, 8, 1, this);
+			addGrid(gbl, gbc, new UnderLineJLabel("          Answer           "), 1, 1, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, new JLabel(),                    1, 2, 1, 4, 1, 10, this);
+			addGrid(gbl, gbc, answer1,                         2, 1, 1, 1, 8, 1, this);
+			addGrid(gbl, gbc, answer2,                         2, 2, 1, 1, 8, 1, this);
+			addGrid(gbl, gbc, answer3,                         2, 3, 1, 1, 8, 1, this);
+			addGrid(gbl, gbc, answer4,                         2, 4, 1, 1, 8, 1, this);
+			addGrid(gbl, gbc, answer5,                         2, 5, 1, 1, 8, 1, this);
 		}
 	}
 	class WriteTextArea extends JScrollPane{
@@ -311,7 +317,7 @@ public class SurveyFrame extends JFrame{
 			j.setLayout(gbl);
 			insets.set(0,0, 0,0);
 			addGrid(gbl, gbc, new JLabel(), 1, 1, 1, 2, 2, 1, j);
-			addGrid(gbl, gbc, new WriteBtn(fManager.treezeLogo,fManager.treezeLogo,fManager.treezeLogo), 2, 1, 1, 1, 1, 1, j);
+			addGrid(gbl, gbc, new WriteBtn(fManager.sendDefault,fManager.sendPress,fManager.sendOver), 2, 1, 1, 1, 1, 1, j);
 			addGrid(gbl, gbc, new JLabel(), 2, 2, 1, 1, 1, 1, j);
 			addGrid(gbl, gbc, new JLabel(), 3, 1, 1, 2, 2, 1, j);
 			insets.set(10, 10, 10, 10);
@@ -324,7 +330,7 @@ public class SurveyFrame extends JFrame{
 
 		public HintTextField(final String hint) {
 			super(hint);
-			Font f = new Font(hint, Font.ITALIC, 10);
+			Font f = new Font(hint, Font.ITALIC, 20);
 			setFont(f);
 			this.setBackground(new Color(234, 234, 234));
 			setForeground(Color.GRAY);
@@ -333,11 +339,11 @@ public class SurveyFrame extends JFrame{
 			
 			setColumns(24);
 			
-			this.setBorder(new LineBorder(new Color(234, 234, 234), 1, true));
-//			this.setBorder(new LineBorder(Color.black, 1, true));
+//			this.setBorder(new LineBorder(new Color(234, 234, 234), 1, true));
+			this.setBorder(new LineBorder(fManager.treezeColor));
+////			this.setBorder(new LineBorder(Color.black, 1, true));
 			this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(),
-					BorderFactory.createEmptyBorder(2, 0, 2, 5)));
-
+					BorderFactory.createEmptyBorder(2, 5, 2, 5)));
 		}
 
 		@Override
@@ -345,6 +351,7 @@ public class SurveyFrame extends JFrame{
 			if (this.getText().isEmpty()) {
 				super.setText("");
 			}
+			this.setBackground(Color.white);
 
 		}
 
@@ -359,6 +366,7 @@ public class SurveyFrame extends JFrame{
 			} else {
 				setForeground(Color.BLACK);
 			}
+			this.setBackground(new Color(234, 234, 234));
 		}
 
 		@Override
@@ -366,6 +374,7 @@ public class SurveyFrame extends JFrame{
 			String typed = super.getText();
 			return typed.equals(hint) ? "" : typed;
 		}
+		
 	}
 	
 	class WriteBtn extends ImgBtn{

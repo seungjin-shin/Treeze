@@ -14,6 +14,7 @@ import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Paint;
 import java.awt.PaintContext;
@@ -24,6 +25,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.ColorModel;
@@ -46,6 +49,8 @@ import javax.swing.border.LineBorder;
 
 import com.google.gson.Gson;
 
+import freemind.Frame.TicketAnswerFrame;
+import freemind.Frame.WriteTicketFrame;
 import freemind.json.Ticket;
 import freemind.json.TicketInfo;
 import freemind.modes.MindMapNode;
@@ -70,13 +75,13 @@ public class TicketFrame extends JFrame{
 	
 	JPanel grid = new JPanel();
 	
-	NodeAdapter selNode;
+	NodeAdapter qNode;
 	Controller c;
 	
 	public TicketFrame(NodeAdapter node, Controller cr) {
-		selNode = node;
+		qNode = node;
 		this.c = cr;
-		nodeTitle = selNode.getParentNode().getText();
+		nodeTitle = qNode.getParentNode().getText();
 		// TODO Auto-generated constructor stub
 		this.setSize(1000, 600);
 		
@@ -102,16 +107,7 @@ public class TicketFrame extends JFrame{
 		JLabel wrLb = new JLabel("writer", JLabel.CENTER);
 		
 		JLabel dumy = new JLabel();
-		JButton btn = new JButton("close");
-		btn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				c.getMc()._setFolded(selNode, true);
-				c.getMc().nodeChanged(selNode);
-				setVisible(false);
-			}
-		});
+		WriteBtn writeBtn = new WriteBtn(fManager.writeDefault, fManager.writePress, fManager.writeOver);
 		
 		dumy.setBackground(new Color(0,0,0,0));
 		dumy.setBackground(Color.RED);
@@ -125,11 +121,10 @@ public class TicketFrame extends JFrame{
 		addGrid(gbl, gbc, ticketHead, 0, 0, 2, 1,  1,  2, ticketPanel);
 		addGrid(gbl, gbc, listPanel,  0, 1, 2, 1,  1, 40, ticketPanel);
 		addGrid(gbl, gbc, dumy     ,  0, 2, 1, 1, 20,  1, ticketPanel);
-		insets.set(10, 20, 0, 20);
-		addGrid(gbl, gbc, btn,        1, 2, 1, 1,   1, 1, ticketPanel);
+		insets.set(10, 20, 10, 20);
+		addGrid(gbl, gbc, writeBtn,        1, 2, 1, 1,   1, 1, ticketPanel);
 		ticketHead.setLayout(gbl);
 		
-	
 		grid.setLayout(new GridLayout(100,1));
 		
 		//grid.add
@@ -141,10 +136,84 @@ public class TicketFrame extends JFrame{
 		
 		listPanel.getViewport().add(grid, null);
 		
-		for(int i = 0; i < selNode.getChildCount(); i++) // add children
-			addTickets((NodeAdapter)selNode.getChildAt(i));
+		addWindowListener(new WindowCloseListener());
+	}
+	
+	class WindowCloseListener implements WindowListener{
+
+		@Override
+		public void windowActivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			setVisibleTicketFrame(false);
+			if (qNode.hasChildren()) {
+				c.getMc()._setFolded(qNode, true);
+				c.getMc().nodeChanged(qNode);
+			}			
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
 		
-//		this.setVisible(true);
+	}
+	
+	public void setVisibleTicketFrame(boolean visible){
+		setVisible(false);
+	}
+	
+	class WriteBtn extends ImgBtn{
+
+		public WriteBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+		}
+
+		@Override
+		protected void Action() {
+			new WriteTicketFrame(qNode);
+//			c.getMc()._setFolded(selNode, true);
+//			c.getMc().nodeChanged(selNode);
+//			setVisibleTicketFrame(false);
+		}
+		
+	}
+	
+	public void updateTickets(){
+		ticketCnt = 0;
+    	grid.removeAll();
+    	for(int i = 0; i < qNode.getChildCount(); i++)
+    		addTickets((NodeAdapter)qNode.getChildAt(i));
+		listPanel.updateUI();
 	}
 	
 	public void addTickets(NodeAdapter node){
@@ -184,6 +253,9 @@ public class TicketFrame extends JFrame{
 			g.drawLine(0, this.getHeight()-10, this.getWidth(), this.getHeight()-10);
 		}
 		
+	}
+	public void newTicketAnswerFrame(NodeAdapter node){
+		new TicketAnswerFrame(node, this); 
 	}
 	
 	
@@ -278,16 +350,24 @@ public class TicketFrame extends JFrame{
 		JLabel numLb;
 		JLabel sbLb;
 		JLabel wrLb;
-		String ctStr;
-		NodeAdapter selNode;
+		NodeAdapter selelctNode;
 		
 		public TicketListItem(String no, NodeAdapter node) {
 			// TODO Auto-generated constructor stub
-			selNode = node;
+			selelctNode = node;
 			numLb  = new JLabel(no, JLabel.CENTER);
-			sbLb  = new JLabel(node.getTicketTitle(), JLabel.CENTER);
-			wrLb  = new JLabel(node.getTicketWriter(), JLabel.CENTER);
-			ctStr = node.getTicketContent();
+			if (node.getTicketContent() != null) {
+				if (node.getTicketContent().length() > 10)
+					sbLb = new JLabel(node.getTicketContent().substring(0, 10)
+							+ "...", JLabel.CENTER);
+				else
+					sbLb = new JLabel(node.getTicketContent(), JLabel.CENTER);
+				wrLb = new JLabel(node.getTicketWriter(), JLabel.CENTER);
+			}
+			else{
+					sbLb = new JLabel("TestSub", JLabel.CENTER);
+				wrLb = new JLabel("TestWriter", JLabel.CENTER);
+			}
 			
 			this.setBackground(new Color(0,0,0,0));
 			//this.add(noPanel);
@@ -302,7 +382,8 @@ public class TicketFrame extends JFrame{
 				@Override
 				public void mouseReleased(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-					
+					setBackground(new Color(255, 255, 255, 255));
+					listPanel.repaint();
 				}
 				
 				public void mousePreswsed(MouseEvent arg0) {
@@ -326,12 +407,14 @@ public class TicketFrame extends JFrame{
 				public void mouseClicked(MouseEvent arg0) {
 					// TODO Auto-generated method stub
 					//System.out.println(noPanel.getText());
-					new InputReplyFrame(selNode);
+//					new InputReplyFrame(selNode);
+					newTicketAnswerFrame(selelctNode);
 				}
 
 				@Override
 				public void mousePressed(MouseEvent e) {
 					// TODO Auto-generated method stub
+					setBackground(new Color(10, 10, 100, 100));
 					
 				}
 			});
@@ -482,8 +565,8 @@ public class TicketFrame extends JFrame{
 	        	
 	        	ticketCnt = 0;
 	        	grid.removeAll();
-	        	for(int i = 0; i < selNode.getChildCount(); i++)
-	        		addTickets((NodeAdapter)selNode.getChildAt(i));
+	        	for(int i = 0; i < qNode.getChildCount(); i++)
+	        		addTickets((NodeAdapter)qNode.getChildAt(i));
 				listPanel.updateUI();
 				this.setVisible(false);
 			}

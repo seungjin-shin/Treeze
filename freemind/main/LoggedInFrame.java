@@ -241,14 +241,14 @@ class InputLectureFrame extends JFrame implements ActionListener{
 			return;
 		}
 		else{
-			UploadToServer UTS = new UploadToServer();
-			UTS.lecturePost(lectureTitle, "minsuk@hansung.ac.kr", "false");
-			
-			this.setVisible(false);
-			frame.init();
-			
-			frame.update(frame.getGraphics());
-			sPanel.updateUI();
+//			UploadToServer UTS = Freem
+//			UTS.lecturePost(lectureTitle, "minsuk@hansung.ac.kr", "false");
+//			
+//			this.setVisible(false);
+//			frame.init();
+//			
+//			frame.update(frame.getGraphics());
+//			sPanel.updateUI();
 		}
 	}
 }

@@ -1,50 +1,30 @@
 package freemind.json;
 
-import java.util.ArrayList;
-
 public class Ticket{
-
-	/**
-	 * 
-	 */
-	private String ticketTitle;
-	private int classId;
-	private String position;
-	private String ticketPosition;
+	
+	private long id;
+	private Long classId;
+	private String parentNodeId;
 	private String contents;
 	private String userName;
-	private ArrayList<Ticket> childList = new ArrayList<Ticket>();
-	private boolean haveChild;
 	
-	public ArrayList<Ticket> getChildList() {
-		return childList;
+	public long getId() {
+		return id;
 	}
-	public void setChildList(ArrayList<Ticket> childList) {
-		this.childList = childList;
+	public void setId(long id) {
+		this.id = id;
 	}
-	public boolean isHaveChild() {
-		return haveChild;
+	public Long getClassId() {
+		return classId;
 	}
-	public void setHaveChild(boolean haveChild) {
-		this.haveChild = haveChild;
+	public void setClassId(Long classId) {
+		this.classId = classId;
 	}
-	public String getTicketPosition() {
-		return ticketPosition;
+	public String getParentNodeId() {
+		return parentNodeId;
 	}
-	public void setTicketPosition(String ticketPosition) {
-		this.ticketPosition = ticketPosition;
-	}
-	public String getTicketTitle() {
-		return ticketTitle;
-	}
-	public void setTicketTitle(String ticketTitle) {
-		this.ticketTitle = ticketTitle;
-	}
-	public String getUserName() {
-		return userName;
-	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setParentNodeId(String parentNodeId) {
+		this.parentNodeId = parentNodeId;
 	}
 	public String getContents() {
 		return contents;
@@ -52,16 +32,11 @@ public class Ticket{
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
-	public String getPosition() {
-		return position;
+	public String getUserName() {
+		return userName;
 	}
-	public void setPosition(String position) {
-		this.position = position;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	public int getClassId() {
-		return classId;
-	}
-	public void setClassId(int classId) {
-		this.classId = classId;
-	}
+
 }

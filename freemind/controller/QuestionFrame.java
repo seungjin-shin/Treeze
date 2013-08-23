@@ -154,85 +154,85 @@ class QuestionFrame extends JFrame{
 			childTotalCnt = 0;
 			ArrayList<Ticket> tmpTicketList = new ArrayList<Ticket>();
 			
-			for(questionCnt = 0; questionCnt < ticketList.size(); questionCnt++){
-				tmpTicket = ticketList.get(questionCnt);
-				tmpTicketList.add(tmpTicket);
-				
-				for(int i = 0; i < tmpTicketList.size(); i++){
-					if (tmpTicket.getTicketPosition().substring(0,tmpTicket.getTicketPosition().length() - 2).equals(tmpTicketList.get(i).getTicketPosition())) {
-						tmpTicketList.get(i).setHaveChild(true);
-						tmpTicketList.get(i).getChildList().add(tmpTicket);
-						ticketList.remove(tmpTicket);
-						childTotalCnt++;
-						questionCnt--;
-						break;
-					}
-					if (tmpTicketList.get(i).isHaveChild()) {
-						for (int j = 0; j < tmpTicketList.get(i).getChildList()
-								.size(); j++) {
-							Ticket tmp = tmpTicketList.get(i).getChildList().get(j);
-							if (tmpTicket.getTicketPosition().substring(0,tmpTicket.getTicketPosition().length() - 2).equals(tmp.getTicketPosition())) {
-								tmp.setHaveChild(true);
-								tmp.getChildList().add(tmpTicket);
-								ticketList.remove(tmpTicket);
-								tmpTicketList.remove(tmp);
-								childTotalCnt++;
-								questionCnt--;
-								break;
-							}
-						}
-					}
-				}
-			}
+//			for(questionCnt = 0; questionCnt < ticketList.size(); questionCnt++){
+//				tmpTicket = ticketList.get(questionCnt);
+//				tmpTicketList.add(tmpTicket);
+//				
+//				for(int i = 0; i < tmpTicketList.size(); i++){
+//					if (tmpTicket.getTicketPosition().substring(0,tmpTicket.getTicketPosition().length() - 2).equals(tmpTicketList.get(i).getTicketPosition())) {
+//						tmpTicketList.get(i).setHaveChild(true);
+//						tmpTicketList.get(i).getChildList().add(tmpTicket);
+//						ticketList.remove(tmpTicket);
+//						childTotalCnt++;
+//						questionCnt--;
+//						break;
+//					}
+//					if (tmpTicketList.get(i).isHaveChild()) {
+//						for (int j = 0; j < tmpTicketList.get(i).getChildList()
+//								.size(); j++) {
+//							Ticket tmp = tmpTicketList.get(i).getChildList().get(j);
+//							if (tmpTicket.getTicketPosition().substring(0,tmpTicket.getTicketPosition().length() - 2).equals(tmp.getTicketPosition())) {
+//								tmp.setHaveChild(true);
+//								tmp.getChildList().add(tmpTicket);
+//								ticketList.remove(tmpTicket);
+//								tmpTicketList.remove(tmp);
+//								childTotalCnt++;
+//								questionCnt--;
+//								break;
+//							}
+//						}
+//					}
+//				}
+//			}
 			
 			int childCnt = 0;
 			for(questionCnt = 0; questionCnt < ticketList.size(); questionCnt++){
-				tmpTicket = ticketList.get(questionCnt);
-				tmpLb = new JLabel((ticketList.size() + childTotalCnt - questionCnt - childCnt) + "");
-				tmpLb.setSize(50, 40);
-				tmpLb.setLocation(20, TOPNUMPADDING + (questionCnt + childCnt) * QUESTIONHGAP);
-				add(tmpLb);
+//				tmpTicket = ticketList.get(questionCnt);
+//				tmpLb = new JLabel((ticketList.size() + childTotalCnt - questionCnt - childCnt) + "");
+//				tmpLb.setSize(50, 40);
+//				tmpLb.setLocation(20, TOPNUMPADDING + (questionCnt + childCnt) * QUESTIONHGAP);
+//				add(tmpLb);
+//				
+//				tmpBtn = new JButton(tmpTicket.getTicketTitle());
+//				tmpBtn.setSize(260, 20);
+//				tmpBtn.setLocation(60, TOPPADDING + (questionCnt + childCnt) * QUESTIONHGAP);
+//				tmpBtn.addActionListener(this);
+//				tmpBtn.setFocusable(false);
+//				add(tmpBtn);
+//				
+//				tmpLb = new JLabel(tmpTicket.getUserName());
+//				tmpLb.setSize(60, 40);
+//				tmpLb.setLocation(380, TOPNUMPADDING + (questionCnt + childCnt) * QUESTIONHGAP);
+//				add(tmpLb);
 				
-				tmpBtn = new JButton(tmpTicket.getTicketTitle());
-				tmpBtn.setSize(260, 20);
-				tmpBtn.setLocation(60, TOPPADDING + (questionCnt + childCnt) * QUESTIONHGAP);
-				tmpBtn.addActionListener(this);
-				tmpBtn.setFocusable(false);
-				add(tmpBtn);
 				
-				tmpLb = new JLabel(tmpTicket.getUserName());
-				tmpLb.setSize(60, 40);
-				tmpLb.setLocation(380, TOPNUMPADDING + (questionCnt + childCnt) * QUESTIONHGAP);
-				add(tmpLb);
-				
-				
-				if(tmpTicket.isHaveChild()){
-					for (int j = 0; j < tmpTicket.getChildList().size(); j++) {
-						childCnt++;
-						tmpTicket = tmpTicket.getChildList().get(j);
-						tmpLb = new JLabel((ticketList.size() + childTotalCnt
-								- questionCnt - childCnt)
-								+ "");
-						tmpLb.setSize(50, 40);
-						tmpLb.setLocation(20, TOPNUMPADDING
-								+ (questionCnt + childCnt) * QUESTIONHGAP);
-						add(tmpLb);
-
-						tmpBtn = new JButton(tmpTicket.getTicketTitle());
-						tmpBtn.setSize(260, 20);
-						tmpBtn.setLocation(60, TOPPADDING
-								+ (questionCnt + childCnt) * QUESTIONHGAP);
-						tmpBtn.addActionListener(this);
-						tmpBtn.setFocusable(false);
-						add(tmpBtn);
-
-						tmpLb = new JLabel(tmpTicket.getUserName());
-						tmpLb.setSize(60, 40);
-						tmpLb.setLocation(380, TOPNUMPADDING
-								+ (questionCnt + childCnt) * QUESTIONHGAP);
-						add(tmpLb);
-					}
-				}
+//				if(tmpTicket.isHaveChild()){
+//					for (int j = 0; j < tmpTicket.getChildList().size(); j++) {
+//						childCnt++;
+//						tmpTicket = tmpTicket.getChildList().get(j);
+//						tmpLb = new JLabel((ticketList.size() + childTotalCnt
+//								- questionCnt - childCnt)
+//								+ "");
+//						tmpLb.setSize(50, 40);
+//						tmpLb.setLocation(20, TOPNUMPADDING
+//								+ (questionCnt + childCnt) * QUESTIONHGAP);
+//						add(tmpLb);
+//
+//						tmpBtn = new JButton(tmpTicket.getTicketTitle());
+//						tmpBtn.setSize(260, 20);
+//						tmpBtn.setLocation(60, TOPPADDING
+//								+ (questionCnt + childCnt) * QUESTIONHGAP);
+//						tmpBtn.addActionListener(this);
+//						tmpBtn.setFocusable(false);
+//						add(tmpBtn);
+//
+//						tmpLb = new JLabel(tmpTicket.getUserName());
+//						tmpLb.setSize(60, 40);
+//						tmpLb.setLocation(380, TOPNUMPADDING
+//								+ (questionCnt + childCnt) * QUESTIONHGAP);
+//						add(tmpLb);
+//					}
+//				}
 			}
 			setPreferredSize(new Dimension(420, 20 + TOPPADDING + (questionCnt + childTotalCnt) * QUESTIONHGAP));
 		}
@@ -250,22 +250,22 @@ class QuestionFrame extends JFrame{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String ticketTitle = e.getActionCommand();
-			for(int i = 0; i < ticketList.size(); i++){
-				if(ticketTitle.equals(ticketList.get(i).getTicketTitle())){
-					new InputReplyFrame(ticketList.get(i));
-					break;
-				}
-				else if(ticketList.get(i).isHaveChild()){
-					for(int j = 0; j < ticketList.get(i).getChildList().size(); j++){
-					
-						if (ticketTitle.equals(ticketList.get(i).getChildList().get(j).getTicketTitle())) {
-							new InputReplyFrame(ticketList.get(i).getChildList().get(j));
-							break;
-						}
-					}
-				}
-			}
+//			String ticketTitle = e.getActionCommand();
+//			for(int i = 0; i < ticketList.size(); i++){
+//				if(ticketTitle.equals(ticketList.get(i).getTicketTitle())){
+//					new InputReplyFrame(ticketList.get(i));
+//					break;
+//				}
+//				else if(ticketList.get(i).isHaveChild()){
+//					for(int j = 0; j < ticketList.get(i).getChildList().size(); j++){
+//					
+//						if (ticketTitle.equals(ticketList.get(i).getChildList().get(j).getTicketTitle())) {
+//							new InputReplyFrame(ticketList.get(i).getChildList().get(j));
+//							break;
+//						}
+//					}
+//				}
+//			}
 		}
 		
 		class InputReplyFrame extends JFrame implements ActionListener{
@@ -289,7 +289,7 @@ class QuestionFrame extends JFrame{
 				add(contentsLb);
 				
 				contentsArea = new JTextArea();
-				contentsArea.setText(ticket.getContents());
+//				contentsArea.setText(ticket.getContents());
 				contentsArea.setEditable(false);
 				contentsArea.setLineWrap(true);
 				JScrollPane sPane = new JScrollPane(contentsArea);
@@ -341,31 +341,31 @@ class QuestionFrame extends JFrame{
 					return;
 				}
 				else{
-					UploadToServer UTS = new UploadToServer();
-					UTS.ticketPost("[Re]" + ticket.getTicketTitle(),
-							ticket.getClassId() + "", ticket.getPosition(),
-							classTitle, "교수", ticket.getTicketPosition()
-									+ "/0");
-					
-					TicketInfo ticketInfo = new TicketInfo();
-					ticketInfo.setContents(classTitle);
-					ticketInfo.setPosition(ticket.getTicketPosition());
-					ticketInfo.setTicketPosition(ticket.getTicketPosition() + "/0");
-					ticketInfo.setTicketTitle("[Re]" + ticket.getTicketTitle());
-					ticketInfo.setUserName("교수");
-					Gson gson = new Gson();
-					String quesStr = gson.toJson(ticketInfo);
-					OutputStream tmpOs;
-					for(int i = 0; i < c.getNaviOs().size(); i++){
-						tmpOs = c.getNaviOs().get(i);
-						try {
-							if(tmpOs != null)
-								tmpOs.write((QUESTION + quesStr).getBytes("UTF-8"));
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					}
+//					UploadToServer UTS = new UploadToServer();
+//					UTS.ticketPost("[Re]" + ticket.getTicketTitle(),
+//							ticket.getClassId() + "", ticket.getPosition(),
+//							classTitle, "교수", ticket.getTicketPosition()
+//									+ "/0");
+//					
+//					TicketInfo ticketInfo = new TicketInfo();
+//					ticketInfo.setContents(classTitle);
+//					ticketInfo.setPosition(ticket.getTicketPosition());
+//					ticketInfo.setTicketPosition(ticket.getTicketPosition() + "/0");
+//					ticketInfo.setTicketTitle("[Re]" + ticket.getTicketTitle());
+//					ticketInfo.setUserName("교수");
+//					Gson gson = new Gson();
+//					String quesStr = gson.toJson(ticketInfo);
+//					OutputStream tmpOs;
+//					for(int i = 0; i < c.getNaviOs().size(); i++){
+//						tmpOs = c.getNaviOs().get(i);
+//						try {
+//							if(tmpOs != null)
+//								tmpOs.write((QUESTION + quesStr).getBytes("UTF-8"));
+//						} catch (IOException e1) {
+//							// TODO Auto-generated catch block
+//							e1.printStackTrace();
+//						}
+//					}
 					
 					questPn.removeAll(); // No가 겹쳐서 removeAll 하고 다시 그리기
 					questPn.init();

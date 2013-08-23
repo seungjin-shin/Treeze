@@ -23,32 +23,29 @@ package freemind.controller;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
-import org.apache.http.client.ClientProtocolException;
-import org.jibx.runtime.impl.InputStreamWrapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import freemind.Frame.TicketAnswerFrame;
-import freemind.json.CurrentPositionOfNav;
+import freemind.Frame.SurveyFrame;
+import freemind.json.ArrayLecture;
+import freemind.json.ArrayTicket;
 import freemind.json.FreemindGson;
+import freemind.json.Lecture;
+import freemind.json.Ticket;
+import freemind.json.TmpTicket;
 import freemind.json.TreezeData;
+//import freemind.main.ProfileFrame.LectureListItem;
 import freemind.modes.MindMapNode;
 import freemind.modes.NodeAdapter;
-import freemind.modes.UploadToServer;
-import freemind.modes.mindmapmode.MindMapMapModel;
 
 /**
  * The KeyListener which belongs to the node and cares for Events like C-D
@@ -97,87 +94,58 @@ public class NodeKeyListener implements KeyListener {
  			c.startSlideShow();
 			
 		} else if (e.getKeyCode() == KeyEvent.VK_F6) {
-			new TicketAnswerFrame();
+			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F4){
-			new SurveyFrame(fManager.getOs()); // c 넘겨서 소켓 다 보내야대
+			new SurveyFrame();
+//			new SurveyFrame(fManager.getOs()); // c 넘겨서 소켓 다 보내야대
 			//new SurveyResultFrame(31, 9);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F3){
+			c.checkNodeType();			
+//				grid.removeAll();
+//				for(int i=0;i<lectureList.size();i++){
+//					grid.add(new LectureListItem(i + 1, lectureList.get(i)));
+//				}
+//				listPanel.updateUI();
+//				lectureListPanel.repaint();
+		
+						
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F8){
-			//if receive q
-			int position[] = {2,0};
-        	int i;
-        	FreemindManager fManager = FreemindManager.getInstance();
-        	MindMapNode targetNode = null;
-        	MindMapNode tmp = c.getMc().getRootNode();
-        	for(i = 0; i < position.length; i++){
-       			tmp = (MindMapNode)tmp.getChildAt(position[i]);
-        	}
-        	
-        	if(tmp.hasChildren()){
-        		for(i = 0; i < tmp.getChildCount(); i++){// 완료
-        			MindMapNode forSearchQNode;
-        			forSearchQNode = (MindMapNode)tmp.getChildAt(i);
-        			if(forSearchQNode.getText().equals("Q"))
-        				break;
-        		}
-        		targetNode = (MindMapNode) tmp.getChildAt(i); 
-        		
-        	}
-        	else{
-        		System.out.println("not have Question Node!");
-        		return;
-        	}
-        	
-        	c.getMc()._setFolded(targetNode, true);
-        	
-			c.getMc().nodeChanged(targetNode);
+			Thread addAllTicketThread = new AddAllTicketThread();
+			addAllTicketThread.start();
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F9){
 			//set Q node
 			
-			if (!fManager.isAddQuestionNodeInfo()) {
-				fManager.setAddQuestionNodeInfo(true);
-
-				c.addQNode.addNodeForQuestion(c.getMc().getRootNode());
-
-				// modify Q node
-				c.addQNode.modifyForQuestion(c.getMc().getRootNode());
-				c.getMc().edit.stopEditing();
-
-				/*
-				modify last node, why not change
-				in modifyForQuestion() method?????
-				*/
-				NodeAdapter tmp = (NodeAdapter)c.getMc().getSelected();
-				tmp.setText("Q");
-				tmp.setNodeTypeStr("Question");
-				c.getMap().nodeChanged(tmp);
-
-				System.out.println("NodeKeyListener : set QuestionNodeInfo");
-
-			}
+//			if (!fManager.isAddQuestionNodeInfo()) {
+//				fManager.setAddQuestionNodeInfo(true);
+//
+//				c.addQNode.addNodeForQuestion(c.getMc().getRootNode());
+//
+//				// modify Q node
+//				c.addQNode.modifyForQuestion(c.getMc().getRootNode());
+//				c.getMc().edit.stopEditing();
+//
+//				/*
+//				modify last node, why not change
+//				in modifyForQuestion() method?????
+//				*/
+//				NodeAdapter tmp = (NodeAdapter)c.getMc().getSelected();
+//				tmp.setText("Q");
+//				tmp.setNodeTypeStr("Question");
+//				c.getMap().nodeChanged(tmp);
+//
+//				System.out.println("NodeKeyListener : set QuestionNodeInfo");
+//
+//			}
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F10){
 			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F16){
-			c.recurSetUploadXmlID((NodeAdapter) c.getMc().getRootNode());
-			c.makeUploadXml();
-				
-			UploadToServer uts = new UploadToServer();
-			try {
-				uts.doFileUpload();
-				uts.doXmlUpload();
-			} catch (ClientProtocolException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			c.uploadLectureaAction();
 			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F15){

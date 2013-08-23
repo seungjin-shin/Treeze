@@ -106,10 +106,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.itextpdf.text.pdf.PdfReader;
 
+import freemind.NodeType.NodeType;
+import freemind.NodeType.QuestionType;
 import freemind.common.BooleanProperty;
 import freemind.controller.MapModuleManager.MapModuleChangeObserver;
 import freemind.controller.filter.FilterController;
 import freemind.controller.printpreview.PreviewDialog;
+import freemind.json.Ticket;
 import freemind.main.FreeMind;
 import freemind.main.FreeMindCommon;
 import freemind.main.FreeMindMain;
@@ -228,9 +231,15 @@ public class Controller  implements MapModuleChangeObserver {
     public NodeAdapter focus;
     public AddQuestionNode addQNode;
 	public CheckNodeType chkNodeType;
-    
+	private Ticket ticket;
     
 
+	public Ticket getTicket() {
+		return ticket;
+	}
+	public void setTicket(Ticket ticket) {
+		this.ticket = ticket;
+	}
 	public MindMapController getMc() {
 		return mc;
 	}
@@ -311,6 +320,70 @@ public class Controller  implements MapModuleChangeObserver {
     	return slideList;
     }
     //dewlit
+
+    public void recurAddTicketNode(NodeAdapter node){
+    	NodeAdapter selNode = node;
+    	NodeAdapter qNode = null;
+    	NodeAdapter updateNode = null;
+		// Question 노드 추가 하기 전 카운트
+		int cnt = selNode.getChildCount();
+		
+		if(selNode.getNodeID().equals(""))
+			return;
+		
+		if(selNode.getNodeID().equals(fManager.getTicket().getParentNodeId())){
+			
+			for(int j = 0; j < selNode.getChildCount(); j++){
+				if(((NodeAdapter)selNode.getChildAt(j)).getText().equals("Q")){
+					qNode = (NodeAdapter)selNode.getChildAt(j);
+					updateNode = qNode;
+					break;
+				}
+			}
+			
+			if(qNode == null){
+				qNode = selNode;
+				NodeAdapter tmp;
+				NodeAdapter recurForNode = qNode;
+				
+				while(true){
+					if((tmp = (NodeAdapter) recurForNode.getParentNode()).getText().equals("Q")){
+						updateNode = tmp;
+						break;
+					}
+					recurForNode = tmp;
+				}
+			}
+			
+			getMc().addNew(qNode, MindMapController.NEW_CHILD, null);
+			getMc().edit.stopEditing();
+			
+			NodeAdapter tmp = (NodeAdapter) qNode.getChildAt(qNode.getChildCount() - 1);
+			
+			if(fManager.getTicket().getContents().length() > 20)
+				tmp.setText(fManager.getTicket().getContents().substring(0, 20) + "...");
+			else
+				tmp.setText(fManager.getTicket().getContents());
+			
+			tmp.setNodeTypeStr("Ticket");
+			tmp.setNodeID(fManager.getTicket().getId() + "");
+			tmp.setTicketContent(fManager.getTicket().getContents());
+			tmp.setTicketWriter(fManager.getTicket().getUserName());
+			getMc().nodeChanged(tmp);
+
+			if (((QuestionType) updateNode.getNodeType()).getFm().isVisible())
+				((QuestionType) updateNode.getNodeType()).getFm().updateTickets();
+			else{
+				getMc()._setFolded(updateNode, true);
+				getMc().nodeChanged(updateNode);
+			}
+			return;
+		}
+		
+		for (int i = 0; i < cnt; i++) {
+			recurAddTicketNode((NodeAdapter) selNode.getChildAt(i));
+		}
+    }
     
     public void makeUploadXml(){
     	File downFold = new File(fManager.getDownPath());
@@ -371,7 +444,7 @@ public class Controller  implements MapModuleChangeObserver {
 				else{
 					preStr = rdStr;
 					
-					if(preStr.indexOf("<node") == -1)
+					if(preStr.indexOf("<node") == -1 || preStr.indexOf("NODETYPESTR=\"Question\"") > -1)
 						forUploadXmlOw.write(preStr + "\n");
 						
 				}
@@ -434,6 +507,236 @@ public class Controller  implements MapModuleChangeObserver {
 			getModeController().nodeChanged(tmp); 
     	}
     	
+    }
+    
+    protected class SetSlideSequenceIconAction extends AbstractAction {
+        public SetSlideSequenceIconAction() {
+        	super("Set Slide Sequence Icon"); 
+        }
+        public void actionPerformed(ActionEvent e) {
+        	removeAllIcon((NodeAdapter) getMc().getRootNode());
+			setSequenceIcon();
+           }}
+    
+    protected class UploadLectureAction extends AbstractAction {
+        public UploadLectureAction() {
+        	super("Upload Lecture"); 
+        }
+        public void actionPerformed(ActionEvent e) {
+        	uploadLectureaAction();
+           }}
+    
+    public void uploadLectureaAction(){
+    	//set Q Node
+    	addQNode.addNodeForQuestion(getMc().getRootNode());
+    	
+    	// modify Q node
+    	addQNode.modifyForQuestion(getMc().getRootNode());
+    	getMc().edit.stopEditing();
+    	
+    	/*
+		modify last node, why not change
+		in modifyForQuestion() method?????
+    	 */
+    	NodeAdapter tmp = (NodeAdapter)getMc().getSelected();
+    	tmp.setText("Q");
+    	tmp.setNodeTypeStr("Question");
+    	getMc().nodeChanged(tmp);
+    	
+    	System.out.println("NodeKeyListener : set QuestionNodeInfo");
+    	
+    	//Set ID
+		recurSetUploadXmlID((NodeAdapter) getMc().getRootNode());
+		
+		//makeXMlFile
+		makeUploadXml();
+			
+		//upload XML
+		UploadToServer uts = fManager.uploadToServer;
+		try {
+			uts.doFileUpload();
+			uts.doXmlUpload();
+		} catch (ClientProtocolException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    }
+    
+    public void checkNodeType(){
+    	if (!fManager.isCheckNodeType()) {
+			chkNodeType.checkNodeType((NodeAdapter) getMc().getRootNode());
+			System.out.println("Controller : check node type");
+			fManager.setCheckNodeType(true);
+		}
+    }
+    
+    protected class SlideShowAction extends AbstractAction {
+        public SlideShowAction() {
+           super("Slide Show"); }
+        public void actionPerformed(ActionEvent e) {
+        	startSlideShow();
+        }}
+    
+    public void startSlideShow(){
+		
+		checkNodeType();
+		
+		if (!fManager.isSlideShowInfo()) {
+
+			NodeAdapter root = (NodeAdapter) getMc().getRootNode();
+			NodeAdapter next;// = (NodeAdapter)mc.getRootNode();
+
+			// set FreemindManager isSlideshow
+			fManager.setSlideShowInfo(true);
+
+			// set root
+			root.setPrev(null);
+			if (root.hasChildren()) {
+				next = (NodeAdapter) root.getChildAt(0);
+				root.setNext(next);
+
+				for (int i = 0; i < root.getChildCount(); i++) { // root direct
+																	// childs
+																	// set
+					recurSetSlideShowInfo((NodeAdapter) root.getChildAt(i));
+				}
+				System.out.println("Controller : set slideShowInfo");
+			} else {
+				System.out.println("Controller : only root");
+				return;
+			}
+    	}
+    	
+    	getSlideShow().setfocus((NodeAdapter)getMc().getRootNode().getChildAt(0));
+		getSlideShow().show();
+		getSlideShow().sendPosition();
+    }
+    
+    protected class CloseLectureAction extends AbstractAction {
+        public CloseLectureAction() {
+           super("Close lecture"); }
+        public void actionPerformed(ActionEvent e) {
+//        	final String CLOSELECTURE = "3";
+//        	LectureInfo lectureInfo;
+//    		lectureInfo = FreemindLectureManager.getInstance();
+//    		
+//        	String lectureTitle = lectureInfo.getLectureTitle();
+//        	String lectureId = lectureInfo.getLectureId() + "";
+//
+//        	HttpClient httpClient = new DefaultHttpClient();  
+//      	  HttpPost post = new HttpPost("http://" + fManager.SERVERIP + ":8080/treeze/setStateOfLecture");
+//      	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
+//      	  
+//      	  StringBody lectureTitleBody = null;
+//      	  StringBody profEmailBody = null;
+//      	  StringBody lectureState = null;
+//      	  
+//		try {
+//			lectureTitleBody = new StringBody("tmp", Charset.forName("UTF-8"));
+//			profEmailBody = new StringBody("minsuk@hansung.ac.kr", Charset.forName("UTF-8"));
+//			lectureState = new StringBody("false", Charset.forName("UTF-8"));
+//			StringBody lectureIdBody = new StringBody(lectureId, Charset.forName("UTF-8"));
+//			
+//			multipart.addPart("lectureName", lectureTitleBody);  
+//			multipart.addPart("professorEmail", profEmailBody);
+//			multipart.addPart("stateOfLecture", lectureState);
+//			multipart.addPart("lectureId", lectureIdBody);
+//			
+//			post.setEntity(multipart);  
+//			HttpResponse response = httpClient.execute(post);  
+//			HttpEntity resEntity = response.getEntity();
+//		} catch (Exception e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//         
+//      	  System.out.println("set state false");
+//      	  getSlideList().clear();
+//      	  
+//      	OutputStream tmpOs;
+//		for(int i = 0; i < getNaviOs().size(); i++){
+//			tmpOs = getNaviOs().get(i);
+//			try {
+//				if(tmpOs != null){
+//					tmpOs.write(CLOSELECTURE.getBytes("UTF-8"));
+//				}
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		}
+      	  fManager.getProfileFrame().setVisible(true);
+      	  fManager.getFreemindMainFrame().setVisible(false);
+           }}
+    
+    public void recurSetSlideShowInfo(NodeAdapter curNode){
+    	NodeAdapter cur = curNode;
+    	NodeAdapter prev;// = prevNode;
+    	NodeAdapter next;// = nextNode;
+    	NodeAdapter root = (NodeAdapter)mc.getRootNode();
+    	int i;
+    	
+    	int cnt = curNode.getChildCount();
+    	
+    	if(cur.getNodeTypeStr().equals("Question") || cur.getNodeTypeStr().equals("Ticket"))
+    		return;
+
+    	prev = recurGetPrev(root, root);
+    	next = recurGetNext(root, root);
+    	
+    	cur.setPrev(prev);
+    	cur.setNext(next);
+    	
+    	for(i = 0; i < cnt; i++){ // set the others
+    		recurSetSlideShowInfo((NodeAdapter)curNode.getChildAt(i));
+    	}
+    }
+    
+    public NodeAdapter recurGetPrev(NodeAdapter prevNode, NodeAdapter curNode){
+   		cur = curNode;
+   		
+    	if(prevNode.getNodeTypeStr().equals("Slide") || prevNode.getNodeTypeStr().equals("Survey"))
+    		prev = prevNode;
+    	
+    	int i;
+
+    	int cnt = curNode.getChildCount();
+
+    	if( (cur.getNodeTypeStr().equals("Slide") || cur.getNodeTypeStr().equals("Survey")) && cur.getPrev() == null && cur.getNext() == null)
+    		return prev;
+    	
+    	for(i = 0; i < cnt; i++){
+    		NodeAdapter tmp;
+    		tmp = recurGetPrev(cur, (NodeAdapter)curNode.getChildAt(i));
+    		if(tmp != null)
+    			return tmp;
+    	}
+    	return null; // last node
+    }
+    
+    public NodeAdapter recurGetNext(NodeAdapter prevNode, NodeAdapter curNode){
+   		cur = curNode;
+   		
+    	if(prevNode.getNodeTypeStr().equals("Slide") || prevNode.getNodeTypeStr().equals("Survey"))
+    		prev = prevNode;
+    	
+    	int i;
+
+    	int cnt = curNode.getChildCount();
+    	
+    	if( (cur.getNodeTypeStr().equals("Slide") || cur.getNodeTypeStr().equals("Survey")) && prev.getNext() == null)
+    		return cur;
+    	
+    	for(i = 0; i < cnt; i++){
+    		NodeAdapter tmp;
+    		tmp = recurGetNext(cur, (NodeAdapter)curNode.getChildAt(i));
+    		if(tmp != null)
+    			return tmp;
+    	}
+    	return null; // last node
     }
     
     
@@ -1220,131 +1523,7 @@ public class Controller  implements MapModuleChangeObserver {
     //
     // program/map control
     //
-    protected class SetSlideSequenceIconAction extends AbstractAction {
-        public SetSlideSequenceIconAction() {
-        	super("Set Slide Sequence Icon"); 
-        }
-        public void actionPerformed(ActionEvent e) {
-        	removeAllIcon((NodeAdapter) getMc().getRootNode());
-			setSequenceIcon();
-           }}
-    
-    protected class UploadLectureAction extends AbstractAction {
-        public UploadLectureAction() {
-        	super("Upload Lecture"); 
-        }
-        public void actionPerformed(ActionEvent e) {
-        	recurSetUploadXmlID((NodeAdapter) getMc().getRootNode());
-    		makeUploadXml();
-			
-			UploadToServer uts = new UploadToServer();
-			try {
-				uts.doFileUpload();
-				uts.doXmlUpload();
-			} catch (ClientProtocolException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-           }}
-    
-    
-    protected class SlideShowAction extends AbstractAction {
-        public SlideShowAction() {
-           super("Slide Show"); }
-        public void actionPerformed(ActionEvent e) {
-        	startSlideShow();
-        }}
-    
-    public void startSlideShow(){
-    	chkNodeType.checkNodeType((NodeAdapter)getMc().getRootNode());
-    	System.out.println("Controller : check node type");
-    	
-    	NodeAdapter root = (NodeAdapter)getMc().getRootNode();
-    	NodeAdapter next;// = (NodeAdapter)mc.getRootNode();
-    	
-    	//set FreemindManager isSlideshow 
-    	fManager.setSlideShowInfo(true);
-    	
-    	//set root
-    	root.setPrev(null);
-    	if(root.hasChildren()){
-    		next = (NodeAdapter)root.getChildAt(0);
-    		root.setNext(next);
-    		
-    		for(int i = 0; i < root.getChildCount(); i++){ // root direct childs set
-        		recurSetSlideShowInfo((NodeAdapter)root.getChildAt(i));
-        	}
-    		System.out.println("Controller : set slideShowInfo");
-    	}
-    	else{
-    		System.out.println("Controller : only root");
-    		return;
-    	}
-    	
-    	getSlideShow().setfocus((NodeAdapter)getMc().getRootNode().getChildAt(0));
-		getSlideShow().show();
-		getSlideShow().sendPosition();
-    }
-    
-    protected class CloseLectureAction extends AbstractAction {
-        public CloseLectureAction() {
-           super("Close lecture"); }
-        public void actionPerformed(ActionEvent e) {
-//        	final String CLOSELECTURE = "3";
-//        	LectureInfo lectureInfo;
-//    		lectureInfo = FreemindLectureManager.getInstance();
-//    		
-//        	String lectureTitle = lectureInfo.getLectureTitle();
-//        	String lectureId = lectureInfo.getLectureId() + "";
-//
-//        	HttpClient httpClient = new DefaultHttpClient();  
-//      	  HttpPost post = new HttpPost("http://" + fManager.SERVERIP + ":8080/treeze/setStateOfLecture");
-//      	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
-//      	  
-//      	  StringBody lectureTitleBody = null;
-//      	  StringBody profEmailBody = null;
-//      	  StringBody lectureState = null;
-//      	  
-//		try {
-//			lectureTitleBody = new StringBody("tmp", Charset.forName("UTF-8"));
-//			profEmailBody = new StringBody("minsuk@hansung.ac.kr", Charset.forName("UTF-8"));
-//			lectureState = new StringBody("false", Charset.forName("UTF-8"));
-//			StringBody lectureIdBody = new StringBody(lectureId, Charset.forName("UTF-8"));
-//			
-//			multipart.addPart("lectureName", lectureTitleBody);  
-//			multipart.addPart("professorEmail", profEmailBody);
-//			multipart.addPart("stateOfLecture", lectureState);
-//			multipart.addPart("lectureId", lectureIdBody);
-//			
-//			post.setEntity(multipart);  
-//			HttpResponse response = httpClient.execute(post);  
-//			HttpEntity resEntity = response.getEntity();
-//		} catch (Exception e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//         
-//      	  System.out.println("set state false");
-//      	  getSlideList().clear();
-//      	  
-//      	OutputStream tmpOs;
-//		for(int i = 0; i < getNaviOs().size(); i++){
-//			tmpOs = getNaviOs().get(i);
-//			try {
-//				if(tmpOs != null){
-//					tmpOs.write(CLOSELECTURE.getBytes("UTF-8"));
-//				}
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//		}
-      	  fManager.getProfileFrame().setVisible(true);
-      	  fManager.getFreemindMainFrame().setVisible(false);
-           }}
+
     
 
     private class QuitAction extends AbstractAction {
@@ -1736,74 +1915,6 @@ public class Controller  implements MapModuleChangeObserver {
 			return leftToolbarVisible;
 		}
     }
-    
-    public void recurSetSlideShowInfo(NodeAdapter curNode){
-    	NodeAdapter cur = curNode;
-    	NodeAdapter prev;// = prevNode;
-    	NodeAdapter next;// = nextNode;
-    	NodeAdapter root = (NodeAdapter)mc.getRootNode();
-    	int i;
-    	
-    	int cnt = curNode.getChildCount();
-    	
-    	if(cur.getNodeTypeStr().equals("Question") || cur.getNodeTypeStr().equals("Ticket"))
-    		return;
-
-    	prev = recurGetPrev(root, root);
-    	next = recurGetNext(root, root);
-    	
-    	cur.setPrev(prev);
-    	cur.setNext(next);
-    	
-    	for(i = 0; i < cnt; i++){ // set the others
-    		recurSetSlideShowInfo((NodeAdapter)curNode.getChildAt(i));
-    	}
-    }
-    
-    public NodeAdapter recurGetPrev(NodeAdapter prevNode, NodeAdapter curNode){
-   		cur = curNode;
-   		
-    	if(prevNode.getNodeTypeStr().equals("Slide") || prevNode.getNodeTypeStr().equals("Survey"))
-    		prev = prevNode;
-    	
-    	int i;
-
-    	int cnt = curNode.getChildCount();
-
-    	if( (cur.getNodeTypeStr().equals("Slide") || cur.getNodeTypeStr().equals("Survey")) && cur.getPrev() == null && cur.getNext() == null)
-    		return prev;
-    	
-    	for(i = 0; i < cnt; i++){
-    		NodeAdapter tmp;
-    		tmp = recurGetPrev(cur, (NodeAdapter)curNode.getChildAt(i));
-    		if(tmp != null)
-    			return tmp;
-    	}
-    	return null; // last node
-    }
-    
-    public NodeAdapter recurGetNext(NodeAdapter prevNode, NodeAdapter curNode){
-   		cur = curNode;
-   		
-    	if(prevNode.getNodeTypeStr().equals("Slide") || prevNode.getNodeTypeStr().equals("Survey"))
-    		prev = prevNode;
-    	
-    	int i;
-
-    	int cnt = curNode.getChildCount();
-    	
-    	if( (cur.getNodeTypeStr().equals("Slide") || cur.getNodeTypeStr().equals("Survey")) && prev.getNext() == null)
-    		return cur;
-    	
-    	for(i = 0; i < cnt; i++){
-    		NodeAdapter tmp;
-    		tmp = recurGetNext(cur, (NodeAdapter)curNode.getChildAt(i));
-    		if(tmp != null)
-    			return tmp;
-    	}
-    	return null; // last node
-    }
-    
     
 
     protected class ZoomInAction extends AbstractAction {

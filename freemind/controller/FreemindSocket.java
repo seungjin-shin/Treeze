@@ -264,12 +264,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
+import com.google.gson.Gson;
+
+import freemind.json.Ticket;
+import freemind.json.TmpTicket;
+import freemind.json.TreezeData;
+import freemind.modes.NodeAdapter;
 import freemind.modes.mindmapmode.MindMapController;
 
 public class FreemindSocket extends Thread {
 	Controller c;
 	MindMapController mc;
 	InputStream in;
+	FreemindManager fManager = FreemindManager.getInstance();
 
 	public FreemindSocket(Controller c, MindMapController mc, InputStream in) {
 		this.c = c;
@@ -287,6 +294,8 @@ public class FreemindSocket extends Thread {
 		lectureInfo = FreemindLectureManager.getInstance();
 		int cnt = -1;
 		byte[] b = new byte[1024];
+		TreezeData treezeData;
+		Gson gson = new Gson();
 
 		while (true) {
 			try {
@@ -303,16 +312,17 @@ public class FreemindSocket extends Thread {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					chkStr = rcvStr.substring(0, 1);
-					
 					System.out.println("FindMindSocket - rcvStr : " + rcvStr);
 					
-					chkStr = rcvStr.substring(0, 1);
+					treezeData = gson.fromJson(rcvStr, TreezeData.class);
 					
-					if (chkStr.equals(SURVEYYES)) {
-						new SurveyResultFrame(1, 0, lectureInfo.getSurverTitle());
-					} else if (chkStr.equals(SURVEYNO)) {
-						new SurveyResultFrame(0, 1, lectureInfo.getSurverTitle());
+					if(treezeData.getDataType().equals(TreezeData.TICKET)){
+						TmpTicket tmpTicket = gson.fromJson(treezeData.getArgList().get(0), TmpTicket.class);
+						Ticket ticket = tmpTicket.getTicket();
+						Thread addTicketThread = new AddTicketThread(ticket);
+						addTicketThread.start();
+//						fManager.setTicket(ticket);
+//						c.recurAddTicketNode((NodeAdapter) c.getMc().getRootNode());
 					}
 					
 				}

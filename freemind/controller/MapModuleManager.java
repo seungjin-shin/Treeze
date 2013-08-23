@@ -320,6 +320,7 @@ public class MapModuleManager {
 		listener.beforeMapModuleChange(oldMapModule, oldMode, newMapModule, newMode);
 		this.mapModule = newMapModule;
 		this.mCurrentMode = newMode;
+		//load map
 		listener.afterMapModuleChange(oldMapModule, oldMode, newMapModule, newMode);
 		listener.numberOfOpenMapInformation(mapModuleVector.size());
 		return true;

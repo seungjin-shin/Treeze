@@ -26,20 +26,31 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import freemind.controller.*;
+import freemind.json.Ticket;
+import freemind.modes.NodeAdapter;
+import freemind.modes.UploadToServer;
 
 public class WriteTicketFrame extends JFrame{
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
-	Insets insets = new Insets(20, 20, 20, 20);
+	Insets insets = new Insets(0, 0, 0, 0);
 	JPanel fullPanel =new JPanel();
 	LogoPanel logoPanel = new LogoPanel();
 	Image logoimg;
 	FreemindManager fManager;
-	public WriteTicketFrame() {
+	NodeAdapter qNode;
+	String parentID;
+	WriteTextArea questionTa;
+	public WriteTicketFrame(NodeAdapter node) {
+		qNode = node;
+		parentID = ((NodeAdapter)qNode.getParentNode()).getNodeID();
+		questionTa = new WriteTextArea();
 		// TODO Auto-generated constructor stub
 		this.setSize(800,500);
 		gbc.fill = GridBagConstraints.BOTH;
-		this.setLayout(gbl);
+		this.setLayout(new BorderLayout());
+		this.add(fullPanel);
+		
 		fManager = FreemindManager.getInstance();
 		logoimg = fManager.treezeLogo;
 		//fullPanel.setBackground(Color.BLUE);
@@ -85,12 +96,12 @@ public class WriteTicketFrame extends JFrame{
 		
 		public RoundPanel() {
 			// TODO Auto-generated constructor stub
-			this.setBackground(new Color(0, 0, 0, 0));
+			this.setBackground(fManager.treezeColor);
 			//this.setSize(10, 10);
 			this.setLayout(gbl);
 			insets.set(20, 20, 0, 0);
+			addGrid(gbl, gbc, logoPanel, 0, 0, 1, 1, 1, 3, this);
 			
-			addGrid(gbl, gbc, logoPanel, 0, 0, 1, 1,1, 3, this);
 			insets.set(10, 20, 5, 20);
 			addGrid(gbl, gbc, new WriteField(), 0, 1, 1, 1,1, 10, this);
 			insets.set(5, 20, 5, 20);
@@ -168,7 +179,7 @@ public class WriteTicketFrame extends JFrame{
 			this.setLayout(gbl);
 			addGrid(gbl, gbc, new UnderLineJLabel("Question"), 1, 1, 1, 1, 1, 1, this);
 			addGrid(gbl, gbc, new JLabel(), 1, 2, 1, 1, 1, 10, this);
-			addGrid(gbl, gbc, new WriteTextArea(), 2, 1, 1, 2, 8, 1, this);
+			addGrid(gbl, gbc, questionTa, 2, 1, 1, 2, 8, 1, this);
 		}
 	}
 	class WriteTextArea extends JScrollPane{
@@ -185,13 +196,18 @@ public class WriteTicketFrame extends JFrame{
 		protected int shadowAlpha = 150;
 		protected int strokeSize = 1;
 		protected Dimension arcs = new Dimension(30, 30);
+		JTextArea textArea;
 		
+		public JTextArea getTextArea() {
+			return textArea;
+		}
+
 		public WriteTextArea() {
 		// TODO Auto-generated constructor stub
 		this.setBackground(new Color(0, 0, 0, 0));
 		//this.setSize(10, 10);
 		//this.setLayout(new BorderLayout());
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		//textArea.setBackground(new Color(0,0,0,0));
 		this.setBorder(new EmptyBorder(10, 10, 10, 10));
 		this.getViewport().add(textArea);
@@ -266,9 +282,10 @@ public class WriteTicketFrame extends JFrame{
 			addGrid(gbl, gbc, new JLabel(), 1, 2, 1, 1, 1, 10, this);
 			addGrid(gbl, gbc, j, 2, 1, 1, 2, 8, 1, this);
 			j.setLayout(gbl);
+			j.setBackground(fManager.treezeColor);
 			insets.set(0,0, 0,0);
 			addGrid(gbl, gbc, new JLabel(), 1, 1, 1, 2, 2, 1, j);
-			addGrid(gbl, gbc, new WriteBtn(null, null, null), 2, 1, 1, 1, 1, 1, j);
+			addGrid(gbl, gbc, new WriteBtn(fManager.writeDefault, fManager.writePress, fManager.writeOver), 2, 1, 1, 1, 1, 1, j);
 			addGrid(gbl, gbc, new JLabel(), 2, 2, 1, 1, 1, 1, j);
 			addGrid(gbl, gbc, new JLabel(), 3, 1, 1, 2, 2, 1, j);
 			insets.set(10, 10, 10, 10);
@@ -289,7 +306,16 @@ public class WriteTicketFrame extends JFrame{
 		}
 		@Override
 		protected void Action(){
-			
+			Ticket t = new Ticket();
+			t.setParentNodeId(parentID);
+			t.setContents(questionTa.getTextArea().getText());
+			t.setUserName("교수");
+			UploadToServer uts = fManager.uploadToServer;
+			setVisibleWriteFrame();
+			uts.ticketPost(t);
 		}
+	}
+	public void setVisibleWriteFrame(){
+		setVisible(false);
 	}
 }

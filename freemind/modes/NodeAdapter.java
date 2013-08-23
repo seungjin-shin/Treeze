@@ -85,7 +85,8 @@ public abstract class NodeAdapter implements MindMapNode {
 	
 	private NodeType nodeType;
 	private String nodeTypeStr = "";
-	private String nodeID;
+	private String nodeID = "";
+	
 	
 
 
@@ -1083,8 +1084,8 @@ freemind.main.Resources.getInstance().logException(			e);
     	//node.set
     	if(imgPath != null)
     		node.setAttribute("IMGPATH", imgPath);
-    	if(nodeID != null)
-    		node.setAttribute("TREEZEID", nodeID);
+    	if(!nodeID.equals(""))
+    		node.setAttribute("NODEID", nodeID);
     	if(ticketTitle != null)
     		node.setAttribute("TICKETTITLE", ticketTitle);
     	if(ticketContent != null)

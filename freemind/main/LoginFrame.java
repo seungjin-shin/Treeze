@@ -1,115 +1,4 @@
 package freemind.main;
-//
-//import java.awt.Color;
-//import java.awt.Container;
-//import java.awt.Dimension;
-//import java.awt.FlowLayout;
-//import java.awt.Graphics;
-//import java.awt.Image;
-//import java.awt.Toolkit;
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
-//import java.net.URL;
-//import java.util.ArrayList;
-//
-//import javax.help.plaf.basic.BasicFavoritesNavigatorUI.AddAction;
-//import javax.swing.BorderFactory;
-//import javax.swing.ImageIcon;
-//import javax.swing.JButton;
-//import javax.swing.JFrame;
-//import javax.swing.JLabel;
-//import javax.swing.JPanel;
-//import javax.swing.JPasswordField;
-//import javax.swing.JScrollPane;
-//import javax.swing.JTextField;
-//import javax.swing.border.Border;
-//
-//import freemind.controller.SlideData;
-//import freemind.modes.mindmapmode.MindMapController;
-//
-//
-//public class LoginFrame extends JFrame {
-//	private Container ct;
-//	
-//	JLabel nLabel = null;
-//	JTextField jText = null;
-//	
-//	private JTextField IDTf;
-//	private JTextField passwdTf;
-//
-//	JButton enterBtn;
-//	JButton nextBtn;
-//	JButton prevBtn;
-//	JScrollPane sPanel;
-//	
-//	UploadListner btnListner;
-//	
-//	MindMapController mc;
-//	
-//	private Image logo;
-//	public LoginFrame(MindMapController mc) {
-//		this.mc = mc;
-//		setSize(300, 250);
-//		setLayout(null);
-//		getContentPane().setBackground(new Color(141, 198, 63));
-//		logo = Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png");
-//		
-//		btnListner = new UploadListner(this);
-//
-//		JLabel ID = new JLabel("E-mail : ");
-//		JLabel passwd = new JLabel("Password : ");
-//		ID.setSize(100, 40);
-//		ID.setLocation(60, 90);
-//		add(ID);
-//		
-//		passwd.setSize(100, 40);
-//		passwd.setLocation(60, 120);
-//		add(passwd);
-//		
-//		JButton upBtn = new JButton("Login");
-//		upBtn.setSize(90, 30);
-//		upBtn.setLocation(140, 160);
-//		//upBtn.setLocation(20, 20);
-//		upBtn.addActionListener(btnListner);
-//		add(upBtn);
-//		
-//		IDTf = new JTextField();
-//		IDTf.setSize(100, 20);
-//		IDTf.setLocation(130, 100);
-//		passwdTf = new JPasswordField();
-//		passwdTf.setSize(100, 20);
-//		passwdTf.setLocation(130, 130);
-//
-//		add(IDTf);
-//		add(passwdTf);
-//		setTitle("Login");
-//		setVisible(true);
-//		setLocation(400, 400);
-//		setDefaultCloseOperation(EXIT_ON_CLOSE);
-//	}
-//	public void paint(Graphics g){
-//		super.paint(g);
-//		g.drawImage(logo, 20, 50, 200, 50, null);
-//		
-//		g.setColor(Color.white);
-//		g.drawLine(20, 120, 240, 120);
-//		repaint();
-//	}
-//	class UploadListner implements ActionListener{
-//		JFrame frame;
-//		public UploadListner(JFrame jf) {
-//			frame = jf;
-//			// TODO Auto-generated constructor stub
-//		}
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			frame.setVisible(false);
-//			new LoggedInFrame(mc);
-//		}
-//		
-//	}
-//	
-//}
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -131,6 +20,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -144,12 +35,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import org.apache.http.client.ClientProtocolException;
 
+import freemind.Frame.SignFrame;
 import freemind.controller.FreemindManager;
+import freemind.controller.ImgBtn;
 import freemind.modes.mindmapmode.MindMapController;
 
 
@@ -160,26 +55,37 @@ public class LoginFrame extends JFrame{
 	Insets insets = new Insets(10, 10, 10, 10);
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
+	FreemindManager fManager = FreemindManager.getInstance();
 	MainPanel mPanel = new MainPanel();
 //	LogoPanel lPanel = new LogoPanel(Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png"));
-	LogoPanel lPanel = new LogoPanel(FreemindManager.getInstance().treezeLogo);
+	LogoPanel lPanel = new LogoPanel(fManager.treezeLogo);
 //	LoginPanel loPanel = new LoginPanel(Toolkit.getDefaultToolkit().getImage("images/LoginInputBar.png"),
 //			Toolkit.getDefaultToolkit().getImage("images/login.png"));
-	LoginPanel loPanel = new LoginPanel(FreemindManager.getInstance().loginInputBar,FreemindManager.getInstance().login); 
+	LoginPanel loPanel; 
 	SignPanel sPanel = new SignPanel();
 	RightPanel rPanel = new RightPanel();
 	MindMapController mc;
+	JTextField emailTf = new HintTextField("e-mail address");;
+	final JTextField pwTf = new HintTextFieldPassword("password");;
+	
+	
+	
 	public LoginFrame(MindMapController mc) {
 		this.mc = mc;
 		this.getContentPane().setBackground(treezeColor);
 		this.setSize(647, 394);
 		this.setLayout(gbl);
 		this.setLocation(400, 100);
-		setResizable(false);
+		loPanel = new LoginPanel();
+		
+		//setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		gbc.fill = GridBagConstraints.BOTH;
-		setInsets(40, 0, 120, 120);
+		setInsets(40, 45, 120, 120);
 		addGrid(gbl, gbc, lPanel, 0, 0, 1, 1, 1, 30, mPanel);
+
+		setLoginPanel();
+
 		setInsets(0, 0, 120, 120);
 		addGrid(gbl, gbc, loPanel, 0, 1, 1, 1, 1, 4, mPanel);
 		setInsets(0, 20, 120, 120);
@@ -193,6 +99,59 @@ public class LoginFrame extends JFrame{
 		setServerIP();
 		
 		setVisible(true);
+	}
+	
+	public void setLoginPanel(){
+		LoginBtn loginBtn;
+			pwTf.addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent e) {
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if(e.getKeyCode() == KeyEvent.VK_ENTER){
+						pushLoginBtn();
+					}
+				}
+			});
+			
+			
+			loginBtn = new LoginBtn(fManager.loginDefault, fManager.loginPress, fManager.loginOver);
+			loginBtn.setBackground(new Color(0, 0, 0, 0));
+			loginBtn.setBorderPainted(false);
+			loginBtn.setContentAreaFilled(false);
+			loginBtn.setFocusable(false);
+			//loginBtn.setBorder(null);
+			loginBtn.addFocusListener(new FocusListener() {
+				
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					
+				}
+				
+				@Override
+				public void focusGained(FocusEvent arg0) {
+					pwTf.requestFocus();
+					
+				}
+			});
+			
+			
+			loginBtn.setBorder(BorderFactory.createCompoundBorder(loginBtn.getBorder(),
+					BorderFactory.createEmptyBorder(1, 5, 1, 5)));
+			setInsets(30, 10, 0, 15);
+//			setInsets(t, b, l, r)
+			addGrid(gbl, gbc, emailTf,  0, 0, 1, 1, 7, 5, loPanel);
+			setInsets(0, 30, 0, 15);
+			addGrid(gbl, gbc, pwTf,     0, 1, 1, 1, 7, 5, loPanel);
+			setInsets(30, 30, 10, 0);
+			addGrid(gbl, gbc, loginBtn, 1, 0, 1, 2, 5, 5, loPanel);
 	}
 	
 	public void setServerIP(){
@@ -219,8 +178,8 @@ public class LoginFrame extends JFrame{
 			System.out.println("treeze.cnf Err");
 			return;
 		}
-		FreemindManager.getInstance().setSERVERIP(ip);
-		FreemindManager.getInstance().setPORT(port);
+		fManager.setSERVERIP(ip);
+		fManager.setPORT(port);
 	}
 	
 	public void setInsets(int t, int b, int l, int r){
@@ -258,9 +217,41 @@ public class LoginFrame extends JFrame{
 	
 	class SignPanel extends JPanel{
 		JLabel signUp = new JLabel("Sign Up");
+		
 		JLabel forgotPw = new JLabel("Forgot your password?");
 		public SignPanel() {
 			signUp.setForeground(Color.white);
+			signUp.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					new SignFrame();
+				}
+			});
 			forgotPw.setForeground(Color.white);
 			setInsets(0, 0, 40, 0);
 			addGrid(gbl, gbc, signUp, 0, 0, 1, 1, 1, 1, this);
@@ -271,92 +262,37 @@ public class LoginFrame extends JFrame{
 		}
 	}
 	
-	class LoginPanel extends JPanel{
-		JTextField emailTf;
-		JTextField pwTf;
-		JButton loginBtn;
-		ImageIcon icon;
-		ImageIcon inputIcon;
-		public LoginPanel(Image textImg, Image loginImg) {
-			inputIcon = new ImageIcon(textImg);
-			emailTf = new HintTextField("e-mail address");
-			pwTf = new HintTextField("password");
-			pwTf.addKeyListener(new KeyListener() {
-				
-				@Override
-				public void keyTyped(KeyEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void keyReleased(KeyEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void keyPressed(KeyEvent e) {
-					if(e.getKeyCode() == KeyEvent.VK_ENTER){
-						pushLoginBtn();
-					}
-				}
-			});
-			
-			
-			icon = new ImageIcon(loginImg);
-			loginBtn = new JButton(icon);
-			loginBtn.setBackground(new Color(0, 0, 0, 0));
-			loginBtn.setBorderPainted(false);
-			loginBtn.setContentAreaFilled(false);
-			loginBtn.setFocusable(false);
-			loginBtn.setBorder(null);
-			loginBtn.addFocusListener(new FocusListener() {
-				
-				@Override
-				public void focusLost(FocusEvent arg0) {
-					
-				}
-				
-				@Override
-				public void focusGained(FocusEvent arg0) {
-					pwTf.requestFocus();
-					
-				}
-			});
-			
-			loginBtn.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					pushLoginBtn();
-				}
-			});
-//			this.setBorder(new LineBorder(Color.black, 1, true));
-//			loginBtn.setBorder(BorderFactory.createCompoundBorder(loginBtn.getBorder(),
-//					BorderFactory.createEmptyBorder(0, 0, 0, 0)));
-			setInsets(15, 0, 0, 15);
-			addGrid(gbl, gbc, emailTf,  0, 0, 1, 1, 7, 5, this);
-			setInsets(5, 15, 0, 15);
-			addGrid(gbl, gbc, pwTf,     0, 1, 1, 1, 7, 5, this);
-			setInsets(0, 0, 0, 0);
-			addGrid(gbl, gbc, loginBtn, 1, 0, 1, 2, 3, 1, this);
-			setLayout(gbl);
-			setBackground(noColor);
+	class LoginBtn extends ImgBtn{
+
+		public LoginBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+			// TODO Auto-generated constructor stub
 		}
+
 		@Override
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			g.drawImage(inputIcon.getImage(), 0, 16, 243, 26, null);
-			g.drawImage(inputIcon.getImage(), 0, 50, 243, 26, null);
-			
+		protected void Action() {
+			pushLoginBtn();
+		}
+		
+	}
+	
+	class LoginPanel extends JPanel{
+		public LoginPanel() {
+			this.setLayout(gbl);
+			setBackground(noColor);
 		}
 	}
 	
 	public void pushLoginBtn(){
-		setVisible(false);
-		JFrame pFrame = new ProfileFrame(mc);
-		FreemindManager.getInstance().setProfileFrame(pFrame);
+		boolean loginChk = false;
+		
+		loginChk = fManager.uploadToServer.signIn(emailTf.getText(), pwTf.getText());
+		
+		if (loginChk) {
+			setVisible(false);
+			JFrame pFrame = new ProfileFrame(mc);
+			FreemindManager.getInstance().setProfileFrame(pFrame);
+		}
 	}
 	
 	class LogoPanel extends JPanel{
@@ -367,7 +303,7 @@ public class LoginFrame extends JFrame{
 		}
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			g.drawImage(icon.getImage(), 0, 0, 384, 107, null);
+			g.drawImage(icon.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
 		}
 		
 	}
@@ -454,12 +390,15 @@ public class LoginFrame extends JFrame{
 			this.hint = hint;
 			super.addFocusListener(this);
 			
-			setColumns(24);
+			setColumns(18);
+			setBackground(new Color(0, 0, 0, 0));
+//			setFocusable(false);.
 			
-			this.setBorder(new LineBorder(new Color(234, 234, 234), 1, true));
+//			this.setBorder(new LineBorder(new Color(234, 234, 234), 1, true));
 //			this.setBorder(new LineBorder(Color.black, 1, true));
-			this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(),
-					BorderFactory.createEmptyBorder(2, 0, 2, 5)));
+//			this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(),
+//					BorderFactory.createEmptyBorder(2, 0, 2, 5)));
+			this.setBorder(new EmptyBorder(5, 10, 5, 10));
 
 		}
 
@@ -489,5 +428,107 @@ public class LoginFrame extends JFrame{
 			String typed = super.getText();
 			return typed.equals(hint) ? "" : typed;
 		}
+		
+		public void paint(Graphics g) {
+			// TODO Auto-generated method stub
+			g.drawImage(fManager.loginInputBar, 0, 0, this.getWidth(),
+					this.getHeight(), null);
+			super.paint(g);
+		}
 	}
+	
+	class HintTextFieldPassword extends JTextField implements FocusListener {
+
+		private final String hint;
+		private String realPw = "";
+		String str;
+		
+		public HintTextFieldPassword(final String hint) {
+			super(hint);
+			Font f = new Font(hint, Font.ITALIC, 10);
+			setFont(f);
+			this.setBackground(new Color(234, 234, 234));
+			setForeground(Color.GRAY);
+			this.hint = hint;
+			super.addFocusListener(this);
+			setColumns(18);
+			
+//			setEchoChar(');
+			setBackground(new Color(0, 0, 0, 0));
+//			setFocusable(false);.
+			
+//			this.setBorder(new LineBorder(new Color(234, 234, 234), 1, true));
+//			this.setBorder(new LineBorder(Color.black, 1, true));
+//			this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(),
+//					BorderFactory.createEmptyBorder(2, 0, 2, 5)));
+			this.setBorder(new EmptyBorder(5, 10, 5, 10));
+			
+			addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+						return;
+					}
+					
+					realPw += e.getKeyChar();
+					
+					str = "";
+					for(int i = 0; i < realPw.length(); i++){
+						str += "*";
+					}
+					setText(str);
+				}					
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+						if(realPw.length() > 0){
+							realPw = realPw.substring(0, realPw.length() - 1);
+							return;
+						}
+					}
+				}
+			});
+		}
+
+		@Override
+		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾úÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ® ±Û¾¾¸¦ Áö
+			if (this.getText().isEmpty()) {
+				super.setText("");
+			}
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ ÀÒÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ®¸¦ ÀûÀ½
+			if (this.getText().isEmpty()) {
+				Font f = new Font(hint, Font.ITALIC, 10);
+				setFont(f);
+
+				setForeground(Color.GRAY);
+				super.setText(hint);
+			} else {
+				setForeground(Color.BLACK);
+			}
+		}
+
+		@Override
+		public String getText() {
+			String typed = super.getText();
+			return typed.equals(hint) ? "" : realPw;
+		}
+		
+		public void paint(Graphics g) {
+			// TODO Auto-generated method stub
+			g.drawImage(fManager.loginInputBar, 0, 0, this.getWidth(),
+					this.getHeight(), null);
+			super.paint(g);
+		}
+	}
+	
 }

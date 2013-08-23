@@ -79,6 +79,7 @@ import javax.swing.text.html.HTMLEditorKit;
 import org.jibx.runtime.IUnmarshallingContext;
 import org.jibx.runtime.JiBXException;
 
+import freemind.Frame.SignFrame;
 import freemind.NodeType.SlideType;
 import freemind.common.XmlBindingTools;
 import freemind.controller.AddQuestionNode;
@@ -430,7 +431,7 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
 	
 	if(FIRST == 1){ // 클래스를 두번 만듬, 한번만 호출하게
 		JFrame lFrame = new LoginFrame(this);
-		//new LoggedInFrame(this);
+//		new SignFrame();
 		FIRST++;
 	}
     // create action factory:
