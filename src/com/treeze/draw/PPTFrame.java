@@ -23,11 +23,11 @@ public class PPTFrame extends JFrame {
 		
 		pptPanel = new PPTPanel(Var.PPT_ADDR + "ppt.png");
 		setBounds(500, 100, 600, 500);
-		setVisible(true);
+		
 		pptPanel.setVisible(true);
 		this.add(pptPanel);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+		setVisible(true);
 	}
 
 

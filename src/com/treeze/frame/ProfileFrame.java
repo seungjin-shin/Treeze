@@ -13,8 +13,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,17 +40,23 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.xstream.io.json.AbstractJsonWriter.Type;
+import com.treeze.Abstract.ImgBtn;
 import com.treeze.data.ArrayClass;
 import com.treeze.data.ArrayLecture;
 import com.treeze.data.ArrayMindMap;
 import com.treeze.data.ClassInfo;
 import com.treeze.data.Lecture;
 import com.treeze.data.Mindmap;
+import com.treeze.data.TreezeStaticData;
+import com.treeze.data.User;
 import com.treeze.downloadthread.*;
+import com.treeze.frame.TicketWriteFrame.WriteBtn;
 
 public class ProfileFrame extends JFrame {
 
@@ -56,10 +65,11 @@ public class ProfileFrame extends JFrame {
 	JPanel lectureListPanel;
 	LogoPanel logoPanel;
 	ImageIcon imgIcon;
+	User user;
 	ArrayList<ClassInfo> classList = new ArrayList<ClassInfo>();
-	NameLabel nameLabel = new NameLabel("½Å ½ÂÁø");
-	PersonalInfo personalInfo = new PersonalInfo("ÇÑ¼º´ëÇÐ±³ ÄÄÇ»ÅÍ°øÇÐ°ú", "´ëÇÐ»ý",
-			"°æ±âµµ ÆòÅÃ½Ã");
+	NameLabel nameLabel = new NameLabel("½Å½Â");
+	PersonalInfo personalInfo = new PersonalInfo("ÇÑ¼º´ëÇÐ±³ ÄÄ°ø", "ÇÐ»ý",
+			"°æ±âµµ ÆòÅÃ");
 	ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
 	ListPanel listPanel;
 	PicturePanel picturePanel = new PicturePanel(
@@ -69,8 +79,8 @@ public class ProfileFrame extends JFrame {
 	GridBagConstraints gbc = new GridBagConstraints();
 	LectureHead lectureHead;
 	Lecture lecture;
-	JPanel grid = new JPanel();
-
+	static JPanel grid = new JPanel();
+	JPanel fullPanel = new JPanel();
 	final int NETWORK_FLAG_GET_LECTURELIST = 0;
 	final int NETWORK_FLAG_GET_CLASSLIST = 1;
 	final int NETWORK_FLAG_GET_MINDMAP = 2;
@@ -84,25 +94,27 @@ public class ProfileFrame extends JFrame {
 	ClassInfo classInfo;
 	public ProfileFrame() {
 		// TODO Auto-generated constructor stub
-		this.setSize(1000, 600);
+		this.setSize(1100, 600);
 		this.setLocation(300, 200);
 
 		this.getContentPane().setBackground(new Color(141, 198, 63));
+	
 		// this.setResizable(false);
-		imgIcon = new ImageIcon("/Users/Kunyoung/Desktop/treezelogo.png");
+		//imgIcon = new ImageIcon("/Users/Kunyoung/Desktop/treezelogo.png");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		listPanel = new ListPanel();
 		lecture = new Lecture();
-		lecture.setLectureName("ÀÓº£µðµå½Ã½ºÅÛ");
-		lecture.setProfessorName("ÀÌ¹Î¼®");
+		lecture.setLectureName("ï¿½Óºï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½");
+		lecture.setProfessorName("ï¿½Ì¹Î¼ï¿½");
 		gbc.fill = GridBagConstraints.BOTH;
 
-		// C:\Users\ÄÄ°ø\Desktop
-		setLayout(gbl);
-
+		// C:\Users\ï¿½Ä°ï¿½\Desktop
+		setLayout(new BorderLayout());
+		this.add(fullPanel);
 		logoPanel = new LogoPanel();
-
+		fullPanel.setLayout(gbl);
+		fullPanel.setBackground(TreezeStaticData.TREEZE_BG_COLOR);
 		btnPanel = new BtnPanel();
 		profilePanel = new JPanel();
 
@@ -119,10 +131,12 @@ public class ProfileFrame extends JFrame {
 
 		lectureListPanel.setBorder(new LineBorder(Color.BLACK, 2, false));
 
-		addGrid(gbl, gbc, logoPanel, 0, 0, 1, 1, 1, 3, this);
-		addGrid(gbl, gbc, btnPanel, 1, 1, 1, 1, 5, 1, this);
-		addGrid(gbl, gbc, profilePanel, 0, 2, 1, 1, 1, 15, this);
-		addGrid(gbl, gbc, lectureListPanel, 1, 2, 1, 1, 5, 15, this);
+		addGrid(gbl, gbc, logoPanel,        0, 0, 1, 1, 1, 3, fullPanel);
+		insets.set(10, 20, 10, 20);
+		addGrid(gbl, gbc, btnPanel,         1, 1, 1, 1, 5, 1, fullPanel);
+		
+		addGrid(gbl, gbc, profilePanel,     0, 2, 1, 1, 1, 15, fullPanel);
+		addGrid(gbl, gbc, lectureListPanel, 1, 2, 1, 1, 5, 15, fullPanel);
 
 		addGrid(gbl, gbc, picturePanel, 0, 0, 1, 1, 1, 3, profilePanel);
 		addGrid(gbl, gbc, nameLabel, 0, 1, 1, 1, 1, 0, profilePanel);
@@ -133,21 +147,22 @@ public class ProfileFrame extends JFrame {
 		insets.left = 10;
 		insets.top = 0;
 		insets.bottom = 0;
-		JLabel noPanel = new JLabel("°ú ¸ñ ¸í", JLabel.CENTER);
-		JLabel subjectPanel = new JLabel("±³  ¼ö", JLabel.CENTER);
-		JLabel whritePane = new JLabel("»ó  ÅÂ", JLabel.CENTER);
+		JLabel noPanel = new JLabel("N o ", JLabel.CENTER);
+		JLabel subjectPanel = new JLabel("°ú ¸ñ ¸í", JLabel.CENTER);
+		JLabel whritePane = new JLabel("±³ ¼ö ¸í", JLabel.CENTER);
 		lectureHead.setLayout(gbl);
-		addGrid(gbl, gbc, noPanel, 0, 0, 1, 1, 1, 1, lectureHead);
+		addGrid(gbl, gbc, noPanel, 0, 0, 1, 1, 11, 1, lectureHead);
 		addGrid(gbl, gbc, subjectPanel, 1, 0, 1, 1, 1, 1, lectureHead);
 		addGrid(gbl, gbc, whritePane, 2, 0, 1, 1, 1, 1, lectureHead);
 		lectureListPanel.setLayout(gbl);
 
-		// lecture List ÆÐ³Î
+		// lecture List ï¿½Ð³ï¿½
 		addGrid(gbl, gbc, lectureHead, 1, 1, 1, 1, 1, 1, lectureListPanel);
 		addGrid(gbl, gbc, listPanel, 1, 2, 1, 1, 1, 20, lectureListPanel);
 
 		grid.setBackground(new Color(0, 0, 0, 0));
-		grid.setLayout(new GridLayout(100, 1));
+		grid.setLayout(new GridLayout(100, 1, 0, 5));
+		//grid.setLayout(new GridLayout(100, 1));
 		// grid.add(item1);
 
 		JPanel dumy = new JPanel();
@@ -156,7 +171,23 @@ public class ProfileFrame extends JFrame {
 		listPanel.getViewport().add(grid, null);
 		NetworkThread networkThread = new NetworkThread();
 		networkThread.start();
+	
 		this.setVisible(true);
+		grid.addMouseWheelListener(new MouseWheelListener() {
+			
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent arg0) {
+				// TODO Auto-generated method stub
+//				fullPanel.setVisible(false);
+//				fullPanel.setVisible(true);
+//				setVisible(true);
+				
+				//wheelRotation
+				listPanel.getVerticalScrollBar().setValue(listPanel.getVerticalScrollBar().getValue()+arg0.getWheelRotation());
+				//arg0.getWheelRotation();
+			}
+		});
+		
 	}
 
 	private void addGrid(GridBagLayout gbl, GridBagConstraints gbc,
@@ -174,7 +205,7 @@ public class ProfileFrame extends JFrame {
 		gbl.setConstraints(c, gbc);
 
 		if (c == picturePanel) {
-			gbc.insets.left = -100;
+			gbc.insets.left = 0;
 
 		}
 
@@ -192,17 +223,17 @@ public class ProfileFrame extends JFrame {
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
-			g.drawImage(imgIcon.getImage(), 10, 10, this.getWidth() - 10,
+			g.drawImage(TreezeStaticData.LOGO_IMG, 10, 10, this.getWidth() - 10,
 					this.getHeight() - 10, null);
 		}
 	}
 
 	class PicturePanel extends JPanel {
-		ImageIcon imgIcon;
+		//ImageIcon imgIcon;
 
 		public PicturePanel(String imgPath) {
 			// TODO Auto-generated constructor stub
-			imgIcon = new ImageIcon(imgPath);
+			//imgIcon = new ImageIcon(imgPath);
 			this.setBorder(new EmptyBorder(20, 20, 20, 20));
 		}
 
@@ -211,7 +242,7 @@ public class ProfileFrame extends JFrame {
 			// TODO Auto-generated method stub
 			super.paint(g);
 
-			g.drawImage(imgIcon.getImage(), 0, 0, this.getWidth(),
+			g.drawImage(TreezeStaticData.PROFILE_DEFAULT_IMG, 0, 0, this.getWidth(),
 					this.getHeight(), null);
 
 		}
@@ -273,25 +304,21 @@ public class ProfileFrame extends JFrame {
 			g2.setStroke(new BasicStroke(3));
 			g2.setColor(Color.WHITE);
 			g2.drawLine(0, 0, this.getWidth(), 0);
-			g2.drawLine(0, this.getHeight(), this.getWidth(), this.getHeight());
+			g2.drawLine(0, this.getHeight()-1, this.getWidth(), this.getHeight()-1);
 		}
 
 	}
 
 	class BtnPanel extends JPanel {
-		JButton profileBtn = new JButton();
-		JButton lectureBtn = new JButton();
-		JButton downBtn = new JButton();
-		JButton logoutBtn = new JButton();
-		ImageIcon imgIcon, resizeIcon;
-		Image img, scaledImage;
-		BufferedImage imageBuff;
-
+		ProfileBtn profileBtn  = new ProfileBtn(TreezeStaticData.WRITE_BTN,TreezeStaticData.WRITE_PRESS_BTN,TreezeStaticData.WRITE_ENTER_BTN);
+		ProfileBtn lectureBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,TreezeStaticData.WRITE_PRESS_BTN,TreezeStaticData.WRITE_ENTER_BTN);
+		ProfileBtn downBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,TreezeStaticData.WRITE_PRESS_BTN,TreezeStaticData.WRITE_ENTER_BTN);
+		ProfileBtn logoutBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,TreezeStaticData.WRITE_PRESS_BTN,TreezeStaticData.WRITE_ENTER_BTN);
+		
 		public BtnPanel() {
 			// TODO Auto-generated constructor stub
-			imgIcon = new ImageIcon("C:\\Users\\Kunyoung\\Desktop\\menubar.png");
-			img = imgIcon.getImage();
-			// setBtnImg();
+			
+			
 			add(profileBtn);
 			add(lectureBtn);
 			add(downBtn);
@@ -300,28 +327,33 @@ public class ProfileFrame extends JFrame {
 
 		}
 
-		void setBtnImg(int whdth, int height) {
-			// downBtn.setSize(this.getWidth()/10, this.getHeight()/2);
-			scaledImage = img.getScaledInstance(whdth, height,
-					Image.SCALE_SMOOTH);
-			imageBuff = new BufferedImage(whdth, height,
-					BufferedImage.TYPE_INT_RGB);
-			Graphics g = imageBuff.createGraphics();
-			g.drawImage(scaledImage, 0, 0, new Color(0, 0, 0), null);
-			g.dispose();
-			resizeIcon = new ImageIcon(scaledImage);
-			profileBtn.setIcon(resizeIcon);
-			lectureBtn.setIcon(resizeIcon);
-			downBtn.setIcon(resizeIcon);
-			logoutBtn.setIcon(resizeIcon);
-
-		}
-
-		@Override
-		public void paint(Graphics g) {
-			// TODO Auto-generated method stub
-			super.paint(g);
-
+	
+		class ProfileBtn extends ImgBtn{
+			
+			public ProfileBtn(final Image defaultImg, final Image pressImg, final Image enterImg) {
+				// TODO Auto-generated constructor stub
+				super(defaultImg, pressImg, enterImg);
+				
+				
+			}
+			@Override
+			public void paint(Graphics g) {
+				// TODO Auto-generated method stub
+				super.paint(g);
+				
+				
+				
+			}
+			@Override
+			protected void Action(JButton jbtn){
+				if(profileBtn==jbtn){
+					networkFlag = NETWORK_FLAG_GET_LECTURELIST;
+					 NetworkThread networkThread = new NetworkThread();
+					 networkThread.start();
+				}
+				
+				
+			}
 		}
 	}
 
@@ -347,28 +379,34 @@ public class ProfileFrame extends JFrame {
 	class LectureListItem extends JPanel {
 		JLabel lectureNm;
 		JLabel professorNm;
-		JLabel stateOfLecture;
+		ImgPanel stateOfLecture;
 		Lecture lecture;
 
 		public LectureListItem(final Lecture lecture) {
 			// TODO Auto-generated constructor stub
 			this.lecture = lecture;
+			this.setBorder(new EmptyBorder(5, 0, 5, 0));
 			lectureNm = new JLabel(lecture.getLectureName(), JLabel.CENTER);
 			professorNm = new JLabel(lecture.getProfessorName(), JLabel.CENTER);
+//			lectureNm.setFont(new Font("Serif", Font.ITALIC, 18));
+//			professorNm.setFont(new Font("Serif", Font.ITALIC, 18));
 			if (lecture.getStateOfLecture()) {
-				stateOfLecture = new JLabel("¿Â¶óÀÎ", JLabel.CENTER);
+				//JPanel j = new JPanel()
+				stateOfLecture = new ImgPanel(TreezeStaticData.ONLINE_IMG);
+				
 			} else {
-				stateOfLecture = new JLabel("¿ÀÇÁ¶óÀÎ", JLabel.CENTER);
+				stateOfLecture = new ImgPanel(TreezeStaticData.OFFLIN_IMG);
+				
 			}
 			this.setBackground(new Color(0, 0, 0, 0));
 			// this.add(noPanel);
 			this.setLayout(gbl);
 			insets.bottom = 5;
 			insets.top = 5;
-			addGrid(gbl, gbc, lectureNm, 0, 0, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, lectureNm, 0, 0, 1, 1, 9, 1, this);
 			addGrid(gbl, gbc, professorNm, 1, 0, 1, 1, 1, 1, this);
 			addGrid(gbl, gbc, stateOfLecture, 2, 0, 1, 1, 1, 1, this);
-
+			stateOfLecture.repaint();
 			this.addMouseListener(new MouseListener() {
 
 				@Override
@@ -391,7 +429,7 @@ public class ProfileFrame extends JFrame {
 				@Override
 				public void mouseEntered(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-
+						
 				}
 
 				@Override
@@ -433,8 +471,12 @@ public class ProfileFrame extends JFrame {
 		public ClassListItem(final ClassInfo classInstance) {
 			// TODO Auto-generated constructor stub
 			this.classInstance = classInstance;
+			this.setBorder(new EmptyBorder(5, 0, 5, 0));
 			this.setLayout(new BorderLayout());
+			this.setBackground(Color.WHITE);
 			classNm = new JLabel(classInstance.getClassName(), JLabel.CENTER);
+			classNm.setFont(new Font("Serif", Font.BOLD, 20));
+			//this.setFont(new Font("Serif", Font.BOLD, 15));
 			this.add(classNm);
 
 			this.addMouseListener(new MouseListener() {
@@ -478,14 +520,9 @@ public class ProfileFrame extends JFrame {
 					DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(
 							classId);
 					downLoadNetworkThread.start();
-					// lectureId = lecture.getLectureId();
 					networkFlag = NETWORK_FLAG_GET_MINDMAP;
 					 NetworkThread networkThread = new NetworkThread();
 					 networkThread.start();
-					// lectureHead.setVisible(false);
-					// grid.removeAll();
-					// invalidate();
-					// System.out.println(ticket.getContents());
 				}
 			});
 
@@ -509,6 +546,15 @@ public class ProfileFrame extends JFrame {
 			// this.setPreferredSize(new Dimension(0, 2000));
 			this.setBackground(Color.WHITE);
 			this.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			
+			getVerticalScrollBar().getModel().addChangeListener(new ChangeListener() {
+	
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		// TODO Auto-generated method stub
+		repaint();
+	}
+});
 
 		}
 
@@ -523,15 +569,28 @@ public class ProfileFrame extends JFrame {
 					this.getHeight() - 1);
 		}
 	}
-
+	class ImgPanel extends JPanel{
+		Image img;
+		public ImgPanel(Image img) {
+			// TODO Auto-generated constructor stub
+			this.img = img;
+		}
+		@Override
+		public void paint(Graphics g) {
+			// TODO Auto-generated method stub
+			super.paint(g);
+			g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
+			
+		}
+	}
 	class NetworkThread extends Thread {
 
 		// HttpResponse response;
-		InputStream is;
+		//InputStream is;
 		URL url = null;
-		String ip ="223.194.158.55";
+		String ip =TreezeStaticData.IP;
 		// Message msg = new Message();
-
+		
 		@Override
 		public void run() {
 
@@ -592,6 +651,8 @@ public class ProfileFrame extends JFrame {
 
 				//
 				e.printStackTrace();
+				 NetworkThread networkThread = new NetworkThread();
+				 networkThread.start();
 
 			}
 
@@ -600,16 +661,34 @@ public class ProfileFrame extends JFrame {
 	}
 
 	void updateGetallLectureList() {
+		
 		java.lang.reflect.Type type = new TypeToken<ArrayLecture>() {
 		}.getType();
 		ArrayLecture jonResultlecturelist = (ArrayLecture) gson.fromJson(
 				sbResult.toString(), (java.lang.reflect.Type) type);
+		
 		lectureList = jonResultlecturelist.getLectures();
 		grid.removeAll();
+		insets.set(5, 0, 5, 0);
 		for (int i = 0; i < lectureList.size(); i++) {
-			grid.add(new LectureListItem(lectureList.get(i)));
+			LectureListItem lectureListItem = new LectureListItem(lectureList.get(i));
+			grid.add(lectureListItem);
+			
 		}
-		invalidate();
+	//	grid.invalidate();
+		//setVisible(true);
+		//grid.setVisible(false);
+		//grid.setVisible(true);
+		//grid.setVisible(false);
+		//grid.setVisible(true);
+//		grid.getParent().setVisible(false);
+//		grid.getParent().setVisible(true);
+		//fullPanel.setVisible(false);
+		//fullPanel.setVisible(true);
+		//fullPanel.repaint();
+		fullPanel.setVisible(false);
+		fullPanel.setVisible(true);
+		setVisible(true);
 	}
 
 	void updateGetallClassList() {
@@ -634,7 +713,7 @@ public class ProfileFrame extends JFrame {
 		Mindmap jsonResultMindmaps = (Mindmap) gson.fromJson(
 				sbResult.toString(), (java.lang.reflect.Type) type);
 		new MindMapMain(jsonResultMindmaps.getMindmap().getMindmapXML(),classInfo);
-		//System.out.println(jsonResultMindmap.getMindmapXML());
+		
 	}
 }
 // http://manic.tistory.com/99

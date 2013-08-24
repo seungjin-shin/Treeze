@@ -4,42 +4,57 @@ package com.treeze.data;
 
 
 public class Ticket extends MindNode {
-	private int classId;
-	private String position;
-	private String contents;
-	private int ticketNumber;
-	private String userName;
-	private String ticketTitle;
+	    private long id;
+     	private long classId;
+   
+     	
+     	private String parentNodeId;
+     	private String contents;
+     	private String userName;
+     	
+     	public long getId() {
+     		return id;
+     	}
+     	
+     	public void setId(long id) {
+     		this.id = id;
+     	}
+     	
+     	public String getParentNodeId() {
+     		return parentNodeId;
+     	}
+     	
+     	public void setParentNodeId(String parentNodeId) {
+     		this.parentNodeId = parentNodeId;
+     	}
+     	
+     	public String getUserName() {
+     		return userName;
+     	}
+     	
+     	public void setUserName(String userName) {
+     		this.userName = userName;
+     	}
 	
 
 	public Ticket() {
 		// TODO Auto-generated constructor stub
+		
 	}
 
-	public Ticket(MindNode parent, String title, String contents,String userName) {
+	public Ticket(MindNode parent,  String nodeID ,String contents,String userName) {
 		// TODO Auto-generated constructor stub
-		this.nodeStr = title;
-		this.ticketTitle = title;
-		this.ticketNumber = -1;
+		
 		this.contents = contents;
 		this.parentNode = parent;
 		this.userName = userName;
-//		if (!parent.isExistTicket()) {
-//			parent.setExistTicket(true);
-//			parent.setScaleX(parent.getScaleX() + 60);
-//			parent.setendX();
-//		}
+		this.parentNode = parent;
+		parentNode.getChildeNodes().add(this);
+		this.nodeID = nodeID;
 		
-		parentNode.childeNodes.add(this);
-		this.absoluteIndex = parent.ChildCount;
+		this.id =Integer.parseInt(nodeID); 
+		
 		parent.ChildCount++;
-		if (parent.equals(parent.getRoot())) {
-			position = (parent.childeNodes.size() - 1) + "";
-		} else {
-			position = parent.getPosition() + "/"
-					+ (parent.childeNodes.size() - 1);
-		}
-		
 	}
 
 	public String getuserName() {
@@ -50,13 +65,7 @@ public class Ticket extends MindNode {
 		this.userName = userName;
 	}
 
-	public int getTicketNumber() {
-		return ticketNumber;
-	}
-
-	public void setTicketNumber(int ticketNumber) {
-		this.ticketNumber = ticketNumber;
-	}
+	
 
 	public String getContents() {
 		return contents;
@@ -66,19 +75,13 @@ public class Ticket extends MindNode {
 		this.contents = contents;
 	}
 
-	public String getPosition() {
-		return position;
-	}
 
-	public void setPosition(String position) {
-		this.position = position;
-	}
 
-	public int getClassId() {
+	public long getClassId() {
 		return classId;
 	}
 
-	public void setClassId(int classId) {
+	public void setClassId(long classId) {
 		this.classId = classId;
 	}
 

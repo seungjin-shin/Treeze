@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.xstream.io.json.AbstractJsonWriter.Type;
 import com.treeze.data.ArrayUploadedFile;
+import com.treeze.data.TreezeStaticData;
 import com.treeze.data.UploadedFile;
 
 public class DownLoadNetworkThread extends Thread {
@@ -42,26 +43,27 @@ public class DownLoadNetworkThread extends Thread {
 		public void run() {
 
 			HttpURLConnection connection;
+			String ip = TreezeStaticData.IP;
 			sbResult.delete(0, sbResult.capacity());
 			try {
 				if (flag == NETWORK_UPLOADED_FILEINFO) {
 					url = new URL(
-							"http://113.198.84.80:8080/treeze/img/?classId="
+							"http://"+ ip+":8080/treeze/img/?classId="
 									+ classId);
 				} else if (flag == NETWORK_UPLOADED_IMG) {
 					for (int i = 0; i < uploadedFileList.size(); i++) {
 
 						// File file = new
 						// File("http://61.43.139.10:8080/treeze/img/"+uploadedFileList.get(i).getId());
-						url = new URL("http://113.198.84.80:8080/treeze/img/"
+						url = new URL("http://"+ip+":8080/treeze/img/"
 								+ uploadedFileList.get(i).getId());
 						connection = (HttpURLConnection) url.openConnection();
-						File SDCardRoot = new File("/Users/Kunyoung/Desktop/TreezeIMG");
-
+						File imgPath =new File(System.getProperty("user.dir"), "/TreezeImgs");
+						TreezeStaticData.PPT_IMG_PATH = imgPath.getPath();
 						// SDCardRoot.mkdir();
-						SDCardRoot.mkdirs();
+						imgPath.mkdirs();
 						// + "/Trezee/" + classinfo.getClassId()
-						File file = new File(SDCardRoot, uploadedFileList
+						File file = new File(imgPath, uploadedFileList
 								.get(i).getFileName());
 						FileOutputStream fileOutput = new FileOutputStream(file);
 						InputStream inputStream = connection.getInputStream();

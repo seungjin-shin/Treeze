@@ -2,16 +2,29 @@ package com.treeze.data;
 
 
 public class User  {
-	
+	private  static User user;
 	public static final String STUDENT = "student";
 	public static final String PROFESSOR = "professor";
-	
+	 
 	private int userImgId;  
 	private String userType;
+	private int identificationNumber;
 	private String userName;
 	private String userEmail;
-	private int password;
-	
+	private String password;
+	private User(){}
+	public static User getInstance() {
+		if(user ==null){
+			user =new User();
+		}
+		return user;
+	}
+	public int getIdentificationNumber() {
+		return identificationNumber;
+	}
+	public void setIdentificationNumber(int identificationNumber) {
+		this.identificationNumber = identificationNumber;
+	}
 	public String getUserEmail() {
 		return userEmail;
 	}
@@ -36,10 +49,10 @@ public class User  {
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
-	public int getPassword() {
+	public String getPassword() {
 		return password;
 	}
-	public void setPassword(int password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 	

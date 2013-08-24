@@ -1,5 +1,4 @@
 package com.treeze.frame;
-
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,11 +10,24 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -28,79 +40,250 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-public class LoginPageFrame extends JFrame {
+import org.apache.http.client.ClientProtocolException;
+
+import com.treeze.Abstract.ImgBtn;
+import com.treeze.data.TreezeStaticData;
+import com.treeze.data.User;
+
+
+
+
+public class LoginPageFrame extends JFrame{
+	Color treezeColor = new Color(141, 198, 63);
+	Color noColor = new Color(0, 0, 0, 0);
+	Insets insets = new Insets(10, 10, 10, 10);
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
-	LoginPagePanel loginPagePanel = new LoginPagePanel();
-	loginPanel loginPanel = new loginPanel();
-	Insets insets = new Insets(20, 20, 20, 20);
-	ImageIcon loginLogoImg;
-	LoginLogo loginlogo;
-	SignUpPanel signUpPanel = new SignUpPanel();
-
-	final int FRAME_WIDTH = 1200;
-	final int FRAME_HEIGHT = 700;
-
+	
+	MainPanel mPanel = new MainPanel();
+//	LogoPanel lPanel = new LogoPanel(Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png"));
+	LogoPanel lPanel = new LogoPanel(TreezeStaticData.LOGO_IMG);
+//	LoginPanel loPanel = new LoginPanel(Toolkit.getDefaultToolkit().getImage("images/LoginInputBar.png"),
+//			Toolkit.getDefaultToolkit().getImage("images/login.png"));
+	LoginPanel loPanel; 
+	SignPanel sPanel = new SignPanel();
+	RightPanel rPanel = new RightPanel();
+	
+	JTextField emailTf = new HintTextField("e-mail address");;
+	final JTextField pwTf = new HintTextFieldPassword("password");;
+	
+	
+	
 	public LoginPageFrame() {
-		// TODO Auto-generated constructor stub
-		this.getContentPane().setBackground(new Color(141, 198, 63));
-		gbc.fill = GridBagConstraints.BOTH;
+	
+		this.getContentPane().setBackground(treezeColor);
+		this.setSize(647, 394);
 		this.setLayout(gbl);
+		this.setLocation(400, 100);
+		loPanel = new LoginPanel();
+		
+		//setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		loginLogoImg = new ImageIcon("/Users/Kunyoung/Desktop/loginlogo.png");
-		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		loginlogo = new LoginLogo();
-		gbc.weightx = 1;
-		gbc.weighty = 1;
-		gbc.insets = new Insets(30, 30, 30, 30); // ∆–≥Œ margin º≥¡§ 30
-		gbl.setConstraints(loginPagePanel, gbc);
-		this.add(loginPagePanel);
-		loginPagePanel.setLayout(gbl);
+		gbc.fill = GridBagConstraints.BOTH;
+		setInsets(40, 45, 120, 120);
+		addGrid(gbl, gbc, lPanel, 0, 0, 1, 1, 1, 30, mPanel);
 
-		addGrid(gbl, gbc, new JLabel(), 0, 0, 1, 1, 2, 1, loginPagePanel);
-		addGrid(gbl, gbc, loginPanel, 1, 0, 1, 1, 4, 1, loginPagePanel);
-		addGrid(gbl, gbc, signUpPanel, 2, 0, 1, 1, 2, 1, loginPagePanel);
-		loginPanel.setLayout(gbl);
+		setLoginPanel();
 
-		addGrid(gbl, gbc, new JLabel(), 0, 0, 1, 1, 1, 2, loginPanel);
-		insets.left = 100; // ∑Œ∞Ì ¿ÃπÃ¡ˆ margin ¡‹
-		insets.right = 100;
-		addGrid(gbl, gbc, loginlogo, 0, 1, 1, 1, 1, 5, loginPanel);
-		insets.left = 20; // margin ¿Áº≥
-		insets.right = 20;
-		addGrid(gbl, gbc, new JLabel(), 0, 2, 1, 1, 1, 3, loginPanel);
-		insets.bottom = 5;
-		insets.top = 5;
+		setInsets(0, 0, 120, 120);
+		addGrid(gbl, gbc, loPanel, 0, 1, 1, 1, 1, 4, mPanel);
+		setInsets(0, 20, 120, 120);
+		addGrid(gbl, gbc, sPanel, 0, 2, 1, 1, 1, 4, mPanel);
+		setInsets(0, 5, 120, 120);
+		addGrid(gbl, gbc, rPanel, 0, 3, 1, 1, 1, 1, mPanel);
+		
+		setInsets(10, 10, 10, 10);
+		addGrid(gbl, gbc, mPanel, 0, 0, 1, 1, 1, 1, this);
 
-		addGrid(gbl, gbc, new HintTextField("e-mail address"), 0, 3, 1, 1, 1,
-				1, loginPanel);
-		addGrid(gbl, gbc, new HintTextField("password"), 0, 4, 1, 1, 1, 1,
-				loginPanel);
-		addGrid(gbl, gbc, new JButton("Sign in"), 0, 5, 1, 1, 1, 1, loginPanel);
-		addGrid(gbl, gbc, new JLabel(), 0, 6, 1, 1, 1, 2, loginPanel);
-
-		loginPagePanel.setVisible(true);
-		this.setVisible(true);
+		setVisible(true);
 	}
-
-	private void addGrid(GridBagLayout gbl, GridBagConstraints gbc,
-			Component c, int gridx, int gridy, int gridwidth, int gridheight,
+	
+	public void setLoginPanel(){
+		LoginBtn loginBtn;
+			pwTf.addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent e) {
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if(e.getKeyCode() == KeyEvent.VK_ENTER){
+						pushLoginBtn();
+					}
+				}
+			});
+			
+			
+			loginBtn = new LoginBtn(TreezeStaticData.LOGIN_BTN, TreezeStaticData.LOGIN_PRESS_BTN, TreezeStaticData.LOGIN_PRESS_BTN);
+			loginBtn.setBackground(new Color(0, 0, 0, 0));
+			loginBtn.setBorderPainted(false);
+			loginBtn.setContentAreaFilled(false);
+			loginBtn.setFocusable(false);
+			//loginBtn.setBorder(null);
+			loginBtn.addFocusListener(new FocusListener() {
+				
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					
+				}
+				
+				@Override
+				public void focusGained(FocusEvent arg0) {
+					pwTf.requestFocus();
+					
+				}
+			});
+			
+			
+			loginBtn.setBorder(BorderFactory.createCompoundBorder(loginBtn.getBorder(),
+					BorderFactory.createEmptyBorder(1, 5, 1, 5)));
+			setInsets(30, 10, 0, 15);
+//			setInsets(t, b, l, r)
+			addGrid(gbl, gbc, emailTf,  0, 0, 1, 1, 7, 5, loPanel);
+			setInsets(0, 30, 0, 15);
+			addGrid(gbl, gbc, pwTf,     0, 1, 1, 1, 7, 5, loPanel);
+			setInsets(30, 30, 10, 0);
+			addGrid(gbl, gbc, loginBtn, 1, 0, 1, 2, 5, 5, loPanel);
+	}
+	
+	
+	
+	public void setInsets(int t, int b, int l, int r){
+		insets.top = t;
+		insets.bottom = b;
+		insets.left = l;
+		insets.right = r;
+	}
+	private void addGrid(GridBagLayout gbl, GridBagConstraints gbc,Component c, int gridx, int gridy, int gridwidth, int gridheight,
 			int weightx, int weighty, Container container) {
-		gbc.gridx = gridx; // ∏Ó «‡
-		gbc.gridy = gridy; // ∏Ó ø≠
-		gbc.gridwidth = gridwidth; // «‡ ∏Ó∞≥∏¶ ¬˜¡ˆ «“¡ˆ
-		gbc.gridheight = gridheight; // ø≠ ∏Ó∞≥∏¶ ¬˜¡ˆ «“¡ˆ
-		gbc.weightx = weightx; // «‡≈©±‚ ∫Ò¿≤
-		gbc.weighty = weighty; // ø≠ ≈©±‚ ∫Ò¿≤
+		gbc.gridx = gridx;
+		gbc.gridy = gridy;
+		gbc.gridwidth = gridwidth;
+		gbc.gridheight = gridheight;
+		gbc.weightx = weightx;
+		gbc.weighty = weighty;
 
 		gbc.insets = insets;
 
 		gbl.setConstraints(c, gbc);
-
 		container.add(c);
 	}
+	
+	class RightPanel extends JPanel{
+		JLabel rightLb = new JLabel("Treeze @ 2013");
+		Font sFont = new Font("Serif", Font.PLAIN, 8);
+		public RightPanel() {
+			rightLb.setForeground(Color.white);
+			rightLb.setFont(sFont);
+			addGrid(gbl, gbc, rightLb, 0, 1, 1, 1, 1, 1, this);
+			setLayout(gbl);
+			setBackground(noColor);
+		}
+	}
+	
+	class SignPanel extends JPanel{
+		JLabel signUp = new JLabel("Sign Up");
+		
+		JLabel forgotPw = new JLabel("Forgot your password?");
+		public SignPanel() {
+			signUp.setForeground(Color.white);
+			signUp.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					new SignFrame();
+				}
+			});
+			forgotPw.setForeground(Color.white);
+			setInsets(0, 0, 40, 0);
+			addGrid(gbl, gbc, signUp, 0, 0, 1, 1, 1, 1, this);
+			setInsets(0, 0, 0, 40);
+			addGrid(gbl, gbc, forgotPw, 1, 0, 1, 1, 1, 1, this);
+			setLayout(gbl);
+			setBackground(noColor);
+		}
+	}
+	
+	class LoginBtn extends ImgBtn{
 
-	class LoginPagePanel extends JPanel {
+		public LoginBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void Action(JButton j) {
+			pushLoginBtn();
+		}
+		
+	}
+	
+	class LoginPanel extends JPanel{
+		public LoginPanel() {
+			this.setLayout(gbl);
+			setBackground(noColor);
+		}
+	}
+	
+	public void pushLoginBtn(){
+//		boolean loginChk = false;
+//		UploadToServer uploadToServer = new UploadToServer();
+//		loginChk = uploadToServer.signIn(emailTf.getText(), pwTf.getText());
+//		System.out.println("loginChk" + loginChk);
+////		if (loginChk) {
+//			setVisible(false);
+//			JFrame pFrame = new ProfileFrame(mc);
+//			FreemindManager.getInstance().setProfileFrame(pFrame);
+//		}
+		User user = User.getInstance();
+		user.setUserName("Ïã†ÏäπÏßÑ");
+		new ProfileFrame();
+	}
+	
+	class LogoPanel extends JPanel{
+		ImageIcon icon;
+		public LogoPanel(Image img) {
+			icon = new ImageIcon(img);
+			setBackground(noColor);
+		}
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			g.drawImage(icon.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+		}
+		
+	}
+	
+	class MainPanel extends JPanel {
 
 		protected Color shadowColor = Color.black;
 		/** Sets if it drops shadow */
@@ -112,17 +295,16 @@ public class LoginPageFrame extends JFrame {
 		protected int shadowOffset = 1;
 		/** The transparency value of shadow. ( 0 - 255) */
 		protected int shadowAlpha = 150;
-		protected int strokeSize = 2;
-		protected Dimension arcs = new Dimension(30, 30);
+		protected int strokeSize = 7;
+		protected Dimension arcs = new Dimension(50, 50);
 
-		public LoginPagePanel() {
+		public MainPanel() {
 			// TODO Auto-generated constructor stub
-			this.setBackground(new Color(0, 0, 0, 0));
-			this.setSize(10, 10);
-
+			this.setBackground(noColor);
+			this.setLayout(gbl);
 		}
 
-		protected void paintComponent(Graphics g) { // ≈◊µŒ∏Æ∏¶ µ’±€∞‘ «œ±‚¿ß«ÿ
+		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			int width = getWidth();
 			int height = getHeight();
@@ -150,50 +332,53 @@ public class LoginPageFrame extends JFrame {
 			}
 
 			// Draws the rounded opaque panel with borders.
-			graphics.setColor(Color.WHITE);
-			graphics.fillRoundRect(0, 0, width - shadowGap, height - shadowGap,
-					arcs.width, arcs.height);
-			graphics.setColor(getForeground());
+			// graphics.setColor(treezeColor); // panel color
+			// graphics.fillRoundRect(0, 0, width - shadowGap,
+			// height - shadowGap, arcs.width, arcs.height);
+			// graphics.setColor(Color.white); // round color
+			// graphics.setStroke(new BasicStroke(strokeSize));
+			// graphics.drawRoundRect(0, 0, width - shadowGap,
+			// height - shadowGap, arcs.width, arcs.height);
+
+			graphics.setColor(Color.white); 
+			graphics.fillRoundRect(0, 0, width, height, arcs.width, arcs.height);
+			graphics.setColor(treezeColor); 
 			graphics.setStroke(new BasicStroke(strokeSize));
-			graphics.drawRoundRect(0, 0, width - shadowGap, height - shadowGap,
-					arcs.width, arcs.height);
+			graphics.fillRoundRect(5, 5, width - 10, height - 10, arcs.width,
+					arcs.height);
 
 			// Sets strokes to default, is better.
 			graphics.setStroke(new BasicStroke());
 
 		}
 	}
-
-	class loginPanel extends JPanel {
-
-		public loginPanel() {
-			// TODO Auto-generated constructor stub
-			this.setBackground(new Color(0, 0, 0, 0));
-
-		}
-
-	}
-
 	class HintTextField extends JTextField implements FocusListener {
 
 		private final String hint;
 
 		public HintTextField(final String hint) {
 			super(hint);
-			Font f = new Font(hint, Font.ITALIC, 25);
+			Font f = new Font(hint, Font.ITALIC, 10);
 			setFont(f);
 			this.setBackground(new Color(234, 234, 234));
 			setForeground(Color.GRAY);
 			this.hint = hint;
 			super.addFocusListener(this);
-			this.setBorder(new LineBorder(Color.BLACK, 1, true));
-			this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(),
-					BorderFactory.createEmptyBorder(2, 20, 2, 5)));
+			
+			setColumns(18);
+			setBackground(new Color(0, 0, 0, 0));
+//			setFocusable(false);.
+			
+//			this.setBorder(new LineBorder(new Color(234, 234, 234), 1, true));
+//			this.setBorder(new LineBorder(Color.black, 1, true));
+//			this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(),
+//					BorderFactory.createEmptyBorder(2, 0, 2, 5)));
+			this.setBorder(new EmptyBorder(5, 10, 5, 10));
 
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // ∆˜ƒøΩ∫∏¶ æÚæ˙¿∏∏È Ω·¡¯ ±€ææ∞° æ¯¿∏∏È »˘∆Æ ±€ææ∏¶ ¡ˆ
+		public void focusGained(FocusEvent e) { // ÔøΩÏ≤®ÔøΩÏ©îÏ©çÏ®òÏ®çÏßù Ï©êÏ±µÏ©êÏ≤¨ÔøΩÏ®çÏ®çÏ±ï Ï©çÏ∞ºÔøΩÏ≤© ÏßπÔøΩÏ©êÏ©êÏß∏Ïßï Ï©êÏ≤©ÔøΩÏ®çÏ®çÏ±ï ÔøΩÏ≤´ÔøΩÏß∞ ÏßπÔøΩÏ©êÏ©êÏ®çÏßù ÔøΩÏ≤†
 			if (this.getText().isEmpty()) {
 				super.setText("");
 			}
@@ -201,9 +386,9 @@ public class LoginPageFrame extends JFrame {
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // ∆˜ƒøΩ∫∏¶ ¿“¿∏∏È Ω·¡¯ ±€ææ∞° æ¯¿∏∏È »˘∆Æ∏¶ ¿˚¿Ω
+		public void focusLost(FocusEvent e) { // ÔøΩÏ≤®ÔøΩÏ©îÏ©çÏ®òÏ®çÏßù ÔøΩÔøΩÔøΩÏ®çÏ®çÏ±ï Ï©çÏ∞ºÔøΩÏ≤© ÏßπÔøΩÏ©êÏ©êÏß∏Ïßï Ï©êÏ≤©ÔøΩÏ®çÏ®çÏ±ï ÔøΩÏ≤´ÔøΩÏß∞Ï®çÏßù ÔøΩÏ≤≠ÔøΩÏ©ç
 			if (this.getText().isEmpty()) {
-				Font f = new Font(hint, Font.ITALIC, 25);
+				Font f = new Font(hint, Font.ITALIC, 10);
 				setFont(f);
 
 				setForeground(Color.GRAY);
@@ -218,29 +403,107 @@ public class LoginPageFrame extends JFrame {
 			String typed = super.getText();
 			return typed.equals(hint) ? "" : typed;
 		}
+		
+		public void paint(Graphics g) {
+			// TODO Auto-generated method stub
+			g.drawImage(TreezeStaticData.LOGIN_INPUT_BAR, 0, 0, this.getWidth(),
+					this.getHeight(), null);
+			super.paint(g);
+		}
 	}
+	
+	class HintTextFieldPassword extends JTextField implements FocusListener {
 
-	class LoginLogo extends JPanel {
-		public LoginLogo() {
-			// TODO Auto-generated constructor stub
-			this.setBackground(new Color(0, 0, 0, 0));
+		private final String hint;
+		private String realPw = "";
+		String str;
+		
+		public HintTextFieldPassword(final String hint) {
+			super(hint);
+			Font f = new Font(hint, Font.ITALIC, 10);
+			setFont(f);
+			this.setBackground(new Color(234, 234, 234));
+			setForeground(Color.GRAY);
+			this.hint = hint;
+			super.addFocusListener(this);
+			setColumns(18);
+			
+//			setEchoChar(');
+			setBackground(new Color(0, 0, 0, 0));
+//			setFocusable(false);.
+			
+//			this.setBorder(new LineBorder(new Color(234, 234, 234), 1, true));
+//			this.setBorder(new LineBorder(Color.black, 1, true));
+//			this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(),
+//					BorderFactory.createEmptyBorder(2, 0, 2, 5)));
+			this.setBorder(new EmptyBorder(5, 10, 5, 10));
+			
+			addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+						return;
+					}
+					
+					realPw += e.getKeyChar();
+					
+					str = "";
+					for(int i = 0; i < realPw.length(); i++){
+						str += "*";
+					}
+					setText(str);
+				}					
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+						if(realPw.length() > 0){
+							realPw = realPw.substring(0, realPw.length() - 1);
+							return;
+						}
+					}
+				}
+			});
 		}
 
 		@Override
+		public void focusGained(FocusEvent e) { // ÔøΩÏ≤®ÔøΩÏ©îÏ©çÏ®òÏ®çÏßù Ï©êÏ±µÏ©êÏ≤¨ÔøΩÏ®çÏ®çÏ±ï Ï©çÏ∞ºÔøΩÏ≤© ÏßπÔøΩÏ©êÏ©êÏß∏Ïßï Ï©êÏ≤©ÔøΩÏ®çÏ®çÏ±ï ÔøΩÏ≤´ÔøΩÏß∞ ÏßπÔøΩÏ©êÏ©êÏ®çÏßù ÔøΩÏ≤†
+			if (this.getText().isEmpty()) {
+				super.setText("");
+			}
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) { // ÔøΩÏ≤®ÔøΩÏ©îÏ©çÏ®òÏ®çÏßù ÔøΩÔøΩÔøΩÏ®çÏ®çÏ±ï Ï©çÏ∞ºÔøΩÏ≤© ÏßπÔøΩÏ©êÏ©êÏß∏Ïßï Ï©êÏ≤©ÔøΩÏ®çÏ®çÏ±ï ÔøΩÏ≤´ÔøΩÏß∞Ï®çÏßù ÔøΩÏ≤≠ÔøΩÏ©ç
+			if (this.getText().isEmpty()) {
+				Font f = new Font(hint, Font.ITALIC, 10);
+				setFont(f);
+
+				setForeground(Color.GRAY);
+				super.setText(hint);
+			} else {
+				setForeground(Color.BLACK);
+			}
+		}
+
+		@Override
+		public String getText() {
+			String typed = super.getText();
+			return typed.equals(hint) ? "" : realPw;
+		}
+		
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
-			super.paint(g);
-			g.drawImage(loginLogoImg.getImage(), 0, 0, this.getWidth(),
+			g.drawImage(TreezeStaticData.lOGIN_INPUT_IMG, 0, 0, this.getWidth(),
 					this.getHeight(), null);
+			super.paint(g);
 		}
 	}
-
-	class SignUpPanel extends JPanel {
-		public SignUpPanel() {
-			// TODO Auto-generated constructor stub
-			this.setLayout(new BorderLayout());
-			this.setBackground(new Color(0, 0, 0, 0));
-			this.add(new JButton("Sign UP"), BorderLayout.SOUTH);
-		}
-	}
+	
 }

@@ -1,29 +1,41 @@
 package com.treeze.frame;
+
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Paint;
 import java.awt.PaintContext;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.ScrollPane;
 import java.awt.TrayIcon;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.ColorModel;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
+import javax.management.InstanceAlreadyExistsException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,12 +46,20 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+import com.treeze.Abstract.ImgBtn;
+import com.treeze.data.ClassInfo;
 import com.treeze.data.MindNode;
 import com.treeze.data.Ticket;
+import com.treeze.data.TreezeStaticData;
+import com.treeze.data.User;
+import com.treeze.frame.TicketWriteFrame.WriteBtn;
 
 public class TicketFrame extends JFrame {
 	MindNode node;
+
 	ListPanel listPanel;
 	TicketPanel ticketPanel = new TicketPanel();
 	TicketTitleLabel ticketTitleLabel;
@@ -48,19 +68,25 @@ public class TicketFrame extends JFrame {
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
 	JScrollPane jsp;
-	//JList list = new JList();
+
+	// JList list = new JList();
 	Ticket ticket;
 
 	TicketListItem item1;
-	
-	JPanel grid = new JPanel();
 
-	public TicketFrame(MindNode node) {
+	JPanel grid = new JPanel();
+	ArrayList<MindNode> nodes = new ArrayList<MindNode>();
+	ClassInfo classInfo;
+	User user;
+
+	public TicketFrame(final MindNode node, ClassInfo classInfo) {
 
 		// TODO Auto-generated constructor stub
 		this.setSize(1000, 600);
 
 		this.node = node;
+		this.classInfo = classInfo;
+		this.user = user;
 		this.getContentPane().setBackground(new Color(141, 198, 63));
 		ticketTitleLabel = new TicketTitleLabel();
 		gbc.fill = GridBagConstraints.BOTH;
@@ -69,8 +95,8 @@ public class TicketFrame extends JFrame {
 		addGrid(gbl, gbc, ticketTitleLabel, 0, 0, 1, 1, 1, 1, this);
 		insets.set(5, 20, 20, 20);
 		// insets.set(, 20, 20, 20);
-		ticket = new Ticket(node, "1", "111", "1111");
-		item1 = new TicketListItem(ticket);
+		// ticket = new Ticket(node, "1", "111", "1111");
+		// item1 = new TicketListItem(ticket);
 		addGrid(gbl, gbc, ticketPanel, 0, 1, 1, 1, 1, 20, this);
 
 		ticketPanel.setLayout(gbl);
@@ -81,13 +107,15 @@ public class TicketFrame extends JFrame {
 
 		JLabel noPanel = new JLabel("N o.", JLabel.CENTER);
 
-		JLabel subjectPanel = new JLabel("�???�?", JLabel.CENTER);
-		JLabel whritePane = new JLabel("??????", JLabel.CENTER);
-		JLabel dumy = new JLabel(); // 踰��?紐⑥������ ��린��� ���??�댄���?	
-		JButton btn = new JButton("?? �?");
-		dumy.setBackground(new Color(0, 0, 0, 0)); 
-		dumy.setBackground(Color.RED);
-		listPanel.setBackground(Color.red);
+		JLabel subjectPanel = new JLabel("Contents", JLabel.CENTER);
+		JLabel whritePane = new JLabel("Writer", JLabel.CENTER);
+		JLabel dumy = new JLabel(); // 甕곤옙占�筌��占쏙옙占쏙옙占쏙옙 占쏙옙由곤옙占쏙옙 占쏙옙占�?占쎈�占쏙옙占�
+		WriteBtn writeBtn = new WriteBtn(TreezeStaticData.WRITE_BTN,
+				TreezeStaticData.WRITE_PRESS_BTN,
+				TreezeStaticData.WRITE_ENTER_BTN);
+		dumy.setBackground(new Color(0, 0, 0, 0));
+		dumy.setBackground(TreezeStaticData.TREEZE_BG_COLOR);
+		listPanel.setBackground(TreezeStaticData.TREEZE_BG_COLOR);
 		// jsp = new JScrollPane(listPanel);
 
 		ticketHead.setBackground(new Color(0, 0, 0, 0));
@@ -97,13 +125,25 @@ public class TicketFrame extends JFrame {
 		addGrid(gbl, gbc, ticketHead, 0, 0, 2, 1, 1, 2, ticketPanel);
 		addGrid(gbl, gbc, listPanel, 0, 1, 2, 1, 1, 40, ticketPanel);
 		addGrid(gbl, gbc, dumy, 0, 2, 1, 1, 20, 1, ticketPanel);
-		insets.set(10, 20, 0, 20);
-		addGrid(gbl, gbc, btn, 1, 2, 1, 1, 1, 1, ticketPanel);
+		insets.set(10, 20, 5, 20);
+		addGrid(gbl, gbc, writeBtn, 1, 2, 1, 1, 1, 1, ticketPanel);
 		ticketHead.setLayout(gbl);
-
 		grid.setLayout(new GridLayout(100, 1));
-		grid.add(item1);
-		// grid.add(itme2);
+
+		node.getAllTicket(nodes, node);
+		System.out.println("[nodes size] = " + nodes.size());
+		for (int i = 0; i < nodes.size(); i++) {
+			grid.add(new TicketListItem((Ticket) nodes.get(i)));
+		}
+		grid.addMouseWheelListener(new MouseWheelListener() {
+
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				// TODO Auto-generated method stub
+				repaint();
+			}
+		});
+	
 		grid.setBackground(Color.WHITE);
 		addGrid(gbl, gbc, noPanel, 0, 0, 1, 1, 1, 1, ticketHead);
 		addGrid(gbl, gbc, subjectPanel, 1, 0, 1, 1, 13, 1, ticketHead);
@@ -112,6 +152,51 @@ public class TicketFrame extends JFrame {
 		listPanel.getViewport().add(grid, null);
 
 		this.setVisible(true);
+		this.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				TreezeStaticData.TICKETFRAME = null;
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 	}
 
 	class TicketList extends JFrame {
@@ -161,8 +246,8 @@ public class TicketFrame extends JFrame {
 
 	class TicketHead extends JPanel {
 		JLabel noPanel = new JLabel("N o.");
-		JLabel subjectPanel = new JLabel("��  紐�");
-		JLabel whritePane = new JLabel("�����?");
+		JLabel subjectPanel = new JLabel("Contents");
+		JLabel whritePane = new JLabel("Writer");
 
 		private void TicketHead() {
 			// TODO Auto-generated method stub
@@ -246,33 +331,48 @@ public class TicketFrame extends JFrame {
 	}
 
 	class TicketListItem extends JPanel {
-		JLabel noPanel;
-		JLabel subjectPanel;
-		JLabel whriterPane;
+		 JLabel noLabel;
+		JLabel contentsLabel;
+		 JLabel whriterLabel;
+		//JPanel noPanel;
+		//JPanel subjectPanel;
+		//JPanel whriterPane;
 		Ticket ticket;
-
+		String contentsSubStr = new String();
 		public TicketListItem(final Ticket ticket) {
 			// TODO Auto-generated constructor stub
 			this.ticket = ticket;
-			noPanel = new JLabel("1", JLabel.CENTER);
-			subjectPanel = new JLabel(ticket.getNodeStr(), JLabel.CENTER);
-			whriterPane = new JLabel(ticket.getuserName(), JLabel.CENTER);
+			noLabel = new JLabel("1", JLabel.CENTER);
+		
+			contentsLabel = new JLabel(ticket.getContents(), JLabel.CENTER);
+			whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
+			
+		
 			this.setBackground(new Color(0, 0, 0, 0));
 			// this.add(noPanel);
 			this.setLayout(gbl);
 			insets.bottom = 5;
 			insets.top = 5;
-			addGrid(gbl, gbc, noPanel, 0, 0, 1, 1, 1, 1, this);
-			addGrid(gbl, gbc, subjectPanel, 1, 0, 1, 1, 13, 1, this);
-			addGrid(gbl, gbc, whriterPane, 2, 0, 1, 1, 2, 1, this);
-
+			insets.right = 3;
+	
+	
+			addGrid(gbl, gbc, noLabel, 0, 0, 1, 1, 1, 1, this);
+	
+			addGrid(gbl, gbc, contentsLabel, 1, 0, 1, 1, 13, 1, this);
+			addGrid(gbl, gbc, whriterLabel, 2, 0, 1, 1, 1, 1, this);
+			noLabel.setSize(50, 10);
+		
 			this.addMouseListener(new MouseListener() {
 
 				@Override
 				public void mouseReleased(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-					System.out.println("flflf");
+
 					setBackground(new Color(255, 255, 255, 255));
+					System.out.println("[Ticket ID]" + ticket.getContents()
+							+ ticket.getNodeID());
+					new TicketAnswerFrame(ticket, classInfo);
+
 				}
 
 				public void mousePreswsed(MouseEvent arg0) {
@@ -303,7 +403,6 @@ public class TicketFrame extends JFrame {
 					// TODO Auto-generated method stub
 					setBackground(new Color(10, 10, 100, 100));
 
-					System.out.println(ticket.getContents());
 				}
 			});
 
@@ -327,6 +426,17 @@ public class TicketFrame extends JFrame {
 			// this.setPreferredSize(new Dimension(0, 2000));
 			this.setBackground(Color.WHITE);
 			this.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+			this.getHorizontalScrollBar().setUnitIncrement(
+					this.getHorizontalScrollBar().getBlockIncrement());
+			
+			getVerticalScrollBar().getModel().addChangeListener(new ChangeListener() {
+				
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					// TODO Auto-generated method stub
+					repaint();
+				}
+			});
 
 		}
 
@@ -342,4 +452,34 @@ public class TicketFrame extends JFrame {
 		}
 	}
 
+	class WriteBtn extends ImgBtn {
+
+		public WriteBtn(final Image defaultImg, final Image pressImg,
+				final Image enterImg) {
+			// TODO Auto-generated constructor stub
+			super(defaultImg, pressImg, enterImg);
+
+		}
+
+		@Override
+		public void paint(Graphics g) {
+			// TODO Auto-generated method stub
+			super.paint(g);
+
+		}
+
+		@Override
+		protected void Action(JButton jbtn) {
+			new TicketWriteFrame(TicketFrame.this, node, classInfo);
+
+		}
+	}
+
+	public MindNode getNode() {
+		return node;
+	}
+
+	public void setNode(MindNode node) {
+		this.node = node;
+	}
 }

@@ -1,6 +1,8 @@
 package com.treeze.data;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -15,11 +17,23 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import org.w3c.dom.Node;
+
 import com.treeze.draw.PPTFrame;
 import com.treeze.frame.TicketFrame;
 
 //http://113.198.84.74:8080/treeze/
 public class MindNode {
+	static ClassInfo classinfo;
+
+	public static ClassInfo getClassinfo() {
+		return classinfo;
+	}
+
+	public static void setClassinfo(ClassInfo classinfo) {
+		MindNode.classinfo = classinfo;
+	}
+
 	static MindNode root;
 	static MindNode now;
 	MindNode next;
@@ -31,6 +45,35 @@ public class MindNode {
 	Image img;
 	Image scaledImage;
 	BufferedImage imageBuff;
+	JButton pptBtn = new JButton();
+	JButton ticketBtn = new JButton();
+	HideBtnThread h;
+	String nodeID;
+
+	public String getNodeID() {
+		return nodeID;
+	}
+
+	public void setNodeID(String nodeID) {
+		this.nodeID = nodeID;
+	}
+
+	public JButton getPptBtn() {
+		return pptBtn;
+	}
+
+	public void setPptBtn(JButton pptBtn) {
+		this.pptBtn = pptBtn;
+	}
+
+	public JButton getTicketBtn() {
+		return ticketBtn;
+	}
+
+	public void setTicketBtn(JButton ticketBtn) {
+		this.ticketBtn = ticketBtn;
+	}
+
 	static ImageIcon rootnodeImgIcon;
 	static ImageIcon nodeImgIcon;
 	static ImageIcon nodePassedImgIcon;
@@ -75,12 +118,12 @@ public class MindNode {
 
 	}
 
-	public MindNode(String str, int x, int y) { // ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½
+	public MindNode(String nodeID, String str, int x, int y) { // ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½
 		this.nodeStr = str;
 
 		this.locateX = x;
 		this.locateY = y;
-
+		this.nodeID = nodeID;
 		// this.scaleX = str.length() * 20;
 		this.scaleY = 50;
 		setendX();
@@ -92,17 +135,97 @@ public class MindNode {
 		now = this;
 		ImgIconSet();
 		getNodeBtn().setIcon(rootnodeImgIcon);
+		pptBtn.addMouseListener(new MouseListener() {
 
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				h.getContainer().remove(getnode().getPptBtn());
+				h.getContainer().remove(getnode().getTicketBtn());
+				h.getContainer().repaint();
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				if (h.getNode() == getnode()) {
+					h.stop();
+				}
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				new PPTFrame();
+			}
+		});
+		ticketBtn.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				h.getContainer().remove(getnode().getPptBtn());
+				h.getContainer().remove(getnode().getTicketBtn());
+				h.getContainer().repaint();
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				if (h.getNode() == getnode()) {
+					h.stop();
+				}
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(classinfo.getClassName());
+				// new TicketFrame(getnode(),classinfo);
+				if (TreezeStaticData.TICKETFRAME != null) {
+					TreezeStaticData.TICKETFRAME.setVisible(false);
+					TreezeStaticData.TICKETFRAME.disable();
+				}
+				TreezeStaticData.TICKETFRAME = new TicketFrame(getnode(),
+						classinfo);
+
+			}
+		});
 	}
 
-	public MindNode(MindNode parentNode, String str, String directionstr) { // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-																			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	public MindNode(MindNode parentNode, String nodeID, String str,
+			String directionstr) { // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		// TODO Auto-generated constructor stub
 		nodeStr = str;
 		now.setNext(this);
 		this.setPrev(now);
 		this.setNow(this);
-
+		this.nodeID = nodeID;
 		// this.scaleX = str.length() * 20;
 		this.scaleY = 50;
 		if (directionstr == null) {
@@ -125,7 +248,88 @@ public class MindNode {
 		middleY = locateY + scaleY / 2;
 		endY = locateY + scaleY;
 		ImgIconSet();
+
 		getNodeBtn().setIcon(nodeImgIcon);
+		pptBtn.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				h.getContainer().remove(getnode().getPptBtn());
+				h.getContainer().remove(getnode().getTicketBtn());
+				h.getContainer().repaint();
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				if (h.getNode() == getnode()) {
+					h.stop();
+				}
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				new PPTFrame();
+			}
+		});
+		ticketBtn.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				h.getContainer().remove(getnode().getPptBtn());
+				h.getContainer().remove(getnode().getTicketBtn());
+				h.getContainer().repaint();
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				if (h.getNode() == getnode()) {
+					h.stop();
+				}
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(classinfo.getClassName());
+				// new TicketFrame(getnode(),classinfo);
+				if (TreezeStaticData.TICKETFRAME != null) {
+					TreezeStaticData.TICKETFRAME.setVisible(false);
+					TreezeStaticData.TICKETFRAME.disable();
+				}
+				TreezeStaticData.TICKETFRAME = new TicketFrame(getnode(),
+						classinfo);
+
+			}
+		});
 	}
 
 	// public static void setNav(CurrentPositionOfNav naviInfo) {
@@ -140,27 +344,26 @@ public class MindNode {
 	void ImgIconSet() {
 		imageBuff = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
 		g = imageBuff.createGraphics();
-		img = Toolkit.getDefaultToolkit().getImage("images/nodebg.png");
+		img = TreezeStaticData.NODE_BG;
 		scaledImage = img.getScaledInstance(NODE_WIDTH, NODE_HEIGHT * 2 / 3,
 				Image.SCALE_SMOOTH);
 
 		g.drawImage(scaledImage, 0, 0, new Color(0, 0, 0), null);
 		nodeImgIcon = new ImageIcon(scaledImage);
-		img = Toolkit.getDefaultToolkit().getImage("images/rootnodebg.png");
+		img = TreezeStaticData.ROOT_NODE_BG;
 		scaledImage = img.getScaledInstance(NODE_WIDTH, NODE_HEIGHT,
 				Image.SCALE_SMOOTH);
 
 		g.drawImage(scaledImage, 0, 0, new Color(0, 0, 0), null);
 		rootnodeImgIcon = new ImageIcon(scaledImage);
 
-		img = Toolkit.getDefaultToolkit().getImage(
-				"images/passedrootnodebg.png");
+		img = TreezeStaticData.PASSED_ROOT_NODE_BG;
 		scaledImage = img.getScaledInstance(NODE_WIDTH, NODE_HEIGHT,
 				Image.SCALE_SMOOTH);
 		g.drawImage(scaledImage, 0, 0, new Color(0, 0, 0), null);
 		rootnodePassedImgIcon = new ImageIcon(scaledImage);
 
-		img = Toolkit.getDefaultToolkit().getImage("images/passednodebg.png");
+		img = TreezeStaticData.PASSED_NODE_BG;
 		scaledImage = img.getScaledInstance(NODE_WIDTH, NODE_HEIGHT * 2 / 3,
 				Image.SCALE_SMOOTH);
 		g.drawImage(scaledImage, 0, 0, new Color(0, 0, 0), null);
@@ -258,7 +461,8 @@ public class MindNode {
 		else
 			this.locateX = parentNode.locateX - DISTANT - 100;
 
-		if (this.parentNodeChildCount() == 0) { // ºÎ¸ð ÀÚ½ÄÀÌ ¾ø¾úÀ» °æ¿ì ÀÏÁ÷¼± »ó¿¡ À§Ä¡ÇÏ°ÔÇÔ.
+		if (this.parentNodeChildCount() == 0) { // ï¿½Î¸ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+												// ï¿½ï¿½Ä¡ï¿½Ï°ï¿½ï¿½ï¿½.
 			this.locateY = parentNode.locateY;
 		} else {
 
@@ -282,6 +486,20 @@ public class MindNode {
 			temp = temp.getChildeAt(temp, temp.getChildCnt() - 1, direction);
 		}
 		return temp;
+	}
+
+	public void getAllTicket(ArrayList<MindNode> nodes, MindNode node) {
+		for (int i = 0; i < node.getChildeNodes().size(); i++) {
+			if(node.getChildeNodes().get(i) instanceof Ticket){
+			nodes.add(node.getChildeNodes().get(i));
+			
+			if (node.getChildeNodes().get(i).getChildeNodes().size() != 0) {
+				getAllTicket(nodes, node.getChildeNodes().get(i));
+			}
+			}
+			
+		}
+
 	}
 
 	private void allParentsetChageLocate(MindNode parentNode) {
@@ -430,11 +648,18 @@ public class MindNode {
 		this.direction = direction;
 	}
 
-	public static MindNode getNode(String position) {
-		String[] splitStr = position.split("/");
-		MindNode temp = MindNode.getRoot();
-		for (int i = 0; i < splitStr.length - 1; i++) {
-			temp = temp.getChildeNodes().get(Integer.parseInt(splitStr[i]));
+	public static MindNode getNode(MindNode node, String nodeID) {
+		MindNode temp = null;
+		for (int i = 0; i < node.getChildeNodes().size(); i++) {
+			// if(node.getChildeNodes().get(i) instanceof Ticket) continue;
+			if (node.getChildeNodes().get(i).getNodeID().equals(nodeID)) {
+				return node.getChildeNodes().get(i);
+			} else if (node.getChildeNodes().get(i).getChildeNodes().size() != 0) {
+				temp = getNode(node.getChildeNodes().get(i), nodeID);
+				if (temp != null) {
+					return temp;
+				}
+			}
 		}
 		return temp;
 
@@ -499,7 +724,10 @@ public class MindNode {
 		}
 
 		public void mouseExited(MouseEvent e) {
-
+			// getnode().getNodeBtn().getParent().remove(getnode().j);
+			// getnode().getNodeBtn().getParent().repaint();
+			h = new HideBtnThread(getnode().getNodeBtn().getParent(), getnode());
+			h.start();
 		}
 
 		public void mousePressed(MouseEvent e) {
@@ -510,7 +738,8 @@ public class MindNode {
 		}
 
 		public void mouseClicked(MouseEvent e) {
-			new PPTFrame();
+			// new PPTFrame();
+			// new TicketFrame(getnode(),classinfo);
 		}
 
 		@Override
@@ -518,6 +747,17 @@ public class MindNode {
 			// TODO Auto-generated method stub
 			// nodeBtn.setLayout(null);
 
+			System.out.println("ë…¸ë“œ ì•„ì´ë”” " + getNodeID());
+			getnode().getNodeBtn().getParent().add(getnode().pptBtn);
+			getnode().getNodeBtn().getParent().add(getnode().ticketBtn);
+			getnode().getNodeBtn().getParent()
+					.setComponentZOrder(getnode().pptBtn, 1);
+			getnode().getNodeBtn().getParent()
+					.setComponentZOrder(getnode().ticketBtn, 2);
+			getnode().getNodeBtn().getParent().repaint();
+			if (h != null && h.getNode() == getnode()) {
+				h.stop();
+			}
 			// fullNameAlert.setText(nodeStr);
 			// fullNameAlert.setLocation(getLocateX(), getLocateY());
 			// fullNameAlert.setSize(100,100);
@@ -527,4 +767,69 @@ public class MindNode {
 		}
 	}
 
+	class HideBtnThread extends Thread {
+		Container container;
+		MindNode node;
+
+		public MindNode getNode() {
+			return node;
+		}
+
+		public void setNode(MindNode node) {
+			this.node = node;
+		}
+
+		public Container getContainer() {
+			return container;
+		}
+
+		public void setContainer(Container container) {
+			this.container = container;
+		}
+
+		public HideBtnThread(Container container, MindNode node) {
+			// TODO Auto-generated constructor stub
+			this.container = container;
+			this.node = node;
+		}
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			super.run();
+			int a = 0;
+			try {
+				sleep(1000);
+
+				// while(true){
+				//
+				// component.setLocation(component.getLocation().x,component.getLocation().y+a);
+				// container.repaint();
+				// a++;
+				// if(a==10){
+				// break;
+				// }
+				// sleep(100);
+				// }
+				container.remove(node.getPptBtn());
+				container.remove(node.getTicketBtn());
+				container.repaint();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+	public int DepthofTicket(){
+		int depth = 0;
+		MindNode temp = this;
+		while(temp instanceof Ticket){
+			temp = temp.getParentNode();
+			depth++;
+		}
+		
+		return depth;
+	}
 }
