@@ -236,8 +236,8 @@ public class LecturePageFrame extends JFrame {
 				return;
 			}
 			else{
-				UploadToServer UTS = FreemindManager.getInstance().uploadToServer;
-				UTS.classPost(lectureId, "minsuk@hansung.ac.kr", classTitle);
+				UploadToServer uploadToServer = new UploadToServer();
+				uploadToServer.classPost(lectureId, "minsuk@hansung.ac.kr", classTitle);
 
 				frame.init();
 				frame.update(frame.getGraphics());

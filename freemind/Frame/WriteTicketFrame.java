@@ -310,9 +310,9 @@ public class WriteTicketFrame extends JFrame{
 			t.setParentNodeId(parentID);
 			t.setContents(questionTa.getTextArea().getText());
 			t.setUserName("교수");
-			UploadToServer uts = fManager.uploadToServer;
+			UploadToServer uploadToServer = new UploadToServer();
 			setVisibleWriteFrame();
-			uts.ticketPost(t);
+			uploadToServer.ticketPost(t);
 		}
 	}
 	public void setVisibleWriteFrame(){

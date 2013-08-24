@@ -321,14 +321,14 @@ public class SignFrame extends JFrame {
 
 	public void pushLoginBtn() {
 		User signUser = new User();
-		signUser.setIdentificatinNumber(Integer.parseInt(studIDTf.getText()));
+		signUser.setIdentificationNumber(Integer.parseInt(studIDTf.getText()));
 		signUser.setPassword(pwTf.getText());
 		signUser.setUserEmail(emailTf.getText());
 		signUser.setUserName(userTf.getText());
 		signUser.setUserType(typeBtnGp.getSelection().getActionCommand());
 		
-		
-		fManager.uploadToServer.signPost(signUser);
+		UploadToServer uploadToServer = new UploadToServer();
+		uploadToServer.signPost(signUser);
 		
 		setVisible(false);
 		// JFrame pFrame = new ProfileFrame(mc);
@@ -489,92 +489,47 @@ public class SignFrame extends JFrame {
 			super.paint(g);
 		}
 	}
-	class HintTextFieldPassword extends JTextField implements FocusListener {
+	class HintTextFieldPassword extends JPasswordField implements FocusListener {
 
-		private final String hint;
 		private String realPw = "";
 		String str;
+		JLabel hintLabel;
 		
-		public HintTextFieldPassword(final String hint) {
-			super(hint);
+		public HintTextFieldPassword(String hint) {
+
 			Font f = new Font(hint, Font.ITALIC, 10);
 			setFont(f);
 			this.setBackground(new Color(234, 234, 234));
 			setForeground(Color.GRAY);
-			this.hint = hint;
+
+			this.hintLabel = new JLabel(hint);
 			super.addFocusListener(this);
-			setColumns(18);
-			
-//			setEchoChar(');
+
+
+			hintLabel.setForeground(new Color(166,166,166));
+
+			this.setLayout(new BorderLayout());
+			this.add(hintLabel);
 			setBackground(new Color(0, 0, 0, 0));
-//			setFocusable(false);.
-			
-//			this.setBorder(new LineBorder(new Color(234, 234, 234), 1, true));
-//			this.setBorder(new LineBorder(Color.black, 1, true));
-//			this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(),
-//					BorderFactory.createEmptyBorder(2, 0, 2, 5)));
 			this.setBorder(new EmptyBorder(5, 10, 5, 10));
-			
-			addKeyListener(new KeyListener() {
-				
-				@Override
-				public void keyTyped(KeyEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void keyReleased(KeyEvent e) {
-					if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-						return;
-					}
-					
-					realPw += e.getKeyChar();
-					
-					str = "";
-					for(int i = 0; i < realPw.length(); i++){
-						str += "*";
-					}
-					setText(str);
-				}					
-				@Override
-				public void keyPressed(KeyEvent e) {
-					if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-						if(realPw.length() > 0){
-							realPw = realPw.substring(0, realPw.length() - 1);
-							return;
-						}
-					}
-				}
-			});
 		}
 
 		@Override
 		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾úÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ® ±Û¾¾¸¦ Áö
-			if (this.getText().isEmpty()) {
-				super.setText("");
-			}
+			hintLabel.setVisible(false);
+
 		}
 
 		@Override
 		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ ÀÒÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ®¸¦ ÀûÀ½
 			if (this.getText().isEmpty()) {
-				Font f = new Font(hint, Font.ITALIC, 10);
-				setFont(f);
-
-				setForeground(Color.GRAY);
-				super.setText(hint);
+				hintLabel.setVisible(true);
 			} else {
-				setForeground(Color.BLACK);
+				hintLabel.setVisible(false);
 			}
 		}
 
-		@Override
-		public String getText() {
-			String typed = super.getText();
-			return typed.equals(hint) ? "" : realPw;
-		}
-		
+
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			g.drawImage(fManager.loginInputBar, 0, 0, this.getWidth(),

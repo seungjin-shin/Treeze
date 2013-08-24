@@ -8,12 +8,18 @@ public class User  {
 
 	private int userImgId;  
 	private String userType;
-	private int identificatinNumber;
+	private int identificationNumber;
 	private String userName;
 	private String userEmail;
 	private String password;
 	
 	
+	public int getIdentificationNumber() {
+		return identificationNumber;
+	}
+	public void setIdentificationNumber(int identificationNumber) {
+		this.identificationNumber = identificationNumber;
+	}
 	public String getPassword() {
 		return password;
 	}
@@ -37,12 +43,6 @@ public class User  {
 	}
 	public void setUserType(String userType) {
 		this.userType = userType;
-	}
-	public int getIdentificatinNumber() {
-		return identificatinNumber;
-	}
-	public void setIdentificatinNumber(int identificatinNumber) {
-		this.identificatinNumber = identificatinNumber;
 	}
 	public String getUserName() {
 		return userName;

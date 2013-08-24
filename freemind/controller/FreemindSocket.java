@@ -258,18 +258,19 @@
 
 package freemind.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
+import freemind.Frame.SurveyResultFrame;
+import freemind.json.ArrayLecture;
+import freemind.json.Survey;
 import freemind.json.Ticket;
 import freemind.json.TmpTicket;
 import freemind.json.TreezeData;
-import freemind.modes.NodeAdapter;
 import freemind.modes.mindmapmode.MindMapController;
 
 public class FreemindSocket extends Thread {
@@ -286,12 +287,6 @@ public class FreemindSocket extends Thread {
 
 	@Override
 	public void run() {
-		final String SURVEYYES = "0";
-		final String SURVEYNO = "1";
-		String chkStr;
-
-		LectureInfo lectureInfo;
-		lectureInfo = FreemindLectureManager.getInstance();
 		int cnt = -1;
 		byte[] b = new byte[1024];
 		TreezeData treezeData;
@@ -324,7 +319,16 @@ public class FreemindSocket extends Thread {
 //						fManager.setTicket(ticket);
 //						c.recurAddTicketNode((NodeAdapter) c.getMc().getRootNode());
 					}
+					else if(treezeData.getDataType().equals(TreezeData.SURVEYRESULT)){
+						Survey survey = gson.fromJson(treezeData.getArgList().get(0), Survey.class);
+						ArrayList<Integer> resultArray;
+						resultArray = survey.getSurveyType().getReultOfSurvey();
+						new SurveyResultFrame(survey.getTotalNumberOfStudents(), resultArray.get(0), resultArray.get(1), survey.getContents());
+					}
 					
+					else{
+						System.out.println(treezeData.getDataType() + " : TreezeData is not define");
+					}
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

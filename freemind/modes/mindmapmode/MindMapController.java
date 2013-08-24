@@ -79,6 +79,8 @@ import javax.swing.text.html.HTMLEditorKit;
 import org.jibx.runtime.IUnmarshallingContext;
 import org.jibx.runtime.JiBXException;
 
+import freemind.Frame.LoginFrame;
+import freemind.Frame.ProfileFrame;
 import freemind.Frame.SignFrame;
 import freemind.NodeType.SlideType;
 import freemind.common.XmlBindingTools;
@@ -123,8 +125,6 @@ import freemind.main.ExampleFileFilter;
 import freemind.main.FixedHTMLWriter;
 import freemind.main.HtmlTools;
 import freemind.main.LoggedInFrame;
-import freemind.main.LoginFrame;
-import freemind.main.ProfileFrame;
 import freemind.main.Resources;
 import freemind.main.Tools;
 import freemind.main.XMLElement;

@@ -552,10 +552,10 @@ public class Controller  implements MapModuleChangeObserver {
 		makeUploadXml();
 			
 		//upload XML
-		UploadToServer uts = fManager.uploadToServer;
+		UploadToServer uploadToServer = new UploadToServer();
 		try {
-			uts.doFileUpload();
-			uts.doXmlUpload();
+			uploadToServer.doFileUpload();
+			uploadToServer.doXmlUpload();
 		} catch (ClientProtocolException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

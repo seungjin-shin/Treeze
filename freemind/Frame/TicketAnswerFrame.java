@@ -361,9 +361,9 @@ public class TicketAnswerFrame extends JFrame{
 			t.setParentNodeId(parentID);
 			t.setContents(reStr + answerTa.getTextArea().getText());
 			t.setUserName("±³¼ö");
-			UploadToServer uts = fManager.uploadToServer;
+			UploadToServer uploadToServer = new UploadToServer();
 			
-			uts.ticketPost(t);
+			uploadToServer.ticketPost(t);
 			
 //			fManager.getMc().addNew(selNode, MindMapController.NEW_CHILD, null);
 //			fManager.getMc().edit.stopEditing();

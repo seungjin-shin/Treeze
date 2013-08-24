@@ -90,7 +90,6 @@ public class UploadMM extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			UploadToServer UTS = FreemindManager.getInstance().uploadToServer;
 			mc.removeUploadMM();
 		}
 		

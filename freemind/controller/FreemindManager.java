@@ -10,8 +10,8 @@ import java.io.PrintWriter;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
+import freemind.Frame.ProfileFrame;
 import freemind.json.Ticket;
-import freemind.main.ProfileFrame;
 import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
 import freemind.modes.mindmapmode.MindMapMapModel;
@@ -32,7 +32,6 @@ public class FreemindManager {
 	
 	private FreemindManager(){
 		slideShow = new SlideShow(this);
-		uploadToServer = new UploadToServer(this);
 	}
 	
 	MindMapController mc;
@@ -62,8 +61,6 @@ public class FreemindManager {
 	private Ticket ticket;
 	
 	SlideShow slideShow;
-	public UploadToServer uploadToServer;
-	
 
 	public Color treezeColor = new Color(141, 198, 63);
 	

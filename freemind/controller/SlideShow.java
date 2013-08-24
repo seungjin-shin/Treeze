@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 
 import org.json.simple.JSONObject;
 
+import freemind.Frame.SurveyFrame;
 import freemind.json.CurrentPositionOfNav;
 import freemind.json.FreemindGson;
 import freemind.json.TreezeData;
@@ -275,7 +276,7 @@ public class SlideShow {
 //						}
 					}
 					else if(e.getKeyCode() == KeyEvent.VK_F4){
-						new SurveyFrame(fManager.getOs());
+						new SurveyFrame();
 					}
 					else
 						return;

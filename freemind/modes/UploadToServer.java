@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -17,12 +16,14 @@ import java.util.ArrayList;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 
@@ -36,21 +37,15 @@ import freemind.json.User;
 public class UploadToServer {
 	ArrayList<SlideData> sList;
 	SlideData tmp;
-	FreemindManager fManager;
-	final String SERVERIP;
-	HttpClient httpClient = new DefaultHttpClient();  
-	
-	public UploadToServer(FreemindManager f) {
-		fManager = f;
-		SERVERIP = fManager.SERVERIP;
-		// TODO Auto-generated constructor stub
-	}
+	FreemindManager fManager = FreemindManager.getInstance();
+	final String SERVERIP = fManager.SERVERIP;
+  
 	
 	  public void doFileUpload() {
           try {
         	  File saveFile;//
         	  FileBody bin = null;
-        	  
+        		HttpClient httpClient = new DefaultHttpClient();
 			for (int i = 1; i <= fManager.getPdfPage(); i++) {
 				saveFile = new File(fManager.getFilePath(),
 						fManager.getClassId() + "_" + i + ".jpg");
@@ -74,6 +69,7 @@ public class UploadToServer {
 				post.setEntity(multipart);
 				HttpResponse response = httpClient.execute(post);
 				HttpEntity resEntity = response.getEntity();
+				EntityUtils.consume(resEntity);
 			}
 
            System.out.println("postXmlImg");
@@ -82,8 +78,8 @@ public class UploadToServer {
 	  }
 	  
 	  public void lecturePost(String lectureName, String profEmail, String state) {
-		  	String jsonStr;
           try {
+        		HttpClient httpClient = new DefaultHttpClient();
         	  HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createLecture");
         	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
         	  
@@ -100,6 +96,7 @@ public class UploadToServer {
         	  post.setEntity(multipart);  
         	  HttpResponse response = httpClient.execute(post);  
         	  HttpEntity resEntity = response.getEntity();
+        	  EntityUtils.consume(resEntity);
         	  System.out.println("postLecture");
           }catch(Exception e){e.printStackTrace();
           }
@@ -108,7 +105,7 @@ public class UploadToServer {
 	  public void classPost(String lectureId, String profEmail, String className) {
 		  	String jsonStr;
         try {
-      	  
+        	HttpClient httpClient = new DefaultHttpClient();
       	  HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createClass"); 
       	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
       	  String ipStr = null;
@@ -135,6 +132,7 @@ public class UploadToServer {
       	  post.setEntity(multipart);  
       	  HttpResponse response = httpClient.execute(post);  
       	  HttpEntity resEntity = response.getEntity();
+      	EntityUtils.consume(resEntity);
       	  System.out.println("postClass");
         }catch(Exception e){e.printStackTrace();
         }
@@ -145,7 +143,7 @@ public class UploadToServer {
 		  	Ticket ticket = t;
 		  	
       try {
-    	  
+    		HttpClient httpClient = new DefaultHttpClient();
     	  HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createTicket"); 
     	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
     	  
@@ -183,6 +181,7 @@ public class UploadToServer {
 			os.write(gson.toJson(treezeData).getBytes("UTF-8"));
 			os.flush();
 			
+			EntityUtils.consume(resEntity);
     	  System.out.println("postTicket");
     	  
       }catch(Exception e){e.printStackTrace();
@@ -207,7 +206,7 @@ public class UploadToServer {
           } catch (Exception e) {
                 e.printStackTrace();
           }
-          
+      	HttpClient httpClient = new DefaultHttpClient();
        HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createMindMap"); 
        
        MultipartEntity multipart = new MultipartEntity(
@@ -223,11 +222,13 @@ public class UploadToServer {
 		post.setEntity(multipart);
 		HttpResponse response = httpClient.execute(post);
 		HttpEntity resEntity = response.getEntity();
+		EntityUtils.consume(resEntity);
 		System.out.println("UploadtoServer : douploadXml()");
 	  }
 	  
 	  public void signPost(User u) {
 		  User user = u;
+			HttpClient httpClient = new DefaultHttpClient();
 	       HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createUser"); 
 	       
 	       MultipartEntity multipart = new MultipartEntity(
@@ -237,7 +238,7 @@ public class UploadToServer {
 	       StringBody typeBoby;
 		try {
 			typeBoby = new StringBody(user.getUserType(), Charset.forName("UTF-8"));
-			StringBody idBody = new StringBody(user.getIdentificatinNumber() + "", Charset.forName("UTF-8"));
+			StringBody idBody = new StringBody(user.getIdentificationNumber() + "", Charset.forName("UTF-8"));
 			StringBody nameBody = new StringBody(user.getUserName(), Charset.forName("UTF-8"));
 			StringBody emailBody = new StringBody(user.getUserEmail(), Charset.forName("UTF-8"));
 			StringBody pwBody = new StringBody(user.getPassword(), Charset.forName("UTF-8"));
@@ -250,6 +251,7 @@ public class UploadToServer {
 			post.setEntity(multipart);
 			HttpResponse response = httpClient.execute(post);
 			HttpEntity resEntity = response.getEntity();
+			EntityUtils.consume(resEntity);
 			System.out.println("UploadtoServer : singUp()");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -262,7 +264,8 @@ public class UploadToServer {
 //    	  113.198.84.80:8080/treeze/login?userEmail="minsuk@hansung.ac.kr"&password="1234"
 //    	  "emailFalse"
 //    	  "passwordFalse"
-	       HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createUser"); 
+			HttpClient httpClient = new DefaultHttpClient();
+	       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/login?userEmail=" + email + "&password=" + pw); 
 	       
 	       MultipartEntity multipart = new MultipartEntity(
 					HttpMultipartMode.BROWSER_COMPATIBLE, null,
@@ -270,14 +273,9 @@ public class UploadToServer {
 			
 	       StringBody typeBoby;
 		try {
-			StringBody emailBody = new StringBody(email, Charset.forName("UTF-8"));
-			StringBody pwBody = new StringBody(pw, Charset.forName("UTF-8"));
 			
-			multipart.addPart("userEmail", emailBody);
-			multipart.addPart("password", pwBody);
+			HttpResponse response = httpClient.execute(get);
 			
-			post.setEntity(multipart);
-			HttpResponse response = httpClient.execute(post);
 			HttpEntity resEntity = response.getEntity();
 			
 			InputStream inputStream = resEntity.getContent();
@@ -291,6 +289,8 @@ public class UploadToServer {
 				
 			System.out.println("response : " + str);
 			
+			EntityUtils.consume(resEntity);
+			
 			if(str.equals("emailFalse")){
 				System.out.println("UploadtoServer : login return f");
 				return false;
@@ -299,13 +299,9 @@ public class UploadToServer {
 				System.out.println("UploadtoServer : login return f");
 				return false;
 			}
-			else if(str.equals("true")){
+			else{
 				System.out.println("UploadtoServer : login return true");
 				return true;
-			}
-			else{
-				System.out.println("login return Err");
-				return false;
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

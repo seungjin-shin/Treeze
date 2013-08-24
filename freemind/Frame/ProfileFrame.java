@@ -1,4 +1,4 @@
-package freemind.main;
+package freemind.Frame;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -13,7 +13,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -27,7 +26,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.Socket;
@@ -53,6 +51,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import freemind.controller.FreemindManager;
+import freemind.controller.ImgBtn;
 import freemind.json.ArrayClass;
 import freemind.json.ArrayLecture;
 import freemind.json.ClassInfo;
@@ -60,7 +59,8 @@ import freemind.json.Lecture;
 import freemind.json.Mindmap;
 import freemind.json.TreezeData;
 import freemind.json.User;
-import freemind.main.LecturePageFrame.ClassPanel;
+import freemind.main.DownLoadNetworkThread;
+import freemind.modes.NodeAdapter;
 import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
 
@@ -73,16 +73,7 @@ public class ProfileFrame extends JFrame {
 	
 	JButton createLtBtn;
 	JButton logoutBtn;
-	ActionListener addLtListener = new AddLtListener();
-	ActionListener addCsListener = new AddCsListener();
-	ActionListener ltListListener = new LtListListener();
 	FreemindManager fManager;
-	
-	public Image addLtBtnImg;
-	public Image delLtBtnImg;
-	public Image ltListBtnImg;
-	public Image addCsBtnImg;
-	public Image delCsBtnImg;
 	
 	BtnPanel btnPanel;
 	JPanel profilePanel;
@@ -120,11 +111,6 @@ public class ProfileFrame extends JFrame {
 		this.mc = mc;
 		fManager = FreemindManager.getInstance();
 		
-		addLtBtnImg = fManager.addLectureDefault;
-		delLtBtnImg = fManager.deleteClassDefault;
-		ltListBtnImg = fManager.lectureListDefault;
-		addCsBtnImg = fManager.addClassDefault;
-		delCsBtnImg = fManager.deleteClassDefault;
 		
 //		fManager.setFilePath(DOWNPATH + "/");
 		// TODO Auto-generated constructor stub
@@ -160,8 +146,6 @@ public class ProfileFrame extends JFrame {
 		lectureListPanel.setBackground(Color.WHITE);
 		
 		
-		btnPanel.setLayout(new GridLayout(1, 4, 0, 5));
-
 		lectureListPanel.setBorder(new LineBorder(Color.BLACK, 2, false));
 
 		addGrid(gbl, gbc, logoPanel,        0, 0, 1, 1, 1, 3, this);
@@ -320,93 +304,61 @@ public class ProfileFrame extends JFrame {
 		
 	}
 	
-	class AddLtListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			new InputLectureFrame();
-		}
-		
-	}
-	
-	class AddCsListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			new InputClassFrame();
-		}
-		
-	}
-	
-	class LtListListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			networkFlag = NETWORK_FLAG_GET_LECTURELIST;
-			networkThread = new NetworkThread();
-			networkThread.start();
-			btnPanel.setLecturePage();
-			lectureHead.setVisible(true);
-		}
-		
-	}
-	
 	class BtnPanel extends JPanel {
-		ImageIcon imgIcon, resizeIcon;
-		Image img, scaledImage;
-		BufferedImage imageBuff;
-
-		JButton addLtBtn;
-		JButton delLtBtn;
-		JButton ltListBtn;
-		JButton addCsBtn;
-		JButton delCsBtn;
-		JButton nullBtn, nullBtn2;
 		
 		JFrame parentFrame;
+		AddLectureBtn addLtBtn;
+		DeleteLectureBtn delLtBtn;
+		ProfileBtn profileBtn;
+		LectureListBtn ltListBtn;
+		AddClassBtn addCsBtn;
+		DeleteClassBtn delCsBtn;
+		JButton nullBtn;
 		
 		public BtnPanel(JFrame f) {
 			parentFrame = f;
 			
+//			loginBtn.setBackground(new Color(0, 0, 0, 0));
+//			loginBtn.setBorderPainted(false);
+//			loginBtn.setContentAreaFilled(false);
+//			loginBtn.setFocusable(false);
 			
-			addLtBtn = new JButton(new ImageIcon(addLtBtnImg));
-			addLtBtn.setBorder(null);
+			this.setLayout(new GridLayout(1, 4, 20, 0));
+			
+			setBackground(Color.black);
+			addLtBtn = new AddLectureBtn(fManager.addLectureDefault, fManager.addLecturePress, fManager.addLectureOver);
 			addLtBtn.setBackground(new Color(0, 0, 0, 0));
 			addLtBtn.setBorderPainted(false);
 			addLtBtn.setContentAreaFilled(false);
 			addLtBtn.setFocusable(false);
-			addLtBtn.addActionListener(addLtListener);
-			delLtBtn = new JButton(new ImageIcon(delLtBtnImg));
+			delLtBtn = new DeleteLectureBtn(fManager.deleteLectureDefault, fManager.deleteLecturePress, fManager.deleteLectureOver);
 			delLtBtn.setBackground(new Color(0, 0, 0, 0));
 			delLtBtn.setBorderPainted(false);
 			delLtBtn.setContentAreaFilled(false);
 			delLtBtn.setFocusable(false);
-			delLtBtn.setBorder(null);
-			ltListBtn = new JButton(new ImageIcon(ltListBtnImg));
+			ltListBtn = new LectureListBtn(fManager.lectureListDefault, fManager.lectureListPress, fManager.lectureListOver);
 			ltListBtn.setBackground(new Color(0, 0, 0, 0));
 			ltListBtn.setBorderPainted(false);
 			ltListBtn.setContentAreaFilled(false);
 			ltListBtn.setFocusable(false);
-			ltListBtn.setBorder(null);
-			ltListBtn.addActionListener(ltListListener);
-			addCsBtn = new JButton(new ImageIcon(addCsBtnImg));
-			addCsBtn.setBorder(null);
+			profileBtn = new ProfileBtn(fManager.profileDefault, fManager.profilePress, fManager.profileOver);
+			profileBtn.setBackground(new Color(0, 0, 0, 0));
+			profileBtn.setBorderPainted(false);
+			profileBtn.setContentAreaFilled(false);
+			profileBtn.setFocusable(false);
+			addCsBtn = new AddClassBtn(fManager.addClassDefault, fManager.addClassPress, fManager.addClassOver);
 			addCsBtn.setBackground(new Color(0, 0, 0, 0));
 			addCsBtn.setBorderPainted(false);
 			addCsBtn.setContentAreaFilled(false);
 			addCsBtn.setFocusable(false);
-			addCsBtn.addActionListener(addCsListener);
-			delCsBtn = new JButton(new ImageIcon(delCsBtnImg));
+			delCsBtn = new DeleteClassBtn(fManager.deleteClassDefault, fManager.deleteClassPress, fManager.deleteClassOver);
 			delCsBtn.setBackground(new Color(0, 0, 0, 0));
 			delCsBtn.setBorderPainted(false);
 			delCsBtn.setContentAreaFilled(false);
 			delCsBtn.setFocusable(false);
-			delCsBtn.setBorder(null);
 			
 			nullBtn = new JButton();
 			nullBtn.setVisible(false);
-			nullBtn2 = new JButton();
-			nullBtn2.setVisible(false);
 			
 			setLecturePage();
 		}
@@ -417,7 +369,7 @@ public class ProfileFrame extends JFrame {
 			add(addLtBtn);
 			add(delLtBtn);
 			add(nullBtn);
-			add(nullBtn2);
+			add(profileBtn);
 			
 			parentFrame.repaint();
 		}
@@ -427,8 +379,7 @@ public class ProfileFrame extends JFrame {
 			add(ltListBtn);
 			add(addCsBtn);
 			add(delCsBtn);
-			add(nullBtn);
-			
+			add(profileBtn);
 			parentFrame.repaint();
 			
 		}
@@ -440,6 +391,93 @@ public class ProfileFrame extends JFrame {
 
 		}
 	}
+	
+	class AddLectureBtn extends ImgBtn{
+
+		public AddLectureBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void Action() {
+			new InputLectureFrame();			
+		}
+	}
+
+	class DeleteLectureBtn extends ImgBtn{
+
+		public DeleteLectureBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void Action() {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	class LectureListBtn extends ImgBtn{
+
+		public LectureListBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void Action() {
+			networkFlag = NETWORK_FLAG_GET_LECTURELIST;
+			networkThread = new NetworkThread();
+			networkThread.start();
+			btnPanel.setLecturePage();
+			lectureHead.setVisible(true);			
+		}
+	}
+	
+	class AddClassBtn extends ImgBtn{
+
+		public AddClassBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void Action() {
+			new InputClassFrame();
+		}
+	}
+	
+	class DeleteClassBtn extends ImgBtn{
+
+		public DeleteClassBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void Action() {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	class ProfileBtn extends ImgBtn{
+
+		public ProfileBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void Action() {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	
 	
 	class InputLectureFrame extends JFrame implements ActionListener{
 		JTextField lecturetf;
@@ -486,8 +524,8 @@ public class ProfileFrame extends JFrame {
 				return;
 			}
 			else{
-				UploadToServer UTS = fManager.uploadToServer;
-				UTS.lecturePost(lectureTitle, "minsuk@hansung.ac.kr", "false");
+				UploadToServer uploadToServer = new UploadToServer();
+				uploadToServer.lecturePost(lectureTitle, "minsuk@hansung.ac.kr", "false");
 				
 				this.setVisible(false);
 				
@@ -644,7 +682,7 @@ public class ProfileFrame extends JFrame {
 				return;
 			}
 			else{
-				UploadToServer UTS = fManager.uploadToServer;
+				UploadToServer UTS = new UploadToServer();
 				UTS.classPost(lectureId + "", "minsuk@hansung.ac.kr", classTitle);
 
 				this.setVisible(false);
@@ -921,8 +959,14 @@ public class ProfileFrame extends JFrame {
 				fileOutput.close();
 				inputStream.close();
 				
-				
 				mc.load(file);
+				
+//				NodeAdapter forModifyNodeName = (NodeAdapter)mc.getRootNode();
+//				forModifyNodeName.setText("변해");
+//				forModifyNodeName.setNodeTypeStr("Question");
+//				mc.nodeChanged(forModifyNodeName);
+//				
+//				mc.addNew(forModifyNodeName, MindMapController.NEW_CHILD, null);
 				
 				Gson gson = new Gson();
 				User user = new User();

@@ -16,20 +16,30 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import com.google.gson.Gson;
+
 import freemind.controller.FreemindManager;
 import freemind.controller.ImgBtn;
+import freemind.json.FreemindGson;
 import freemind.json.Survey;
+import freemind.json.SurveyTrueFalseType;
+import freemind.json.SurveyTypeFactory;
+import freemind.json.TreezeData;
 
 public class SurveyFrame extends JFrame{
 	GridBagLayout gbl = new GridBagLayout();
@@ -42,21 +52,27 @@ public class SurveyFrame extends JFrame{
 	
 	
 	Survey survey = new Survey();
-	HintTextField answer1 = new HintTextField(survey.getAnswer1());
-	HintTextField answer2 = new HintTextField(survey.getAnswer2());
-	HintTextField answer3 = new HintTextField(survey.getAnswer3());
-	HintTextField answer4 = new HintTextField(survey.getAnswer4());
-	HintTextField answer5 = new HintTextField(survey.getAnswer5());
+//	HintTextField answer1 = new HintTextField(survey.getAnswer1());
+//	HintTextField answer2 = new HintTextField(survey.getAnswer2());
+//	HintTextField answer3 = new HintTextField(survey.getAnswer3());
+//	HintTextField answer4 = new HintTextField(survey.getAnswer4());
+//	HintTextField answer5 = new HintTextField(survey.getAnswer5());
 	WriteTextArea surveyTa = new WriteTextArea();
 	
+	ButtonGroup btnGroup = new ButtonGroup();
+	JRadioButton type1 = new JRadioButton("True & False", true);
+	JRadioButton type2 = new JRadioButton("One of Tthree");
+	JRadioButton type3 = new JRadioButton("One of Four");
+	JRadioButton type4 = new JRadioButton("One of Five");
 	
 	public SurveyFrame() {
 		// TODO Auto-generated constructor stub
 		this.setBackground(fManager.treezeColor);
-		this.setSize(800,500);
+		this.setSize(800,700);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.setLayout(gbl);
 		logoimg =  fManager.treezeLogo;
+		
 		//fullPanel.setBackground(Color.BLUE);
 		addGrid(gbl, gbc, new RoundPanel(), 0, 1, 1, 1, 1, 1, this);
 		//fullPanel.setLayout(gbl);
@@ -110,7 +126,7 @@ public class SurveyFrame extends JFrame{
 			addGrid(gbl, gbc, new WriteField("dd"), 0, 1, 1, 1,1, 8, this);
 			insets.set(5, 20, 5, 20);
 			addGrid(gbl, gbc, new WriteField(), 0, 2, 1, 1,1, 12, this);
-			addGrid(gbl, gbc, new ButtonField(), 0, 3, 1, 1,1, 1, this);
+			addGrid(gbl, gbc, new ButtonField(), 0, 3, 1, 1,1, 3, this);
 			
 
 		}
@@ -190,13 +206,22 @@ public class SurveyFrame extends JFrame{
 			// TODO Auto-generated constructor stub
 			this.setBackground(fManager.treezeColor);
 			this.setLayout(gbl);
-			addGrid(gbl, gbc, new UnderLineJLabel("          Answer           "), 1, 1, 1, 1, 1, 1, this);
-			addGrid(gbl, gbc, new JLabel(),                    1, 2, 1, 4, 1, 10, this);
-			addGrid(gbl, gbc, answer1,                         2, 1, 1, 1, 8, 1, this);
-			addGrid(gbl, gbc, answer2,                         2, 2, 1, 1, 8, 1, this);
-			addGrid(gbl, gbc, answer3,                         2, 3, 1, 1, 8, 1, this);
-			addGrid(gbl, gbc, answer4,                         2, 4, 1, 1, 8, 1, this);
-			addGrid(gbl, gbc, answer5,                         2, 5, 1, 1, 8, 1, this);
+			addGrid(gbl, gbc, new UnderLineJLabel("          Type           "), 1, 1, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, new JLabel(),                    1, 2, 1, 3, 1, 10, this);
+			
+//			addGrid(gbl, gbc, answer1,                         2, 1, 1, 1, 8, 1, this);
+//			addGrid(gbl, gbc, answer2,                         2, 2, 1, 1, 8, 1, this);
+//			addGrid(gbl, gbc, answer3,                         2, 3, 1, 1, 8, 1, this);
+//			addGrid(gbl, gbc, answer4,                         2, 4, 1, 1, 8, 1, this);
+//			addGrid(gbl, gbc, answer5,                         2, 5, 1, 1, 8, 1, this);
+			btnGroup.add(type1);
+			btnGroup.add(type2);
+			btnGroup.add(type3);
+			btnGroup.add(type4);
+			addGrid(gbl, gbc, type1,                         2, 1, 1, 1, 8, 1, this);
+			addGrid(gbl, gbc, type2,                         2, 2, 1, 1, 8, 1, this);
+			addGrid(gbl, gbc, type3,                         2, 3, 1, 1, 8, 1, this);
+			addGrid(gbl, gbc, type4,                         2, 4, 1, 1, 8, 1, this);
 		}
 	}
 	class WriteTextArea extends JScrollPane{
@@ -214,6 +239,13 @@ public class SurveyFrame extends JFrame{
 		protected int strokeSize = 1;
 		protected Dimension arcs = new Dimension(30, 30);
 		Color textAreaBgColor;
+		
+		JTextArea textArea;
+		
+		public JTextArea getTextArea() {
+			return textArea;
+		}
+
 		public WriteTextArea() {
 		// TODO Auto-generated constructor stub
 		this.setBackground(new Color(0, 0, 0, 0));
@@ -221,7 +253,7 @@ public class SurveyFrame extends JFrame{
 		
 		//this.setSize(10, 10);
 		//this.setLayout(new BorderLayout());
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setBackground(textAreaBgColor);
 		//textArea.setBackground(new Color(0,0,0,0));
 		this.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -309,6 +341,7 @@ public class SurveyFrame extends JFrame{
 		public ButtonField() {
 			// TODO Auto-generated constructor stub
 			this.setBackground(fManager.treezeColor);
+//			this.setBackground(Color.black);
 			this.setLayout(gbl);
 			jlabelDumy.setForeground(new Color(0, 0, 0, 0));
 			addGrid(gbl, gbc, jlabelDumy, 1, 1, 1, 1, 1, 1, this);
@@ -317,7 +350,7 @@ public class SurveyFrame extends JFrame{
 			j.setLayout(gbl);
 			insets.set(0,0, 0,0);
 			addGrid(gbl, gbc, new JLabel(), 1, 1, 1, 2, 2, 1, j);
-			addGrid(gbl, gbc, new WriteBtn(fManager.sendDefault,fManager.sendPress,fManager.sendOver), 2, 1, 1, 1, 1, 1, j);
+			addGrid(gbl, gbc, new SendBtn(fManager.sendDefault,fManager.sendPress,fManager.sendOver), 2, 1, 1, 1, 1, 1, j);
 			addGrid(gbl, gbc, new JLabel(), 2, 2, 1, 1, 1, 1, j);
 			addGrid(gbl, gbc, new JLabel(), 3, 1, 1, 2, 2, 1, j);
 			insets.set(10, 10, 10, 10);
@@ -377,26 +410,43 @@ public class SurveyFrame extends JFrame{
 		
 	}
 	
-	class WriteBtn extends ImgBtn{
+	class SendBtn extends ImgBtn{
 		
-		public WriteBtn(final Image defaultImg, final Image pressImg, final Image enterImg) {
+		public SendBtn(final Image defaultImg, final Image pressImg, final Image enterImg) {
 			// TODO Auto-generated constructor stub
 			super(defaultImg, pressImg, enterImg);
-			
 			
 		}
 		@Override
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
-			
-			
-			
 		}
 		@Override
 		protected void Action(){
+			Survey survey = new Survey();
+			SurveyTrueFalseType surveyType = (SurveyTrueFalseType)SurveyTypeFactory
+					.createSurveyType(SurveyTypeFactory.TRUEFALSETYPE);
 			
+			survey.setContents(surveyTa.getTextArea().getText());
+			survey.setSurveyType(surveyType);
 			
+			Gson gson = new Gson();
+			TreezeData treezeData = new TreezeData();
+			treezeData.setDataType(TreezeData.SURVEY);
+			treezeData.getArgList().add(gson.toJson(survey));
+			System.out.println("전송하기 : " +gson.toJson(treezeData));
+			
+			try {
+				FreemindManager.getInstance().getOs().write(gson.toJson(treezeData).getBytes("UTF-8"));
+				FreemindManager.getInstance().getOs().flush();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
