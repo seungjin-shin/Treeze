@@ -41,15 +41,7 @@ public class FreemindManager {
 	InputStream in;
 
 	private boolean isSlideShowInfo = false;
-	private boolean isAddQuestionNodeInfo = false;
-	private boolean isCheckNodeType = false;
 
-
-
-	private String ticketTitle;
-	private String ticketContent;
-	private String ticketWriter;
-	
 	private String filePath;// = "/Users/dewlit/Desktop/test/Linux/";
 	private String downPath = System.getProperty("user.home") + System.getProperty("file.separator") + "Treeze";
 
@@ -63,6 +55,7 @@ public class FreemindManager {
 	SlideShow slideShow;
 
 	public Color treezeColor = new Color(141, 198, 63);
+	public Color noColor = new Color(0, 0, 0, 0);
 	
 	//(Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png"));
 	public Image treezeLogo = new ImageIcon(getClass().getClassLoader().getResource("images/treezeLogo.png")).getImage();
@@ -107,19 +100,16 @@ public class FreemindManager {
 	
 	
 	
+	public void init(){
+		isSlideShowInfo = false;
+	}
+	
 	public Ticket getTicket() {
 		return ticket;
 	}
 	
 	public void setTicket(Ticket ticket) {
 		this.ticket = ticket;
-	}
-	public boolean isCheckNodeType() {
-		return isCheckNodeType;
-	}
-	
-	public void setCheckNodeType(boolean isCheckNodeType) {
-		this.isCheckNodeType = isCheckNodeType;
 	}
 	public int getPORT() {
 		return PORT;
@@ -216,13 +206,6 @@ public class FreemindManager {
 	public void setSlideShow(SlideShow slideShow) {
 		this.slideShow = slideShow;
 	}
-	public boolean isAddQuestionNodeInfo() {
-		return isAddQuestionNodeInfo;
-	}
-	
-	public void setAddQuestionNodeInfo(boolean isAddQuestionNodeInfo) {
-		this.isAddQuestionNodeInfo = isAddQuestionNodeInfo;
-	}
 	public boolean isSlideShowInfo() {
 		return isSlideShowInfo;
 	}
@@ -238,29 +221,6 @@ public class FreemindManager {
 		this.filePath = filePath;
 	}
 
-	public String getTicketTitle() {
-		return ticketTitle;
-	}
-
-	public void setTicketTitle(String ticketTitle) {
-		this.ticketTitle = ticketTitle;
-	}
-
-	public String getTicketContent() {
-		return ticketContent;
-	}
-
-	public void setTicketContent(String ticketContent) {
-		this.ticketContent = ticketContent;
-	}
-
-	public String getTicketWriter() {
-		return ticketWriter;
-	}
-
-	public void setTicketWriter(String ticketWriter) {
-		this.ticketWriter = ticketWriter;
-	}
 
 	
 	

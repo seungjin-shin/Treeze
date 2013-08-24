@@ -131,7 +131,7 @@ public class NodeMouseMotionListener implements MouseMotionListener,
     	
 //        if (mListener != null)
 //            mListener.mouseReleased(e); // 여기서 클릭
-    	c.checkNodeType();
+//    	c.checkNodeType();
     	
         NodeAdapter sel = (NodeAdapter)c.getMc().getSelected();
         

@@ -24,8 +24,6 @@ public class AddAllTicketThread extends Thread{
 	@Override
 	public void run() {
 		
-		fManager.getC().checkNodeType();
-		
 		StringBuffer sbResult = new StringBuffer();
 		InputStream is;
 		URL url = null;

@@ -961,12 +961,7 @@ public class ProfileFrame extends JFrame {
 				
 				mc.load(file);
 				
-//				NodeAdapter forModifyNodeName = (NodeAdapter)mc.getRootNode();
-//				forModifyNodeName.setText("변해");
-//				forModifyNodeName.setNodeTypeStr("Question");
-//				mc.nodeChanged(forModifyNodeName);
-//				
-//				mc.addNew(forModifyNodeName, MindMapController.NEW_CHILD, null);
+				fManager.getC().checkNodeType();
 				
 				Gson gson = new Gson();
 				User user = new User();

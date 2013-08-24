@@ -725,29 +725,11 @@ public abstract class ControllerAdapter implements ModeController {
 			}
 			FreemindManager.getInstance().getProfileFrame().setMainFramevisible(false);
 			FreemindManager.getInstance().getFreemindMainFrame().setVisible(true);
+			fManager.getC().checkNodeType();
         }
         
 //        templateChk = false;
         getController().setTitle();
-    }
-    
-    public void checkLectureReady(){
-    	//set QuestionNodeInfo
-    	NodeAdapter root = (NodeAdapter)getRootNode();
-    	NodeAdapter checkNode;
-    	
-    	int i;
-    	System.out.println("ControllerAdapter check : QuestionNodeInfo");
-    	for(i = 0; i < root.getChildCount(); i++){
-    		checkNode = (NodeAdapter)root.getChildAt(i);
-//    		if(checkNode.isQuestion()){
-//    			fManager.setAddQuestionNodeInfo(true);
-//    			System.out.println("ControllerAdapter : set QuestionNodeInfo");
-//    			break;
-//    		}
-    	}
-    	
-    	
     }
     
     public class OpenAction extends AbstractAction {

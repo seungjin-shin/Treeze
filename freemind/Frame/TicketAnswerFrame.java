@@ -238,10 +238,14 @@ public class TicketAnswerFrame extends JFrame{
 			textArea.setText(question);
 			textArea.setFocusable(false);
 			
+			JScrollPane jsp = new JScrollPane(textArea);
+			jsp.setBorder(null);
+			this.setPreferredSize(new Dimension(2000,
+					2000));
 			//textArea.setBackground(new Color(0,0,0,0));
 			this.setBorder(new EmptyBorder(10, 10, 10, 10));
 			
-			this.getViewport().add(textArea);
+			this.getViewport().add(jsp);
 		}
 
 		protected void paintComponent(Graphics g) { // ??еш??? ???? ???????

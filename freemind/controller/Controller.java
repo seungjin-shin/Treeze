@@ -566,11 +566,8 @@ public class Controller  implements MapModuleChangeObserver {
     }
     
     public void checkNodeType(){
-    	if (!fManager.isCheckNodeType()) {
-			chkNodeType.checkNodeType((NodeAdapter) getMc().getRootNode());
-			System.out.println("Controller : check node type");
-			fManager.setCheckNodeType(true);
-		}
+		chkNodeType.checkNodeType((NodeAdapter) fManager.getMc().getRootNode());
+		System.out.println("Controller : check node type");
     }
     
     protected class SlideShowAction extends AbstractAction {
@@ -581,8 +578,6 @@ public class Controller  implements MapModuleChangeObserver {
         }}
     
     public void startSlideShow(){
-		
-		checkNodeType();
 		
 		if (!fManager.isSlideShowInfo()) {
 
@@ -619,6 +614,7 @@ public class Controller  implements MapModuleChangeObserver {
         public CloseLectureAction() {
            super("Close lecture"); }
         public void actionPerformed(ActionEvent e) {
+        	
 //        	final String CLOSELECTURE = "3";
 //        	LectureInfo lectureInfo;
 //    		lectureInfo = FreemindLectureManager.getInstance();
@@ -668,6 +664,8 @@ public class Controller  implements MapModuleChangeObserver {
 //				e1.printStackTrace();
 //			}
 //		}
+        	fManager.init();
+        	
       	  fManager.getProfileFrame().setVisible(true);
       	  fManager.getFreemindMainFrame().setVisible(false);
            }}

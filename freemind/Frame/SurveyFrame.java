@@ -81,6 +81,10 @@ public class SurveyFrame extends JFrame{
 		setVisible(true);
 		logoPanel.setVisible(true);
 	}
+	
+	public void falseVisibleMainFrame(){
+		setVisible(false);
+	}
 
 	private void addGrid(GridBagLayout gbl, GridBagConstraints gbc,
 			Component c, int gridx, int gridy, int gridwidth, int gridheight,
@@ -424,6 +428,8 @@ public class SurveyFrame extends JFrame{
 		}
 		@Override
 		protected void Action(){
+			falseVisibleMainFrame();
+			
 			Survey survey = new Survey();
 			SurveyTrueFalseType surveyType = (SurveyTrueFalseType)SurveyTypeFactory
 					.createSurveyType(SurveyTypeFactory.TRUEFALSETYPE);
