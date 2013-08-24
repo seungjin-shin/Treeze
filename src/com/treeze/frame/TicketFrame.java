@@ -109,7 +109,8 @@ public class TicketFrame extends JFrame {
 
 		JLabel subjectPanel = new JLabel("Contents", JLabel.CENTER);
 		JLabel whritePane = new JLabel("Writer", JLabel.CENTER);
-		JLabel dumy = new JLabel(); // 甕곤옙占�筌��占쏙옙占쏙옙占쏙옙 占쏙옙由곤옙占쏙옙 占쏙옙占�?占쎈�占쏙옙占�
+		JLabel dumy = new JLabel(); // 甕곤옙占�筌��占쏙옙占쏙옙占쏙옙 占쏙옙由곤옙占쏙옙
+									// 占쏙옙占�?占쎈�占쏙옙占�
 		WriteBtn writeBtn = new WriteBtn(TreezeStaticData.WRITE_BTN,
 				TreezeStaticData.WRITE_PRESS_BTN,
 				TreezeStaticData.WRITE_ENTER_BTN);
@@ -143,7 +144,7 @@ public class TicketFrame extends JFrame {
 				repaint();
 			}
 		});
-	
+
 		grid.setBackground(Color.WHITE);
 		addGrid(gbl, gbc, noPanel, 0, 0, 1, 1, 1, 1, ticketHead);
 		addGrid(gbl, gbc, subjectPanel, 1, 0, 1, 1, 13, 1, ticketHead);
@@ -153,50 +154,50 @@ public class TicketFrame extends JFrame {
 
 		this.setVisible(true);
 		this.addWindowListener(new WindowListener() {
-			
+
 			@Override
 			public void windowOpened(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowIconified(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowDeiconified(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowDeactivated(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				// TODO Auto-generated method stub
 				TreezeStaticData.TICKETFRAME = null;
 			}
-			
+
 			@Override
 			public void windowClosed(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void windowActivated(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
+
 	}
 
 	class TicketList extends JFrame {
@@ -331,89 +332,47 @@ public class TicketFrame extends JFrame {
 	}
 
 	class TicketListItem extends JPanel {
-		 JLabel noLabel;
+		JLabel noLabel;
 		JLabel contentsLabel;
-		 JLabel whriterLabel;
-		//JPanel noPanel;
-		//JPanel subjectPanel;
-		//JPanel whriterPane;
+		JLabel whriterLabel;
+		// JPanel noPanel;
+		// JPanel subjectPanel;
+		// JPanel whriterPane;
 		Ticket ticket;
-		JScrollPane jsp ;
+		JScrollPane jsp;
 		String contentsSubStr = new String();
+
 		public TicketListItem(final Ticket ticket) {
 			// TODO Auto-generated constructor stub
 			this.ticket = ticket;
 			noLabel = new JLabel("1", JLabel.CENTER);
-			
+
 			contentsLabel = new JLabel(ticket.getContents(), JLabel.CENTER);
 			jsp = new JScrollPane(contentsLabel);
-			
+
 			jsp.setBorder(null);
-//			contentsLabel.setPreferredSize(new Dimension(1000,
-//					contentsLabel.getHeight()));
+			// contentsLabel.setPreferredSize(new Dimension(1000,
+			// contentsLabel.getHeight()));
 			whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
-			
-		
+
 			this.setBackground(new Color(0, 0, 0, 0));
 			// this.add(noPanel);
 			this.setLayout(gbl);
 			insets.bottom = 5;
 			insets.top = 5;
 			insets.right = 3;
-	
-	
-			addGrid(gbl, gbc, noLabel,      0, 0, 1, 1, 1, 1, this);
-	
-			addGrid(gbl, gbc, jsp,          1, 0, 1, 1, 13, 1, this);
+
+			addGrid(gbl, gbc, noLabel, 0, 0, 1, 1, 1, 1, this);
+
+			addGrid(gbl, gbc, jsp, 1, 0, 1, 1, 13, 1, this);
 			addGrid(gbl, gbc, whriterLabel, 2, 0, 1, 1, 1, 1, this);
-			
-			contentsLabel.setPreferredSize(new Dimension(contentsLabel.getWidth(),
-			contentsLabel.getHeight()));
-			this.addMouseListener(new MouseListener() {
 
-				@Override
-				public void mouseReleased(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-					setBackground(new Color(255, 255, 255, 255));
-					System.out.println("[Ticket ID]" + ticket.getContents()
-							+ ticket.getNodeID());
-					new TicketAnswerFrame(ticket, classInfo);
-
-				}
-
-				public void mousePreswsed(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseExited(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {
-					// TODO Auto-generated method stub
-					setBackground(new Color(10, 10, 100, 100));
-
-				}
-			});
+			contentsLabel.setPreferredSize(new Dimension(contentsLabel
+					.getWidth(), contentsLabel.getHeight()));
+			this.addMouseListener(new TicketMouseEvent());
+			jsp.addMouseListener(new TicketMouseEvent());
 			this.setVisible(false);
-this.setVisible(true);
+			this.setVisible(true);
 		}
 
 		@Override
@@ -422,6 +381,45 @@ this.setVisible(true);
 			super.paint(g);
 			g.drawLine(0, this.getHeight() - 1, this.getWidth(),
 					this.getHeight() - 1);
+		}
+		class TicketMouseEvent implements MouseListener{
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+				setBackground(new Color(255, 255, 255, 255));
+				jsp.setBackground(new Color(255, 255, 255, 255));
+				System.out.println("[Ticket ID]" + ticket.getContents()
+						+ ticket.getNodeID());
+				new TicketAnswerFrame(ticket, classInfo);
+				repaint();
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				setBackground(new Color(10, 10, 100, 100));
+			}
+			
 		}
 	}
 
@@ -436,15 +434,16 @@ this.setVisible(true);
 			this.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 			this.getHorizontalScrollBar().setUnitIncrement(
 					this.getHorizontalScrollBar().getBlockIncrement());
-			
-			getVerticalScrollBar().getModel().addChangeListener(new ChangeListener() {
-				
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					// TODO Auto-generated method stub
-					repaint();
-				}
-			});
+
+			getVerticalScrollBar().getModel().addChangeListener(
+					new ChangeListener() {
+
+						@Override
+						public void stateChanged(ChangeEvent e) {
+							// TODO Auto-generated method stub
+							repaint();
+						}
+					});
 
 		}
 
@@ -490,4 +489,5 @@ this.setVisible(true);
 	public void setNode(MindNode node) {
 		this.node = node;
 	}
+
 }

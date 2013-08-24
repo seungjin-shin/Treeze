@@ -58,8 +58,8 @@ public class DownLoadNetworkThread extends Thread {
 						url = new URL("http://"+ip+":8080/treeze/img/"
 								+ uploadedFileList.get(i).getId());
 						connection = (HttpURLConnection) url.openConnection();
-						File imgPath =new File(System.getProperty("user.dir"), "/TreezeImgs");
-						TreezeStaticData.PPT_IMG_PATH = imgPath.getPath();
+						File imgPath =new File(TreezeStaticData.PPT_IMG_PATH);
+						
 						// SDCardRoot.mkdir();
 						imgPath.mkdirs();
 						// + "/Trezee/" + classinfo.getClassId()

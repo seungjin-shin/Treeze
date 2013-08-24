@@ -372,7 +372,7 @@ public class MindMapMain extends JFrame {
 	public void nodetoMindNode(MindNode parent, node child) {
 		if(child.getNODETYPESTR().equals("Question")) return;
 		MindNode temp = new MindNode(parent, child.NODEID,child.getTEXT(),
-				child.getPOSITION());
+				child.getPOSITION(),child.IMGPATH);
 		nodes.add(temp);
 		if (child.nodes != null)
 			for (int i = 0; i < child.nodes.size(); i++) {

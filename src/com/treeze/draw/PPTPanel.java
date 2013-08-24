@@ -118,7 +118,7 @@ public class PPTPanel extends JPanel {
 		this.filename = filename;
 		nm = getNoteManager();
 		setLayout(null);
-
+		System.out.println("[fileNm] "+ filename);
 		
 
 		//커서의 색과 굵기 커서의 모양을 초기화

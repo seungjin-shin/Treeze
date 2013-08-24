@@ -44,6 +44,15 @@ public class MindNode {
 	final int NODE_HEIGHT = 50;
 	Image img;
 	Image scaledImage;
+	String imgPath;
+	public String getImgPath() {
+		return imgPath;
+	}
+
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
+	}
+
 	BufferedImage imageBuff;
 	JButton pptBtn = new JButton();
 	JButton ticketBtn = new JButton();
@@ -118,7 +127,7 @@ public class MindNode {
 
 	}
 
-	public MindNode(String nodeID, String str, int x, int y) { // ��Ʈ����
+	public MindNode(String nodeID, String str, int x, int y) { // 占쏙옙트占쏙옙占쏙옙
 		this.nodeStr = str;
 
 		this.locateX = x;
@@ -168,7 +177,7 @@ public class MindNode {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				new PPTFrame();
+				new PPTFrame(getnode());
 			}
 		});
 		ticketBtn.addMouseListener(new MouseListener() {
@@ -218,8 +227,8 @@ public class MindNode {
 	}
 
 	public MindNode(MindNode parentNode, String nodeID, String str,
-			String directionstr) { // ������
-		// ������
+			String directionstr,String imgPath) { // 占쏙옙占쏙옙占쏙옙
+		// 占쏙옙占쏙옙占쏙옙
 		// TODO Auto-generated constructor stub
 		nodeStr = str;
 		now.setNext(this);
@@ -228,6 +237,7 @@ public class MindNode {
 		this.nodeID = nodeID;
 		// this.scaleX = str.length() * 20;
 		this.scaleY = 50;
+		this.imgPath = imgPath;
 		if (directionstr == null) {
 			this.direction = parentNode.direction;
 		} else if (directionstr.equals("left")) {
@@ -283,7 +293,7 @@ public class MindNode {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				new PPTFrame();
+				new PPTFrame(getnode());
 			}
 		});
 		ticketBtn.addMouseListener(new MouseListener() {
@@ -461,8 +471,8 @@ public class MindNode {
 		else
 			this.locateX = parentNode.locateX - DISTANT - 100;
 
-		if (this.parentNodeChildCount() == 0) { // �θ� �ڽ��� ����� ��� ������ ��
-												// ��ġ�ϰ���.
+		if (this.parentNodeChildCount() == 0) { // 占싸몌옙 占쌘쏙옙占쏙옙 占쏙옙占쏙옙占�占쏙옙占�占쏙옙占쏙옙占쏙옙 占쏙옙
+												// 占쏙옙치占싹곤옙占쏙옙.
 			this.locateY = parentNode.locateY;
 		} else {
 
@@ -747,7 +757,7 @@ public class MindNode {
 			// TODO Auto-generated method stub
 			// nodeBtn.setLayout(null);
 
-			System.out.println("노드 아이디 " + getNodeID());
+			System.out.println("�몃� �����" + getNodeID());
 			getnode().getNodeBtn().getParent().add(getnode().pptBtn);
 			getnode().getNodeBtn().getParent().add(getnode().ticketBtn);
 			getnode().getNodeBtn().getParent()
