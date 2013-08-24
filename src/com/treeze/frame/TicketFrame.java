@@ -338,13 +338,19 @@ public class TicketFrame extends JFrame {
 		//JPanel subjectPanel;
 		//JPanel whriterPane;
 		Ticket ticket;
+		JScrollPane jsp ;
 		String contentsSubStr = new String();
 		public TicketListItem(final Ticket ticket) {
 			// TODO Auto-generated constructor stub
 			this.ticket = ticket;
 			noLabel = new JLabel("1", JLabel.CENTER);
-		
+			
 			contentsLabel = new JLabel(ticket.getContents(), JLabel.CENTER);
+			jsp = new JScrollPane(contentsLabel);
+			
+			jsp.setBorder(null);
+//			contentsLabel.setPreferredSize(new Dimension(1000,
+//					contentsLabel.getHeight()));
 			whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
 			
 		
@@ -356,12 +362,13 @@ public class TicketFrame extends JFrame {
 			insets.right = 3;
 	
 	
-			addGrid(gbl, gbc, noLabel, 0, 0, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, noLabel,      0, 0, 1, 1, 1, 1, this);
 	
-			addGrid(gbl, gbc, contentsLabel, 1, 0, 1, 1, 13, 1, this);
+			addGrid(gbl, gbc, jsp,          1, 0, 1, 1, 13, 1, this);
 			addGrid(gbl, gbc, whriterLabel, 2, 0, 1, 1, 1, 1, this);
-			noLabel.setSize(50, 10);
-		
+			
+			contentsLabel.setPreferredSize(new Dimension(contentsLabel.getWidth(),
+			contentsLabel.getHeight()));
 			this.addMouseListener(new MouseListener() {
 
 				@Override
@@ -405,7 +412,8 @@ public class TicketFrame extends JFrame {
 
 				}
 			});
-
+			this.setVisible(false);
+this.setVisible(true);
 		}
 
 		@Override

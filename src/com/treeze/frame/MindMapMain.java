@@ -19,6 +19,8 @@ import java.awt.ScrollPane;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.CubicCurve2D;
 import java.awt.image.BufferedImage;
@@ -116,7 +118,7 @@ public class MindMapMain extends JFrame {
 		screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		setTitle(classinfo.getClassName());
 		this.classinfo = classinfo;
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	//	setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.user = user;
 		MindNode.setClassinfo(classinfo);
 
@@ -152,7 +154,57 @@ public class MindMapMain extends JFrame {
 		socketThread.start();
 		setVisible(true);
 		nodeScrollPanel.init(); // 占썬�占썸에占쏙옙占쏙옙占쏙옙占�(?占썩�占썹�占썰빳占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙);
-
+		this.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+//				ServerSocket serverSocket = ServerSocket.getInstance();
+//				try {
+//					serverSocket.getSocket().close();
+//					System.err.println("[Socket End]");
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 	
@@ -350,6 +402,8 @@ public class MindMapMain extends JFrame {
 			try {
 				socket = new Socket(ip, port);
 				Gson gson = new Gson();
+				
+				System.out.println("[Socket Start]");
 				ServerSocket sv = ServerSocket.getInstance();
 				sv.setSocket(socket);
 				// ClassInfo classInfo = new ClassInfo();
@@ -469,14 +523,17 @@ public class MindMapMain extends JFrame {
 				} catch (UnknownHostException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+			
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+			
 				}
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			
 			}
 
 			// naviInputStream = naviSocket.getInputStream();
