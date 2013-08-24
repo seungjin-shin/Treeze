@@ -3,6 +3,7 @@ package freemind.controller;
 import java.awt.Color;
 import java.awt.Image;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -34,28 +35,6 @@ public class FreemindManager {
 		slideShow = new SlideShow(this);
 	}
 	
-	MindMapController mc;
-	Controller c;
-
-	OutputStream os;
-	InputStream in;
-
-	private boolean isSlideShowInfo = false;
-
-	private String filePath;// = "/Users/dewlit/Desktop/test/Linux/";
-	private String downPath = System.getProperty("user.home") + System.getProperty("file.separator") + "Treeze";
-
-	private int classId = 1;
-	private int pdfPage;
-	private MindMapMapModel mModel;
-	private ProfileFrame profileFrame;
-	private JFrame freemindMainFrame;
-	private Ticket ticket;
-	
-	SlideShow slideShow;
-
-	public Color treezeColor = new Color(141, 198, 63);
-	public Color noColor = new Color(0, 0, 0, 0);
 	
 	//(Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png"));
 	public Image treezeLogo = new ImageIcon(getClass().getClassLoader().getResource("images/treezeLogo.png")).getImage();
@@ -98,10 +77,70 @@ public class FreemindManager {
 	public Image signPress = new ImageIcon(getClass().getClassLoader().getResource("images/sign3.png")).getImage();
 	
 	
+	MindMapController mc;
+	Controller c;
 	
+	OutputStream os;
+	InputStream in;
 	
+	private boolean isSlideShowInfo = false;
+	
+	public String mode; 
+	public static String REGMODE = "regMode";
+	public static String LECMODE = "lecMode";
+	
+	private MenuBar menuBar;
+	
+
+
+	private String filePath;// = "/Users/dewlit/Desktop/test/Linux/";
+	private String downPath = System.getProperty("user.home") + System.getProperty("file.separator") + "Treeze";
+	
+	private int classId = 1;
+	private int pdfPage;
+	private MindMapMapModel mModel;
+	private ProfileFrame profileFrame;
+	private JFrame freemindMainFrame;
+	private Ticket ticket;
+	
+	SlideShow slideShow;
+	
+	public Color treezeColor = new Color(141, 198, 63);
+	public Color noColor = new Color(0, 0, 0, 0);
+	
+	public void setEnableMenuBar(){
+		if(getMode().equals(REGMODE)){
+			menuBar.setRegModeMenu();
+		}
+		else{
+			menuBar.setLecModeMenu();
+		}
+	}
+	public MenuBar getMenuBar() {
+		return menuBar;
+	}
+	
+	public void setMenuBar(MenuBar menuBar) {
+		this.menuBar = menuBar;
+	}
+	
+	public String getMode() {
+		return mode;
+	}
+	
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
 	public void init(){
 		isSlideShowInfo = false;
+		
+		try {
+			in.close();
+			os.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public Ticket getTicket() {

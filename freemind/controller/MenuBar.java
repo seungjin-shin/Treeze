@@ -79,16 +79,38 @@ public class MenuBar extends JMenuBar {
     ActionListener mapsMenuActionListener = new MapsMenuActionListener();
     ActionListener lastOpenedActionListener = new LastOpenedActionListener();
     private JMenu formatmenu;
-
+    
+    private JMenuItem slideShow;
+    private JMenuItem surveyItem;
+	
+    private JMenuItem setSlideSequneceIcon;
+    private JMenuItem uploadLecture;
+	
     public MenuBar(Controller controller) {
 		this.c = controller;
 		if(logger==null) {
 		    logger = controller.getFrame().getLogger(this.getClass().getName());
 		}
+		FreemindManager.getInstance().setMenuBar(this);
 		//updateMenus();
     }//Constructor
 
-
+    //dewlit
+    public void setRegModeMenu(){
+    	slideShow.setEnabled(false);
+    	surveyItem.setEnabled(false);
+    	setSlideSequneceIcon.setEnabled(true);
+    	uploadLecture.setEnabled(true);
+    }
+    
+    public void setLecModeMenu(){
+    	slideShow.setEnabled(true);
+    	surveyItem.setEnabled(true);
+    	setSlideSequneceIcon.setEnabled(false);
+    	uploadLecture.setEnabled(false);
+    }
+    
+    
 	/**
 	 * This is the only public method. It restores all menus.
 	 * @param newModeController 
@@ -337,10 +359,18 @@ public class MenuBar extends JMenuBar {
 		JMenuItem zoomIn = menuHolder.addAction(c.zoomIn, VIEW_MENU+"zoom/zoomIn");
 		zoomIn.setAccelerator(KeyStroke.getKeyStroke(c.getFrame().getAdjustableProperty("keystroke_zoom_in")));
 		
+		//dewlit
+		menuHolder.addSeparator(VIEW_MENU);
 		JMenuItem closeLecture = menuHolder.addAction(c.closeLecture, VIEW_MENU+"Close lecture");
-		JMenuItem slideShow = menuHolder.addAction(c.slideShowAction, VIEW_MENU+"Slide Show");
-		JMenuItem setSlideSequneceIcon = menuHolder.addAction(c.setSlideSequenceIconAction, VIEW_MENU+"Setting Slide Sequence Icon");
-		JMenuItem uploadLecture = menuHolder.addAction(c.uploadLectureAction, VIEW_MENU+"Upload Lecture");
+		menuHolder.addSeparator(VIEW_MENU);
+		slideShow = menuHolder.addAction(c.slideShowAction, VIEW_MENU+"Slide Show");
+		surveyItem = menuHolder.addAction(c.surveyAction, VIEW_MENU+"Send Survey");
+		menuHolder.addSeparator(VIEW_MENU);
+		setSlideSequneceIcon = menuHolder.addAction(c.setSlideSequenceIconAction, VIEW_MENU+"Setting Slide Sequence Icon");
+		uploadLecture = menuHolder.addAction(c.uploadLectureAction, VIEW_MENU+"Upload Lecture");
+		menuHolder.addSeparator(VIEW_MENU);
+		
+		
 		
 		JMenuItem zoomOut = menuHolder.addAction(c.zoomOut, VIEW_MENU+"zoom/zoomOut");
 		zoomOut.setAccelerator(KeyStroke.getKeyStroke(c.getFrame().getAdjustableProperty("keystroke_zoom_out")));

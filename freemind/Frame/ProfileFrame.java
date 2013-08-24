@@ -50,6 +50,7 @@ import javax.swing.border.LineBorder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import freemind.controller.AddAllTicketThread;
 import freemind.controller.FreemindManager;
 import freemind.controller.ImgBtn;
 import freemind.json.ArrayClass;
@@ -962,6 +963,11 @@ public class ProfileFrame extends JFrame {
 				mc.load(file);
 				
 				fManager.getC().checkNodeType();
+				Thread addAllTicketThread = new AddAllTicketThread();
+				addAllTicketThread.start();
+				
+				fManager.setMode(FreemindManager.LECMODE);
+				fManager.setEnableMenuBar();
 				
 				Gson gson = new Gson();
 				User user = new User();

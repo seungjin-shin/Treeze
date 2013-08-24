@@ -106,6 +106,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.itextpdf.text.pdf.PdfReader;
 
+import freemind.Frame.SurveyFrame;
 import freemind.NodeType.NodeType;
 import freemind.NodeType.QuestionType;
 import freemind.common.BooleanProperty;
@@ -222,6 +223,7 @@ public class Controller  implements MapModuleChangeObserver {
     public SlideShow slideShow;
     public Action closeLecture;
     public Action slideShowAction;
+    public Action surveyAction;
     public Action setSlideSequenceIconAction;
     public Action uploadLectureAction;
     private MindMapController mc;
@@ -570,6 +572,13 @@ public class Controller  implements MapModuleChangeObserver {
 		System.out.println("Controller : check node type");
     }
     
+    protected class SurveyAction extends AbstractAction {
+        public SurveyAction() {
+           super("Send Survey"); }
+        public void actionPerformed(ActionEvent e) {
+        	new SurveyFrame();
+        }}
+    
     protected class SlideShowAction extends AbstractAction {
         public SlideShowAction() {
            super("Slide Show"); }
@@ -844,6 +853,7 @@ public class Controller  implements MapModuleChangeObserver {
         //dewlit
         closeLecture = new CloseLectureAction();
         slideShowAction = new SlideShowAction();
+        surveyAction = new SurveyAction();
         setSlideSequenceIconAction = new SetSlideSequenceIconAction();
         uploadLectureAction = new UploadLectureAction();
 

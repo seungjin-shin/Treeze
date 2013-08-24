@@ -102,18 +102,10 @@ public class NodeKeyListener implements KeyListener {
 			//new SurveyResultFrame(31, 9);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F3){
-//				grid.removeAll();
-//				for(int i=0;i<lectureList.size();i++){
-//					grid.add(new LectureListItem(i + 1, lectureList.get(i)));
-//				}
-//				listPanel.updateUI();
-//				lectureListPanel.repaint();
-		
 						
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F8){
-			Thread addAllTicketThread = new AddAllTicketThread();
-			addAllTicketThread.start();
+			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F9){
 			//set Q node
