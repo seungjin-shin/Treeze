@@ -72,11 +72,6 @@ public class NodeKeyListener implements KeyListener {
 	}
 
 	public void keyPressed(KeyEvent e) {
-		OutputStream os = fManager.getOs();
-		
-		TreezeData treezeData = new TreezeData();
-		String jsonString;
-		FreemindGson myGson = new FreemindGson();
 		
 		if(e.getKeyCode() == KeyEvent.VK_SHIFT){
 			pressedShiftKey = true;
@@ -97,9 +92,7 @@ public class NodeKeyListener implements KeyListener {
 			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F4){
-			new SurveyFrame();
-//			new SurveyFrame(fManager.getOs()); // c 넘겨서 소켓 다 보내야대
-			//new SurveyResultFrame(31, 9);
+			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F3){
 						
@@ -136,16 +129,11 @@ public class NodeKeyListener implements KeyListener {
 			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F16){
-			c.uploadLectureaAction();
 			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F15){
-			c.removeAllIcon((NodeAdapter) c.getMc().getRootNode());
-			c.setSequenceIcon();
-			System.out.println("KeyL : F15");
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F14){
-			System.out.println("KeyL : F14");
 		}
  		
 		if (mListener != null)

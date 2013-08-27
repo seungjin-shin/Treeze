@@ -362,12 +362,17 @@ public class MenuBar extends JMenuBar {
 		//dewlit
 		menuHolder.addSeparator(VIEW_MENU);
 		JMenuItem closeLecture = menuHolder.addAction(c.closeLecture, VIEW_MENU+"Close lecture");
+//		closeLecture.setAccelerator(KeyStroke.getKeyStroke("F6"));
 		menuHolder.addSeparator(VIEW_MENU);
 		slideShow = menuHolder.addAction(c.slideShowAction, VIEW_MENU+"Slide Show");
+		slideShow.setAccelerator(KeyStroke.getKeyStroke("F5"));
 		surveyItem = menuHolder.addAction(c.surveyAction, VIEW_MENU+"Send Survey");
+		surveyItem.setAccelerator(KeyStroke.getKeyStroke("F4"));
 		menuHolder.addSeparator(VIEW_MENU);
 		setSlideSequneceIcon = menuHolder.addAction(c.setSlideSequenceIconAction, VIEW_MENU+"Setting Slide Sequence Icon");
+		setSlideSequneceIcon.setAccelerator(KeyStroke.getKeyStroke("F9"));
 		uploadLecture = menuHolder.addAction(c.uploadLectureAction, VIEW_MENU+"Upload Lecture");
+		uploadLecture.setAccelerator(KeyStroke.getKeyStroke("F10"));
 		menuHolder.addSeparator(VIEW_MENU);
 		
 		
