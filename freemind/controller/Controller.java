@@ -323,7 +323,7 @@ public class Controller  implements MapModuleChangeObserver {
     }
     //dewlit
 
-    public void recurAddTicketNode(NodeAdapter node){
+    public synchronized void recurAddTicketNode(NodeAdapter node){
     	NodeAdapter selNode = node;
     	NodeAdapter qNode = null;
     	NodeAdapter updateNode = null;
@@ -357,16 +357,16 @@ public class Controller  implements MapModuleChangeObserver {
 				}
 			}
 			
-			fManager.getMc().addNew(qNode, MindMapController.NEW_CHILD, null);
-//			fManager.getMc().edit.stopEditing();
-			
-			NodeAdapter tmp = (NodeAdapter) qNode.getChildAt(qNode.getChildCount() - 1);
-			
 			if(fManager.getTicket().getContents().length() > 20)
 				fManager.setNodeText(fManager.getTicket().getContents().substring(0, 20) + "...");
 			else
 				fManager.setNodeText(fManager.getTicket().getContents());
 			
+			fManager.getMc().addNew(qNode, MindMapController.NEW_CHILD, null);
+//			fManager.getMc().edit.stopEditing();
+			
+			NodeAdapter tmp = (NodeAdapter) qNode.getChildAt(qNode.getChildCount() - 1);
+						
 			tmp.setNodeTypeStr("Ticket");
 			tmp.setNodeID(fManager.getTicket().getId() + "");
 			tmp.setTicketContent(fManager.getTicket().getContents());
@@ -1345,7 +1345,7 @@ public class Controller  implements MapModuleChangeObserver {
 //    	logger.finest("obtainFocusForSelected");
     	if (getView() != null) { // is null if the last map was closed.
     		logger.info("Requesting Focus for " + getView().getSelected());
-    		getView().getSelected().requestFocus();
+//    		getView().getSelected().requestFocus();
     	} else {
     		// fc, 6.1.2004: bug fix, that open and quit are not working if no map is present.
     		// to avoid this, the menu bar gets the focus, and everything seems to be all right!!

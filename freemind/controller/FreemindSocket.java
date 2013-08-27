@@ -258,13 +258,18 @@
 
 package freemind.controller;
 
+import java.awt.FlowLayout;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+
 import com.google.gson.Gson;
 
+import freemind.Frame.SurveyFrame;
 import freemind.Frame.SurveyResultFrame;
 import freemind.json.ArrayLecture;
 import freemind.json.Survey;
@@ -312,12 +317,18 @@ public class FreemindSocket extends Thread {
 					treezeData = gson.fromJson(rcvStr, TreezeData.class);
 					
 					if(treezeData.getDataType().equals(TreezeData.TICKET)){
+						
+						new SurveyFrame();
+						
 						TmpTicket tmpTicket = gson.fromJson(treezeData.getArgList().get(0), TmpTicket.class);
 						Ticket ticket = tmpTicket.getTicket();
 						Thread addTicketThread = new AddTicketThread(ticket);
 						addTicketThread.start();
 //						fManager.setTicket(ticket);
 //						c.recurAddTicketNode((NodeAdapter) c.getMc().getRootNode());
+						
+						
+						
 					}
 					else if(treezeData.getDataType().equals(TreezeData.SURVEYRESULT)){
 						Survey survey = gson.fromJson(treezeData.getArgList().get(0), Survey.class);

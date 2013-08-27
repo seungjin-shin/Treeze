@@ -73,6 +73,12 @@ public class AddAllTicketThread extends Thread{
 			
 			for(int i = 0; i < ticketList.size(); i++){
 				fManager.setTicket(ticketList.get(i));
+				try {
+					Thread.sleep(700);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				fManager.getC().recurAddTicketNode((NodeAdapter) fManager.getMc().getRootNode());
 			}
 			System.out.println("Add All tickets");

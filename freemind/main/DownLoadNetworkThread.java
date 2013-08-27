@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sun.xml.internal.rngom.digested.DOptionalPattern;
 
 import freemind.controller.FreemindManager;
 import freemind.json.ArrayUploadedFile;
