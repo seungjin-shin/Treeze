@@ -18,8 +18,8 @@ public class AddQuestionNode {
 		int i;
 		// Question 노드 추가 하기 전 카운트
 		int cnt = forNodeForQuestion.getChildCount();
-
-		c.getMc().addNew(forNodeForQuestion, MindMapController.NEW_CHILD, null);
+		
+		FreemindManager.getInstance().getMc().addNew(forNodeForQuestion, MindMapController.NEW_CHILD, null);
 
 		for (i = 0; i < cnt; i++) {
 			addNodeForQuestion((MindMapNode) forNodeForQuestion.getChildAt(i));
@@ -35,9 +35,9 @@ public class AddQuestionNode {
 		int cnt = modifyForQuestion.getChildCount();
 		if(cnt != 0){
 			forModifyNodeName = (NodeAdapter)modifyForQuestion.getChildAt(cnt - 1);
-			forModifyNodeName.setText("Q");
+//			forModifyNodeName.setText("Q");
 			forModifyNodeName.setNodeTypeStr("Question");
-			c.getMc().nodeChanged(forModifyNodeName);
+			FreemindManager.getInstance().getMc().nodeChanged(forModifyNodeName);
 		}
 		
 		for (i = 0; i < cnt; i++) {

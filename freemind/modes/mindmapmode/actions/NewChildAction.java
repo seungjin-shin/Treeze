@@ -89,7 +89,10 @@ public class NewChildAction extends AbstractAction implements ActorXml {
 //			newNode.setTicketWriter(ticketWriter);
 //		}
 //		else
+		if(fManager.getNodeText().equals(""))
 			newNode = c.newNode("", parent.getMap());
+		else
+			newNode = c.newNode(fManager.getNodeText(), parent.getMap());
 		
 		//c.setChildName("");
         

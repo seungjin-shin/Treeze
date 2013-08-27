@@ -90,12 +90,13 @@ public class FreemindManager {
 	public static String LECMODE = "lecMode";
 	
 	private MenuBar menuBar;
-	
-
 
 	private String filePath;// = "/Users/dewlit/Desktop/test/Linux/";
 	private String downPath = System.getProperty("user.home") + System.getProperty("file.separator") + "Treeze";
+	private String nodeText = "";
 	
+
+
 	private int classId = 1;
 	private int pdfPage;
 	private MindMapMapModel mModel;
@@ -108,6 +109,13 @@ public class FreemindManager {
 	public Color treezeColor = new Color(141, 198, 63);
 	public Color noColor = new Color(0, 0, 0, 0);
 	
+	public String getNodeText() {
+		return nodeText;
+	}
+	
+	public void setNodeText(String nodeText) {
+		this.nodeText = nodeText;
+	}
 	public void setEnableMenuBar(){
 		if(getMode().equals(REGMODE)){
 			menuBar.setRegModeMenu();
@@ -135,8 +143,11 @@ public class FreemindManager {
 		isSlideShowInfo = false;
 		
 		try {
-			in.close();
-			os.close();
+			if(in != null)
+				in.close();
+			if(os != null)
+				os.close();
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

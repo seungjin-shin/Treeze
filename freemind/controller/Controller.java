@@ -301,7 +301,7 @@ public class Controller  implements MapModuleChangeObserver {
 	public FreemindSocket fmSck;// = new FreemindSocket(this, getMc());
     
 	public void startFreemindSocket(){
-		fmSck = new FreemindSocket(this, getMc(), fManager.getIn());
+		fmSck = new FreemindSocket(this, fManager.getMc(), fManager.getIn());
 		fmSck.start();
 		System.out.println("Controller startFreemindSocket");
 	}
@@ -357,27 +357,27 @@ public class Controller  implements MapModuleChangeObserver {
 				}
 			}
 			
-			getMc().addNew(qNode, MindMapController.NEW_CHILD, null);
-			getMc().edit.stopEditing();
+			fManager.getMc().addNew(qNode, MindMapController.NEW_CHILD, null);
+//			fManager.getMc().edit.stopEditing();
 			
 			NodeAdapter tmp = (NodeAdapter) qNode.getChildAt(qNode.getChildCount() - 1);
 			
 			if(fManager.getTicket().getContents().length() > 20)
-				tmp.setText(fManager.getTicket().getContents().substring(0, 20) + "...");
+				fManager.setNodeText(fManager.getTicket().getContents().substring(0, 20) + "...");
 			else
-				tmp.setText(fManager.getTicket().getContents());
+				fManager.setNodeText(fManager.getTicket().getContents());
 			
 			tmp.setNodeTypeStr("Ticket");
 			tmp.setNodeID(fManager.getTicket().getId() + "");
 			tmp.setTicketContent(fManager.getTicket().getContents());
 			tmp.setTicketWriter(fManager.getTicket().getUserName());
-			getMc().nodeChanged(tmp);
+			fManager.getMc().nodeChanged(tmp);
 
 			if (((QuestionType) updateNode.getNodeType()).getFm().isVisible())
 				((QuestionType) updateNode.getNodeType()).getFm().updateTickets();
 			else{
-				getMc()._setFolded(updateNode, true);
-				getMc().nodeChanged(updateNode);
+				fManager.getMc()._setFolded(updateNode, true);
+				fManager.getMc().nodeChanged(updateNode);
 			}
 			return;
 		}
@@ -411,7 +411,7 @@ public class Controller  implements MapModuleChangeObserver {
 			out = new OutputStreamWriter(new FileOutputStream(mmFile), "UTF-8");
 			forUploadXmlOw = new OutputStreamWriter(new FileOutputStream(forUpmmFile), "UTF-8");
 			
-			FreemindManager.getInstance().getmModel().getXml(out, true, getMc().getRootNode());
+			fManager.getmModel().getXml(out, true, fManager.getMc().getRootNode());
 			
 			out.close();
 			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(mmFile),"UTF-8"));
@@ -516,7 +516,7 @@ public class Controller  implements MapModuleChangeObserver {
         	super("Set Slide Sequence Icon"); 
         }
         public void actionPerformed(ActionEvent e) {
-        	removeAllIcon((NodeAdapter) getMc().getRootNode());
+        	removeAllIcon((NodeAdapter) fManager.getMc().getRootNode());
 			setSequenceIcon();
            }}
     
@@ -530,25 +530,26 @@ public class Controller  implements MapModuleChangeObserver {
     
     public void uploadLectureaAction(){
     	//set Q Node
-    	addQNode.addNodeForQuestion(getMc().getRootNode());
+    	fManager.setNodeText("Q");
+    	addQNode.addNodeForQuestion(fManager.getMc().getRootNode());
     	
     	// modify Q node
-    	addQNode.modifyForQuestion(getMc().getRootNode());
-    	getMc().edit.stopEditing();
+    	addQNode.modifyForQuestion(fManager.getMc().getRootNode());
+//    	fManager.getMc().edit.stopEditing();
     	
     	/*
 		modify last node, why not change
 		in modifyForQuestion() method?????
     	 */
-    	NodeAdapter tmp = (NodeAdapter)getMc().getSelected();
-    	tmp.setText("Q");
-    	tmp.setNodeTypeStr("Question");
-    	getMc().nodeChanged(tmp);
+//    	NodeAdapter tmp = (NodeAdapter)fManager.getMc().getSelected();
+//    	tmp.setText("Q");
+//    	tmp.setNodeTypeStr("Question");
+//    	fManager.getMc().nodeChanged(tmp);
     	
     	System.out.println("NodeKeyListener : set QuestionNodeInfo");
     	
     	//Set ID
-		recurSetUploadXmlID((NodeAdapter) getMc().getRootNode());
+		recurSetUploadXmlID((NodeAdapter) fManager.getMc().getRootNode());
 		
 		//makeXMlFile
 		makeUploadXml();
@@ -590,7 +591,7 @@ public class Controller  implements MapModuleChangeObserver {
 		
 		if (!fManager.isSlideShowInfo()) {
 
-			NodeAdapter root = (NodeAdapter) getMc().getRootNode();
+			NodeAdapter root = (NodeAdapter) fManager.getMc().getRootNode();
 			NodeAdapter next;// = (NodeAdapter)mc.getRootNode();
 
 			// set FreemindManager isSlideshow
@@ -614,7 +615,7 @@ public class Controller  implements MapModuleChangeObserver {
 			}
     	}
     	
-    	getSlideShow().setfocus((NodeAdapter)getMc().getRootNode().getChildAt(0));
+    	getSlideShow().setfocus((NodeAdapter)fManager.getMc().getRootNode().getChildAt(0));
 		getSlideShow().show();
 		getSlideShow().sendPosition();
     }

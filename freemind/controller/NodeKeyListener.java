@@ -55,12 +55,10 @@ public class NodeKeyListener implements KeyListener {
 
 	private Controller c;
 	private KeyListener mListener;
-	private FreemindManager fManager;
 	private boolean pressedShiftKey = false; 
 	
 	public NodeKeyListener(Controller controller) {
 		c = controller;
-		fManager = FreemindManager.getInstance();
 	}
 
 	public void register(KeyListener listener) {

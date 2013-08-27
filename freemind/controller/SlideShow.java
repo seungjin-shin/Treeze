@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import org.json.simple.JSONObject;
 
 import freemind.Frame.SurveyFrame;
 import freemind.json.CurrentPositionOfNav;
