@@ -2,22 +2,15 @@ package com.treeze.draw;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-
-import com.treeze.util.Var;
-
 
 /*
  * pptpanel을 나타냄
@@ -29,132 +22,76 @@ public class PPTPanel extends JPanel {
 	public static int x2;
 	public static int y1;
 	public static int y2;
-
-	// draw type
-	public static int DRAW_TYPE_CIRCLE = 0;
-	public static int DRAW_TYPE_RECTANGLE = 1;
-	public static int DRAW_TYPE_X = 2;
-	public static int DRAW_TYPE_LINE = 3;
-	public static int DRAW_TYPE_STAR = 4;
-	public static int DRAW_TYPE_ARROW = 5;
-	// public static int DRAW_TYPE_RECTANGLE = 6;
-
-
-
-	// keycode
-	public static final int KEY_CODE_MODE = 192;
-	public static final int KEY_CODE_ONE = 49;
-	public static final int KEY_CODE_TWO = 50;
-	public static final int KEY_CODE_THREE = 51;
-	public static final int KEY_CODE_FOUR = 52;
-	public static final int KEY_CODE_FIVE = 53;
-	public static final int KEY_CODE_SIX = 54;
-	public static final int KEY_CODE_SHIFT = 16;
-
-	// 필기 모드
-	public static final int NOTE_MODE_PEN = 0;
-	public static final int NOTE_MODE_FIGURE = 1;
-	public static final int NOTE_MODE_ERASER = 2;
-
-	// figure type
-	public static final int FIGURE_TYPE_STAR = 0;
-	public static final int FIGURE_TYPE_ARROW = 1;
-	public static final int FIGURE_TYPE_CIRCLE = 2;
-	public static final int FIGURE_TYPE_X = 3;
-	public static final int FIGURE_TYPE_REC = 4;
-	public static final int FIGURE_TYPE_TEXT = 5;
-
-	// LineMode
-	public static final int LINE_MODE_STRAIGHT = 0;
-	public static final int LINE_MODE_CURVE = 1;
-
-	// button
-	public static final int CLICK_BUTTON_LEFT = 1;
-	public static final int CLICK_BUTTON_RIGHT = 3;
-	
-	public static final int MOUSE_STATE_CLICK = 0;
-
-	private int curNoteMode;
-	private int curFigureMode;
-	private int curLineMode;
-	private boolean curMouseState;
-
-	// this is for cursor
-	private Toolkit toolkit;
-	private Image image;
-	Point hotspot;
-
-	// pen cursor;
-	Cursor blackPenCursor;
-	Cursor redPenCursor;
-	Cursor highliterCursor;
-	Cursor figureCursor;
-
-	// figure cursor;
-	Cursor starCursor;
-	Cursor arrowCursor;
-	Cursor circleCursor;
-	Cursor XCursor;
-	Cursor recCursor;
-	Cursor textCursor;
-
-	// set line property
-	Color color;
-	BasicStroke bs;
-
-	//필기를 관장하는 부분
-	NoteManager nm;
-	
-	//현재 pptPanel 부분
+	// 현재 pptPanel 부분
 	PPTPanel pptPanel;
-	String filename;
+//	String filename;
+	StateManager sm;
+	
+	DrawablePanel dp;
+	
+	NoteManager nm;
 
+	
 	public PPTPanel(String filename) {
 		// TODO Auto-generated constructor stub
-		
+		super();
+		System.out.println(filename);
 		pptPanel = this;
+		// 처음 초기화
+		dp = new DrawablePanel(this, filename);
 		
-		//처음 초기화
-		this.filename = filename;
-		nm = getNoteManager();
+		nm = dp.getNoteManager();
 		setLayout(null);
-		System.out.println("[fileNm] "+ filename);
-		
 
-		//커서의 색과 굵기 커서의 모양을 초기화
-		initCursor();
-		setCurMode(NOTE_MODE_PEN);
-		setCursor(blackPenCursor);
-		bs = new BasicStroke(1);
-		color = Color.BLACK;
+		sm = StateManager.getStateManager();
+
+		// 커서의 색과 굵기 커서의 모양을 초기화
+
+		sm.setCurNoteMode(StateManager.NOTE_MODE_PEN);
+		setCursor(StateManager.blackPenCursor);
+
+		sm.setColor(Color.BLACK);
+		sm.setBs(new BasicStroke(1));
 
 		// 직선 곡선 모드 설정
-		curLineMode = LINE_MODE_CURVE;
+		sm.setCurLineMode(StateManager.LINE_MODE_CURVE);
+
 
 		this.addMouseListener(new MouseListener() {
-			
-			//마우스가 눌렀다가 떼었을때
+
+			// 마우스가 눌렀다가 떼었을때
 			@Override
 			public void mouseReleased(MouseEvent e) {
+
+				// 현재 까지 그린부분까지 저장(펜이라면 그린곡선을, figure라면 figure를)
+				sm.setExMouseMode(sm.getCurMouseMode());
+				sm.setCurMouseMode(StateManager.MOUSE_STATE_RELEASED);
 				
-				//현재 까지 그린부분까지 저장(펜이라면 그린곡선을, figure라면 figure를)
-				if (curNoteMode == NOTE_MODE_PEN) {
+				System.out.println("" + sm.isChangeSizeFlag() + sm.isMoveFlag() + sm.getExMouseMode());
 
-					nm.makePathComplete();
+				if (sm.getExMouseMode() == StateManager.MOUSE_STATE_DRAGGED) {
+					if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
 
-				} else if (curNoteMode == NOTE_MODE_FIGURE) {
-					if(curFigureMode == FIGURE_TYPE_CIRCLE || curFigureMode == FIGURE_TYPE_REC) {
-						
-						nm.makeFigureComplete();
-						
+						nm.makePathComplete();
+
+					} else if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
+						if (sm.getCurFigureMode() == StateManager.FIGURE_TYPE_CIRCLE
+								|| sm.getCurFigureMode() == StateManager.FIGURE_TYPE_REC) {
+
+							nm.makeFigureComplete();
+
+						}
 					}
 				}
+
 			}
-			
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
+
+				// curMouseMode = MOUSE_STATE_PRESSED;
+				sm.setCurMouseMode(StateManager.MOUSE_STATE_PRESSED);
 
 				pptPanel.grabFocus();
 
@@ -164,7 +101,7 @@ public class PPTPanel extends JPanel {
 				int clickCount = e.getClickCount();
 
 				if (clickCount == 1) {
-					if (curNoteMode == NOTE_MODE_PEN) {
+					if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
 
 						nm.initPath();
 
@@ -188,27 +125,46 @@ public class PPTPanel extends JPanel {
 				int clickCount = e.getClickCount();
 				int clickButton = e.getButton();
 
-				if (clickButton == CLICK_BUTTON_LEFT) {
+				if (clickButton == StateManager.CLICK_BUTTON_LEFT) {
+					
 					if (clickCount == 1) {
+						
+						if(nm.isClickableItem(x1, y1)) {
+							nm.setClick(x1, y1);
+						} else {
+							nm.setUnClicked();
+							if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
+								if (sm.getCurFigureMode() == StateManager.FIGURE_TYPE_STAR) {
+									nm.drawImage(x1, y1, 40, 40, NoteManager.IMG_TYPE_STAR);
+								}
 
-						if (curNoteMode == NOTE_MODE_FIGURE) {
-							if(curFigureMode == FIGURE_TYPE_STAR) {
-								nm.drawImage(x1, y1, 25, 25, Var.IMG_ADDR +"star.png");
+							}else if(sm.getCurNoteMode() == StateManager.NOTE_MODE_ERASER) {
+								
+								nm.setClick(x1, y1);
+								
 							}
-							
 						}
+
+
 
 					} else if (clickCount == 2) {
 						// 첫번째 클릭했던 내용을 지워버리면된다.
-						if (curNoteMode == NOTE_MODE_FIGURE) {
-							nm.removeLastDrawableObj();
+						if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
+							if(sm.getCurFigureMode() == StateManager.FIGURE_TYPE_STAR) {
+								nm.removeLastDrawableObj();
+							}
 						}
-						// 그다음 두번째에는 textarea를 넣어버리면됨.
-						nm.addTextField(x1, y1, 100, 100);
+						// 그다음 두번째에는 textarea를 넣어버리면됨
+						if(sm.getCurNoteMode() != StateManager.NOTE_MODE_ERASER)
+
+							nm.addMemo(x1, y1, 100, 100);
+
 					}
 
-				} else if (clickButton == CLICK_BUTTON_RIGHT) {
-					nm.addMemo(x1, y1, 100, 100);
+				} else if (clickButton == StateManager.CLICK_BUTTON_RIGHT) {
+
+					nm.addPostIt(x1, y1, 100, 100);
+					
 				}
 
 			}
@@ -221,27 +177,40 @@ public class PPTPanel extends JPanel {
 
 					@Override
 					public void mouseMoved(MouseEvent e) {
+						
+						int x = e.getX();
+						int y = e.getY();
+						
+						if(nm.isClickableItem(x, y)) {
+							setCursor(StateManager.moveCursor);
+						}else {
+							setCursor(sm.getCurStateCursor());
+						}
 					}
 
 					@Override
 					public void mouseDragged(MouseEvent e) {
 						// TODO Auto-generated method stub
 						// pen 모드중은 두개로 구분된다.
-						if (curNoteMode == NOTE_MODE_PEN) {
-							// shift를 누르고 있으므로 직선을 그린다.
-							if (curLineMode == LINE_MODE_STRAIGHT) {
+						// curMouseMode = MOUSE_STATE_DRAGGED;
+						sm.setCurMouseMode(StateManager.MOUSE_STATE_DRAGGED);
 
-								nm.makePath(new Point(e.getX(), y1), color, bs);
+						if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
+							// shift를 누르고 있으므로 직선을 그린다.
+							if (sm.getCurLineMode() == StateManager.LINE_MODE_STRAIGHT) {
+
+								nm.makePath(new Point(e.getX(), y1), sm.getColor(), sm.getBs());
 
 							} else {
 
-								nm.makePath(new Point(e.getX(), e.getY()),color, bs);
+								nm.makePath(new Point(e.getX(), e.getY()), sm.getColor(), sm.getBs());
 
 							}
 
-						} else if (curNoteMode == NOTE_MODE_FIGURE) {
+						} else if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
 
-							nm.makeFigure(x1, y1, e.getX() - x1, e.getY() - y1, curFigureMode);
+							nm.makeFigure(x1, y1, e.getX() - x1, e.getY() - y1,
+									sm.getCurFigureMode());
 
 						}
 
@@ -254,93 +223,106 @@ public class PPTPanel extends JPanel {
 		pptPanel.addKeyListener(new KeyListener() {
 
 			@Override
-			public void keyTyped(KeyEvent e) {}
+			public void keyTyped(KeyEvent e) {
+			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
 				// key release 될때
-				if (curLineMode == LINE_MODE_STRAIGHT) {
-					curLineMode = LINE_MODE_CURVE;
+				if (sm.getCurLineMode() == StateManager.LINE_MODE_STRAIGHT) {
+					// curLineMode = LINE_MODE_CURVE;
+					sm.setCurLineMode(StateManager.LINE_MODE_CURVE);
 				}
 
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
+				// TODO Auto-generated metdehod stub
 
 				int keyCode = e.getKeyCode();
+				
+				System.out.println("cur keycode : " + keyCode);
+				
+				if (keyCode == StateManager.KEY_CODE_DEL) {
+					nm.removeSelectedItem();
+				}					
 
 				if (keyCode == 192) {
-					if (curNoteMode == NOTE_MODE_FIGURE) {
+					nm.saveStoredNote();
+					if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
 
-						setCursor(blackPenCursor);
-						setCurMode(NOTE_MODE_PEN);
+						setCursor(StateManager.blackPenCursor);
+						sm.setCurNoteMode(StateManager.NOTE_MODE_PEN);
 
 					} else {
 
-						setCursor(figureCursor);
-						setCurMode(NOTE_MODE_FIGURE);
+						setCursor(StateManager.figureCursor);
+						sm.setCurNoteMode(StateManager.NOTE_MODE_FIGURE);
 
 					}
 				}
 
-				if (curNoteMode == NOTE_MODE_PEN) {
+				if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
 
-					if (keyCode == KEY_CODE_SHIFT) {
-						curLineMode = LINE_MODE_STRAIGHT;
+					if (keyCode == StateManager.KEY_CODE_SHIFT) {
+
+						sm.setCurLineMode(StateManager.LINE_MODE_STRAIGHT);
 					}
 
-					if (keyCode == KEY_CODE_ONE) {
+					if (keyCode == StateManager.KEY_CODE_ONE) {
 
-						setCursor(blackPenCursor);
-						color = Color.black;
-						bs = new BasicStroke(1);
+						setCursor(StateManager.blackPenCursor);
+						sm.setColor(Color.BLACK);
+						sm.setBs(new BasicStroke(1));
+						sm.setCurPenMode(StateManager.PEN_MODE_BLACK);
 
-					} else if (keyCode == KEY_CODE_TWO) {
+					} else if (keyCode == StateManager.KEY_CODE_TWO) {
 
-						setCursor(redPenCursor);
-						color = Color.red;
-						bs = new BasicStroke(1);
+						setCursor(StateManager.redPenCursor);
+						sm.setColor(Color.red);
+						sm.setBs(new BasicStroke(3));
+						sm.setCurPenMode(StateManager.PEN_MODE_RED);
 
-					} else if (keyCode == KEY_CODE_THREE) {
+					} else if (keyCode == StateManager.KEY_CODE_THREE) {
 
-						setCursor(highliterCursor);
-						color = new Color(1, 0, 0, 0.1f); // Red
-						bs = new BasicStroke(10);
+						setCursor(StateManager.highliterCursor);
+						sm.setColor(new Color(1f, 1f, 0.2f, 0.1f));
+						sm.setBs(new BasicStroke(10));
+						sm.setCurPenMode(StateManager.PEN_MODE_HIGHLIGHTER);
 					}
-				} else if (curNoteMode == NOTE_MODE_FIGURE) {
+				} else if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
 
-					if (keyCode == KEY_CODE_ONE) {
+					if (keyCode == StateManager.KEY_CODE_ONE) {
 
-						setCursor(starCursor);
-						setFigureMode(FIGURE_TYPE_STAR);
+						setCursor(StateManager.starCursor);
+						sm.setCurFigureMode(StateManager.FIGURE_TYPE_STAR);
 
-					} else if (keyCode == KEY_CODE_TWO) {
+					} else if (keyCode == StateManager.KEY_CODE_TWO) {
 
-						setCursor(arrowCursor);
-						setFigureMode(FIGURE_TYPE_ARROW);
+						setCursor(StateManager.arrowCursor);
+						sm.setCurFigureMode(StateManager.FIGURE_TYPE_ARROW);
 
-					} else if (keyCode == KEY_CODE_THREE) {
+					} else if (keyCode == StateManager.KEY_CODE_THREE) {
 
-						setCursor(circleCursor);
-						setFigureMode(FIGURE_TYPE_CIRCLE);
+						setCursor(StateManager.circleCursor);
+						sm.setCurFigureMode(StateManager.FIGURE_TYPE_CIRCLE);
 
-					} else if (keyCode == KEY_CODE_FOUR) {
+					} else if (keyCode == StateManager.KEY_CODE_FOUR) {
 
-						setCursor(XCursor);
-						setFigureMode(FIGURE_TYPE_X);
+						setCursor(StateManager.XCursor);
+						sm.setCurFigureMode(StateManager.FIGURE_TYPE_X);
 
-					} else if (keyCode == KEY_CODE_FIVE) {
+					} else if (keyCode == StateManager.KEY_CODE_FIVE) {
 
-						setCursor(recCursor);
-						setFigureMode(FIGURE_TYPE_REC);
+						setCursor(StateManager.recCursor);
+						sm.setCurFigureMode(StateManager.FIGURE_TYPE_REC);
 
-					} else if (keyCode == KEY_CODE_SIX) {
+					} else if (keyCode == StateManager.KEY_CODE_SIX) {
 
-						setCursor(textCursor);
-						setFigureMode(FIGURE_TYPE_TEXT);
+						setCursor(StateManager.textCursor);
+						sm.setCurFigureMode(StateManager.FIGURE_TYPE_TEXT);
 
 					}
 				}
@@ -349,85 +331,17 @@ public class PPTPanel extends JPanel {
 		});
 
 	}
-
+	
 	@Override
 	public void paintComponent(Graphics g) {
-
 		super.paintComponent(g);
-		Image bg = new ImageIcon(filename).getImage();
-		g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
-
-		nm.draw(g);
-		nm.drawLineByRealTime(g);
-		nm.drawFigureByRealTime(g);
+		dp.paintComponent(g);
+		
 	}
-
+	
 	public NoteManager getNoteManager() {
-		if (nm == null) {
-			nm = new NoteManager(this);
-		}
 		return nm;
 	}
-
 	
-
-	private void initCursor() {
-
-		toolkit = Toolkit.getDefaultToolkit();
-		hotspot = new Point(0, 0);
-
-		image = toolkit.getImage(Var.IMG_ADDR + "pen.png");
-		blackPenCursor = toolkit.createCustomCursor(image, hotspot, "Stone");
-
-		image = toolkit.getImage(Var.IMG_ADDR + "redpen.png");
-		redPenCursor = toolkit.createCustomCursor(image, hotspot, "Stone");
-
-		image = toolkit.getImage(Var.IMG_ADDR + "highlighter.png");
-		highliterCursor = toolkit.createCustomCursor(image, hotspot, "Stone");
-
-		image = toolkit.getImage(Var.IMG_ADDR + "figure.png");
-		figureCursor = toolkit.createCustomCursor(image, hotspot, "Stone");
-
-		image = toolkit.getImage(Var.IMG_ADDR + "star.png");
-		starCursor = toolkit.createCustomCursor(image, hotspot, "Stone");
-
-		image = toolkit.getImage(Var.IMG_ADDR + "arrow.png");
-		arrowCursor = toolkit.createCustomCursor(image, hotspot, "Stone");
-
-		image = toolkit.getImage(Var.IMG_ADDR + "circle.png");
-		circleCursor = toolkit.createCustomCursor(image, hotspot, "Stone");
-
-		image = toolkit.getImage(Var.IMG_ADDR + "X.png");
-		XCursor = toolkit.createCustomCursor(image, hotspot, "Stone");
-
-		image = toolkit.getImage(Var.IMG_ADDR + "rectangle.png");
-		recCursor = toolkit.createCustomCursor(image, hotspot, "Stone");
-
-		image = toolkit.getImage(Var.IMG_ADDR + "text.png");
-		textCursor = toolkit.createCustomCursor(image, hotspot, "Stone");
-
-	}
-
-	protected int getCurNoteMode() {
-		return curNoteMode;
-	}
-
-	protected int getCurFigureMode() {
-		return curFigureMode;
-	}
-
-	protected int getLineMode() {
-		return curLineMode;
-	}
-
-	private void setCurMode(int mode) {
-
-		curNoteMode = mode;
-	}
-
-	private void setFigureMode(int mode) {
-
-		curFigureMode = mode;
-	}
 
 }

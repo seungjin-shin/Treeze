@@ -1,64 +1,113 @@
 package com.treeze.draw;
 
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.Color;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-import javax.swing.ImageIcon;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import com.treeze.util.Var;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 public class FoldButton extends JButton {
 	
-	PostItPanel memoPanel;
+	ComponentSizeController psc;
 	int originalX;
 	int originalY;
 	
-	int originalWidth;
-	int originalHeight;
+	public static final int FOLD_BUTTON_SIZE_WIDTH = 40;
+	public static final int FOLD_BUTTON_SIZE_HEIGHT = 20;
 	
-	public FoldButton(int x, int y, int width, int height, final PostItPanel memoPanel) {
+	FoldButton foldButton;
+	PostItPanel postItPanel;
+	
+	public FoldButton(final int width,final int height, final PostItPanel postItPanel) {
 		// TODO Auto-generated constructor stub
-		this.setBounds(x, y, width, height);
-		this.setVisible(true);
+
+		this.postItPanel = postItPanel;
+		this.psc = postItPanel.getPsc();		
+		foldButton = this;		
+
+		//essential
 		
-		this.memoPanel = memoPanel;		
-		this.originalX = x;
-		this.originalY = y;
-		this.originalWidth = width;
-		this.originalHeight = height;
+		this.setBackground(new Color(0,0,0,0));
+		this.setIcon(Util.makeResizedImageIcon(width, height, Util.IMG_ADDR + "fold.png", this));
+		this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		this.setBorderPainted(false);
+		this.setFocusable(false);
+		this.setFocusPainted(false);	
 		
 		this.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
+				int curFoldMode = psc.getCurFoldMode();
 				
-				memoPanel.setSize(20, 20);
-				memoPanel.setCurFoldMode(PostItPanel.FOLD_MODE_FOLD);
+				if(curFoldMode == ComponentSizeController.FOLD_MODE_UNFOLD) {
+					setIcon(Util.makeResizedImageIcon(width, height, Util.IMG_ADDR + "expand.png", foldButton));
+					
+					psc.setOriginalWidth(psc.getWidth());
+					psc.setOriginalHeight(psc.getHeight());
+					
+					psc.setSize(FOLD_BUTTON_SIZE_WIDTH, FOLD_BUTTON_SIZE_HEIGHT);
+					psc.setCurFoldMode(ComponentSizeController.FOLD_MODE_FOLD);
+					
+					postItPanel.getWasteBasketButton().setVisible(false);
+					postItPanel.getWasteBasketButton().setVisible(true);
+					foldButton.setVisible(true);
+				}else if(curFoldMode == ComponentSizeController.FOLD_MODE_FOLD) {
+					setIcon(Util.makeResizedImageIcon(width, height, Util.IMG_ADDR + "fold.png", foldButton));
+					psc.setCurFoldMode(ComponentSizeController.FOLD_MODE_UNFOLD);
+					psc.setSize(psc.getOriginalWidth(),
+							psc.getOriginalHeight());
+					psc.invalidate();
+				}
 				
+				
+				
+			}
+			
+		});
+		psc.invalidate();
+	}
+	
+	public void reLocation(int x, int y) {
+		this.setLocation(x, y);
+	}
+	
+
+
+}
+
+class WasteBasketButton extends JButton {
+	
+	private JPanel postItPanel;
+	
+	public WasteBasketButton(int width, int height, final JPanel postItPanel) {
+		// TODO Auto-generated constructor stub
+		this.postItPanel = postItPanel;
+		this.setBackground(new Color(0,0,0,0));
+		this.setIcon(Util.makeResizedImageIcon(width, height, Util.IMG_ADDR + "wastebasket.png", this));
+		this.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));	
+		this.setVisible(true);
+		
+		this.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				PPTPanel pptPanel = (PPTPanel)postItPanel.getParent();
+				pptPanel.remove(postItPanel);
+				NoteManager nm= pptPanel.getNoteManager(); 
+				nm.repaint();
 				
 			}
 		});
 		
-
-	}
-	
-	@Override
-	public void paintComponent(Graphics g) {
 		
-		super.paintComponent(g);
-		Image bg = new ImageIcon(Var.IMG_ADDR + "fold.png").getImage();
-		g.drawImage(bg, getX(), getY(), getWidth(), getHeight(), this);
-
 	}
-	
-
 
 }

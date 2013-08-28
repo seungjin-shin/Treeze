@@ -1,11 +1,13 @@
 package com.treeze.draw;
 
-import com.treeze.data.MindNode;
+import javax.swing.ImageIcon;
 
 public class Main {
 	
 	public static void main(String args[]) {
-		new PPTFrame(new MindNode());
+//		new PPTFrame();
+//		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("/images/image.jpg");
+		//new PPTFrame();
 	}
 
 }

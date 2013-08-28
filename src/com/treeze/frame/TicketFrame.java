@@ -347,7 +347,7 @@ public class TicketFrame extends JFrame {
 			this.ticket = ticket;
 			noLabel = new JLabel("1", JLabel.CENTER);
 
-			contentsLabel = new JLabel(ticket.getContents(), JLabel.CENTER);
+			contentsLabel = new JLabel(ticket.getContents(), JLabel.LEFT);
 			jsp = new JScrollPane(contentsLabel);
 
 			jsp.setBorder(null);
@@ -355,7 +355,7 @@ public class TicketFrame extends JFrame {
 			// contentsLabel.getHeight()));
 			whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
 
-			this.setBackground(new Color(0, 0, 0, 0));
+			this.setBackground(Color.WHITE);
 			// this.add(noPanel);
 			this.setLayout(gbl);
 			insets.bottom = 5;
@@ -366,13 +366,17 @@ public class TicketFrame extends JFrame {
 
 			addGrid(gbl, gbc, jsp, 1, 0, 1, 1, 13, 1, this);
 			addGrid(gbl, gbc, whriterLabel, 2, 0, 1, 1, 1, 1, this);
-
+			
+			
 			contentsLabel.setPreferredSize(new Dimension(contentsLabel
 					.getWidth(), contentsLabel.getHeight()));
+			
+			jsp.getViewport().setBackground(Color.WHITE);
+			
 			this.addMouseListener(new TicketMouseEvent());
 			jsp.addMouseListener(new TicketMouseEvent());
-			this.setVisible(false);
-			this.setVisible(true);
+			
+			
 		}
 
 		@Override
@@ -389,7 +393,7 @@ public class TicketFrame extends JFrame {
 				// TODO Auto-generated method stub
 
 				setBackground(new Color(255, 255, 255, 255));
-				jsp.setBackground(new Color(255, 255, 255, 255));
+				jsp.getViewport().setBackground(new Color(255, 255, 255, 255));
 				System.out.println("[Ticket ID]" + ticket.getContents()
 						+ ticket.getNodeID());
 				new TicketAnswerFrame(ticket, classInfo);
@@ -418,6 +422,7 @@ public class TicketFrame extends JFrame {
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
 				setBackground(new Color(10, 10, 100, 100));
+				jsp.getViewport().setBackground(Color.WHITE);
 			}
 			
 		}
