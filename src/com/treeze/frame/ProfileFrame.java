@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -68,8 +69,7 @@ public class ProfileFrame extends JFrame {
 	User user;
 	ArrayList<ClassInfo> classList = new ArrayList<ClassInfo>();
 	NameLabel nameLabel = new NameLabel("신승");
-	PersonalInfo personalInfo = new PersonalInfo("한성대학교 컴공", "학생",
-			"경기도 평택");
+	PersonalInfo personalInfo = new PersonalInfo("한성대학교 컴공", "학생", "경기도 평택");
 	ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
 	ListPanel listPanel;
 	PicturePanel picturePanel = new PicturePanel(
@@ -92,15 +92,16 @@ public class ProfileFrame extends JFrame {
 	StringBuffer sbResult = new StringBuffer();
 	Gson gson = new Gson();
 	ClassInfo classInfo;
+
 	public ProfileFrame() {
 		// TODO Auto-generated constructor stub
 		this.setSize(1100, 600);
 		this.setLocation(300, 200);
 
 		this.getContentPane().setBackground(new Color(141, 198, 63));
-	
+
 		// this.setResizable(false);
-		//imgIcon = new ImageIcon("/Users/Kunyoung/Desktop/treezelogo.png");
+		// imgIcon = new ImageIcon("/Users/Kunyoung/Desktop/treezelogo.png");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		listPanel = new ListPanel();
@@ -131,11 +132,11 @@ public class ProfileFrame extends JFrame {
 
 		lectureListPanel.setBorder(new LineBorder(Color.BLACK, 2, false));
 
-		addGrid(gbl, gbc, logoPanel,        0, 0, 1, 1, 1, 3, fullPanel);
+		addGrid(gbl, gbc, logoPanel, 0, 0, 1, 1, 1, 3, fullPanel);
 		insets.set(10, 20, 10, 20);
-		addGrid(gbl, gbc, btnPanel,         1, 1, 1, 1, 5, 1, fullPanel);
-		
-		addGrid(gbl, gbc, profilePanel,     0, 2, 1, 1, 1, 15, fullPanel);
+		addGrid(gbl, gbc, btnPanel, 1, 1, 1, 1, 5, 1, fullPanel);
+
+		addGrid(gbl, gbc, profilePanel, 0, 2, 1, 1, 1, 15, fullPanel);
 		addGrid(gbl, gbc, lectureListPanel, 1, 2, 1, 1, 5, 15, fullPanel);
 
 		addGrid(gbl, gbc, picturePanel, 0, 0, 1, 1, 1, 3, profilePanel);
@@ -147,11 +148,11 @@ public class ProfileFrame extends JFrame {
 		insets.left = 10;
 		insets.top = 0;
 		insets.bottom = 0;
-		JLabel noPanel = new JLabel("N o ", JLabel.CENTER);
-		JLabel subjectPanel = new JLabel("과 목 명", JLabel.CENTER);
-		JLabel whritePane = new JLabel("교 수 명", JLabel.CENTER);
+		JLabel noPanel = new JLabel("과 목 명", JLabel.CENTER);
+		JLabel subjectPanel = new JLabel("교 수 명", JLabel.CENTER);
+		JLabel whritePane = new JLabel("상  태", JLabel.CENTER);
 		lectureHead.setLayout(gbl);
-		addGrid(gbl, gbc, noPanel, 0, 0, 1, 1, 11, 1, lectureHead);
+		addGrid(gbl, gbc, noPanel, 0, 0, 1, 1, 12, 1, lectureHead);
 		addGrid(gbl, gbc, subjectPanel, 1, 0, 1, 1, 1, 1, lectureHead);
 		addGrid(gbl, gbc, whritePane, 2, 0, 1, 1, 1, 1, lectureHead);
 		lectureListPanel.setLayout(gbl);
@@ -162,7 +163,7 @@ public class ProfileFrame extends JFrame {
 
 		grid.setBackground(new Color(0, 0, 0, 0));
 		grid.setLayout(new GridLayout(100, 1, 0, 5));
-		//grid.setLayout(new GridLayout(100, 1));
+		// grid.setLayout(new GridLayout(100, 1));
 		// grid.add(item1);
 
 		JPanel dumy = new JPanel();
@@ -171,23 +172,25 @@ public class ProfileFrame extends JFrame {
 		listPanel.getViewport().add(grid, null);
 		NetworkThread networkThread = new NetworkThread();
 		networkThread.start();
-	
+
 		this.setVisible(true);
 		grid.addMouseWheelListener(new MouseWheelListener() {
-			
+
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent arg0) {
 				// TODO Auto-generated method stub
-//				fullPanel.setVisible(false);
-//				fullPanel.setVisible(true);
-//				setVisible(true);
-				
-				//wheelRotation
-				listPanel.getVerticalScrollBar().setValue(listPanel.getVerticalScrollBar().getValue()+arg0.getWheelRotation());
-				//arg0.getWheelRotation();
+				// fullPanel.setVisible(false);
+				// fullPanel.setVisible(true);
+				// setVisible(true);
+
+				// wheelRotation
+				listPanel.getVerticalScrollBar().setValue(
+						listPanel.getVerticalScrollBar().getValue()
+								+ arg0.getWheelRotation());
+				// arg0.getWheelRotation();
 			}
 		});
-		
+
 	}
 
 	private void addGrid(GridBagLayout gbl, GridBagConstraints gbc,
@@ -223,17 +226,17 @@ public class ProfileFrame extends JFrame {
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
-			g.drawImage(TreezeStaticData.LOGO_IMG, 10, 10, this.getWidth() - 10,
-					this.getHeight() - 10, null);
+			g.drawImage(TreezeStaticData.LOGO_IMG, 10, 10,
+					this.getWidth() - 10, this.getHeight() - 10, null);
 		}
 	}
 
 	class PicturePanel extends JPanel {
-		//ImageIcon imgIcon;
+		// ImageIcon imgIcon;
 
 		public PicturePanel(String imgPath) {
 			// TODO Auto-generated constructor stub
-			//imgIcon = new ImageIcon(imgPath);
+			// imgIcon = new ImageIcon(imgPath);
 			this.setBorder(new EmptyBorder(20, 20, 20, 20));
 		}
 
@@ -242,8 +245,8 @@ public class ProfileFrame extends JFrame {
 			// TODO Auto-generated method stub
 			super.paint(g);
 
-			g.drawImage(TreezeStaticData.PROFILE_DEFAULT_IMG, 0, 0, this.getWidth(),
-					this.getHeight(), null);
+			g.drawImage(TreezeStaticData.PROFILE_DEFAULT_IMG, 0, 0,
+					this.getWidth(), this.getHeight(), null);
 
 		}
 
@@ -304,21 +307,29 @@ public class ProfileFrame extends JFrame {
 			g2.setStroke(new BasicStroke(3));
 			g2.setColor(Color.WHITE);
 			g2.drawLine(0, 0, this.getWidth(), 0);
-			g2.drawLine(0, this.getHeight()-1, this.getWidth(), this.getHeight()-1);
+			g2.drawLine(0, this.getHeight() - 1, this.getWidth(),
+					this.getHeight() - 1);
 		}
 
 	}
 
 	class BtnPanel extends JPanel {
-		ProfileBtn profileBtn  = new ProfileBtn(TreezeStaticData.WRITE_BTN,TreezeStaticData.WRITE_PRESS_BTN,TreezeStaticData.WRITE_ENTER_BTN);
-		ProfileBtn lectureBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,TreezeStaticData.WRITE_PRESS_BTN,TreezeStaticData.WRITE_ENTER_BTN);
-		ProfileBtn downBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,TreezeStaticData.WRITE_PRESS_BTN,TreezeStaticData.WRITE_ENTER_BTN);
-		ProfileBtn logoutBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,TreezeStaticData.WRITE_PRESS_BTN,TreezeStaticData.WRITE_ENTER_BTN);
-		
+		ProfileBtn profileBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,
+				TreezeStaticData.WRITE_PRESS_BTN,
+				TreezeStaticData.WRITE_ENTER_BTN);
+		ProfileBtn lectureBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,
+				TreezeStaticData.WRITE_PRESS_BTN,
+				TreezeStaticData.WRITE_ENTER_BTN);
+		ProfileBtn downBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,
+				TreezeStaticData.WRITE_PRESS_BTN,
+				TreezeStaticData.WRITE_ENTER_BTN);
+		ProfileBtn logoutBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,
+				TreezeStaticData.WRITE_PRESS_BTN,
+				TreezeStaticData.WRITE_ENTER_BTN);
+
 		public BtnPanel() {
 			// TODO Auto-generated constructor stub
-			
-			
+
 			add(profileBtn);
 			add(lectureBtn);
 			add(downBtn);
@@ -327,32 +338,30 @@ public class ProfileFrame extends JFrame {
 
 		}
 
-	
-		class ProfileBtn extends ImgBtn{
-			
-			public ProfileBtn(final Image defaultImg, final Image pressImg, final Image enterImg) {
+		class ProfileBtn extends ImgBtn {
+
+			public ProfileBtn(final Image defaultImg, final Image pressImg,
+					final Image enterImg) {
 				// TODO Auto-generated constructor stub
 				super(defaultImg, pressImg, enterImg);
-				
-				
+
 			}
+
 			@Override
 			public void paint(Graphics g) {
 				// TODO Auto-generated method stub
 				super.paint(g);
-				
-				
-				
+
 			}
+
 			@Override
-			protected void Action(JButton jbtn){
-				if(profileBtn==jbtn){
+			protected void Action(JButton jbtn) {
+				if (profileBtn == jbtn) {
 					networkFlag = NETWORK_FLAG_GET_LECTURELIST;
-					 NetworkThread networkThread = new NetworkThread();
-					 networkThread.start();
+					NetworkThread networkThread = new NetworkThread();
+					networkThread.start();
 				}
-				
-				
+
 			}
 		}
 	}
@@ -381,6 +390,7 @@ public class ProfileFrame extends JFrame {
 		JLabel professorNm;
 		ImgPanel stateOfLecture;
 		Lecture lecture;
+		JScrollPane jsp;
 
 		public LectureListItem(final Lecture lecture) {
 			// TODO Auto-generated constructor stub
@@ -388,70 +398,33 @@ public class ProfileFrame extends JFrame {
 			this.setBorder(new EmptyBorder(5, 0, 5, 0));
 			lectureNm = new JLabel(lecture.getLectureName(), JLabel.CENTER);
 			professorNm = new JLabel(lecture.getProfessorName(), JLabel.CENTER);
-//			lectureNm.setFont(new Font("Serif", Font.ITALIC, 18));
-//			professorNm.setFont(new Font("Serif", Font.ITALIC, 18));
+			// lectureNm.setFont(new Font("Serif", Font.ITALIC, 18));
+			// professorNm.setFont(new Font("Serif", Font.ITALIC, 18));
 			if (lecture.getStateOfLecture()) {
-				//JPanel j = new JPanel()
+				// JPanel j = new JPanel()
 				stateOfLecture = new ImgPanel(TreezeStaticData.ONLINE_IMG);
-				
+
 			} else {
 				stateOfLecture = new ImgPanel(TreezeStaticData.OFFLIN_IMG);
-				
+
 			}
 			this.setBackground(new Color(0, 0, 0, 0));
 			// this.add(noPanel);
 			this.setLayout(gbl);
 			insets.bottom = 5;
 			insets.top = 5;
-			addGrid(gbl, gbc, lectureNm, 0, 0, 1, 1, 9, 1, this);
+			jsp = new JScrollPane(lectureNm);
+			jsp.setBorder(null);
+
+			addGrid(gbl, gbc, jsp, 0, 0, 1, 1, 7, 1, this);
 			addGrid(gbl, gbc, professorNm, 1, 0, 1, 1, 1, 1, this);
 			addGrid(gbl, gbc, stateOfLecture, 2, 0, 1, 1, 1, 1, this);
+			lectureNm.setPreferredSize(new Dimension(lectureNm.getWidth(),
+					lectureNm.getHeight()));
+			jsp.getViewport().setBackground(Color.WHITE);
 			stateOfLecture.repaint();
-			this.addMouseListener(new MouseListener() {
-
-				@Override
-				public void mouseReleased(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-					setBackground(new Color(255, 255, 255, 255));
-				}
-
-				public void mousePreswsed(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseExited(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-						
-				}
-
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {
-					// TODO Auto-generated method stub
-					setBackground(new Color(10, 10, 100, 100));
-					lectureId = lecture.getLectureId();
-					networkFlag = NETWORK_FLAG_GET_CLASSLIST;
-					lectureHead.setVisible(false);
-					NetworkThread networkThread = new NetworkThread();
-					networkThread.start();
-					// grid.removeAll();
-					// invalidate();
-					// System.out.println(ticket.getContents());
-				}
-			});
+			this.addMouseListener(new ProfileMouseListener(this, jsp));
+			jsp.addMouseListener(new ProfileMouseListener(this, jsp));
 
 		}
 
@@ -476,7 +449,7 @@ public class ProfileFrame extends JFrame {
 			this.setBackground(Color.WHITE);
 			classNm = new JLabel(classInstance.getClassName(), JLabel.CENTER);
 			classNm.setFont(new Font("Serif", Font.BOLD, 20));
-			//this.setFont(new Font("Serif", Font.BOLD, 15));
+			// this.setFont(new Font("Serif", Font.BOLD, 15));
 			this.add(classNm);
 
 			this.addMouseListener(new MouseListener() {
@@ -521,8 +494,8 @@ public class ProfileFrame extends JFrame {
 							classId);
 					downLoadNetworkThread.start();
 					networkFlag = NETWORK_FLAG_GET_MINDMAP;
-					 NetworkThread networkThread = new NetworkThread();
-					 networkThread.start();
+					NetworkThread networkThread = new NetworkThread();
+					networkThread.start();
 				}
 			});
 
@@ -546,15 +519,16 @@ public class ProfileFrame extends JFrame {
 			// this.setPreferredSize(new Dimension(0, 2000));
 			this.setBackground(Color.WHITE);
 			this.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-			
-			getVerticalScrollBar().getModel().addChangeListener(new ChangeListener() {
-	
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		// TODO Auto-generated method stub
-		repaint();
-	}
-});
+
+			getVerticalScrollBar().getModel().addChangeListener(
+					new ChangeListener() {
+
+						@Override
+						public void stateChanged(ChangeEvent e) {
+							// TODO Auto-generated method stub
+							repaint();
+						}
+					});
 
 		}
 
@@ -569,28 +543,33 @@ public class ProfileFrame extends JFrame {
 					this.getHeight() - 1);
 		}
 	}
-	class ImgPanel extends JPanel{
+
+	class ImgPanel extends JPanel {
 		Image img;
+
 		public ImgPanel(Image img) {
 			// TODO Auto-generated constructor stub
 			this.img = img;
 		}
+
 		@Override
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
 			g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
-			
+
 		}
 	}
+
 	class NetworkThread extends Thread {
 
 		// HttpResponse response;
-		//InputStream is;
+		// InputStream is;
 		URL url = null;
-		String ip =TreezeStaticData.IP;
+		String ip = TreezeStaticData.IP;
+
 		// Message msg = new Message();
-		
+
 		@Override
 		public void run() {
 
@@ -598,17 +577,15 @@ public class ProfileFrame extends JFrame {
 			sbResult.delete(0, sbResult.capacity());
 			try {
 				if (networkFlag == NETWORK_FLAG_GET_MINDMAP) {
-					url = new URL(
-							"http://"+ip+":8080/treeze/getMindMap?classId="
-									+ classId);
+					url = new URL("http://" + ip
+							+ ":8080/treeze/getMindMap?classId=" + classId);
 				} else if (networkFlag == NETWORK_FLAG_GET_LECTURELIST) {
-					url = new URL(
-							"http://"+ip+":8080/treeze/getAllLectures");
+					url = new URL("http://" + ip
+							+ ":8080/treeze/getAllLectures");
 
 				} else {
-					url = new URL(
-							"http://"+ip+":8080/treeze//getClasses?lectureId="
-									+ lectureId);
+					url = new URL("http://" + ip
+							+ ":8080/treeze//getClasses?lectureId=" + lectureId);
 
 				}
 				connection = (HttpURLConnection) url.openConnection();
@@ -651,8 +628,8 @@ public class ProfileFrame extends JFrame {
 
 				//
 				e.printStackTrace();
-				 NetworkThread networkThread = new NetworkThread();
-				 networkThread.start();
+				NetworkThread networkThread = new NetworkThread();
+				networkThread.start();
 
 			}
 
@@ -661,34 +638,29 @@ public class ProfileFrame extends JFrame {
 	}
 
 	void updateGetallLectureList() {
-		
+
 		java.lang.reflect.Type type = new TypeToken<ArrayLecture>() {
 		}.getType();
 		ArrayLecture jonResultlecturelist = (ArrayLecture) gson.fromJson(
 				sbResult.toString(), (java.lang.reflect.Type) type);
-		
+
 		lectureList = jonResultlecturelist.getLectures();
 		grid.removeAll();
 		insets.set(5, 0, 5, 0);
 		for (int i = 0; i < lectureList.size(); i++) {
-			LectureListItem lectureListItem = new LectureListItem(lectureList.get(i));
+			LectureListItem lectureListItem = new LectureListItem(
+					lectureList.get(i));
 			grid.add(lectureListItem);
-			
+
 		}
-	//	grid.invalidate();
-		//setVisible(true);
-		//grid.setVisible(false);
-		//grid.setVisible(true);
-		//grid.setVisible(false);
-		//grid.setVisible(true);
-//		grid.getParent().setVisible(false);
-//		grid.getParent().setVisible(true);
-		//fullPanel.setVisible(false);
-		//fullPanel.setVisible(true);
-		//fullPanel.repaint();
+		lectureHead.setVisible(true);
 		fullPanel.setVisible(false);
 		fullPanel.setVisible(true);
 		setVisible(true);
+		fullPanel.repaint();
+		lectureListPanel.setVisible(false);
+		lectureListPanel.setVisible(true);
+		lectureListPanel.repaint();
 	}
 
 	void updateGetallClassList() {
@@ -712,8 +684,65 @@ public class ProfileFrame extends JFrame {
 		System.out.println(sbResult.toString());
 		Mindmap jsonResultMindmaps = (Mindmap) gson.fromJson(
 				sbResult.toString(), (java.lang.reflect.Type) type);
-		new MindMapMain(jsonResultMindmaps.getMindmap().getMindmapXML(),classInfo);
-		
+		new MindMapMain(jsonResultMindmaps.getMindmap().getMindmapXML(),
+				classInfo);
+
+	}
+
+	class ProfileMouseListener implements MouseListener {
+		LectureListItem lectureListItem;
+		JScrollPane jsp;
+
+		public ProfileMouseListener(LectureListItem lectureListItem,
+				JScrollPane jsp) {
+			// TODO Auto-generated constructor stub
+			this.lectureListItem = lectureListItem;
+			this.jsp = jsp;
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			jsp.getViewport().setBackground(new Color(255, 255, 255, 255));
+			lectureListItem.setBackground(new Color(255, 255, 255, 255));
+		}
+
+		public void mousePreswsed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			jsp.getViewport().setBackground(new Color(10, 10, 100, 100));
+			lectureListItem.setBackground(new Color(10, 10, 100, 100));
+			lectureId = lectureListItem.lecture.getLectureId();
+			networkFlag = NETWORK_FLAG_GET_CLASSLIST;
+			lectureHead.setVisible(false);
+			NetworkThread networkThread = new NetworkThread();
+			networkThread.start();
+
+		}
+
 	}
 }
 // http://manic.tistory.com/99

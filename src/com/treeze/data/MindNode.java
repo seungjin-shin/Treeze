@@ -177,7 +177,7 @@ public class MindNode {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				new PPTFrame(getnode());
+				//new PPTFrame(getnode());
 			}
 		});
 		ticketBtn.addMouseListener(new MouseListener() {
@@ -293,7 +293,7 @@ public class MindNode {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				new PPTFrame(getnode());
+			//	new PPTFrame(getnode());
 			}
 		});
 		ticketBtn.addMouseListener(new MouseListener() {
@@ -353,6 +353,8 @@ public class MindNode {
 	// }
 	void ImgIconSet() {
 		imageBuff = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+		
+		
 		g = imageBuff.createGraphics();
 		img = TreezeStaticData.NODE_BG;
 		scaledImage = img.getScaledInstance(NODE_WIDTH, NODE_HEIGHT * 2 / 3,

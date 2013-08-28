@@ -133,15 +133,32 @@ public class TicketFrame extends JFrame {
 
 		node.getAllTicket(nodes, node);
 		System.out.println("[nodes size] = " + nodes.size());
+		int ticketNum = 1;
 		for (int i = 0; i < nodes.size(); i++) {
-			grid.add(new TicketListItem((Ticket) nodes.get(i)));
+			if (nodes.get(i).getParentNode() instanceof Ticket)
+				grid.add(new TicketListItem((Ticket) nodes.get(i))); // Ticket
+																		// List
+																		// Number
+																		// null
+			else {
+				grid.add(new TicketListItem((Ticket) nodes.get(i), ticketNum));
+				ticketNum++;
+			}
 		}
 		grid.addMouseWheelListener(new MouseWheelListener() {
 
 			@Override
-			public void mouseWheelMoved(MouseWheelEvent e) {
+			public void mouseWheelMoved(MouseWheelEvent arg0) {
 				// TODO Auto-generated method stub
-				repaint();
+				// fullPanel.setVisible(false);
+				// fullPanel.setVisible(true);
+				// setVisible(true);
+
+				// wheelRotation
+				listPanel.getVerticalScrollBar().setValue(
+						listPanel.getVerticalScrollBar().getValue()
+								+ arg0.getWheelRotation());
+				// arg0.getWheelRotation();
 			}
 		});
 
@@ -342,10 +359,11 @@ public class TicketFrame extends JFrame {
 		JScrollPane jsp;
 		String contentsSubStr = new String();
 
-		public TicketListItem(final Ticket ticket) {
+		public TicketListItem(final Ticket ticket, int ticketNum) {
 			// TODO Auto-generated constructor stub
 			this.ticket = ticket;
-			noLabel = new JLabel("1", JLabel.CENTER);
+
+			noLabel = new JLabel(ticketNum + "", JLabel.CENTER);
 
 			contentsLabel = new JLabel(ticket.getContents(), JLabel.LEFT);
 			jsp = new JScrollPane(contentsLabel);
@@ -366,17 +384,50 @@ public class TicketFrame extends JFrame {
 
 			addGrid(gbl, gbc, jsp, 1, 0, 1, 1, 13, 1, this);
 			addGrid(gbl, gbc, whriterLabel, 2, 0, 1, 1, 1, 1, this);
-			
-			
+			noLabel.setPreferredSize(new Dimension(noLabel.getWidth(), noLabel.getHeight()));
 			contentsLabel.setPreferredSize(new Dimension(contentsLabel
 					.getWidth(), contentsLabel.getHeight()));
-			
+
 			jsp.getViewport().setBackground(Color.WHITE);
-			
+
 			this.addMouseListener(new TicketMouseEvent());
 			jsp.addMouseListener(new TicketMouseEvent());
-			
-			
+
+		}
+
+		public TicketListItem(final Ticket ticket) {
+			// TODO Auto-generated constructor stub
+			this.ticket = ticket;
+			noLabel = new JLabel("", JLabel.CENTER);
+
+			contentsLabel = new JLabel(ticket.getContents(), JLabel.LEFT);
+			jsp = new JScrollPane(contentsLabel);
+
+			jsp.setBorder(null);
+			// contentsLabel.setPreferredSize(new Dimension(1000,
+			// contentsLabel.getHeight()));
+			whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
+
+			this.setBackground(Color.WHITE);
+			// this.add(noPanel);
+			this.setLayout(gbl);
+			insets.bottom = 5;
+			insets.top = 5;
+			insets.right = 3;
+
+			addGrid(gbl, gbc, noLabel, 0, 0, 1, 1, 1, 1, this);
+
+			addGrid(gbl, gbc, jsp, 1, 0, 1, 1, 13, 1, this);
+			addGrid(gbl, gbc, whriterLabel, 2, 0, 1, 1, 1, 1, this);
+
+			contentsLabel.setPreferredSize(new Dimension(contentsLabel
+					.getWidth(), contentsLabel.getHeight()));
+
+			jsp.getViewport().setBackground(Color.WHITE);
+
+			this.addMouseListener(new TicketMouseEvent());
+			jsp.addMouseListener(new TicketMouseEvent());
+
 		}
 
 		@Override
@@ -386,7 +437,8 @@ public class TicketFrame extends JFrame {
 			g.drawLine(0, this.getHeight() - 1, this.getWidth(),
 					this.getHeight() - 1);
 		}
-		class TicketMouseEvent implements MouseListener{
+
+		class TicketMouseEvent implements MouseListener {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -403,19 +455,19 @@ public class TicketFrame extends JFrame {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
@@ -424,7 +476,7 @@ public class TicketFrame extends JFrame {
 				setBackground(new Color(10, 10, 100, 100));
 				jsp.getViewport().setBackground(Color.WHITE);
 			}
-			
+
 		}
 	}
 

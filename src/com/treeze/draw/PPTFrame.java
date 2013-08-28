@@ -7,9 +7,6 @@ import java.io.InputStream;
 
 import javax.swing.JFrame;
 
-import com.treeze.data.MindNode;
-import com.treeze.data.TreezeStaticData;
-
 
 
 
@@ -20,12 +17,10 @@ public class PPTFrame extends JFrame {
 
 	
 	
-	public PPTFrame(MindNode node) {
+	public PPTFrame() {
 		// TODO Auto-generated constructor stub
-		System.out.println("z");
 		
-		pptPanel = new PPTPanel(TreezeStaticData.PPT_IMG_PATH + "/"+node.getImgPath()+".jpg");
-		System.out.println("z");
+		pptPanel = new PPTPanel(Util.PPT_ADDR + "ppt.png");
 		setBounds(500, 100, 600, 500);
 		setVisible(true);
 		pptPanel.setVisible(true);

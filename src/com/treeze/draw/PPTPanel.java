@@ -3,14 +3,20 @@ package com.treeze.draw;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
+import com.treeze.data.TreezeStaticData;
 
 /*
  * pptpanel을 나타냄
@@ -31,15 +37,15 @@ public class PPTPanel extends JPanel {
 	
 	NoteManager nm;
 
-	
+	Image img;
 	public PPTPanel(String filename) {
 		// TODO Auto-generated constructor stub
 		super();
-		System.out.println(filename);
+
 		pptPanel = this;
+		img = new ImageIcon(filename).getImage();
 		// 처음 초기화
 		dp = new DrawablePanel(this, filename);
-		
 		nm = dp.getNoteManager();
 		setLayout(null);
 
@@ -335,6 +341,9 @@ public class PPTPanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+	
+		g.drawImage(img, 0, 0,
+				this.getParent().getWidth(), this.getParent().getHeight(), null);;
 		dp.paintComponent(g);
 		
 	}

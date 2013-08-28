@@ -236,11 +236,11 @@ public class MindMapMain extends JFrame {
 						.setVerticalTextPosition(SwingConstants.CENTER);
 				node.getNodeBtn().setHorizontalTextPosition(
 						SwingConstants.CENTER);
-				node.getNodeBtn().setBorder(new EmptyBorder(5, 5, 5, 5));
+				
 				node.getNodeBtn().setBackground(new Color(0, 0, 0, 0));
 				node.getNodeBtn().setBorderPainted(false);
 				node.getNodeBtn().setContentAreaFilled(false);
-				node.getNodeBtn().setMargin(new Insets(5, 5, 5, 5));
+				//node.getNodeBtn().setMargin(new Insets(5, 5, 5, 5));
 				
 				
 				this.add(node.getNodeBtn());
@@ -304,9 +304,8 @@ public class MindMapMain extends JFrame {
 					root.getLocateX() - screenSize.width / 2);
 			jsp.getVerticalScrollBar().setValue(
 					root.getLocateY() - screenSize.height / 2);
-			jsp.getVerticalScrollBar().setVisible(false);
-			jsp.getHorizontalScrollBar().setVisible(false);
-			jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		//	jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		}
 
 	
@@ -359,7 +358,7 @@ public class MindMapMain extends JFrame {
 		}
 	}
 	
-
+ 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
