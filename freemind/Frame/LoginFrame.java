@@ -380,10 +380,10 @@ public class LoginFrame extends JFrame{
 	class HintTextField extends JTextField implements FocusListener {
 
 		private final String hint;
-
+		Font f;
 		public HintTextField(final String hint) {
 			super(hint);
-			Font f = new Font(hint, Font.ITALIC, 10);
+			f = new Font(hint, Font.PLAIN, 12);
 			setFont(f);
 			this.setBackground(new Color(234, 234, 234));
 			setForeground(Color.GRAY);
@@ -413,9 +413,6 @@ public class LoginFrame extends JFrame{
 		@Override
 		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ ÀÒÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ®¸¦ ÀûÀ½
 			if (this.getText().isEmpty()) {
-				Font f = new Font(hint, Font.ITALIC, 10);
-				setFont(f);
-
 				setForeground(Color.GRAY);
 				super.setText(hint);
 			} else {
@@ -442,15 +439,16 @@ public class LoginFrame extends JFrame{
 		private String realPw = "";
 		String str;
 		JLabel hintLabel;
-		
+		Font f;
 		public HintTextFieldPassword(String hint) {
 
-			Font f = new Font(hint, Font.ITALIC, 10);
+			f = new Font(hint, Font.PLAIN, 12);
 			setFont(f);
 			this.setBackground(new Color(234, 234, 234));
 			setForeground(Color.GRAY);
 
 			this.hintLabel = new JLabel(hint);
+			this.hintLabel.setFont(f);
 			super.addFocusListener(this);
 
 

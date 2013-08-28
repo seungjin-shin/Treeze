@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
+import freemind.Frame.TextDialogue;
 import freemind.json.ArrayTicket;
 import freemind.json.Ticket;
 import freemind.modes.NodeAdapter;
@@ -74,7 +75,7 @@ public class AddAllTicketThread extends Thread{
 			for(int i = 0; i < ticketList.size(); i++){
 				fManager.setTicket(ticketList.get(i));
 				try {
-					Thread.sleep(700);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -82,6 +83,7 @@ public class AddAllTicketThread extends Thread{
 				fManager.getC().recurAddTicketNode((NodeAdapter) fManager.getMc().getRootNode());
 			}
 			System.out.println("Add All tickets");
+			new TextDialogue(fManager.getFreemindMainFrame(), "Loading all tickets", true);
 	}
 
 }

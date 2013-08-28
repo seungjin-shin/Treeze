@@ -117,7 +117,10 @@ public class SignFrame extends JFrame {
 		typePanel.setBackground(noColor);
 		
 		stuTypeBtn.setActionCommand(User.STUDENT);
+		stuTypeBtn.setBackground(fManager.treezeColor);
 		profTypeBtn.setActionCommand(User.PROFESSOR);
+		profTypeBtn.setBackground(fManager.treezeColor);
+		
 		
 		typeBtnGp.add(profTypeBtn);
 		typeBtnGp.add(stuTypeBtn);
@@ -142,6 +145,7 @@ public class SignFrame extends JFrame {
 		signBtn.setBackground(new Color(0, 0, 0, 0));
 		signBtn.setBorderPainted(false);
 		signBtn.setContentAreaFilled(false);
+		
 		signBtn.setFocusable(false);
 		// loginBtn.setBorder(null);
 		
@@ -425,9 +429,10 @@ public class SignFrame extends JFrame {
 
 		private final String hint;
 		private Image tfIma;
+		Font f;
 		public HintTextField(final String hint) {
 			super(hint);
-			Font f = new Font(hint, Font.ITALIC, 10);
+			f = new Font(hint, Font.PLAIN, 12);
 			setFont(f);
 			this.setBackground(new Color(234, 234, 234));
 			setForeground(Color.GRAY);
@@ -463,9 +468,6 @@ public class SignFrame extends JFrame {
 		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ ÀÒÀ¸¸é ½áÁø ±Û¾¾°¡
 												// ¾øÀ¸¸é ÈùÆ®¸¦ ÀûÀ½
 			if (this.getText().isEmpty()) {
-				Font f = new Font(hint, Font.ITALIC, 10);
-				setFont(f);
-
 				setForeground(Color.GRAY);
 				super.setText(hint);
 			} else {
@@ -494,15 +496,16 @@ public class SignFrame extends JFrame {
 		private String realPw = "";
 		String str;
 		JLabel hintLabel;
-		
+		Font f;
 		public HintTextFieldPassword(String hint) {
 
-			Font f = new Font(hint, Font.ITALIC, 10);
+			f = new Font(hint, Font.PLAIN, 12);
 			setFont(f);
 			this.setBackground(new Color(234, 234, 234));
 			setForeground(Color.GRAY);
 
 			this.hintLabel = new JLabel(hint);
+			this.hintLabel.setFont(f);
 			super.addFocusListener(this);
 
 

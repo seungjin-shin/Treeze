@@ -24,7 +24,6 @@ import javax.swing.border.EmptyBorder;
 
 import freemind.controller.FreemindManager;
 import freemind.controller.ImgBtn;
-import freemind.controller.TicketFrame;
 import freemind.json.Ticket;
 import freemind.modes.NodeAdapter;
 import freemind.modes.UploadToServer;
@@ -317,6 +316,7 @@ public class TicketAnswerFrame extends JFrame{
 			addGrid(gbl, gbc, new JLabel(), 1, 2, 1, 1, 1, 10, this);
 			addGrid(gbl, gbc, j, 2, 1, 1, 2, 8, 1, this);
 			j.setLayout(gbl);
+			j.setBackground(fManager.treezeColor);
 			insets.set(0,0, 0,0);
 			addGrid(gbl, gbc, new JLabel(), 1, 1, 1, 2, 2, 1, j);
 			addGrid(gbl, gbc, new WriteBtn(fManager.writeDefault,fManager.writePress,fManager.writeOver), 2, 1, 1, 1, 1, 1, j);

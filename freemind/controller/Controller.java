@@ -107,6 +107,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.itextpdf.text.pdf.PdfReader;
 
 import freemind.Frame.SurveyFrame;
+import freemind.Frame.TextDialogue;
 import freemind.NodeType.NodeType;
 import freemind.NodeType.QuestionType;
 import freemind.common.BooleanProperty;
@@ -323,7 +324,7 @@ public class Controller  implements MapModuleChangeObserver {
     }
     //dewlit
 
-    public synchronized void recurAddTicketNode(NodeAdapter node){
+    public void recurAddTicketNode(NodeAdapter node){
     	NodeAdapter selNode = node;
     	NodeAdapter qNode = null;
     	NodeAdapter updateNode = null;
@@ -372,7 +373,11 @@ public class Controller  implements MapModuleChangeObserver {
 			tmp.setTicketContent(fManager.getTicket().getContents());
 			tmp.setTicketWriter(fManager.getTicket().getUserName());
 			fManager.getMc().nodeChanged(tmp);
-
+			
+			getModeController().nodeChanged(tmp);
+			
+			fManager.setReceiveQNode(updateNode);
+			
 			if (((QuestionType) updateNode.getNodeType()).getFm().isVisible())
 				((QuestionType) updateNode.getNodeType()).getFm().updateTickets();
 			else{
@@ -529,12 +534,16 @@ public class Controller  implements MapModuleChangeObserver {
            }}
     
     public void uploadLectureaAction(){
+    	//set Slide sequence Icon
+    	removeAllIcon((NodeAdapter) fManager.getMc().getRootNode());
+		setSequenceIcon();
+    	
     	//set Q Node
     	fManager.setNodeText("Q");
     	addQNode.addNodeForQuestion(fManager.getMc().getRootNode());
     	
-    	// modify Q node
-    	addQNode.modifyForQuestion(fManager.getMc().getRootNode());
+//    	// modify Q node
+//    	addQNode.modifyForQuestion(fManager.getMc().getRootNode());
 //    	fManager.getMc().edit.stopEditing();
     	
     	/*
@@ -549,23 +558,30 @@ public class Controller  implements MapModuleChangeObserver {
     	System.out.println("NodeKeyListener : set QuestionNodeInfo");
     	
     	//Set ID
-		recurSetUploadXmlID((NodeAdapter) fManager.getMc().getRootNode());
+//		recurSetUploadXmlID((NodeAdapter) fManager.getMc().getRootNode());
 		
 		//makeXMlFile
-		makeUploadXml();
+//		makeUploadXml();
 			
 		//upload XML
-		UploadToServer uploadToServer = new UploadToServer();
-		try {
-			uploadToServer.doFileUpload();
-			uploadToServer.doXmlUpload();
-		} catch (ClientProtocolException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//		UploadToServer uploadToServer = new UploadToServer();
+//		try {
+//			uploadToServer.doFileUpload();
+//			uploadToServer.doXmlUpload();
+//		} catch (ClientProtocolException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		new TextDialogue(fManager.getFreemindMainFrame(), "Upload Class", true);
+		
+//		fManager.init();
+//		fManager.getProfileFrame().setVisible(true);
+//		fManager.getFreemindMainFrame().setVisible(false);
+		
     }
     
     public void checkNodeType(){

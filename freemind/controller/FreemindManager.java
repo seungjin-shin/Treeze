@@ -13,9 +13,11 @@ import javax.swing.JFrame;
 
 import freemind.Frame.ProfileFrame;
 import freemind.json.Ticket;
+import freemind.modes.NodeAdapter;
 import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
 import freemind.modes.mindmapmode.MindMapMapModel;
+import freemind.modes.mindmapmode.actions.NodeActorXml;
 
 public class FreemindManager {
 	private static FreemindManager fInstance;
@@ -109,6 +111,16 @@ public class FreemindManager {
 	public Color treezeColor = new Color(141, 198, 63);
 	public Color noColor = new Color(0, 0, 0, 0);
 	
+	private NodeAdapter receiveQNode;
+	
+	public NodeAdapter getReceiveQNode() {
+		return receiveQNode;
+	}
+
+	public void setReceiveQNode(NodeAdapter receiveQNode) {
+		this.receiveQNode = receiveQNode;
+	}
+
 	public String getNodeText() {
 		return nodeText;
 	}

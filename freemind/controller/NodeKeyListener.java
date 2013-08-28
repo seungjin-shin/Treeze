@@ -46,6 +46,8 @@ import freemind.json.TreezeData;
 //import freemind.main.ProfileFrame.LectureListItem;
 import freemind.modes.MindMapNode;
 import freemind.modes.NodeAdapter;
+import freemind.modes.UploadToServer;
+import freemind.modes.mindmapmode.MindMapController;
 
 /**
  * The KeyListener which belongs to the node and cares for Events like C-D
@@ -87,6 +89,8 @@ public class NodeKeyListener implements KeyListener {
  			c.startSlideShow();
 			
 		} else if (e.getKeyCode() == KeyEvent.VK_F6) {
+			FreemindManager.getInstance().setNodeText("Q");
+			FreemindManager.getInstance().getMc().addNew(FreemindManager.getInstance().getMc().getSelected(), MindMapController.NEW_CHILD, null);
 			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F4){

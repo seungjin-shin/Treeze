@@ -46,6 +46,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -150,7 +152,7 @@ public class ProfileFrame extends JFrame {
 		lectureListPanel.setBorder(new LineBorder(Color.BLACK, 2, false));
 
 		addGrid(gbl, gbc, logoPanel,        0, 0, 1, 1, 1, 3, this);
-		addGrid(gbl, gbc, btnPanel,         1, 1, 1, 1, 4, 1, this);
+		addGrid(gbl, gbc, btnPanel,         1, 1, 1, 1, 4, 2, this);
 		addGrid(gbl, gbc, profilePanel,     0, 2, 1, 1, 1, 15, this);
 		addGrid(gbl, gbc, lectureListPanel, 1, 2, 1, 1, 4, 15, this);
 		
@@ -165,7 +167,7 @@ public class ProfileFrame extends JFrame {
 		insets.left = 10;
 		insets.top = 0;
 		insets.bottom = 0;
-		JLabel noPanel = new JLabel("N o", JLabel.CENTER);
+		JLabel noPanel = new JLabel("   N o", JLabel.LEFT);
 		JLabel subjectPanel = new JLabel("Subject", JLabel.LEFT);
 //		JLabel whritePane = new JLabel("State",JLabel.CENTER);
 		lectureHead.setLayout(gbl);
@@ -563,8 +565,10 @@ public class ProfileFrame extends JFrame {
 
 		public LectureListItem(int no, final Lecture lecture) {
 			// TODO Auto-generated constructor stub
-			lectureNo = new JLabel(no + "", JLabel.CENTER);
-			professorNm = new JLabel(lecture.getLectureName(), JLabel.LEFT);
+			lectureNo = new JLabel("     " + no, JLabel.LEFT);
+			lectureNo.setBackground(Color.black);
+			professorNm = new JLabel("       " + lecture.getLectureName(), JLabel.LEFT);
+			professorNm.setBackground(Color.blue);
 //			if(lecture.getStateOfLecture()){
 //				stateOfLecture = new JLabel("Online", JLabel.CENTER);
 //			}
@@ -574,8 +578,11 @@ public class ProfileFrame extends JFrame {
 			this.setBackground(new Color(0, 0, 0, 0));
 			// this.add(noPanel);
 			this.setLayout(gbl);
+//			this.setLayout(new GridLayout(1, 2));
 			insets.bottom = 5;
 			insets.top = 5;
+//			add(lectureNo);
+//			add(professorNm);
 			addGrid(gbl, gbc, lectureNo, 0, 0, 1, 1, 1, 1, this);
 			addGrid(gbl, gbc, professorNm, 1, 0, 1, 1, 1, 1, this);
 //			addGrid(gbl, gbc, stateOfLecture, 2, 0, 1, 1, 1, 1, this);
@@ -731,11 +738,22 @@ public class ProfileFrame extends JFrame {
 				}
 			});
 			
+			UploadToServer uploadToServer = new UploadToServer();
+			boolean chkClassEmpty = uploadToServer.checkClassIsEmpty(classInfo.getClassId());
+			
+			if(chkClassEmpty)
+				goBtn.setEnabled(false);
+			else
+				regBtn.setEnabled(false);
+			
 			insets.top = 0;
 			insets.bottom = 0;
-			
 			addGrid(gbl, gbc, classNm, 0, 0, 1, 2, 8, 3, this);
+			insets.top = 10;
+			insets.bottom = 10;
 			addGrid(gbl, gbc, regBtn,  1, 0, 1, 1, 1, 3, this);
+			insets.top = 0;
+			insets.bottom = 10;
 			addGrid(gbl, gbc, goBtn,   1, 1, 1, 1, 1, 3, this);
 
 			this.addMouseListener(new MouseListener() {
@@ -804,7 +822,14 @@ public class ProfileFrame extends JFrame {
 			// this.setPreferredSize(new Dimension(0, 2000));
 			this.setBackground(Color.WHITE);
 			this.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-
+			getVerticalScrollBar().getModel().addChangeListener(new ChangeListener() {
+				
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					// TODO Auto-generated method stub
+					repaint();	
+				}
+			});
 		}
 
 		@Override

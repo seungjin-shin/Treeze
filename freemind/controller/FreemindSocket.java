@@ -271,6 +271,8 @@ import com.google.gson.Gson;
 
 import freemind.Frame.SurveyFrame;
 import freemind.Frame.SurveyResultFrame;
+import freemind.Frame.TextDialogue;
+import freemind.Frame.TextFrame;
 import freemind.json.ArrayLecture;
 import freemind.json.Survey;
 import freemind.json.Ticket;
@@ -318,7 +320,6 @@ public class FreemindSocket extends Thread {
 					
 					if(treezeData.getDataType().equals(TreezeData.TICKET)){
 						
-						new SurveyFrame();
 						
 						TmpTicket tmpTicket = gson.fromJson(treezeData.getArgList().get(0), TmpTicket.class);
 						Ticket ticket = tmpTicket.getTicket();
@@ -327,6 +328,7 @@ public class FreemindSocket extends Thread {
 //						fManager.setTicket(ticket);
 //						c.recurAddTicketNode((NodeAdapter) c.getMc().getRootNode());
 						
+						new TextFrame(fManager.getSlideShow().getImgFrame(), "Receive a Question", true);
 						
 						
 					}

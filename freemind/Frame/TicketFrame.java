@@ -1,4 +1,4 @@
-package freemind.controller;
+package freemind.Frame;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -46,11 +46,14 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.google.gson.Gson;
 
-import freemind.Frame.TicketAnswerFrame;
-import freemind.Frame.WriteTicketFrame;
+import freemind.controller.Controller;
+import freemind.controller.FreemindManager;
+import freemind.controller.ImgBtn;
 import freemind.json.Ticket;
 import freemind.json.TicketInfo;
 import freemind.modes.MindMapNode;
@@ -122,7 +125,7 @@ public class TicketFrame extends JFrame{
 		addGrid(gbl, gbc, listPanel,  0, 1, 2, 1,  1, 40, ticketPanel);
 		addGrid(gbl, gbc, dumy     ,  0, 2, 1, 1, 20,  1, ticketPanel);
 		insets.set(10, 20, 10, 20);
-		addGrid(gbl, gbc, writeBtn,        1, 2, 1, 1,   1, 1, ticketPanel);
+		addGrid(gbl, gbc, writeBtn,        1, 2, 1, 1,   2, 4, ticketPanel);
 		ticketHead.setLayout(gbl);
 		
 		grid.setLayout(new GridLayout(100,1));
@@ -357,8 +360,8 @@ public class TicketFrame extends JFrame{
 			selelctNode = node;
 			numLb  = new JLabel(no, JLabel.CENTER);
 			if (node.getTicketContent() != null) {
-				if (node.getTicketContent().length() > 10)
-					sbLb = new JLabel(node.getTicketContent().substring(0, 10)
+				if (node.getTicketContent().length() > 20)
+					sbLb = new JLabel(node.getTicketContent().substring(0, 20)
 							+ "...", JLabel.CENTER);
 				else
 					sbLb = new JLabel(node.getTicketContent(), JLabel.CENTER);
@@ -432,7 +435,14 @@ public class TicketFrame extends JFrame{
 			// TODO Auto-generated constructor stub
 			this.setBackground(Color.WHITE);
 			this.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-		
+			getVerticalScrollBar().getModel().addChangeListener(new ChangeListener() {
+				
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					// TODO Auto-generated method stub
+					repaint();	
+				}
+			});
 		}
 		@Override
 		public void paint(Graphics g) {

@@ -726,9 +726,6 @@ public abstract class ControllerAdapter implements ModeController {
 			}
 			FreemindManager.getInstance().getProfileFrame().setMainFramevisible(false);
 			FreemindManager.getInstance().getFreemindMainFrame().setVisible(true);
-			fManager.getC().checkNodeType();
-			Thread addAllTicketThread = new AddAllTicketThread();
-			addAllTicketThread.start();
 			fManager.setMode(FreemindManager.REGMODE);
 			fManager.setEnableMenuBar();
         }

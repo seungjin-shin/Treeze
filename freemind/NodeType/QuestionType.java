@@ -2,8 +2,9 @@ package freemind.NodeType;
 
 import javax.swing.JFrame;
 
+import freemind.Frame.TicketFrame;
 import freemind.controller.Controller;
-import freemind.controller.TicketFrame;
+import freemind.modes.MindIcon;
 import freemind.modes.NodeAdapter;
 
 
@@ -35,6 +36,9 @@ public class QuestionType extends NodeType{
 			}
 		}
 		else{
+			if(!node.getIcons().isEmpty())
+    			node.removeIcon(0); 
+    		
 			fm.updateTickets();
 			fm.setVisible(true);
 			if(node.hasChildren()){
@@ -42,21 +46,6 @@ public class QuestionType extends NodeType{
 				c.getMc().nodeChanged(node);
 			}
 		}
-		
-		
-		
-
-//		if (node.isFolded()) { // 접혀있어
-//			c.getMc()._setFolded(node, false);
-//			c.getMc().nodeChanged(node);
-//		} else {
-//			if (node.hasChildren()) {
-//				c.getMc()._setFolded(node, true);
-//				c.getMc().nodeChanged(node);
-//			}
-//			
-//			fm.setVisible(false);
-//		}
 	}
 
 	@Override

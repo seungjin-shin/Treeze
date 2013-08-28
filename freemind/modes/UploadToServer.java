@@ -61,8 +61,6 @@ public class UploadToServer {
 				MultipartEntity multipart = new MultipartEntity(
 						HttpMultipartMode.BROWSER_COMPATIBLE, null,
 						Charset.forName("UTF-8")); // xml, classId, LectureName
-													// ��� 蹂대�
-
 				multipart.addPart("classId", classBody);
 				multipart.addPart("upload", bin);
 
@@ -86,7 +84,7 @@ public class UploadToServer {
         	  StringBody lectureTitle = new StringBody(lectureName, Charset.forName("UTF-8"));
         	  StringBody profEmailBody = new StringBody(profEmail, Charset.forName("UTF-8"));
         	  StringBody lectureState = new StringBody(state, Charset.forName("UTF-8"));
-        	  StringBody profssorNameBody = new StringBody("이민석", Charset.forName("UTF-8"));
+        	  StringBody profssorNameBody = new StringBody("�̹μ�", Charset.forName("UTF-8"));
            
         	  multipart.addPart("lectureName", lectureTitle);  
         	  multipart.addPart("professorEmail", profEmailBody);
@@ -196,13 +194,10 @@ public class UploadToServer {
     	  
           try {
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF-8"));
-                // 왜 파일인풋스트림 안에 new File(폴더, 이름) 이렇게 하면 안되는지 알수없는에러.....
-                //똑같이 xml은 읽히는데 왜?????????
-                //물어봐 
                 while ((line = br.readLine()) != null) {
                 	xml += line;
                 }
-                br.close();        
+                br.close();       
           } catch (Exception e) {
                 e.printStackTrace();
           }
@@ -211,8 +206,7 @@ public class UploadToServer {
        
        MultipartEntity multipart = new MultipartEntity(
 				HttpMultipartMode.BROWSER_COMPATIBLE, null,
-				Charset.forName("UTF-8"));  // xml, classId, LectureName ��� 蹂대�
-		
+				Charset.forName("UTF-8"));  // xml, classId, LectureName 		
        StringBody classBody = new StringBody(fManager.getClassId() + "", Charset.forName("UTF-8"));
        StringBody xmlBody = new StringBody(xml, Charset.forName("UTF-8"));
 
@@ -233,8 +227,7 @@ public class UploadToServer {
 	       
 	       MultipartEntity multipart = new MultipartEntity(
 					HttpMultipartMode.BROWSER_COMPATIBLE, null,
-					Charset.forName("UTF-8"));  // xml, classId, LectureName ��� 蹂대�
-			
+					Charset.forName("UTF-8"));  // xml, classId, LectureName 			
 	       StringBody typeBoby;
 		try {
 			typeBoby = new StringBody(user.getUserType(), Charset.forName("UTF-8"));
@@ -269,8 +262,7 @@ public class UploadToServer {
 	       
 	       MultipartEntity multipart = new MultipartEntity(
 					HttpMultipartMode.BROWSER_COMPATIBLE, null,
-					Charset.forName("UTF-8"));  // xml, classId, LectureName ��� 蹂대�
-			
+					Charset.forName("UTF-8"));  // xml, classId, LectureName 			
 	       StringBody typeBoby;
 		try {
 			
@@ -310,4 +302,40 @@ public class UploadToServer {
 		return false;
 	  }
 	  
+	  public boolean checkClassIsEmpty(int classId){
+			HttpClient httpClient = new DefaultHttpClient();
+		       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/img?classId=" + classId);
+		       
+		       MultipartEntity multipart = new MultipartEntity(
+						HttpMultipartMode.BROWSER_COMPATIBLE, null,
+						Charset.forName("UTF-8"));  // xml, classId, LectureName 				
+		       StringBody typeBoby;
+			try {
+				HttpResponse response = httpClient.execute(get);
+				
+				HttpEntity resEntity = response.getEntity();
+				
+				InputStream inputStream = resEntity.getContent();
+		    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+		    	  String str = "";
+		    	  String tmp;
+		    	  
+					while((tmp = in.readLine()) != null )
+						str += tmp;
+					
+				EntityUtils.consume(resEntity);
+				if(str.equals("{\"imgs\":[]}")){
+					return true;
+				}
+				else{
+					return false;
+				}
+					
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return false;
+	  }
 }

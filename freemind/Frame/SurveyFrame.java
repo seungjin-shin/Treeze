@@ -222,6 +222,11 @@ public class SurveyFrame extends JFrame{
 			btnGroup.add(type2);
 			btnGroup.add(type3);
 			btnGroup.add(type4);
+			type1.setBackground(fManager.treezeColor);
+			type2.setBackground(fManager.treezeColor);
+			type3.setBackground(fManager.treezeColor);
+			type4.setBackground(fManager.treezeColor);
+			
 			addGrid(gbl, gbc, type1,                         2, 1, 1, 1, 8, 1, this);
 			addGrid(gbl, gbc, type2,                         2, 2, 1, 1, 8, 1, this);
 			addGrid(gbl, gbc, type3,                         2, 3, 1, 1, 8, 1, this);
@@ -352,6 +357,7 @@ public class SurveyFrame extends JFrame{
 			addGrid(gbl, gbc, new JLabel(), 1, 2, 1, 1, 1, 10, this);
 			addGrid(gbl, gbc, j, 2, 1, 1, 2, 8, 1, this);
 			j.setLayout(gbl);
+			j.setBackground(fManager.treezeColor);
 			insets.set(0,0, 0,0);
 			addGrid(gbl, gbc, new JLabel(), 1, 1, 1, 2, 2, 1, j);
 			addGrid(gbl, gbc, new SendBtn(fManager.sendDefault,fManager.sendPress,fManager.sendOver), 2, 1, 1, 1, 1, 1, j);
