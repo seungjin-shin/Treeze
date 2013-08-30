@@ -84,10 +84,10 @@ import com.treeze.data.User;
 import com.treeze.data.Survey.Survey;
 import com.treeze.downloadthread.DownLoadAllTicket;
 
-public class MindMapMain extends JFrame {
+public class MindMapMain extends JPanel {
 	static MindNode md;
-	final int NODE_WIDTH = 100;
-	final int NODE_HEIGHT = 50;
+	final int NODE_WIDTH = 80;
+	final int NODE_HEIGHT = 40;
 	final int SCROLLFRAME_WIDTH = 4000;
 	final int SCROLLFRAME_HEIGHT = 2000;
 
@@ -96,13 +96,15 @@ public class MindMapMain extends JFrame {
 	Image scaledImage;
 	BufferedImage imageBuff;
 	ImageIcon resizeIcon;
-
+	Dimension dimension = new Dimension();
 	private ArrayList<MindNode> nodes = new ArrayList<MindNode>();
 	MindNode root;
+	MainFrameManager mainFrameManager;
+	
 
 	JScrollPane jsp;
 	JButton j;
-	ScrollPanel nodeScrollPanel = new ScrollPanel();
+	public ScrollPanel nodeScrollPanel = new ScrollPanel();
 	CubicCurve2D.Float graph = new CubicCurve2D.Float();
 	java.awt.Dimension screenSize;
 	
@@ -116,13 +118,13 @@ public class MindMapMain extends JFrame {
 	public MindMapMain(String xml, ClassInfo classinfo) {
 		// TODO Auto-generated constructor stub
 		screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		setTitle(classinfo.getClassName());
+		//setTitle(classinfo.getClassName());
 		this.classinfo = classinfo;
 	//	setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.user = user;
 		MindNode.setClassinfo(classinfo);
 
-		this.getContentPane().setBackground(Color.white);
+	//	this.getContentPane().setBackground(Color.white);
 		
 
 		this.setLayout(new BorderLayout());
@@ -136,7 +138,7 @@ public class MindMapMain extends JFrame {
 		MindMap map = (MindMap) xstream.fromXML(xml);
 
 		root = new MindNode(map.nodes.get(0).NODEID,map.nodes.get(0).getTEXT(),
-				(int) screenSize.getWidth(), (int) screenSize.getHeight());
+				(int) SCROLLFRAME_WIDTH/2, SCROLLFRAME_HEIGHT/2,this);
 		nodes.add(root);
 		for (int i = 0; i < map.nodes.get(0).nodes.size(); i++) {
 			nodetoMindNode(root, map.nodes.get(0).nodes.get(i));
@@ -146,68 +148,38 @@ public class MindMapMain extends JFrame {
 		
 		nodeScrollPanel = new ScrollPanel(); // 占썬�占썸에?占쏙옙 占쏙옙占썩�占�占쏙옙
 		jsp = new JScrollPane(nodeScrollPanel); // 占썬�占썸에占쏙옙?占쏙옙占쏙옙?占쏙옙
+		
 		this.add(jsp);
 
-		setSize(screenSize.width, screenSize.height);
+		//setSize(screenSize.width, screenSize.height);
 
 		SocketThread socketThread = new SocketThread(classinfo);
 		socketThread.start();
+		
 		setVisible(true);
-		nodeScrollPanel.init(); // 占썬�占썸에占쏙옙占쏙옙占쏙옙占�(?占썩�占썹�占썰빳占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙);
-		this.addWindowListener(new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowIconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeiconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeactivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowClosing(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-//				ServerSocket serverSocket = ServerSocket.getInstance();
-//				try {
-//					serverSocket.getSocket().close();
-//					System.err.println("[Socket End]");
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+		init(); // 占썬�占썸에占쏙옙占쏙옙占쏙옙占�(?占썩�占썹�占썰빳占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙);
+		
+		
+		
+
+	}
+	@Override
+	public void paint(Graphics g) {
+		// TODO Auto-generated method stub
+		super.paint(g);
+		dimension = getSize();
+		init();
+		System.out.println("[MindMapMain getWidth]  = "+dimension.getWidth());
 	}
 
-	
+	public void init() {
+		
+		jsp.getHorizontalScrollBar().setValue(2000);
+		jsp.getVerticalScrollBar().setValue((int) (root.getLocateY()-dimension.getHeight()/2));
+		jsp.getHorizontalScrollBar().setValue((int) (root.getLocateX()-dimension.getWidth()/2));
+
+	}
+
 
 	class ScrollPanel extends JPanel {
 		private Point pp = new Point();
@@ -230,7 +202,7 @@ public class MindMapMain extends JFrame {
 						node.getLocateY()-10, 20, 20);
 				node.getTicketBtn().setBounds(node.getEndX()-20,
 						node.getLocateY()-10, 20, 20);
-				node.getNodeBtn().setFont(new Font("Serif",Font.BOLD,14));
+				node.getNodeBtn().setFont(new Font("Serif",Font.BOLD,10));
 				node.getNodeBtn().setText(node.getNodeStr());
 				node.getNodeBtn()
 						.setVerticalTextPosition(SwingConstants.CENTER);
@@ -239,8 +211,9 @@ public class MindMapMain extends JFrame {
 				
 				node.getNodeBtn().setBackground(new Color(0, 0, 0, 0));
 				node.getNodeBtn().setBorderPainted(false);
+				node.getNodeBtn().setBorder(null);
 				node.getNodeBtn().setContentAreaFilled(false);
-				//node.getNodeBtn().setMargin(new Insets(5, 5, 5, 5));
+				node.getNodeBtn().setMargin(new Insets(5, 5, 5, 5));
 				
 				
 				this.add(node.getNodeBtn());
@@ -298,21 +271,12 @@ public class MindMapMain extends JFrame {
 
 	
 
-		public void init() {
-			
-			jsp.getHorizontalScrollBar().setValue(
-					root.getLocateX() - screenSize.width / 2);
-			jsp.getVerticalScrollBar().setValue(
-					root.getLocateY() - screenSize.height / 2);
-		
-		//	jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		}
-
 	
 		@Override
 		protected void paintComponent(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paintComponent(g);
+			
 	//		System.out.println("MindMap PaintComponents");
 			Graphics2D g2 = (Graphics2D) g;
 			// g2.drawLine(100, 100, 1001, 1010);
@@ -331,7 +295,7 @@ public class MindMapMain extends JFrame {
 
 						graph.setCurve(node.getEndX(), node.getMiddleY(),
 
-						node.getEndX() + 130, node.getMiddleY(), node
+						node.getEndX() + 90, node.getMiddleY(), node
 								.getParentNode().getLocateX(), node
 								.getParentNode().getMiddleY(),
 
@@ -356,8 +320,14 @@ public class MindMapMain extends JFrame {
 			}
 
 		}
+		
 	}
-	
+	public MainFrameManager getMainFrameManager() {
+		return mainFrameManager;
+	}
+	public void setMainFrameManager(MainFrameManager mainFrameManager) {
+		this.mainFrameManager = mainFrameManager;
+	}
  
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -505,11 +475,7 @@ public class MindMapMain extends JFrame {
 							while(node instanceof Ticket){
 								node = node.getParentNode();
 							}
-							if(TreezeStaticData.TICKETFRAME!=null&&TreezeStaticData.TICKETFRAME.getNode()==node){
-								TreezeStaticData.TICKETFRAME.setVisible(false);
-								TreezeStaticData.TICKETFRAME.disable();
-								TreezeStaticData.TICKETFRAME = new TicketFrame(node, classinfo);
-							}
+							mainFrameManager.ticketRepaint(node);
 							
 							
 							

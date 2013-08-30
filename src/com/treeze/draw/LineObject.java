@@ -15,9 +15,12 @@ public class LineObject extends DrawableObject {
 
 	Path path;
 
-	public LineObject(Path path) {
-		// TODO Auto-generated constructor stub
+	public LineObject(Path path, int backgroundWidth, int backgroundHeight) {
+		// TODO Auto-generated constructor stub		
+		super(backgroundWidth, backgroundHeight);
 		this.path = path;
+		setLineFeature();
+		setRate(x, y, width, height, this.backgroundWidth, this.backgroundHeight);
 	}
 
 	@Override
@@ -38,9 +41,31 @@ public class LineObject extends DrawableObject {
 	@Override
 	public boolean isClick(int x, int y, NoteManager nm) {
 		// TODO Auto-generated method stub
-//		System.out.println("position : " + x + " " + y);
+		// System.out.println("position : " + x + " " + y);
 		if (path.points.size() == 0) {
 			return false;
+		}			
+		
+		for(int i = 0; i < path.points.size(); i++) {
+			int curPathX = path.points.get(i).x;
+			int curPathY = path.points.get(i).y;
+			
+			double distanceResult = Math.sqrt(Math.pow(curPathX - x, 2) + Math.pow(curPathY - y, 2));
+			
+			if( 0 <= distanceResult && 10 >= distanceResult) {
+				return true;
+			}
+			
+			
+		}
+
+		return false;
+	}
+
+	private void setLineFeature() {
+
+		if (path.points.size() == 0) {
+			return;
 		}
 
 		Point largestPoint = new Point();
@@ -73,34 +98,17 @@ public class LineObject extends DrawableObject {
 
 		}
 
-		if ((largestPoint.x >= x && x >= smallestPoint.x)
-				&& (largestPoint.y >= y && y >= smallestPoint.y)) {
-
-			this.clickPanelWidth = largestPoint.x - smallestPoint.x;
-			this.clickPanelHeight = largestPoint.y - smallestPoint.y;
-			this.clickPanelX = smallestPoint.x;
-			this.clickPanelY = smallestPoint.y;
-
-			this.width = largestPoint.x - smallestPoint.x;
-			this.height = largestPoint.y - smallestPoint.y;
-			this.x = smallestPoint.x;
-			this.y = smallestPoint.y;
-
-			return true;
-		} else {
-			return false;
-		}
+		this.width = largestPoint.x - smallestPoint.x;
+		this.height = largestPoint.y - smallestPoint.y;
+		this.x = smallestPoint.x;
+		this.y = smallestPoint.y;
 	}
-
+	//이움직임은 panel에서 관장하므로 실제적으로 여기서 불러서 사용하지 않는다.
 	@Override
 	public void move(int x, int y, NoteManager nm) {
 		// TODO Auto-generated method stub
 		int diffrenceX = x - this.x;
 		int diffrenceY = y - this.y;
-
-		System.out.println("x y : " + x + " " + this.x);
-		System.out.println("diffrence : " + diffrenceX + " " + diffrenceY);
-
 		for (int i = 0; i < path.points.size(); i++) {
 			int curPathX = path.points.get(i).x;
 			int curPathY = path.points.get(i).y;
@@ -111,6 +119,7 @@ public class LineObject extends DrawableObject {
 
 		this.x = this.x + diffrenceX;
 		this.y = this.y + diffrenceY;
+		setRate(this.x, this.y, width, height, backgroundWidth, backgroundHeight);
 
 	}
 
@@ -118,12 +127,52 @@ public class LineObject extends DrawableObject {
 	public void setClick(int x, int y, NoteManager nm) {
 		// TODO Auto-generated method stub
 		if (isClick(x, y, nm)) {
-			
-			clickPanel=new ClickLinePanel(clickPanelX, clickPanelY,
-					clickPanelWidth + 10, clickPanelHeight + 10, this, nm);
+
+			makeClickPanel(new ClickLinePanel(this.x, this.y,
+					width, height, this, nm));
 
 		}
 
+	}
+	//실제적으로 이녀석이 계속 불려서 움직이는데 이녀석은 자기 자신뿐만 아니라 클릭패널의 이동도 관장한다.
+	@Override
+	protected void setRelativeLocation(NoteManager nm) {
+		// TODO Auto-generated method stub
+		super.setRelativeLocation(nm);
+
+		if (path.points.size() == 0) {
+			return;
+		}
+		
+		for (int i = 0; i < path.points.size(); i++) {
+
+			path.points.get(i).x = (int) (backgroundWidth * path.points.get(i).rateX);
+			path.points.get(i).y = (int) (backgroundHeight * path.points.get(i).rateY);
+			
+		}
+
+
+	}
+	
+	@Override
+	protected void setRate(int x, int y, int width, int height, int backgroundWidth, int backgroundHeight) {
+		// TODO Auto-generated method stub
+		super.setRate(x, y, width, height, backgroundWidth, backgroundHeight);
+		
+		if (path.points.size() == 0) {
+			return;
+		}
+		for (int i = 0; i < path.points.size(); i++) {
+
+			int curPathX = path.points.get(i).x;
+			int curPathY = path.points.get(i).y;
+
+			path.points.get(i).rateX = (double)curPathX/(double)backgroundWidth;
+			path.points.get(i).rateY = (double)curPathY/(double)backgroundHeight;
+//			System.out.println("rateX : " + path.points.get(i).rateX);
+
+		}
+		
 	}
 
 }
@@ -149,6 +198,7 @@ class ClickLinePanel extends ClickGraphicPanel {
 				}
 
 			}
+
 			public void mousePressed(MouseEvent e) {
 
 				if (csc.isDrag(e, margin)) {
@@ -172,7 +222,6 @@ class ClickLinePanel extends ClickGraphicPanel {
 		this.addMouseMotionListener(mia);
 
 	}
-
 
 
 }

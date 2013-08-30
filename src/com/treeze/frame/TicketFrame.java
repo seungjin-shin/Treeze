@@ -57,7 +57,7 @@ import com.treeze.data.TreezeStaticData;
 import com.treeze.data.User;
 import com.treeze.frame.TicketWriteFrame.WriteBtn;
 
-public class TicketFrame extends JFrame {
+public class TicketFrame extends JPanel {
 	MindNode node;
 
 	ListPanel listPanel;
@@ -82,12 +82,10 @@ public class TicketFrame extends JFrame {
 	public TicketFrame(final MindNode node, ClassInfo classInfo) {
 
 		// TODO Auto-generated constructor stub
-		this.setSize(1000, 600);
-
 		this.node = node;
 		this.classInfo = classInfo;
 		this.user = user;
-		this.getContentPane().setBackground(new Color(141, 198, 63));
+		this.setBackground(new Color(141, 198, 63));
 		ticketTitleLabel = new TicketTitleLabel();
 		gbc.fill = GridBagConstraints.BOTH;
 		this.setLayout(gbl);
@@ -117,17 +115,13 @@ public class TicketFrame extends JFrame {
 		dumy.setBackground(new Color(0, 0, 0, 0));
 		dumy.setBackground(TreezeStaticData.TREEZE_BG_COLOR);
 		listPanel.setBackground(TreezeStaticData.TREEZE_BG_COLOR);
-		// jsp = new JScrollPane(listPanel);
-
 		ticketHead.setBackground(new Color(0, 0, 0, 0));
-		// jsp.setBorder(new EmptyBorder(0, 0, 0, 0));
-		// listPanel.setBackground(new Color(0,0,0,0));
 		insets.set(0, 20, 0, 20);
 		addGrid(gbl, gbc, ticketHead, 0, 0, 2, 1, 1, 2, ticketPanel);
 		addGrid(gbl, gbc, listPanel, 0, 1, 2, 1, 1, 40, ticketPanel);
-		addGrid(gbl, gbc, dumy, 0, 2, 1, 1, 20, 1, ticketPanel);
+		addGrid(gbl, gbc, dumy, 0, 2, 1, 1, 15, 2, ticketPanel);
 		insets.set(10, 20, 5, 20);
-		addGrid(gbl, gbc, writeBtn, 1, 2, 1, 1, 1, 1, ticketPanel);
+		addGrid(gbl, gbc, writeBtn, 1, 2, 1, 1, 2, 2, ticketPanel);
 		ticketHead.setLayout(gbl);
 		grid.setLayout(new GridLayout(100, 1));
 
@@ -170,50 +164,7 @@ public class TicketFrame extends JFrame {
 		listPanel.getViewport().add(grid, null);
 
 		this.setVisible(true);
-		this.addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowOpened(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowIconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowClosing(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				TreezeStaticData.TICKETFRAME = null;
-			}
-
-			@Override
-			public void windowClosed(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowActivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		
 
 	}
 
@@ -534,7 +485,7 @@ public class TicketFrame extends JFrame {
 
 		@Override
 		protected void Action(JButton jbtn) {
-			new TicketWriteFrame(TicketFrame.this, node, classInfo);
+			new TicketWriteFrame(node, classInfo);
 
 		}
 	}

@@ -658,9 +658,7 @@ public class ProfileFrame extends JFrame {
 		fullPanel.setVisible(true);
 		setVisible(true);
 		fullPanel.repaint();
-		lectureListPanel.setVisible(false);
-		lectureListPanel.setVisible(true);
-		lectureListPanel.repaint();
+	
 	}
 
 	void updateGetallClassList() {
@@ -684,9 +682,9 @@ public class ProfileFrame extends JFrame {
 		System.out.println(sbResult.toString());
 		Mindmap jsonResultMindmaps = (Mindmap) gson.fromJson(
 				sbResult.toString(), (java.lang.reflect.Type) type);
-		new MindMapMain(jsonResultMindmaps.getMindmap().getMindmapXML(),
+		MindMapMain mindmapMain = new MindMapMain(jsonResultMindmaps.getMindmap().getMindmapXML(),
 				classInfo);
-
+       MainFrameManager mainFrameManager = new MainFrameManager(mindmapMain,classInfo);
 	}
 
 	class ProfileMouseListener implements MouseListener {

@@ -54,14 +54,14 @@ public class StoredNoteObject {
 				NoteManager nm = pip.getNoteManager();
 
 				PostItObj pio = new PostItObj(pip.getX(), pip.getY(),
-						pip.getWidth(), pip.getHeight(), nm.getDrawobjList(),
+						pip.getWidth(), pip.getHeight(),pip.getBackgroundWidth(), pip.getBackgroundHeight(), nm.getDrawobjList(),
 						nm.getComponentList());
 				System.out.println("postit size : "+nm.getComponentList().size());
 				piList.add(pio);
 			} else if (component instanceof MemoPanel) {
 				MemoPanel mp = (MemoPanel) component;
 				MemoObj mo = new MemoObj(mp.getX(), mp.getY(), mp.getWidth(),
-						mp.getHeight(), mp.getText());
+						mp.getHeight(),mp.getBackgroundWidth(),mp.getBackgroundHeight(), mp.getText());
 				moList.add(mo);
 
 			}

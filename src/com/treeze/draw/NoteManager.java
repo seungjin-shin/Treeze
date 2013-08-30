@@ -4,11 +4,13 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import com.google.gson.Gson;
@@ -21,19 +23,26 @@ public class NoteManager {
 	protected ArrayList<DrawableObject> drawobjList;
 	protected ArrayList<ComponentJPanel> componentList;
 	
-	Path path;
+	protected Path path;
 	private JPanel jpanel;
 
 
-	FigureObject figureObj;
+	protected FigureObject figureObj;
 
-	Gson gson;
-	FileIOManager fim;
+	protected Gson gson;
+	protected FileIOManager fim;
 	
-	public static final int IMG_TYPE_STAR = 0;
+	protected static final int IMG_TYPE_STAR = 0;
 	
+	public static final int IMG_SIZE_NO_DECIDED = -1;
+//	public static int IMG_SIZE_WIDTH;
+//	public static int IMG_SIZE_HEIGHT;
+//	
+	public static Image STAR_IMG; 	 
+	
+	private NoteManager nm;
 
-	public NoteManager(JPanel jpanel) {
+	protected NoteManager(JPanel jpanel) {
 		// TODO Auto-generated constructor stub
 		this.drawobjList = new ArrayList<DrawableObject>();
 		this.componentList = new ArrayList<ComponentJPanel>();
@@ -41,6 +50,45 @@ public class NoteManager {
 
 		gson = new Gson();
 		fim = new FileIOManager();
+		
+//		IMG_SIZE_WIDTH = IMG_SIZE_NO_DECIDED;
+//		IMG_SIZE_HEIGHT = IMG_SIZE_NO_DECIDED;
+		
+		
+		nm = this;
+		
+		
+		
+		
+		jpanel.addComponentListener(new ComponentListener() {
+			
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void componentResized(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				nm.setRelativeLocation();
+				nm.repaint();
+				
+				
+			}
+			
+			@Override
+			public void componentMoved(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void componentHidden(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 
 	}
 
@@ -50,23 +98,24 @@ public class NoteManager {
 
 	}
 
-	protected void makePath(Point point, Color color, BasicStroke bs) {
+	protected void makePath(LinePoint point, Color color, BasicStroke bs) {
 
 		path.setBs(bs);
 		path.setColor(color);
-		path.getPoints().add(point);
+//		path.getPoints().add(point);
+		path.points.add(point);
 		repaint();
 
 	}
 
 	protected void makePathComplete() {
-		drawobjList.add(new LineObject(this.path));
+		drawobjList.add(new LineObject(this.path, jpanel.getWidth(), jpanel.getHeight()));
 		this.path = null;
 //		System.out.println("drawobj size : " + drawobjList.size());
 	}
 
 	protected void makeFigure(int x, int y, int width, int height, int type) {
-		this.figureObj = new FigureObject(x, y, width, height, type);
+		this.figureObj = new FigureObject(x, y, width, height,jpanel.getWidth(),jpanel.getHeight(), type);
 		repaint();
 
 	}
@@ -77,7 +126,7 @@ public class NoteManager {
 //		System.out.println("drawobj size : " + drawobjList.size());
 	}
 	
-	public void restore() {
+	protected void restore() {
 		drawAll(jpanel.getGraphics());
 		addAllToPanel();
 	}
@@ -85,8 +134,7 @@ public class NoteManager {
 	protected void drawAll(Graphics g) {
 		
 		for (int i = 0; i < drawobjList.size(); i++) {
-			System.out.println("draw");
-
+			
 			drawobjList.get(i).draw(g, jpanel);
 
 		}
@@ -101,18 +149,10 @@ public class NoteManager {
 		}
 	}
 
-
-
-	protected void drawLine(Path path) {
-
-		drawobjList.add(new LineObject(path));
-		repaint();
-	}
-
 	protected void drawLineByRealTime(Graphics g) {
 
 		if (path != null) {
-			System.out.println("sex");
+
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setColor(path.getColor());
 			g2.setStroke(path.getBs());
@@ -129,6 +169,8 @@ public class NoteManager {
 	}
 
 	protected void drawFigureByRealTime(Graphics g) {
+		
+//		System.out.println(figureObj);
 
 		if (figureObj != null) {
 			figureObj.draw(g, jpanel);
@@ -137,35 +179,32 @@ public class NoteManager {
 	}
 
 	protected void drawFigure(int x, int y, int width, int height, int type) {
-		drawobjList.add(new FigureObject(x, y, width, height, type));
+		drawobjList.add(new FigureObject(x, y, width, height, jpanel.getWidth(),jpanel.getHeight(),type));
 		repaint();
 	}
 
-//	protected void drawImage(int x, int y, int width, int height,
-//			String imagePath) {
-//		drawobjList.add(new ImageObject(x, y, width, height, imagePath));
-//		repaint();
-//	}
-//	
-	protected void drawImage(int x, int y, int width, int height,
+
+	protected void drawImage(int x, int y, double width, double height,
 			int  type) {
-		drawobjList.add(new ImageObject(x, y, width, height, type));
+//		if(IMG_SIZE_WIDTH != IMG_SIZE_NO_DECIDED) {
+//			width = IMG_SIZE_WIDTH;
+//			height = IMG_SIZE_HEIGHT;
+//		}
+		drawobjList.add(new ImageObject(x, y, (int)width, (int)height,jpanel.getWidth(), jpanel.getHeight(), type));
 		repaint();
 	}
 
-	public void repaint() {
+	protected void repaint() {
 
 		jpanel.repaint();
 
 	}
 
-	protected void addPath(Path path) {
-		drawobjList.add(new LineObject(path));
-	}
+
 
 	protected void addPostIt(int x, int y, int width, int height) {
 		
-		PostItPanel postItPanel = new PostItPanel(x,y,width,height);
+		PostItPanel postItPanel = new PostItPanel(x,y,width,height,jpanel.getWidth(), jpanel.getHeight());
 		
 
 		jpanel.add(postItPanel);
@@ -181,17 +220,15 @@ public class NoteManager {
 
 
 	protected void addMemo(int x, int y, int width, int height) {
-
-		MemoPanel memo = makeMemo(x, y, width, height);
+		System.out.println("asdfadsfadsfadsadsf");
+		MemoPanel memo = new MemoPanel(x, y, width, height, jpanel.getWidth(), jpanel.getHeight());
 		memo.addToPanel(jpanel, this);
 		componentList.add(memo);		
 		repaint();
 
 	}
 	
-	protected MemoPanel makeMemo(int x, int y, int width, int height) {
-		return new MemoPanel(x, y, width, height);
-	}
+
 
 	protected void removeLastDrawableObj() {
 
@@ -199,9 +236,6 @@ public class NoteManager {
 
 	}
 
-	protected void eraseObjByPosition(int x, int y) {
-		
-	}
 
 	protected void changeJson() {
 
@@ -258,7 +292,7 @@ public class NoteManager {
 	protected void setClick(int x, int y) {
 		setUnClicked();
 		for(int i = 0; i< drawobjList.size(); i++) {
-			System.out.println("asdfadsfasdfsdasdafasdfasdfsadf");
+//			System.out.println("asdfadsfasdfsdasdafasdfasdfsadf");
 			drawobjList.get(i).setClick(x, y, this);
 			
 				
@@ -290,53 +324,68 @@ public class NoteManager {
 		}
 		
 		for(int i = 0; i < componentList.size(); i++) {
-			System.out.println("ÄÚ¸ÆÀÌ");
+//			System.out.println("ÄÚ¸ÆÀÌ");
 			componentList.get(i).removeSelectedItem(this);
 		}
 		repaint();
 	}
 	
 	protected void setUnClicked() {
-		System.out.println("unclick size : " +drawobjList.size());
+//		System.out.println("unclick size : " +drawobjList.size());
 		for(int i = 0; i < drawobjList.size(); i++) {
 			drawobjList.get(i).setUnClicked(this);
 		}
 		
 		for(int i = 0; i < componentList.size(); i++) {
-			System.out.println("ÄÚ¸ÆÀÌ");
+//			System.out.println("ÄÚ¸ÆÀÌ");
 			componentList.get(i).setUnClicked(this);
 		}
 		repaint();
 	}
+	
+	protected void setRelativeLocation() {
+		
+		for(int i = 0; i < drawobjList.size(); i++) {
+			drawobjList.get(i).setRelativeLocation(this);
+		}
+		
+		for(int i = 0; i < componentList.size(); i++) {
+			
+			componentList.get(i).setRelativeLocation(this);
+		}
+		
+	}
 
-	public ArrayList<DrawableObject> getDrawobjList() {
+	protected ArrayList<DrawableObject> getDrawobjList() {
 		return drawobjList;
 	}
 
-	public void setDrawobjList(ArrayList<DrawableObject> drawobjList) {
+	protected void setDrawobjList(ArrayList<DrawableObject> drawobjList) {
 		this.drawobjList = drawobjList;
 	}
 	
-	public ArrayList<ComponentJPanel> getComponentList() {
+	protected ArrayList<ComponentJPanel> getComponentList() {
 		return componentList;
 	}
 
-	public void setComponentList(ArrayList<ComponentJPanel> componentList) {
+	protected void setComponentList(ArrayList<ComponentJPanel> componentList) {
 		this.componentList = componentList;
 	}
 	
-	public JPanel getJpanel() {
+	protected JPanel getJpanel() {
 		return jpanel;
 	}
 
-	public void setJpanel(JPanel jpanel) {
+	protected void setJpanel(JPanel jpanel) {
 		this.jpanel = jpanel;
 	}
-
+	
 
 
 
 }
+
+
 
 
 

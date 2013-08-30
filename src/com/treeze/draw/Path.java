@@ -2,50 +2,62 @@ package com.treeze.draw;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Point;
 import java.util.ArrayList;
 
 public class Path {
 	
-	ArrayList<Point> points;
+	ArrayList<LinePoint> points;
 	Color color;
 	BasicStroke bs;
 	
-	public Path() {
+	protected Path() {
 		// TODO Auto-generated constructor stub
-		points = new ArrayList<Point>();
+		points = new ArrayList<LinePoint>();
 		color = Color.BLACK;
 		bs = new BasicStroke(1);
 	}
 
-	public void setColor(Color color) {
+	protected void setColor(Color color) {
 		this.color = color;
 	}
 
-	public void setStroke(BasicStroke bs) {
+	protected void setStroke(BasicStroke bs) {
 		this.bs = bs;
 	}
 
-	public ArrayList<Point> getPoints() {
+	protected ArrayList<LinePoint> getPoints() {
 		return points;
 	}
 
-	public void setPoints(ArrayList<Point> points) {
+	protected void setPoints(ArrayList<LinePoint> points) {
 		this.points = points;
 	}
 
-	public BasicStroke getBs() {
+	protected BasicStroke getBs() {
 		return bs;
 	}
 
-	public void setBs(BasicStroke bs) {
+	protected void setBs(BasicStroke bs) {
 		this.bs = bs;
 	}
 
-	public Color getColor() {
+	protected Color getColor() {
 		return color;
 	}
 	
 	 
 
+}
+
+class LinePoint {
+	int x;
+	int y;
+	double rateX;
+	double rateY;
+	
+	protected LinePoint(int x, int y) {
+		// TODO Auto-generated constructor stub
+		this.x = x;
+		this.y = y;
+	}
 }

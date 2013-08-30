@@ -3,19 +3,16 @@ package com.treeze.draw;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import com.treeze.data.MindNode;
 import com.treeze.data.TreezeStaticData;
 
 /*
@@ -36,16 +33,16 @@ public class PPTPanel extends JPanel {
 	DrawablePanel dp;
 	
 	NoteManager nm;
-
-	Image img;
-	public PPTPanel(String filename) {
+	MindNode node;
+	
+	public PPTPanel(MindNode node) {
 		// TODO Auto-generated constructor stub
 		super();
 
 		pptPanel = this;
-		img = new ImageIcon(filename).getImage();
+		
 		// 처음 초기화
-		dp = new DrawablePanel(this, filename);
+		dp = new DrawablePanel(this, (TreezeStaticData.PPT_IMG_PATH + "/"+node.getImgPath()+".jpg"));
 		nm = dp.getNoteManager();
 		setLayout(null);
 
@@ -141,7 +138,7 @@ public class PPTPanel extends JPanel {
 							nm.setUnClicked();
 							if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
 								if (sm.getCurFigureMode() == StateManager.FIGURE_TYPE_STAR) {
-									nm.drawImage(x1, y1, 40, 40, NoteManager.IMG_TYPE_STAR);
+									nm.drawImage(x1, y1, (pptPanel.getWidth()*0.05), (pptPanel.getHeight()*0.05), NoteManager.IMG_TYPE_STAR);
 								}
 
 							}else if(sm.getCurNoteMode() == StateManager.NOTE_MODE_ERASER) {
@@ -185,7 +182,7 @@ public class PPTPanel extends JPanel {
 					public void mouseMoved(MouseEvent e) {
 						
 						int x = e.getX();
-						int y = e.getY();
+						int y = e.getY();						
 						
 						if(nm.isClickableItem(x, y)) {
 							setCursor(StateManager.moveCursor);
@@ -200,16 +197,18 @@ public class PPTPanel extends JPanel {
 						// pen 모드중은 두개로 구분된다.
 						// curMouseMode = MOUSE_STATE_DRAGGED;
 						sm.setCurMouseMode(StateManager.MOUSE_STATE_DRAGGED);
+						
+						setCursor(sm.getCurStateCursor());
 
 						if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
 							// shift를 누르고 있으므로 직선을 그린다.
 							if (sm.getCurLineMode() == StateManager.LINE_MODE_STRAIGHT) {
 
-								nm.makePath(new Point(e.getX(), y1), sm.getColor(), sm.getBs());
+								nm.makePath(new LinePoint(e.getX(), y1), sm.getColor(), sm.getBs());
 
 							} else {
 
-								nm.makePath(new Point(e.getX(), e.getY()), sm.getColor(), sm.getBs());
+								nm.makePath(new LinePoint(e.getX(), e.getY()), sm.getColor(), sm.getBs());
 
 							}
 
@@ -341,9 +340,6 @@ public class PPTPanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-	
-		g.drawImage(img, 0, 0,
-				this.getParent().getWidth(), this.getParent().getHeight(), null);;
 		dp.paintComponent(g);
 		
 	}

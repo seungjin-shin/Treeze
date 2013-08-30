@@ -25,15 +25,16 @@ public class MemoPanel extends ComponentJPanel {
 	JTextArea textArea;
 	int margin;
 
-	ComponentSizeController csc;
+//	ComponentSizeController csc;
 	int foldSize;
 	MemoPanel memoPanel;	
 	
 	private PPTPanel ptPanel;
 	private NoteManager nm;	
 
-	public MemoPanel(final int x, final int y, final int width, final int height) {
+	public MemoPanel(final int x, final int y, final int width, final int height, int backgroundWidth, int backgroundHeight) {
 		// TODO Auto-generated constructor stub
+		super();
 		margin = 3;
 		foldSize = 30;
 		memoPanel = this;
@@ -43,11 +44,39 @@ public class MemoPanel extends ComponentJPanel {
 		
 		textArea = new JTextArea();
 		textArea.setBounds(0, 0, width, height);
+		
+		
 		this.add(textArea);		
 
-		csc = new ComponentSizeController(this);
-		
+		csc = new ComponentSizeController(this);		
 		csc.setBound(x, y, width, height);
+		setRate(backgroundWidth, backgroundHeight);
+
+		
+
+		
+		textArea.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				textArea.setBackground(new Color(0,0,0,0));
+				memoPanel.setBackground(new Color(0,0,0,0));
+				
+				
+			}
+			
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				textArea.setBackground(Color.white);
+				memoPanel.setBackground(Color.gray);
+				
+				
+			}
+		});
+		
+		
 		
 		textArea.addKeyListener(new KeyListener() {
 			
@@ -60,6 +89,7 @@ public class MemoPanel extends ComponentJPanel {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				// TODO Auto-generated method stub
+				getClickPanel().setVisible(false);
 				Dimension textAreaDimention = textArea.getPreferredSize();
 				textArea.setSize(textArea.getPreferredSize());
 				csc.setSize(textAreaDimention.width + 10 , textAreaDimention.height+ 10);
@@ -69,43 +99,31 @@ public class MemoPanel extends ComponentJPanel {
 			}
 		});
 		
-		textArea.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				// 
-				
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				getClickPanel().setVisible(false);
-				
-			}
-		});
+
 		
 		MouseInputAdapter mia = new MouseInputAdapter() {
 
 			public void mouseDragged(MouseEvent e) {}
 
 			public void mousePressed(MouseEvent e) {
+//				textArea.setBackground(Color.white);
+//				memoPanel.setBackground(Color.gray);
 				
 				if (csc.isChangeSize(e, margin) || csc.isDrag(e, margin)) {
-
+					
+					getClickPanel().requestFocus();
+					getClickPanel().grabFocus();
 					getClickPanel().setVisible(true);
+
 					
 				}
 
 			}
 
 			public void mouseMoved(MouseEvent e) {
+				
+
+				
 				if (csc.isChangeSize(e, margin) || csc.isDrag(e, margin)) {
 
 					setCursor(StateManager.moveCursor);
@@ -131,9 +149,6 @@ public class MemoPanel extends ComponentJPanel {
 		return textArea.getText();
 	}
 
-
-
-
 //	private void unfold() {
 //		psc.setCurFoldMode(ComponentSizeController.FOLD_MODE_UNFOLD);
 //		psc.setSize(psc.getOriginalWidth(), psc.getOriginalHeight());
@@ -158,7 +173,6 @@ public class MemoPanel extends ComponentJPanel {
 		ptPanel = (PPTPanel)jpanel;
 		this.nm = nm;
 		setClickPanel(new ClickMemoPanel(this.getX(), this.getY(), this.getWidth(), this.getHeight(), memoPanel, nm));
-		getClickPanel().setVisible(false);
 		jpanel.add(this);
 		jpanel.setVisible(false);
 		jpanel.setVisible(true);

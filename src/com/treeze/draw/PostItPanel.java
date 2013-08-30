@@ -15,6 +15,7 @@ import javax.swing.event.MouseInputAdapter;
 public class PostItPanel extends ComponentJPanel {
 
 	// size control은 여기서 전부다.
+	
 
 	int x1;
 	int y1;
@@ -35,9 +36,10 @@ public class PostItPanel extends ComponentJPanel {
 	private PostItHeadPanel headPanel;
 	private PostItBodyPanel bodyPanel;
 
-	public PostItPanel(int x, int y, int width, int height) {
+	public PostItPanel(int x, int y, int width, int height, int backgroundWidth, int backgroundHeight) {
 		// TODO Auto-generated constructor stub
-
+//		super(backgroundWidth, backgroundHeight);
+		super();
 		this.postItPanel = this;
 
 		// size control
@@ -55,6 +57,7 @@ public class PostItPanel extends ComponentJPanel {
 		glm.addGrid(new PostItBodyPanel(this), 1, 2, 1, 1, 1, 1, this);
 		psc.setBound(x, y, width, height);
 		// this.setMinimumSize(new Dimension(40, 40));
+
 
 	}
 
@@ -311,13 +314,13 @@ class PostItBodyPanel extends JPanel {
 						if (sm.getCurLineMode() == StateManager.LINE_MODE_STRAIGHT) {
 
 							getNoteManager().makePath(
-									new Point(e.getX(), mousePressedPoint.y),
+									new LinePoint(e.getX(), mousePressedPoint.y),
 									sm.color, sm.bs);
 
 						} else {
 
 							getNoteManager().makePath(
-									new Point(e.getX(), e.getY()), sm.color,
+									new LinePoint(e.getX(), e.getY()), sm.color,
 									sm.bs);
 
 						}
@@ -364,7 +367,7 @@ class PostItBodyPanel extends JPanel {
 
 						if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
 							if (sm.getCurFigureMode() == StateManager.FIGURE_TYPE_STAR) {
-								getNoteManager().drawImage(mousePressedPoint.x, mousePressedPoint.y, 25, 25, NoteManager.IMG_TYPE_STAR);
+								getNoteManager().drawImage(mousePressedPoint.x, mousePressedPoint.y, 15, 15, NoteManager.IMG_TYPE_STAR);
 							}
 
 						} else if (sm.getCurNoteMode() == StateManager.NOTE_MODE_ERASER) {

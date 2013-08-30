@@ -10,7 +10,109 @@ import javax.swing.event.MouseInputAdapter;
 
 public abstract class ComponentJPanel extends JPanel {
 	
-	NoteObject no = new NoteObject();
+	private NoteObject no = new NoteObject();	
+	
+	protected int backgroundWidth;
+	protected int backgroundHeight;
+	
+	protected double rateX;
+	protected double rateY;	
+	protected double rateWidth;
+	protected double rateHeight;
+	
+	ComponentSizeController csc;
+	
+	protected ComponentJPanel() {
+		// TODO Auto-generated constructor stub
+		no = new NoteObject();
+		csc = new ComponentSizeController(this);
+	}
+	
+
+	
+	protected abstract void addToPanel(JPanel jpanel , NoteManager nm);
+
+
+	protected void removeSelectedItem(NoteManager nm) {
+		if (no.getClickPanel() != null && no.getClickPanel().isVisible()) {
+			no.getClickPanel().removeClicked();
+		}
+	}
+	
+	
+	protected void setUnClicked(NoteManager nm) {
+
+		if (getClickPanel() != null) {
+			
+			getClickPanel().setVisible(false);			
+			
+		}
+	}
+	protected ClickPanel makeClickPanel(ClickPanel cp) {
+		return no.makeClickPanel(cp);
+	}
+	
+	protected  void setRelativeLocation(NoteManager nm) {
+		backgroundWidth = nm.getJpanel().getWidth();
+		backgroundHeight = nm.getJpanel().getHeight();
+		
+		int x  = (int) (backgroundWidth*rateX);
+		int y = (int) (backgroundHeight*rateY);
+		int width  = (int) (backgroundWidth*rateWidth);
+		int height = (int) (backgroundHeight*rateHeight);
+		
+		
+		if(getClickPanel() != null) {
+			getClickPanel().setBounds(x, y, width, height);
+		}
+		
+		this.setBounds(x, y, width, height);
+		
+	}
+	
+	
+	//생성자 이후에 혹은 컴포넌트의 크기를 정한 후에 불러줘야함 
+	protected void setRate(int backgroundWidth, int backgroundHeight) {
+		
+		rateX = (double)getX()/(double)backgroundWidth;
+		rateWidth = (double)getWidth()/(double)backgroundWidth;
+		rateY = (double)getY()/(double)backgroundHeight;
+		rateHeight = (double)getHeight()/(double)backgroundHeight;
+		
+		this.backgroundWidth = backgroundWidth;
+		this.backgroundHeight = backgroundHeight;
+		
+		
+	}
+	
+	protected void setLeftFloorSize(Point p) {
+		csc.setLeftFloorSize(p);
+		setRate(backgroundWidth, backgroundHeight);
+	}
+	
+	protected void setRightFloorSize(Point p) {
+		csc.setRightFloorSize(p);
+		setRate(backgroundWidth, backgroundHeight);
+	}
+	
+	protected void setLeftBottomSize(Point p) {
+		csc.setLeftBottomSize(p);
+		setRate(backgroundWidth, backgroundHeight);
+	}
+	
+	protected void setRightBottomSize(Point p) {
+		csc.setRightBottomSize(p);
+		setRate(backgroundWidth, backgroundHeight);
+	}
+	
+	@Override
+	public void setLocation(int x, int y) {
+		// TODO Auto-generated method stub
+		super.setLocation(x, y);
+		setRate(backgroundWidth, backgroundHeight);
+		
+	}
+	
 	
 	protected void setClickPanel(ClickPanel cp) {
 		no.setClickPanel(cp);
@@ -19,18 +121,57 @@ public abstract class ComponentJPanel extends JPanel {
 	protected ClickPanel getClickPanel() {
 		return no.getClickPanel();
 	}
-	
 
 	
-	public abstract void addToPanel(JPanel jpanel , NoteManager nm);
-	
-	public void removeSelectedItem(NoteManager nm) {
-		no.removeSelectedItem(nm);
+	public int getBackgroundWidth() {
+		return backgroundWidth;
+	}
+
+	public void setBackgroundWidth(int backgroundWidth) {
+		this.backgroundWidth = backgroundWidth;
+	}
+
+	public int getBackgroundHeight() {
+		return backgroundHeight;
+	}
+
+	public void setBackgroundHeight(int backgroundHeight) {
+		this.backgroundHeight = backgroundHeight;
+	}
+
+	public double getRateX() {
+		return rateX;
+	}
+
+	public void setRateX(double rateX) {
+		this.rateX = rateX;
+	}
+
+	public double getRateY() {
+		return rateY;
+	}
+
+	public void setRateY(double rateY) {
+		this.rateY = rateY;
+	}
+
+	public double getRateWidth() {
+		return rateWidth;
+	}
+
+	public void setRateWidth(double rateWidth) {
+		this.rateWidth = rateWidth;
+	}
+
+	public double getRateHeight() {
+		return rateHeight;
+	}
+
+	public void setRateHeight(double rateHeight) {
+		this.rateHeight = rateHeight;
 	}
 	
-	public void setUnClicked(NoteManager nm) {
-		no.setUnClicked(nm);
-	}
+//	protected void setRate(ComponentJPanel cjp, )
 
 
 }
@@ -38,7 +179,7 @@ public abstract class ComponentJPanel extends JPanel {
 
 abstract class ClickComponentPanel extends ClickPanel {
 	
-	private ComponentSizeController contentSC;
+//	private ComponentSizeController contentSC;
 	private ClickComponentPanel ccp;
 	
 
@@ -47,7 +188,7 @@ abstract class ClickComponentPanel extends ClickPanel {
 		super(x, y, width, height, compJpanel, nm);
 		// TODO Auto-generated constructor stub
 		ccp = this;
-		contentSC = new ComponentSizeController(compJpanel);
+//		contentSC = new ComponentSizeController(compJpanel);
 		margin = 15;
 		
 		
@@ -75,6 +216,9 @@ abstract class ClickComponentPanel extends ClickPanel {
 				
 			}
 		});
+		
+		
+		
 		
 		
 		MouseInputAdapter mia  = new MouseInputAdapter() {
@@ -119,7 +263,6 @@ abstract class ClickComponentPanel extends ClickPanel {
 					}
 
 				} else if (csc.isDrag(e, margin)) {
-					System.out.println("drag");
 					csc.setMoveFlag(true);
 				}
 				csc.setSizeControlPoint(new Point(e.getX(), e.getY()));
@@ -155,8 +298,6 @@ abstract class ClickComponentPanel extends ClickPanel {
 	
 	protected abstract void contentFocused();
 	
-
-
 	@Override
 	protected void relocate(int x, int y) {
 		// TODO Auto-generated method stub
@@ -169,7 +310,7 @@ abstract class ClickComponentPanel extends ClickPanel {
 	@Override
 	protected void removeClicked() {
 		// TODO Auto-generated method stub
-		System.out.println("코복");
+		
 		PPTPanel ptPanel = (PPTPanel) getParent();
 		ptPanel.remove(this);
 		ptPanel.remove(compJpanel);
@@ -184,7 +325,7 @@ abstract class ClickComponentPanel extends ClickPanel {
 		// TODO Auto-generated method stub
 		Point p = csc.getTransformedPoint(e);
 		csc.setRightBottomSize(p);
-		contentSC.setRightBottomSize(p);
+		compJpanel.setRightBottomSize(p);
 		nm.repaint();
 		
 	}
@@ -194,7 +335,7 @@ abstract class ClickComponentPanel extends ClickPanel {
 		// TODO Auto-generated method stub
 		Point p = csc.getTransformedPoint(e);
 		csc.setRightFloorSize(p);
-		contentSC.setRightFloorSize(p);
+		compJpanel.setRightFloorSize(p);
 		nm.repaint();
 		
 		
@@ -205,7 +346,7 @@ abstract class ClickComponentPanel extends ClickPanel {
 		// TODO Auto-generated method stub
 		Point p = csc.getTransformedPoint(e);
 		csc.setLeftBottomSize(p);
-		contentSC.setLeftBottomSize(p);
+		compJpanel.setLeftBottomSize(p);
 		nm.repaint();
 		
 	}
@@ -215,9 +356,11 @@ abstract class ClickComponentPanel extends ClickPanel {
 		// TODO Auto-generated method stub
 		Point p = csc.getTransformedPoint(e);
 		csc.setLeftFloorSize(p);
-		contentSC.setLeftFloorSize(p);
+		compJpanel.setLeftFloorSize(p);
 		nm.repaint();
 		
 	}
+	
+	
 	
 }

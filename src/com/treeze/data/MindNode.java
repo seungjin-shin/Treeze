@@ -20,12 +20,13 @@ import javax.swing.JLabel;
 import org.w3c.dom.Node;
 
 import com.treeze.draw.PPTFrame;
+import com.treeze.frame.MindMapMain;
 import com.treeze.frame.TicketFrame;
 
 //http://113.198.84.74:8080/treeze/
 public class MindNode {
 	static ClassInfo classinfo;
-
+	static MindMapMain mindMapMain;
 	public static ClassInfo getClassinfo() {
 		return classinfo;
 	}
@@ -40,8 +41,8 @@ public class MindNode {
 	boolean existTicket = false;
 	MindNode prev;
 	boolean passed;
-	final int NODE_WIDTH = 100;
-	final int NODE_HEIGHT = 50;
+	final int NODE_WIDTH = 80;
+	final int NODE_HEIGHT = 40;
 	Image img;
 	Image scaledImage;
 	String imgPath;
@@ -90,7 +91,7 @@ public class MindNode {
 	Graphics g;
 	// ArrayList<Notes> notes = new ArrayList<Notes>();
 
-	static final int DISTANT = 80;
+	static final int DISTANT = 50;
 	MindNode parentNode;
 	ArrayList<MindNode> childeNodes = new ArrayList<MindNode>();
 	ArrayList<MindNode> LchildeNodes = new ArrayList<MindNode>();
@@ -127,19 +128,19 @@ public class MindNode {
 
 	}
 
-	public MindNode(String nodeID, String str, int x, int y) { // 占쏙옙트占쏙옙占쏙옙
+	public MindNode(String nodeID, String str, int x, int y,MindMapMain mindMapMain) { // 占쏙옙트占쏙옙占쏙옙
 		this.nodeStr = str;
-
+		this.mindMapMain = mindMapMain;
 		this.locateX = x;
 		this.locateY = y;
 		this.nodeID = nodeID;
 		// this.scaleX = str.length() * 20;
-		this.scaleY = 50;
+		this.scaleY = NODE_HEIGHT;
 		setendX();
 		nodeBtn.addMouseListener(new NodeMouseListener());
 		// endX = locateX + scaleX;
-		middleY = locateY + scaleY / 2;
-		endY = locateY + scaleY;
+		middleY = locateY + NODE_HEIGHT / 2;
+		endY = locateY + NODE_HEIGHT;
 		root = this;
 		now = this;
 		ImgIconSet();
@@ -236,7 +237,7 @@ public class MindNode {
 		this.setNow(this);
 		this.nodeID = nodeID;
 		// this.scaleX = str.length() * 20;
-		this.scaleY = 50;
+		this.scaleY = NODE_HEIGHT;
 		this.imgPath = imgPath;
 		if (directionstr == null) {
 			this.direction = parentNode.direction;
@@ -254,7 +255,7 @@ public class MindNode {
 		this.absoluteIndex = parentNode.ChildCount;
 		parentNode.ChildCount++;
 		this.paretNodeChildCntAdd();
-		this.endX = this.locateX + 100;
+		this.endX = this.locateX + NODE_WIDTH;
 		middleY = locateY + scaleY / 2;
 		endY = locateY + scaleY;
 		ImgIconSet();
@@ -397,7 +398,7 @@ public class MindNode {
 
 	public void setendX() {
 		// TODO Auto-generated method stub
-		endX = locateX + 100;
+		endX = locateX + NODE_WIDTH;
 	}
 
 	private ArrayList<MindNode> ChildeList(int direction) {
@@ -469,9 +470,9 @@ public class MindNode {
 	private void setLocate(MindNode parentNode) {
 		// TODO Auto-generated method stub
 		if (this.direction == 0)
-			this.locateX = parentNode.endX + DISTANT;
-		else
-			this.locateX = parentNode.locateX - DISTANT - 100;
+			this.locateX = parentNode.endX + DISTANT;  // right
+		else   // left
+			this.locateX = parentNode.locateX - DISTANT - NODE_WIDTH;
 
 		if (this.parentNodeChildCount() == 0) { // 占싸몌옙 占쌘쏙옙占쏙옙 占쏙옙占쏙옙占�占쏙옙占�占쏙옙占쏙옙占쏙옙 占쏙옙
 												// 占쏙옙치占싹곤옙占쏙옙.
@@ -752,6 +753,7 @@ public class MindNode {
 		public void mouseClicked(MouseEvent e) {
 			// new PPTFrame();
 			// new TicketFrame(getnode(),classinfo);
+			mindMapMain.getMainFrameManager().changeTopPanel(getnode());
 		}
 
 		@Override

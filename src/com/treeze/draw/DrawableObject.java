@@ -17,25 +17,97 @@ import javax.swing.event.MouseInputAdapter;
  */
 public abstract class DrawableObject extends NoteObject {
 
-	int clickPanelX;
-	int clickPanelY;
-	int clickPanelWidth;
-	int clickPanelHeight;
+	DrawableObject(int x, int y, int width, int height, int backgroundWidth,
+			int backgroundHeight) {
+		// TODO Auto-generated constructor stub
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.backgroundWidth = backgroundWidth;
+		this.backgroundHeight = backgroundHeight;
+		setRate(x, y, width, height, backgroundWidth, backgroundHeight);
+	}
 
+	DrawableObject(int backgroundWidth, int backgroundHeight) {
+		// TODO Auto-generated constructor stub
 
+		this.backgroundWidth = backgroundWidth;
+		this.backgroundHeight = backgroundHeight;
+
+	}
 
 	// graphic을 사용하여 그림을 그리는 방법
 	public abstract void draw(Graphics g, JPanel jpanel);
-	
-	public abstract void move(int x, int y, NoteManager nm);
-	
+
 	public abstract void setClick(int x, int y, NoteManager nm);
-	
+
 	public abstract boolean isClick(int x, int y, NoteManager nm);
+
+
+	protected void setRelativeLocation(NoteManager nm) {
+
+		backgroundWidth = nm.getJpanel().getWidth();
+		backgroundHeight = nm.getJpanel().getHeight();
+
+		x = (int) (backgroundWidth * rateX);
+		y = (int) (backgroundHeight * rateY);
+		width = (int) (backgroundWidth * rateWidth);
+		height = (int) (backgroundHeight * rateHeight);
+
+		if (getClickPanel() != null) {
+			getClickPanel().setBounds(x, y, width, height);
+		}
+
+	}
 	
 
+	public void move(int x, int y, NoteManager nm) {
+		// TODO Auto-generated method stub
+		int diffrenceX = x - this.x;
+		int diffrenceY = y - this.y;
 
+		this.x = this.x + diffrenceX;
+		this.y = this.y + diffrenceY;
+		setRate(this.x, this.y, this.width, this.height, this.backgroundWidth, this.backgroundHeight);
 
+	}
+
+	void setRightBottomSize(int x, int y) {
+
+		this.width = x - this.x;
+		this.height = y - this.y;
+		setRate(this.x, this.y, this.width, this.height, this.backgroundWidth, this.backgroundHeight);
+
+	}
+
+	void setRightFloorSize(int x, int y) {
+
+		this.width = x - this.x;
+		this.height = this.height + this.y - y;
+		this.y = y;
+		setRate(this.x, this.y, this.width, this.height, this.backgroundWidth, this.backgroundHeight);
+
+	}
+
+	void setLeftBottomSize(int x, int y) {
+
+		this.width = this.width + this.x - x;
+		this.height = y - this.y;
+		this.x = x;
+		setRate(this.x, this.y, this.width, this.height, this.backgroundWidth, this.backgroundHeight);
+
+	}
+
+	void setLeftFloorSize(int x, int y) {
+
+		this.width = this.width + this.x - x;
+		this.height = this.height + this.y - y;
+		this.y = y;
+		this.x = x;
+		setRate(this.x, this.y, this.width, this.height, this.backgroundWidth, this.backgroundHeight);
+
+	}
 
 }
 
@@ -60,8 +132,8 @@ abstract class ClickPanel extends JPanel {
 	protected ClickPanel(int x, int y, int width, int height,
 			ComponentJPanel compJpanel, NoteManager nm) {
 		// TODO Auto-generated constructor stub
-//		System.out.println(x + " " + y + " " + width + " " + height
-//				+ "asdfsdafasdf");
+		// System.out.println(x + " " + y + " " + width + " " + height
+		// + "asdfsdafasdf");
 		this.setBounds(x, y, width, height);
 		this.setBackground(new Color(0, 0, 0, 0));
 		this.compJpanel = compJpanel;
@@ -80,8 +152,7 @@ abstract class ClickPanel extends JPanel {
 	protected ClickPanel(int x, int y, int width, int height,
 			DrawableObject drawableObj, NoteManager nm) {
 		// TODO Auto-generated constructor stub
-//		System.out.println(x + " " + y + " " + width + " " + height
-//				+ "asdfsdafasdf");
+
 		this.setBounds(x, y, width, height);
 		this.setBackground(new Color(0, 0, 0, 0));
 		this.drawableObj = drawableObj;
@@ -140,7 +211,7 @@ abstract class ClickPanel extends JPanel {
 					}
 
 				} else if (csc.isDrag(e, margin)) {
-//					System.out.println("drag");
+					// System.out.println("drag");
 					csc.setMoveFlag(true);
 				}
 				csc.setSizeControlPoint(new Point(e.getX(), e.getY()));
@@ -204,7 +275,7 @@ class ClickGraphicPanel extends ClickPanel {
 	@Override
 	protected void relocate(int x, int y) {
 		// TODO Auto-generated method stub
-		System.out.println("relocate");
+		// System.out.println("relocate");
 
 		this.setLocation(x, y);
 		drawableObj.move(x, y, nm);
@@ -222,13 +293,12 @@ class ClickGraphicPanel extends ClickPanel {
 		nm.repaint();
 
 	}
-
+	
 	@Override
 	protected void setRightBottomSize(MouseEvent e) {
 		Point p = csc.getTransformedPoint(e);
 		csc.setRightBottomSize(e);
-		drawableObj.width = p.getLocation().x - drawableObj.x;
-		drawableObj.height = p.getLocation().y - drawableObj.y;
+		drawableObj.setRightBottomSize(p.getLocation().x, p.getLocation().y);
 		nm.repaint();
 
 	}
@@ -238,11 +308,7 @@ class ClickGraphicPanel extends ClickPanel {
 
 		Point p = csc.getTransformedPoint(e);
 		csc.setRightFloorSize(p);
-
-		drawableObj.width = p.getLocation().x - drawableObj.x;
-		drawableObj.height = drawableObj.height + drawableObj.y
-				- p.getLocation().y;
-		drawableObj.y = p.getLocation().y;
+		drawableObj.setRightFloorSize(p.getLocation().x, p.getLocation().y);
 		nm.repaint();
 
 	}
@@ -251,15 +317,8 @@ class ClickGraphicPanel extends ClickPanel {
 	protected void setLeftBottomSize(MouseEvent e) {
 
 		Point p = csc.getTransformedPoint(e);
-		csc.setLeftBottomSize(p);
-
-		int x = p.getLocation().x;
-		int y = p.getLocation().y;
-
-		drawableObj.width = drawableObj.width + drawableObj.x - x;
-		drawableObj.height = y - drawableObj.y;
-		drawableObj.x = x;
-
+		csc.setLeftBottomSize(p);		
+		drawableObj.setLeftBottomSize(p.getLocation().x, p.getLocation().y);
 		nm.repaint();
 
 	}
@@ -268,14 +327,8 @@ class ClickGraphicPanel extends ClickPanel {
 	protected void setLeftFloorSize(MouseEvent e) {
 
 		Point p = csc.getTransformedPoint(e);
-		int x = p.getLocation().x;
-		int y = p.getLocation().y;
-		csc.setLeftFloorSize(p);
-
-		drawableObj.width = drawableObj.width + drawableObj.x - x;
-		drawableObj.height = drawableObj.height + drawableObj.y - y;
-		drawableObj.y = y;
-		drawableObj.x = x;
+		csc.setLeftFloorSize(p);	
+		drawableObj.setLeftFloorSize(p.getLocation().x, p.getLocation().y);
 		nm.repaint();
 
 	}
@@ -284,6 +337,8 @@ class ClickGraphicPanel extends ClickPanel {
 
 class ClickFigurePanel extends ClickGraphicPanel {
 
+	FigureObject figureObj;
+
 	public ClickFigurePanel(int x, int y, int width, int height,
 			DrawableObject drawableObj, NoteManager nm) {
 		super(x, y, width, height, drawableObj, nm);
@@ -291,8 +346,10 @@ class ClickFigurePanel extends ClickGraphicPanel {
 		margin = 20;
 		this.addMouseListener(defaultMIA);
 		this.addMouseMotionListener(defaultMIA);
+
+		figureObj = (FigureObject) drawableObj;
 	}
 
+
+
 }
-
-

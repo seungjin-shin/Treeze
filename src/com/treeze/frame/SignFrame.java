@@ -114,10 +114,10 @@ public class SignFrame extends JFrame {
 		
 		typePanel.setLayout(new FlowLayout());
 		typePanel.setBackground(noColor);
-		
+		stuTypeBtn.setBackground(TreezeStaticData.TREEZE_BG_COLOR);
 		stuTypeBtn.setActionCommand(com.treeze.data.User.STUDENT);
 		profTypeBtn.setActionCommand(com.treeze.data.User.PROFESSOR);
-		
+		profTypeBtn.setBackground(TreezeStaticData.TREEZE_BG_COLOR);
 		typeBtnGp.add(profTypeBtn);
 		typeBtnGp.add(stuTypeBtn);
 		
@@ -202,7 +202,7 @@ public class SignFrame extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					//鍮�� 泥댄� 
+					//��옙占�筌ｋ�占�
 					if(signBtn.isEnabled())
 						pushLoginBtn();
 				}
@@ -484,14 +484,14 @@ public class SignFrame extends JFrame {
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾úÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ® ±Û¾¾¸¦ Áö
+		public void focusGained(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 쩐챵쩐첬�쨍쨍챕 쩍찼�첩 짹�쩐쩐째징 쩐첩�쨍쨍챕 �첫�짰 짹�쩐쩐쨍짝 �철
 			System.out.println("asdasd");
 			hintLabel.setVisible(false);
 			
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ ÀÒÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ®¸¦ ÀûÀ½
+		public void focusLost(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 ���쨍쨍챕 쩍찼�첩 짹�쩐쩐째징 쩐첩�쨍쨍챕 �첫�짰쨍짝 �청�쩍
 			if (this.getText().isEmpty()) {
 				
 				hintLabel.setVisible(true);
