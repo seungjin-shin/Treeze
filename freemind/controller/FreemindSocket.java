@@ -328,8 +328,6 @@ public class FreemindSocket extends Thread {
 //						fManager.setTicket(ticket);
 //						c.recurAddTicketNode((NodeAdapter) c.getMc().getRootNode());
 						
-						new TextFrame(fManager.getSlideShow().getImgFrame(), "Receive a Question", true);
-						
 						
 					}
 					else if(treezeData.getDataType().equals(TreezeData.SURVEYRESULT)){

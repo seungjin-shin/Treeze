@@ -58,7 +58,11 @@ public class EditNodeTextField extends EditNodeBase {
 
     private JTextField textfield;
 
-    public EditNodeTextField(
+    public JTextField getTextfield() {
+		return textfield;
+	}
+
+	public EditNodeTextField(
         final NodeView node,
         final String text,
         final KeyEvent firstEvent,

@@ -65,7 +65,13 @@ public class EditAction extends AbstractAction implements ActorXml {
     private static final Pattern HTML_HEAD = Pattern.compile("\\s*<head>.*</head>", Pattern.DOTALL);
 	private final MindMapController mMindMapController;
     private EditNodeBase mCurrentEditDialog = null;
-    public EditAction(MindMapController modeController) {
+    
+    public EditNodeBase getmCurrentEditDialog() {
+		return mCurrentEditDialog;
+	}
+    
+    
+	public EditAction(MindMapController modeController) {
         super(modeController.getText("edit_node"));
         this.mMindMapController = modeController;
         this.mMindMapController.getActionFactory().registerActor(this, getDoActionClass());

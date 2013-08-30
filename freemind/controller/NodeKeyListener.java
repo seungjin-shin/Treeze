@@ -20,6 +20,8 @@
 
 package freemind.controller;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
@@ -48,6 +50,7 @@ import freemind.modes.MindMapNode;
 import freemind.modes.NodeAdapter;
 import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
+import freemind.view.mindmapview.EditNodeTextField;
 
 /**
  * The KeyListener which belongs to the node and cares for Events like C-D
@@ -88,10 +91,16 @@ public class NodeKeyListener implements KeyListener {
 			}
  			c.startSlideShow();
 			
-		} else if (e.getKeyCode() == KeyEvent.VK_F6) {
+		} else if (e.getKeyCode() == KeyEvent.VK_F7) {
+			FreemindManager fManager = FreemindManager.getInstance();
 			FreemindManager.getInstance().setNodeText("Q");
 			FreemindManager.getInstance().getMc().addNew(FreemindManager.getInstance().getMc().getSelected(), MindMapController.NEW_CHILD, null);
+			EditNodeTextField tmp = (EditNodeTextField)FreemindManager.getInstance().getMc().edit.getmCurrentEditDialog();
+			tmp.getTextfield().setText("dd");
+			fManager.getFreemindMainFrame().requestFocus();
+			fManager.getMc().nodeChanged(fManager.getMc().getSelected());
 			
+			return;
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F4){
 			

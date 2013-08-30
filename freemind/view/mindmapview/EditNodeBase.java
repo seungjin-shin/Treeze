@@ -78,7 +78,6 @@ public class EditNodeBase {
             public void actionPerformed(ActionEvent e) {
                 submit();
             }
-            
         }
         class SplitAction extends AbstractAction{
             public void actionPerformed(ActionEvent e) {
@@ -236,7 +235,7 @@ public class EditNodeBase {
     		textFieldListener.focusLost(null); // hack to close the edit
     	}
     }
-
+    
 	/**
 	 */
 	protected String getText() {

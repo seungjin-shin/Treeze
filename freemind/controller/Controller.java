@@ -138,6 +138,7 @@ import freemind.preferences.FreemindPropertyListener;
 import freemind.preferences.layout.OptionPanel;
 import freemind.preferences.layout.OptionPanel.OptionPanelFeedback;
 import freemind.view.MapModule;
+import freemind.view.mindmapview.EditNodeTextField;
 import freemind.view.mindmapview.MapView;
 
 /**
@@ -358,13 +359,18 @@ public class Controller  implements MapModuleChangeObserver {
 				}
 			}
 			
-			if(fManager.getTicket().getContents().length() > 20)
-				fManager.setNodeText(fManager.getTicket().getContents().substring(0, 20) + "...");
+			if(fManager.getTicket().getContents().length() > 10)
+				fManager.setNodeText(fManager.getTicket().getContents().substring(0, 10) + "...");
 			else
 				fManager.setNodeText(fManager.getTicket().getContents());
 			
 			fManager.getMc().addNew(qNode, MindMapController.NEW_CHILD, null);
 //			fManager.getMc().edit.stopEditing();
+			
+//			EditNodeTextField tmp2 = (EditNodeTextField)FreemindManager.getInstance().getMc().edit.getmCurrentEditDialog();
+//			tmp2.getTextfield().setEditable(false);
+			
+//			fManager.getFreemindMainFrame().requestFocus();
 			
 			NodeAdapter tmp = (NodeAdapter) qNode.getChildAt(qNode.getChildCount() - 1);
 						
@@ -373,11 +379,9 @@ public class Controller  implements MapModuleChangeObserver {
 			tmp.setTicketContent(fManager.getTicket().getContents());
 			tmp.setTicketWriter(fManager.getTicket().getUserName());
 			fManager.getMc().nodeChanged(tmp);
-			
-			getModeController().nodeChanged(tmp);
+//			getModeController().nodeChanged(tmp);
 			
 			fManager.setReceiveQNode(updateNode);
-			
 			if (((QuestionType) updateNode.getNodeType()).getFm().isVisible())
 				((QuestionType) updateNode.getNodeType()).getFm().updateTickets();
 			else{

@@ -84,7 +84,7 @@ public class ProfileFrame extends JFrame {
 	LogoPanel logoPanel;
 	Image imgIcon;
 //	ArrayList<Data.Class> classList = new ArrayList<Data.Class>();	
-	NameLabel nameLabel = new NameLabel("이 민석");
+	NameLabel nameLabel = new NameLabel("�� �μ�");
 	PersonalInfo personalInfo = new PersonalInfo("Hansung Univ", "Professor", "Computer engineering");
 //	ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
 	ListPanel listPanel;
@@ -126,8 +126,6 @@ public class ProfileFrame extends JFrame {
 	
 		listPanel = new ListPanel();
 //		lecture = new Lecture();
-//		lecture.setLectureName("ÀÓº£µðµå½Ã½ºÅÛ");
-//		lecture.setProfessorName("ÀÌ¹Î¼®");
 		gbc.fill = GridBagConstraints.BOTH;
 
 		// C:\Users\ÄÄ°ø\Desktop
@@ -738,13 +736,13 @@ public class ProfileFrame extends JFrame {
 				}
 			});
 			
-			UploadToServer uploadToServer = new UploadToServer();
-			boolean chkClassEmpty = uploadToServer.checkClassIsEmpty(classInfo.getClassId());
-			
-			if(chkClassEmpty)
-				goBtn.setEnabled(false);
-			else
-				regBtn.setEnabled(false);
+//			UploadToServer uploadToServer = new UploadToServer();
+//			boolean chkClassEmpty = uploadToServer.checkClassIsEmpty(classInfo.getClassId());
+//			
+//			if(chkClassEmpty)
+//				goBtn.setEnabled(false);
+//			else
+//				regBtn.setEnabled(false);
 			
 			insets.top = 0;
 			insets.bottom = 0;
@@ -1002,10 +1000,10 @@ public class ProfileFrame extends JFrame {
 				user.setUserType(User.PROFESSOR);
 				user.setUserEmail("minsuk@hansung.ac.kr");
 
-				// classInfo 데이터 세팅
+				// classInfo d
 				
 
-				// treezeData 데이터 세팅
+				// treezeData d
 				treezeData.setDataType(TreezeData.CONNECTIONINFO);
 				treezeData.getArgList().add(gson.toJson(user));
 				treezeData.getArgList().add(gson.toJson(cInfo));
@@ -1048,7 +1046,7 @@ public class ProfileFrame extends JFrame {
 			cnt = in.read(b);
 
 			if (cnt == -1) {
-				System.out.println("server 응답 : Error");
+				System.out.println("server end : Error");
 				// c.getNaviOs().remove(os); // remove Client at Err
 			} else {
 				String rcvStr = null;
@@ -1064,7 +1062,6 @@ public class ProfileFrame extends JFrame {
 		
 			
 			
-//			System.out.println("server 응답 : " + in.readLine());
 			
 			fManager.setOs(os);
 			fManager.setIn(in);
