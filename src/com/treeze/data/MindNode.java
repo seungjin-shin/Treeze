@@ -737,10 +737,9 @@ public class MindNode {
 		}
 
 		public void mouseExited(MouseEvent e) {
-			// getnode().getNodeBtn().getParent().remove(getnode().j);
-			// getnode().getNodeBtn().getParent().repaint();
-			h = new HideBtnThread(getnode().getNodeBtn().getParent(), getnode());
-			h.start();
+		
+//			h = new HideBtnThread(getnode().getNodeBtn().getParent(), getnode());
+//			h.start();
 		}
 
 		public void mousePressed(MouseEvent e) {
@@ -760,23 +759,19 @@ public class MindNode {
 		public void mouseEntered(MouseEvent arg0) {
 			// TODO Auto-generated method stub
 			// nodeBtn.setLayout(null);
-
-			System.out.println("�몃� �����" + getNodeID());
-			getnode().getNodeBtn().getParent().add(getnode().pptBtn);
-			getnode().getNodeBtn().getParent().add(getnode().ticketBtn);
-			getnode().getNodeBtn().getParent()
-					.setComponentZOrder(getnode().pptBtn, 1);
-			getnode().getNodeBtn().getParent()
-					.setComponentZOrder(getnode().ticketBtn, 2);
-			getnode().getNodeBtn().getParent().repaint();
-			if (h != null && h.getNode() == getnode()) {
-				h.stop();
-			}
-			// fullNameAlert.setText(nodeStr);
-			// fullNameAlert.setLocation(getLocateX(), getLocateY());
-			// fullNameAlert.setSize(100,100);
-
-			// nodeBtn.add(fullNameAlert);
+//
+//			System.out.println("�몃� �����" + getNodeID());
+//			getnode().getNodeBtn().getParent().add(getnode().pptBtn);
+//			getnode().getNodeBtn().getParent().add(getnode().ticketBtn);
+//			getnode().getNodeBtn().getParent()
+//					.setComponentZOrder(getnode().pptBtn, 1);
+//			getnode().getNodeBtn().getParent()
+//					.setComponentZOrder(getnode().ticketBtn, 2);
+//			getnode().getNodeBtn().getParent().repaint();
+//			if (h != null && h.getNode() == getnode()) {
+//				h.stop();
+//			}
+		
 
 		}
 	}

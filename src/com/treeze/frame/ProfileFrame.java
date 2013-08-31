@@ -216,7 +216,7 @@ public class ProfileFrame extends JFrame {
 	}
 
 	class LogoPanel extends JPanel {
-
+		ImageIcon icon;
 		public LogoPanel() {
 			// TODO Auto-generated constructor stub
 
@@ -226,14 +226,16 @@ public class ProfileFrame extends JFrame {
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
-			g.drawImage(TreezeStaticData.LOGO_IMG, 10, 10,
-					this.getWidth() - 10, this.getHeight() - 10, null);
+			if(icon ==null){
+				icon = TreezeStaticData.makeResizedImageIcon(getWidth(), getHeight(), TreezeStaticData.LOGO_IMG);
+			}
+			g.drawImage(icon.getImage(), 0, 0, null);
 		}
 	}
 
 	class PicturePanel extends JPanel {
-		// ImageIcon imgIcon;
-
+		 ImageIcon icon;
+		
 		public PicturePanel(String imgPath) {
 			// TODO Auto-generated constructor stub
 			// imgIcon = new ImageIcon(imgPath);
@@ -244,9 +246,10 @@ public class ProfileFrame extends JFrame {
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
-
-			g.drawImage(TreezeStaticData.PROFILE_DEFAULT_IMG, 0, 0,
-					this.getWidth(), this.getHeight(), null);
+			if(icon==null){
+				icon = TreezeStaticData.makeResizedImageIcon(getWidth(), getHeight(), TreezeStaticData.PROFILE_DEFAULT_IMG);
+			}
+			g.drawImage(icon.getImage(), 0, 0, null);
 
 		}
 
@@ -546,7 +549,7 @@ public class ProfileFrame extends JFrame {
 
 	class ImgPanel extends JPanel {
 		Image img;
-
+		ImageIcon icon;
 		public ImgPanel(Image img) {
 			// TODO Auto-generated constructor stub
 			this.img = img;
@@ -556,7 +559,10 @@ public class ProfileFrame extends JFrame {
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
-			g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
+			if(icon ==null){
+				icon = TreezeStaticData.makeResizedImageIcon(getWidth(), getHeight(), img);
+			}
+			g.drawImage(icon.getImage(), 0, 0,null);
 
 		}
 	}

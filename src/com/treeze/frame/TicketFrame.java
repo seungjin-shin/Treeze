@@ -22,6 +22,7 @@ import java.awt.PaintContext;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.ScrollPane;
+import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -86,6 +87,7 @@ public class TicketFrame extends JPanel {
 		this.classInfo = classInfo;
 		this.user = user;
 		this.setBackground(new Color(141, 198, 63));
+		
 		ticketTitleLabel = new TicketTitleLabel();
 		gbc.fill = GridBagConstraints.BOTH;
 		this.setLayout(gbl);

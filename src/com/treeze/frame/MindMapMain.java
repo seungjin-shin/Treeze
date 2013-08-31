@@ -213,7 +213,9 @@ public class MindMapMain extends JPanel {
 				node.getNodeBtn().setBorderPainted(false);
 				node.getNodeBtn().setBorder(null);
 				node.getNodeBtn().setContentAreaFilled(false);
-				node.getNodeBtn().setMargin(new Insets(5, 5, 5, 5));
+				node.getNodeBtn().setFocusPainted(false); 
+				node.getNodeBtn().setOpaque(false);
+				//node.getNodeBtn().setMargin(new Insets(5, 5, 5, 5));
 				
 				
 				this.add(node.getNodeBtn());

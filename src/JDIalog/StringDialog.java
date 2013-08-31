@@ -1,0 +1,1 @@
+package JDIalog;import javax.swing.JDialog;public class StringDialog extends JDialog{}

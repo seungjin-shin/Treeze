@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +33,7 @@ import java.io.InputStreamReader;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -121,7 +123,7 @@ public class LoginPageFrame extends JFrame{
 			
 			
 			loginBtn = new LoginBtn(TreezeStaticData.LOGIN_BTN, TreezeStaticData.LOGIN_PRESS_BTN, TreezeStaticData.LOGIN_PRESS_BTN);
-			loginBtn.setBackground(new Color(0, 0, 0, 0));
+			loginBtn.setBackground(treezeColor);
 			loginBtn.setBorderPainted(false);
 			loginBtn.setContentAreaFilled(false);
 			loginBtn.setFocusable(false);
@@ -145,6 +147,7 @@ public class LoginPageFrame extends JFrame{
 					BorderFactory.createEmptyBorder(1, 5, 1, 5)));
 			setInsets(30, 10, 0, 15);
 //			setInsets(t, b, l, r)
+			
 			addGrid(gbl, gbc, emailTf,  0, 0, 1, 1, 7, 5, loPanel);
 			setInsets(0, 30, 0, 15);
 			addGrid(gbl, gbc, pwTf,     0, 1, 1, 1, 7, 5, loPanel);
@@ -251,7 +254,7 @@ public class LoginPageFrame extends JFrame{
 	class LoginPanel extends JPanel{
 		public LoginPanel() {
 			this.setLayout(gbl);
-			setBackground(noColor);
+			setBackground(treezeColor);
 		}
 	}
 	
@@ -273,16 +276,21 @@ public class LoginPageFrame extends JFrame{
 	class LogoPanel extends JPanel{
 		ImageIcon icon;
 		public LogoPanel(Image img) {
-			icon = new ImageIcon(img);
+			//icon = new ImageIcon(img);
+			//this.set
 			setBackground(noColor);
 		}
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			g.drawImage(icon.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+
+			if(icon==null){
+			icon = TreezeStaticData.makeResizedImageIcon(this.getWidth(),this.getHeight(),TreezeStaticData.LOGO_IMG);
+			}
+			g.drawImage(icon.getImage(), 0, 0,null);
 		}
 		
 	}
-	
+
 	class MainPanel extends JPanel {
 
 		protected Color shadowColor = Color.black;
@@ -412,96 +420,60 @@ public class LoginPageFrame extends JFrame{
 		}
 	}
 	
-	class HintTextFieldPassword extends JTextField implements FocusListener {
+	class HintTextFieldPassword extends JPasswordField implements FocusListener {
 
-		private final String hint;
+	
 		private String realPw = "";
 		String str;
-		
-		public HintTextFieldPassword(final String hint) {
-			super(hint);
+		JLabel hintLabel;
+		ImageIcon icon;
+		public HintTextFieldPassword(String hint) {
+	
 			Font f = new Font(hint, Font.ITALIC, 10);
 			setFont(f);
 			this.setBackground(new Color(234, 234, 234));
 			setForeground(Color.GRAY);
-			this.hint = hint;
+			
+			this.hintLabel = new JLabel(hint);
 			super.addFocusListener(this);
-			setColumns(18);
 			
-//			setEchoChar(');
-			setBackground(new Color(0, 0, 0, 0));
-//			setFocusable(false);.
 			
-//			this.setBorder(new LineBorder(new Color(234, 234, 234), 1, true));
-//			this.setBorder(new LineBorder(Color.black, 1, true));
-//			this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(),
-//					BorderFactory.createEmptyBorder(2, 0, 2, 5)));
+			hintLabel.setForeground(new Color(166,166,166));
+			
+			this.setLayout(new BorderLayout());
+			this.add(hintLabel);
+			
 			this.setBorder(new EmptyBorder(5, 10, 5, 10));
+			setBackground(new Color(0, 0, 0, 0));
+		
+		}
+
+		@Override
+		public void focusGained(FocusEvent e) {
+		
+			hintLabel.setVisible(false);
 			
-			addKeyListener(new KeyListener() {
-				
-				@Override
-				public void keyTyped(KeyEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void keyReleased(KeyEvent e) {
-					if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-						return;
-					}
-					
-					realPw += e.getKeyChar();
-					
-					str = "";
-					for(int i = 0; i < realPw.length(); i++){
-						str += "*";
-					}
-					setText(str);
-				}					
-				@Override
-				public void keyPressed(KeyEvent e) {
-					if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-						if(realPw.length() > 0){
-							realPw = realPw.substring(0, realPw.length() - 1);
-							return;
-						}
-					}
-				}
-			});
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 쩐챵쩐첬�쨍쨍챕 쩍찼�첩 짹�쩐쩐째징 쩐첩�쨍쨍챕 �첫�짰 짹�쩐쩐쨍짝 �철
+		public void focusLost(FocusEvent e) { 
 			if (this.getText().isEmpty()) {
-				super.setText("");
-			}
-		}
-
-		@Override
-		public void focusLost(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 ���쨍쨍챕 쩍찼�첩 짹�쩐쩐째징 쩐첩�쨍쨍챕 �첫�짰쨍짝 �청�쩍
-			if (this.getText().isEmpty()) {
-				Font f = new Font(hint, Font.ITALIC, 10);
-				setFont(f);
-
-				setForeground(Color.GRAY);
-				super.setText(hint);
+				
+				hintLabel.setVisible(true);
 			} else {
-				setForeground(Color.BLACK);
+				hintLabel.setVisible(false);
 			}
+			this.repaint();
+			
 		}
 
-		@Override
-		public String getText() {
-			String typed = super.getText();
-			return typed.equals(hint) ? "" : realPw;
-		}
 		
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
-			g.drawImage(TreezeStaticData.lOGIN_INPUT_IMG, 0, 0, this.getWidth(),
-					this.getHeight(), null);
+			if(icon ==null){
+				icon = TreezeStaticData.makeResizedImageIcon(getWidth(), getHeight(), TreezeStaticData.LOGIN_INPUT_BAR);
+			}
+			g.drawImage(icon.getImage(), 0, 0, null);
 			super.paint(g);
 		}
 	}

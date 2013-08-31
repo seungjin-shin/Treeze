@@ -78,9 +78,10 @@ public class SignFrame extends JFrame {
 	JRadioButton profTypeBtn = new JRadioButton("Professor");
 	
 	JTextField emailTf = new HintTextField("E-mail Address");
-	final HintTextFieldPassword pwTf = new HintTextFieldPassword("Password");
+	
 	HintTextField studIDTf= new HintTextField("Student Identification Number");
 	HintTextField userTf= new HintTextField("User Name");
+	final HintTextFieldPassword pwTf = new HintTextFieldPassword("Password");
 	HintTextFieldPassword confPwTf= new HintTextFieldPassword("Confirm Password");
 	
 	JLabel studErrLb = new JLabel();
@@ -121,8 +122,8 @@ public class SignFrame extends JFrame {
 		typeBtnGp.add(profTypeBtn);
 		typeBtnGp.add(stuTypeBtn);
 		
-		typePanel.add(profTypeBtn);
-		typePanel.add(stuTypeBtn);
+//		typePanel.add(profTypeBtn);
+//		typePanel.add(stuTypeBtn);
 		
 		setInsets(10, 10, 10, 10);
 		addGrid(gbl, gbc, signLbPanel, 0, 1, 1, 1, 1, 1, mPanel);
@@ -293,28 +294,34 @@ public class SignFrame extends JFrame {
 
 	public void pushLoginBtn() {
 		
-
+		if(pwTf.getText().equals(confPwTf.getText())){
+			System.out.println("같음");
+		}
+		else{
+			System.out.println("다름");
+		}
 		
-		SignUpThread signUpThread = new SignUpThread(Integer.parseInt(studIDTf.getText()),pwTf.getText(),emailTf.getText(),userTf.getText(),typeBtnGp.getSelection().getActionCommand());
 		//fManager.uts.signPost(signUser);
-		
-		setVisible(false);
+		//SignUpThread signUpThread = new SignUpThread(Integer.parseInt(studIDTf.getText()),pwTf.getText(),emailTf.getText(),userTf.getText(),typeBtnGp.getSelection().getActionCommand());
+		//setVisible(false);
 		// JFrame pFrame = new ProfileFrame(mc);
 		// FreemindManager.getInstance().setProfileFrame(pFrame);
 	}
 
 	class LogoPanel extends JPanel {
 		ImageIcon icon;
-
+		Image img;
 		public LogoPanel(Image img) {
-			icon = new ImageIcon(img);
+			this.img = img;
 			setBackground(noColor);
 		}
 
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			g.drawImage(icon.getImage(), 0, 0, this.getWidth() * 4/5,
-					this.getHeight(), null);
+			if(icon == null){
+				icon  = TreezeStaticData.makeResizedImageIcon(getWidth()*4/5, getHeight(), img);
+			}
+			g.drawImage(icon.getImage(), 0, 0, null);
 		}
 	}
 	
@@ -392,7 +399,7 @@ public class SignFrame extends JFrame {
 	class HintTextField extends JTextField implements FocusListener {
 
 		private final String hint;
-		private Image tfIma;
+		ImageIcon icon;
 		public HintTextField(final String hint) {
 			super(hint);
 			Font f = new Font(hint, Font.ITALIC, 10);
@@ -401,7 +408,7 @@ public class SignFrame extends JFrame {
 			setForeground(Color.GRAY);
 			this.hint = hint;
 			super.addFocusListener(this);
-			tfIma = TreezeStaticData.LOGIN_INPUT_BAR;
+			
 			setColumns(18);
 
 			setBackground(new Color(0, 0, 0, 0));
@@ -451,8 +458,10 @@ public class SignFrame extends JFrame {
 
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
-			g.drawImage(tfIma, 0, 0, this.getWidth(),
-					this.getHeight(), null);
+			if(icon ==null){
+				icon = TreezeStaticData.makeResizedImageIcon(getWidth(), getHeight(), TreezeStaticData.LOGIN_INPUT_BAR);
+			}
+			g.drawImage(icon.getImage(), 0, 0, null);
 			super.paint(g);
 		}
 	}
@@ -462,6 +471,7 @@ public class SignFrame extends JFrame {
 		private String realPw = "";
 		String str;
 		JLabel hintLabel;
+		ImageIcon icon;
 		public HintTextFieldPassword(String hint) {
 	
 			Font f = new Font(hint, Font.ITALIC, 10);
@@ -484,14 +494,14 @@ public class SignFrame extends JFrame {
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 쩐챵쩐첬�쨍쨍챕 쩍찼�첩 짹�쩐쩐째징 쩐첩�쨍쨍챕 �첫�짰 짹�쩐쩐쨍짝 �철
-			System.out.println("asdasd");
+		public void focusGained(FocusEvent e) {
+		
 			hintLabel.setVisible(false);
 			
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 ���쨍쨍챕 쩍찼�첩 짹�쩐쩐째징 쩐첩�쨍쨍챕 �첫�짰쨍짝 �청�쩍
+		public void focusLost(FocusEvent e) { 
 			if (this.getText().isEmpty()) {
 				
 				hintLabel.setVisible(true);
@@ -503,8 +513,10 @@ public class SignFrame extends JFrame {
 		
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
-			g.drawImage(TreezeStaticData.LOGIN_INPUT_BAR, 0, 0, this.getWidth(),
-					this.getHeight(), null);
+			if(icon ==null){
+				icon = TreezeStaticData.makeResizedImageIcon(getWidth(), getHeight(), TreezeStaticData.LOGIN_INPUT_BAR);
+			}
+			g.drawImage(icon.getImage(), 0, 0, null);
 			super.paint(g);
 		}
 	}
