@@ -105,7 +105,7 @@ public class WriteTicketFrame extends JFrame{
 			insets.set(10, 20, 5, 20);
 			addGrid(gbl, gbc, new WriteField(), 0, 1, 1, 1,1, 10, this);
 			insets.set(5, 20, 5, 20);
-			addGrid(gbl, gbc, new ButtonField(), 0, 2, 1, 1,1, 1, this);
+			addGrid(gbl, gbc, new ButtonField(), 0, 2, 1, 1,1, 2, this);
 			
 
 		}
@@ -141,7 +141,7 @@ public class WriteTicketFrame extends JFrame{
 //			graphics.setColor(TreezeStaticData.TREEZE_BG_COLOR);
 //			graphics.fillRoundRect(0, 0, width - shadowGap, height - shadowGap,
 //					arcs.width, arcs.height);
-//			graphics.setColor(Color.WHITE); //ÌÖåÎëêÎ¶¨  
+//			graphics.setColor(Color.WHITE); // 
 //			graphics.setStroke(new BasicStroke(strokeSize));
 //			graphics.fillRoundRect(5, 5, width - 10, height - 10, arcs.width,
 //					arcs.height);
@@ -244,7 +244,7 @@ public class WriteTicketFrame extends JFrame{
 			graphics.setColor(Color.WHITE);
 			graphics.fillRoundRect(0, 0, width - shadowGap, height - shadowGap,
 					arcs.width, arcs.height);
-			graphics.setColor(Color.BLACK); //ÌÖåÎëêÎ¶¨  
+			graphics.setColor(Color.BLACK); //åÎëêÎ¶ 
 			graphics.setStroke(new BasicStroke(strokeSize));
 			graphics.drawRoundRect(0, 0, width - shadowGap, height - shadowGap,
 					arcs.width, arcs.height);
@@ -309,7 +309,7 @@ public class WriteTicketFrame extends JFrame{
 			Ticket t = new Ticket();
 			t.setParentNodeId(parentID);
 			t.setContents(questionTa.getTextArea().getText());
-			t.setUserName("ÍµêÏàò");
+			t.setUserName("±≥ºˆ");
 			UploadToServer uploadToServer = new UploadToServer();
 			setVisibleWriteFrame();
 			uploadToServer.ticketPost(t);

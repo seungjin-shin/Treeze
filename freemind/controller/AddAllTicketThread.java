@@ -1,5 +1,6 @@
 package freemind.controller;
 
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +15,8 @@ import freemind.Frame.TextDialogue;
 import freemind.json.ArrayTicket;
 import freemind.json.Ticket;
 import freemind.modes.NodeAdapter;
+import freemind.modes.common.CommonNodeKeyListener;
+import freemind.modes.common.CommonNodeKeyListener.EditHandler;
 
 public class AddAllTicketThread extends Thread{
 	
@@ -74,14 +77,15 @@ public class AddAllTicketThread extends Thread{
 			
 			for(int i = 0; i < ticketList.size(); i++){
 				fManager.setTicket(ticketList.get(i));
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					Thread.sleep(100);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				fManager.getC().recurAddTicketNode((NodeAdapter) fManager.getMc().getRootNode());
 			}
+			
 			System.out.println("Add All tickets");
 			new TextDialogue(fManager.getFreemindMainFrame(), "Loading all tickets", true);
 	}

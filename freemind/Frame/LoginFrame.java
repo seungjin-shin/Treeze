@@ -58,7 +58,7 @@ public class LoginFrame extends JFrame{
 	FreemindManager fManager = FreemindManager.getInstance();
 	MainPanel mPanel = new MainPanel();
 //	LogoPanel lPanel = new LogoPanel(Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png"));
-	LogoPanel lPanel = new LogoPanel(fManager.treezeLogo);
+	LogoPanel lPanel = new LogoPanel();
 //	LoginPanel loPanel = new LoginPanel(Toolkit.getDefaultToolkit().getImage("images/LoginInputBar.png"),
 //			Toolkit.getDefaultToolkit().getImage("images/login.png"));
 	LoginPanel loPanel; 
@@ -73,7 +73,7 @@ public class LoginFrame extends JFrame{
 	public LoginFrame(MindMapController mc) {
 		this.mc = mc;
 		this.getContentPane().setBackground(treezeColor);
-		this.setSize(647, 394);
+		this.setSize(600, 394);
 		this.setLayout(gbl);
 		this.setLocation(400, 100);
 		loPanel = new LoginPanel();
@@ -97,7 +97,7 @@ public class LoginFrame extends JFrame{
 		addGrid(gbl, gbc, mPanel, 0, 0, 1, 1, 1, 1, this);
 		
 		setServerIP();
-		
+		setResizable(false);
 		setVisible(true);
 	}
 	
@@ -147,11 +147,12 @@ public class LoginFrame extends JFrame{
 					BorderFactory.createEmptyBorder(1, 5, 1, 5)));
 			setInsets(30, 10, 0, 15);
 //			setInsets(t, b, l, r)
-			addGrid(gbl, gbc, emailTf,  0, 0, 1, 1, 7, 5, loPanel);
+			addGrid(gbl, gbc, emailTf,  0, 0, 1, 1, 5, 5, loPanel);
 			setInsets(0, 30, 0, 15);
-			addGrid(gbl, gbc, pwTf,     0, 1, 1, 1, 7, 5, loPanel);
-			setInsets(30, 30, 10, 0);
-			addGrid(gbl, gbc, loginBtn, 1, 0, 1, 2, 5, 5, loPanel);
+			addGrid(gbl, gbc, pwTf,     0, 1, 1, 1, 5, 5, loPanel);
+//			setInsets(30, 30, 10, 0);
+			setInsets(30, 30, 0, 0);
+			addGrid(gbl, gbc, loginBtn, 1, 0, 1, 2, 10, 5, loPanel);
 	}
 	
 	public void setServerIP(){
@@ -205,7 +206,7 @@ public class LoginFrame extends JFrame{
 	
 	class RightPanel extends JPanel{
 		JLabel rightLb = new JLabel("Treeze @ 2013");
-		Font sFont = new Font("Serif", Font.PLAIN, 8);
+		Font sFont = new Font("Serif", Font.PLAIN, 10);
 		public RightPanel() {
 			rightLb.setForeground(Color.white);
 			rightLb.setFont(sFont);
@@ -219,7 +220,11 @@ public class LoginFrame extends JFrame{
 		JLabel signUp = new JLabel("Sign Up");
 		
 		JLabel forgotPw = new JLabel("Forgot your password?");
+		Font f = new Font("Serif", Font.PLAIN, 14);
+		
 		public SignPanel() {
+			signUp.setFont(f);
+			forgotPw.setFont(f);
 			signUp.setForeground(Color.white);
 			signUp.addMouseListener(new MouseListener() {
 				
@@ -297,13 +302,14 @@ public class LoginFrame extends JFrame{
 	
 	class LogoPanel extends JPanel{
 		ImageIcon icon;
-		public LogoPanel(Image img) {
-			icon = new ImageIcon(img);
+		public LogoPanel() {
 			setBackground(noColor);
 		}
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			g.drawImage(icon.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+			if(icon == null)
+				icon = fManager.makeResizedImageIcon(this.getWidth(), this.getHeight(), fManager.treezeLogo);
+			g.drawImage(icon.getImage(), 0, 0, null);
 		}
 		
 	}
@@ -403,7 +409,7 @@ public class LoginFrame extends JFrame{
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾úÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ® ±Û¾¾¸¦ Áö
+		public void focusGained(FocusEvent e) { //
 			if (this.getText().isEmpty()) {
 				super.setText("");
 			}
@@ -411,7 +417,7 @@ public class LoginFrame extends JFrame{
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ ÀÒÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ®¸¦ ÀûÀ½
+		public void focusLost(FocusEvent e) { // 
 			if (this.getText().isEmpty()) {
 				setForeground(Color.GRAY);
 				super.setText(hint);
@@ -463,13 +469,13 @@ public class LoginFrame extends JFrame{
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾úÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ® ±Û¾¾¸¦ Áö
+		public void focusGained(FocusEvent e) { // 
 			hintLabel.setVisible(false);
 
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ ÀÒÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ®¸¦ ÀûÀ½
+		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ 
 			if (this.getText().isEmpty()) {
 				hintLabel.setVisible(true);
 			} else {

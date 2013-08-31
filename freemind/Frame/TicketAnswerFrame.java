@@ -105,7 +105,7 @@ public class TicketAnswerFrame extends JFrame{
 			addGrid(gbl, gbc, new WriteField(selNode.getTicketContent()), 0, 1, 1, 1,1, 8, this);
 			insets.set(5, 20, 5, 20);
 			addGrid(gbl, gbc, new WriteField(), 0, 2, 1, 1,1, 12, this);
-			addGrid(gbl, gbc, new ButtonField(), 0, 3, 1, 1,1, 1, this);
+			addGrid(gbl, gbc, new ButtonField(), 0, 3, 1, 1,1, 2, this);
 			
 
 		}

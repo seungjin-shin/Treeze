@@ -25,6 +25,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.geom.AffineTransform;
@@ -86,7 +88,7 @@ public class TicketFrame extends JFrame{
 		this.c = cr;
 		nodeTitle = qNode.getParentNode().getText();
 		// TODO Auto-generated constructor stub
-		this.setSize(1000, 600);
+		this.setSize(800, 600);
 		
 		this.getContentPane().setBackground(new Color(141, 198, 63));
 		ticketTitleLabel = new TicketTitleLabel();
@@ -104,10 +106,14 @@ public class TicketFrame extends JFrame{
 		
 		
 		ticketPanel.setBackground(new Color(0,0,0,0));
-		
+		Font f = new Font("Serif", Font.PLAIN, 14);
 		JLabel numLb  = new JLabel("N o.",JLabel.CENTER);
-		JLabel sbLb = new JLabel("subject", JLabel.CENTER);
+		JLabel sbLb = new JLabel("subject", JLabel.LEFT);
 		JLabel wrLb = new JLabel("writer", JLabel.CENTER);
+		
+		numLb.setFont(f);
+		sbLb.setFont(f);
+		wrLb.setFont(f);
 		
 		JLabel dumy = new JLabel();
 		WriteBtn writeBtn = new WriteBtn(fManager.writeDefault, fManager.writePress, fManager.writeOver);
@@ -133,6 +139,7 @@ public class TicketFrame extends JFrame{
 		//grid.add
 		
 		grid.setBackground(Color.WHITE);
+		insets.set(0, 0, 0, 0);
 		addGrid(gbl, gbc, numLb,  0, 0, 1, 1, 1,  1, ticketHead);
 		addGrid(gbl, gbc, sbLb,   1, 0, 1, 1, 13, 1, ticketHead);
 		addGrid(gbl, gbc, wrLb,   2, 0, 1, 1, 2,  1, ticketHead);
@@ -217,6 +224,13 @@ public class TicketFrame extends JFrame{
     	for(int i = 0; i < qNode.getChildCount(); i++)
     		addTickets((NodeAdapter)qNode.getChildAt(i));
 		listPanel.updateUI();
+		mainFrameRepaint();
+	}
+	
+	public void mainFrameRepaint(){
+		setVisible(false);
+		setVisible(true);
+		repaint();
 	}
 	
 	public void addTickets(NodeAdapter node){
@@ -354,32 +368,57 @@ public class TicketFrame extends JFrame{
 		JLabel sbLb;
 		JLabel wrLb;
 		NodeAdapter selelctNode;
+		JScrollPane jsp;
 		
 		public TicketListItem(String no, NodeAdapter node) {
 			// TODO Auto-generated constructor stub
+			
 			selelctNode = node;
 			numLb  = new JLabel(no, JLabel.CENTER);
 			if (node.getTicketContent() != null) {
 				if (node.getTicketContent().length() > 20)
 					sbLb = new JLabel(node.getTicketContent().substring(0, 20)
-							+ "...", JLabel.CENTER);
+							+ "...", JLabel.LEFT);
 				else
-					sbLb = new JLabel(node.getTicketContent(), JLabel.CENTER);
+					sbLb = new JLabel(node.getTicketContent(), JLabel.LEFT);
 				wrLb = new JLabel(node.getTicketWriter(), JLabel.CENTER);
 			}
 			else{
-					sbLb = new JLabel("TestSub", JLabel.CENTER);
+				sbLb = new JLabel("TestSub", JLabel.CENTER);
 				wrLb = new JLabel("TestWriter", JLabel.CENTER);
 			}
 			
-			this.setBackground(new Color(0,0,0,0));
-			//this.add(noPanel);
+
+			jsp = new JScrollPane(sbLb);
+			jsp.setBorder(null);
+
+			this.setBackground(Color.WHITE);
+			// this.add(noPanel);
 			this.setLayout(gbl);
-			insets.bottom=5;
-			insets.top=5;
-			addGrid(gbl, gbc, numLb,      0, 0, 1, 1, 1, 1, this);
-			addGrid(gbl, gbc, sbLb, 1, 0, 1, 1, 13, 1, this);
-			addGrid(gbl, gbc, wrLb,   2, 0, 1, 1, 2, 1, this);
+			insets.bottom = 5;
+			insets.top = 5;
+			insets.right = 3;
+			insets.left = 5;
+
+			addGrid(gbl, gbc, numLb, 0, 0, 1, 1, 1, 1, this);
+
+			addGrid(gbl, gbc, jsp, 1, 0, 1, 1, 13, 1, this);
+			addGrid(gbl, gbc, wrLb, 2, 0, 1, 1, 1, 1, this);
+
+			sbLb.setPreferredSize(new Dimension(sbLb
+					.getWidth(), sbLb.getHeight()));
+
+			jsp.getViewport().setBackground(Color.WHITE);
+			jsp.addMouseWheelListener(new MouseWheelListener() {
+				
+				@Override
+				public void mouseWheelMoved(MouseWheelEvent e) {
+					listPanel.getVerticalScrollBar().setValue(
+							listPanel.getVerticalScrollBar().getValue()
+									+ e.getWheelRotation());
+				}
+			});
+			
 			this.addMouseListener(new MouseListener() {
 				
 				@Override
@@ -421,6 +460,49 @@ public class TicketFrame extends JFrame{
 					
 				}
 			});
+			
+			jsp.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					setBackground(new Color(255, 255, 255, 255));
+					listPanel.repaint();
+				}
+				
+				public void mousePreswsed(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					//System.out.println(noPanel.getText());
+//					new InputReplyFrame(selNode);
+					newTicketAnswerFrame(selelctNode);
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					setBackground(new Color(10, 10, 100, 100));
+					
+				}
+			});
+			
 		}
 		@Override
 		public void paint(Graphics g) {
@@ -429,6 +511,7 @@ public class TicketFrame extends JFrame{
 			g.drawLine(0, this.getHeight()-1,this.getWidth(), this.getHeight()-1);
 		}
 	}
+	
 	class ListPanel extends JScrollPane{
 		
 		public ListPanel() {
@@ -452,134 +535,6 @@ public class TicketFrame extends JFrame{
 			g2.setStroke(new BasicStroke(3));
 			g2.drawLine(0, 0,this.getWidth(), 0);
 			g2.drawLine(0, this.getHeight()-1,this.getWidth(), this.getHeight()-1);
-		}
-	}
-	
-	class InputReplyFrame extends JFrame implements ActionListener{
-		JTextField classtf;
-		JTextArea replyArea;
-		JTextArea contentsArea;
-		NodeAdapter node;
-		
-		public InputReplyFrame(NodeAdapter node) {
-			this.node = node;
-			setSize(400, 540);
-			setLayout(null);
-			setTitle("Input your reply");
-			setLocation(350, 200);
-			
-			getContentPane().setBackground(new Color(141, 198, 63));
-			
-			JLabel contentsLb = new JLabel("contents :");
-			contentsLb.setSize(60, 30);
-			contentsLb.setLocation(10, 10);
-			add(contentsLb);
-			
-			contentsArea = new JTextArea();
-			contentsArea.setText(node.getTicketContent());
-			contentsArea.setEditable(false);
-			contentsArea.setLineWrap(true);
-			JScrollPane sPane = new JScrollPane(contentsArea);
-			sPane.setBounds(80, 10, 200, 170);
-			add(sPane);
-			
-			
-			JLabel inputLb = new JLabel("Reply :");
-			inputLb.setSize(50, 30);
-			inputLb.setLocation(10, 210);
-			replyArea = new JTextArea();
-			replyArea.setLineWrap(true);
-			sPane = new JScrollPane(replyArea);
-			sPane.setBounds(80, 210, 200, 250);
-			add(sPane);
-			
-			JButton input = new JButton("Reply");
-			input.addActionListener(this);
-			input.setSize(80, 25);
-			input.setLocation(290, 434);
-			add(inputLb);
-			add(input);
-			
-			setVisible(true);
-		}
-		
-		public void paint(Graphics g){
-			super.paint(g);
-			
-			g.drawRect(86, 39, 202, 172);
-			g.drawRect(87, 40, 200, 170);
-			
-			g.drawRect(86, 239, 202, 252);
-			g.drawRect(87, 240, 200, 250);
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String rpStr = replyArea.getText();
-			rpStr = rpStr.trim();
-			JDialog dlg;
-//			final String QUESTION = "2";
-			
-			if(rpStr.equals("")){
-				dlg = new JDialog(this, "Error", true);
-				JLabel errLb = new JLabel("Input your reply!");
-				dlg.setLayout(new FlowLayout());
-				dlg.add(errLb);
-				dlg.setBounds(150,200,200,100);
-				dlg.setVisible(true);
-				return;
-			}
-			else{
-//				UploadToServer UTS = new UploadToServer();
-//				UTS.ticketPost("[Re]" + ticket.getTicketTitle(),
-//						ticket.getClassId() + "", ticket.getPosition(),
-//						classTitle, "교수", ticket.getTicketPosition()
-//								+ "/0");
-//				
-//				TicketInfo ticketInfo = new TicketInfo();
-//				ticketInfo.setContents(classTitle);
-//				ticketInfo.setPosition(ticket.getTicketPosition());
-//				ticketInfo.setTicketPosition(ticket.getTicketPosition() + "/0");
-//				ticketInfo.setTicketTitle("[Re]" + ticket.getTicketTitle());
-//				ticketInfo.setUserName("교수");
-//				Gson gson = new Gson();
-//				String quesStr = gson.toJson(ticketInfo);
-//				OutputStream tmpOs;
-//				for(int i = 0; i < c.getNaviOs().size(); i++){
-//					tmpOs = c.getNaviOs().get(i);
-//					try {
-//						if(tmpOs != null)
-//							tmpOs.write((QUESTION + quesStr).getBytes("UTF-8"));
-//					} catch (IOException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					}
-//				}
-//				
-//				questPn.removeAll(); // No가 겹쳐서 removeAll 하고 다시 그리기
-				NodeAdapter parent = (NodeAdapter)node.getParentNode();
-				int pos = node.getChildCount();
-				
-//				fManager.setQuestion(true); // 질문 받았을 때 newChildAction에서 처리하려고
-//	        	fManager.setTicketContent(rpStr);
-//	        	fManager.setTicketTitle("[Re]" + node.getTicketTitle());
-//	        	fManager.setTicketWriter(node.getTicketWriter());
-//	        	
-//	        	//c.getMc().addNew(selNode, MindMapController.NEW_CHILD, null);
-//	        	c.getMc().addNewNode(node, pos, parent.isNewChildLeft());
-//	        	fManager.setQuestion(false);
-//	        	fManager.setTicketContent("");
-//	        	fManager.setTicketTitle("");
-//	        	fManager.setTicketWriter("");
-//	        	c.getMc().edit.stopEditing();
-	        	
-	        	ticketCnt = 0;
-	        	grid.removeAll();
-	        	for(int i = 0; i < qNode.getChildCount(); i++)
-	        		addTickets((NodeAdapter)qNode.getChildAt(i));
-				listPanel.updateUI();
-				this.setVisible(false);
-			}
 		}
 	}
 	

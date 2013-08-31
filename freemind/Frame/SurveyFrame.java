@@ -61,9 +61,9 @@ public class SurveyFrame extends JFrame{
 	
 	ButtonGroup btnGroup = new ButtonGroup();
 	JRadioButton type1 = new JRadioButton("True & False", true);
-	JRadioButton type2 = new JRadioButton("One of Tthree");
-	JRadioButton type3 = new JRadioButton("One of Four");
-	JRadioButton type4 = new JRadioButton("One of Five");
+//	JRadioButton type2 = new JRadioButton("One of Three");
+//	JRadioButton type3 = new JRadioButton("One of Four");
+//	JRadioButton type4 = new JRadioButton("One of Five");
 	
 	public SurveyFrame() {
 		// TODO Auto-generated constructor stub
@@ -166,7 +166,7 @@ public class SurveyFrame extends JFrame{
 //			graphics.setColor(TreezeStaticData.TREEZE_BG_COLOR);
 //			graphics.fillRoundRect(0, 0, width - shadowGap, height - shadowGap,
 //					arcs.width, arcs.height);
-//			graphics.setColor(Color.WHITE); //테두리  
+//			graphics.setColor(Color.WHITE); // 
 //			graphics.setStroke(new BasicStroke(strokeSize));
 //			graphics.fillRoundRect(5, 5, width - 10, height - 10, arcs.width,
 //					arcs.height);
@@ -219,18 +219,18 @@ public class SurveyFrame extends JFrame{
 //			addGrid(gbl, gbc, answer4,                         2, 4, 1, 1, 8, 1, this);
 //			addGrid(gbl, gbc, answer5,                         2, 5, 1, 1, 8, 1, this);
 			btnGroup.add(type1);
-			btnGroup.add(type2);
-			btnGroup.add(type3);
-			btnGroup.add(type4);
+//			btnGroup.add(type2);
+//			btnGroup.add(type3);
+//			btnGroup.add(type4);
 			type1.setBackground(fManager.treezeColor);
-			type2.setBackground(fManager.treezeColor);
-			type3.setBackground(fManager.treezeColor);
-			type4.setBackground(fManager.treezeColor);
+//			type2.setBackground(fManager.treezeColor);
+//			type3.setBackground(fManager.treezeColor);
+//			type4.setBackground(fManager.treezeColor);
 			
 			addGrid(gbl, gbc, type1,                         2, 1, 1, 1, 8, 1, this);
-			addGrid(gbl, gbc, type2,                         2, 2, 1, 1, 8, 1, this);
-			addGrid(gbl, gbc, type3,                         2, 3, 1, 1, 8, 1, this);
-			addGrid(gbl, gbc, type4,                         2, 4, 1, 1, 8, 1, this);
+//			addGrid(gbl, gbc, type2,                         2, 2, 1, 1, 8, 1, this);
+//			addGrid(gbl, gbc, type3,                         2, 3, 1, 1, 8, 1, this);
+//			addGrid(gbl, gbc, type4,                         2, 4, 1, 1, 8, 1, this);
 		}
 	}
 	class WriteTextArea extends JScrollPane{
@@ -318,7 +318,7 @@ public class SurveyFrame extends JFrame{
 			graphics.setColor(textAreaBgColor);
 			graphics.fillRoundRect(0, 0, width - shadowGap, height - shadowGap,
 					arcs.width, arcs.height);
-			graphics.setColor(Color.BLACK); //테두리  
+			graphics.setColor(Color.BLACK); // 
 			graphics.setStroke(new BasicStroke(strokeSize));
 			graphics.drawRoundRect(0, 0, width - shadowGap, height - shadowGap,
 					arcs.width, arcs.height);
@@ -390,7 +390,7 @@ public class SurveyFrame extends JFrame{
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾úÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ® ±Û¾¾¸¦ Áö
+		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾ú
 			if (this.getText().isEmpty()) {
 				super.setText("");
 			}
@@ -399,7 +399,7 @@ public class SurveyFrame extends JFrame{
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ ÀÒÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ®¸¦ ÀûÀ½
+		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ 
 			if (this.getText().isEmpty()) {
 				Font f = new Font(hint, Font.ITALIC, 10);
 				setFont(f);
@@ -447,7 +447,6 @@ public class SurveyFrame extends JFrame{
 			TreezeData treezeData = new TreezeData();
 			treezeData.setDataType(TreezeData.SURVEY);
 			treezeData.getArgList().add(gson.toJson(survey));
-			System.out.println("전송하기 : " +gson.toJson(treezeData));
 			
 			try {
 				FreemindManager.getInstance().getOs().write(gson.toJson(treezeData).getBytes("UTF-8"));

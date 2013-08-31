@@ -1,12 +1,12 @@
 package freemind.controller;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
-import java.io.BufferedReader;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -14,10 +14,8 @@ import javax.swing.JFrame;
 import freemind.Frame.ProfileFrame;
 import freemind.json.Ticket;
 import freemind.modes.NodeAdapter;
-import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
 import freemind.modes.mindmapmode.MindMapMapModel;
-import freemind.modes.mindmapmode.actions.NodeActorXml;
 
 public class FreemindManager {
 	private static FreemindManager fInstance;
@@ -43,6 +41,7 @@ public class FreemindManager {
 	public Image loginInputBar = new ImageIcon(getClass().getClassLoader().getResource("images/LoginInputBar.png")).getImage();
 	public Image activateBar = new ImageIcon(getClass().getClassLoader().getResource("images/activatebar.png")).getImage();
 	public Image professorImg = new ImageIcon(getClass().getClassLoader().getResource("images/minsuk.jpg")).getImage();
+	public Image defaultProfile = new ImageIcon(getClass().getClassLoader().getResource("images/profiledefault.png")).getImage();
 	
 	public Image loginDefault = new ImageIcon(getClass().getClassLoader().getResource("images/loginBtn1.png")).getImage();
 	public Image loginOver = new ImageIcon(getClass().getClassLoader().getResource("images/loginBtn2.png")).getImage();
@@ -112,6 +111,17 @@ public class FreemindManager {
 	public Color noColor = new Color(0, 0, 0, 0);
 	
 	private NodeAdapter receiveQNode;
+	
+	public ImageIcon makeResizedImageIcon(int width, int height, Image imgs) {
+
+		BufferedImage imageBuff = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+		Image img = imgs;
+		Graphics g = imageBuff.createGraphics();
+		Image scaleImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		g.drawImage(scaleImg, 0, 0, new Color(0, 0, 0), null);
+		return new ImageIcon(scaleImg);
+
+	}
 	
 	public NodeAdapter getReceiveQNode() {
 		return receiveQNode;

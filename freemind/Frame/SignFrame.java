@@ -63,7 +63,7 @@ public class SignFrame extends JFrame {
 	MainPanel mPanel = new MainPanel();
 	// LogoPanel lPanel = new
 	// LogoPanel(Toolkit.getDefaultToolkit().getImage("images/treezeLogo.png"));
-	LogoPanel lPanel = new LogoPanel(fManager.treezeLogo);
+	LogoPanel lPanel = new LogoPanel();
 	// LoginPanel loPanel = new
 	// LoginPanel(Toolkit.getDefaultToolkit().getImage("images/LoginInputBar.png"),
 	// Toolkit.getDefaultToolkit().getImage("images/login.png"));
@@ -101,8 +101,8 @@ public class SignFrame extends JFrame {
 
 		// setResizable(false);
 		gbc.fill = GridBagConstraints.BOTH;
-		setInsets(30, 10, 30, 60);
-		addGrid(gbl, gbc, lPanel, 0, 0, 1, 1, 1, 30, mPanel);
+		setInsets(20, 10, 30, 60);
+		addGrid(gbl, gbc, lPanel, 0, 0, 1, 1, 1, 45, mPanel);
 		
 		JLabel signUpLabel = new JLabel("Sign Up");
 		signUpLabel.setFont(new Font("Sign UP", Font.PLAIN, 30));
@@ -164,7 +164,7 @@ public class SignFrame extends JFrame {
 		
 		addGrid(gbl, gbc, dumy,         0, 0, 1, 1, 1, 1, signBtnPanel);
 		addGrid(gbl, gbc, dumy2,         1, 0, 1, 1, 1, 1, signBtnPanel);
-		setInsets(0, 0, 25, 25);
+		setInsets(20, 20, 50, 50);
 		addGrid(gbl, gbc, signBtn,      2, 0, 1, 1, 1, 1, signBtnPanel);
 		setInsets(0, 0, 0, 0);
 		addGrid(gbl, gbc, dumy3,         3, 0, 1, 1, 1, 1, signBtnPanel);
@@ -174,17 +174,16 @@ public class SignFrame extends JFrame {
 //		signBtnPanel.add(new JButton("dd"));
 //		signBtnPanel.add(new JLabel());
 		
-		setInsets(20, 0, 0, 0);
+		setInsets(0, 0, 0, 0);
 		addGrid(gbl, gbc, signBtnPanel, 0, 3, 1, 1, 1, 35, mPanel);
 		
-		setInsets(40, 0, 60, 60);
+		setInsets(20, 0, 60, 60);
 		addGrid(gbl, gbc, rPanel, 0, 4, 1, 1, 1, 5, mPanel);
 
 		setInsets(10, 10, 10, 10);
 		addGrid(gbl, gbc, mPanel, 0, 0, 1, 1, 1, 10, this);
 
-		setServerIP();
-
+		setResizable(false);
 		setVisible(true);
 	}
 
@@ -233,35 +232,6 @@ public class SignFrame extends JFrame {
 //		addGrid(gbl, gbc, signBtn,     0,11, 1, 1, 7, 4, signPanel);
 		
 		
-	}
-
-	public void setServerIP() {
-		String tmp;
-		String ip = null;
-		int port = -1;
-		File file = new File(System.getProperty("user.dir"), "treeze.cnf");
-
-		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					new FileInputStream(file), "UTF-8"));
-
-			while ((tmp = in.readLine()) != null) {
-				if (tmp.equals("[serverIp]"))
-					ip = in.readLine();
-				if (tmp.equals("[serverPort]"))
-					port = Integer.parseInt(in.readLine());
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (ip == null || port == -1) {
-			System.out.println("treeze.cnf Err");
-			return;
-		}
-		fManager.setSERVERIP(ip);
-		fManager.setPORT(port);
 	}
 
 	public void setInsets(int t, int b, int l, int r) {
@@ -342,13 +312,14 @@ public class SignFrame extends JFrame {
 	class LogoPanel extends JPanel {
 		ImageIcon icon;
 
-		public LogoPanel(Image img) {
-			icon = new ImageIcon(img);
+		public LogoPanel() {
 			setBackground(noColor);
 		}
 
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
+			if(icon == null)
+				icon = fManager.makeResizedImageIcon(this.getWidth(), this.getHeight(), fManager.treezeLogo);
 			g.drawImage(icon.getImage(), 0, 0, this.getWidth() * 4/5,
 					this.getHeight(), null);
 		}
@@ -454,8 +425,8 @@ public class SignFrame extends JFrame {
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾úÀ¸¸é ½áÁø ±Û¾¾°¡
-												// ¾øÀ¸¸é ÈùÆ® ±Û¾¾¸¦ Áö
+		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾ú¸¸é ½áÁø ±Û¾¾°¡
+												// ¾ø¸¸é ÈùÆ® ±Û¾¾¸¦ Áö
 			if (this.getText().isEmpty()) {
 				super.setText("");
 			}
@@ -465,8 +436,8 @@ public class SignFrame extends JFrame {
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ ÀÒÀ¸¸é ½áÁø ±Û¾¾°¡
-												// ¾øÀ¸¸é ÈùÆ®¸¦ ÀûÀ½
+		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ Ò¸¸é ½áÁø ±Û¾¾°¡
+												// ¾ø¸¸é ÈùÆ®¸¦ û½
 			if (this.getText().isEmpty()) {
 				setForeground(Color.GRAY);
 				super.setText(hint);
@@ -518,13 +489,13 @@ public class SignFrame extends JFrame {
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾úÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ® ±Û¾¾¸¦ Áö
+		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾ú¸¸é ½áÁø ±Û¾¾°¡ ¾ø¸¸é ÈùÆ® ±Û¾¾¸¦ Áö
 			hintLabel.setVisible(false);
 
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ ÀÒÀ¸¸é ½áÁø ±Û¾¾°¡ ¾øÀ¸¸é ÈùÆ®¸¦ ÀûÀ½
+		public void focusLost(FocusEvent e) { // Æ÷Ä¿½
 			if (this.getText().isEmpty()) {
 				hintLabel.setVisible(true);
 			} else {

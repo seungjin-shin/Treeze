@@ -19,22 +19,16 @@ public class AddQuestionNode {
 		// Question 노드 추가 하기 전 카운트
 		int cnt = forNodeForQuestion.getChildCount();
 		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		FreemindManager.getInstance().setNodeText("Q");
+//		FreemindManager.getInstance().setNodeText("Q");
 		FreemindManager.getInstance().getMc().addNew(forNodeForQuestion, MindMapController.NEW_CHILD, null);
 		
 		for (i = 0; i < cnt; i++) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				Thread.sleep(1000);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			addNodeForQuestion((MindMapNode) forNodeForQuestion.getChildAt(i));
 		}
 	}
@@ -48,7 +42,7 @@ public class AddQuestionNode {
 		int cnt = modifyForQuestion.getChildCount();
 		if(cnt != 0){
 			forModifyNodeName = (NodeAdapter)modifyForQuestion.getChildAt(cnt - 1);
-//			forModifyNodeName.setText("Q");
+			forModifyNodeName.setText("Q");
 			forModifyNodeName.setNodeTypeStr("Question");
 			FreemindManager.getInstance().getMc().nodeChanged(forModifyNodeName);
 		}

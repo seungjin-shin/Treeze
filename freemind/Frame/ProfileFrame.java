@@ -1,9 +1,12 @@
 package freemind.Frame;
 
 import java.awt.BasicStroke;
+import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -17,6 +20,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,6 +42,8 @@ import java.util.logging.Handler;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -88,7 +95,7 @@ public class ProfileFrame extends JFrame {
 	PersonalInfo personalInfo = new PersonalInfo("Hansung Univ", "Professor", "Computer engineering");
 //	ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
 	ListPanel listPanel;
-	PicturePanel picturePanel = new PicturePanel(FreemindManager.getInstance().professorImg);
+	PicturePanel picturePanel = new PicturePanel();
 	private static final Insets insets = new Insets(10, 10, 10, 10);
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
@@ -109,11 +116,11 @@ public class ProfileFrame extends JFrame {
 	Gson gson = new Gson();
 	MindMapController mc;
 	NetworkThread networkThread;
+	ArrayList<JCheckBox> chkBoxList = new ArrayList<JCheckBox>();
 	
 	public ProfileFrame(MindMapController mc) {
 		this.mc = mc;
 		fManager = FreemindManager.getInstance();
-		
 		
 //		fManager.setFilePath(DOWNPATH + "/");
 		// TODO Auto-generated constructor stub
@@ -131,7 +138,7 @@ public class ProfileFrame extends JFrame {
 		// C:\Users\ÄÄ°ø\Desktop
 		setLayout(gbl);
 		
-		logoPanel = new LogoPanel(fManager.treezeLogo);
+		logoPanel = new LogoPanel();
 
 		lectureListPanel = new JPanel();
 		
@@ -141,7 +148,7 @@ public class ProfileFrame extends JFrame {
 		profilePanel.setLayout(gbl);
 		logoPanel.setBackground(new Color(0, 0, 0, 0));
 		
-		btnPanel.setBackground(new Color(0,0,0,0));
+		btnPanel.setBackground(fManager.treezeColor);
 		profilePanel.setBackground(new Color(0,0,0,0));
 		
 		lectureListPanel.setBackground(Color.WHITE);
@@ -150,9 +157,9 @@ public class ProfileFrame extends JFrame {
 		lectureListPanel.setBorder(new LineBorder(Color.BLACK, 2, false));
 
 		addGrid(gbl, gbc, logoPanel,        0, 0, 1, 1, 1, 3, this);
-		addGrid(gbl, gbc, btnPanel,         1, 1, 1, 1, 4, 2, this);
+		addGrid(gbl, gbc, btnPanel,         1, 1, 1, 1, 6, 2, this);
 		addGrid(gbl, gbc, profilePanel,     0, 2, 1, 1, 1, 15, this);
-		addGrid(gbl, gbc, lectureListPanel, 1, 2, 1, 1, 4, 15, this);
+		addGrid(gbl, gbc, lectureListPanel, 1, 2, 1, 1, 6, 15, this);
 		
 		
 		
@@ -165,13 +172,13 @@ public class ProfileFrame extends JFrame {
 		insets.left = 10;
 		insets.top = 0;
 		insets.bottom = 0;
-		JLabel noPanel = new JLabel("   N o", JLabel.LEFT);
-		JLabel subjectPanel = new JLabel("Subject", JLabel.LEFT);
-//		JLabel whritePane = new JLabel("State",JLabel.CENTER);
+		JLabel noPanel = new JLabel("N o", JLabel.CENTER);
+		JLabel subjectPanel = new JLabel("Subject", JLabel.CENTER);
+		JLabel whritePane = new JLabel("Delete",JLabel.CENTER);
 		lectureHead.setLayout(gbl);
 		addGrid(gbl, gbc, noPanel,      0, 0, 1, 1, 1, 1, lectureHead);
-		addGrid(gbl, gbc, subjectPanel, 1, 0, 1, 1, 1, 1, lectureHead);
-//		addGrid(gbl, gbc, whritePane,   2, 0, 1, 1, 1, 1, lectureHead);
+		addGrid(gbl, gbc, subjectPanel, 1, 0, 1, 1, 10, 1, lectureHead);
+		addGrid(gbl, gbc, whritePane,   2, 0, 1, 1, 1, 1, lectureHead);
 		lectureListPanel.setLayout(gbl);
 		
 		// lecture List ÆÐ³Î 
@@ -215,25 +222,21 @@ public class ProfileFrame extends JFrame {
 
 	class LogoPanel extends JPanel {
 		ImageIcon imgIcon;
-		public LogoPanel(Image img) {
-			// TODO Auto-generated constructor stub
-			imgIcon = new ImageIcon(img);
-		}
-
+		
 		@Override
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
-			g.drawImage(imgIcon.getImage(), 10, 10, this.getWidth()-10,
-					this.getHeight()-10, null);
+			if(imgIcon == null)
+				imgIcon = fManager.makeResizedImageIcon(this.getWidth(), this.getHeight(), fManager.treezeLogo);
+			g.drawImage(imgIcon.getImage(), 0, 0, null);
 		}
 	}
 
 	class PicturePanel extends JPanel {
 		ImageIcon imgIcon;
-		public PicturePanel(Image image) {
+		public PicturePanel() {
 			// TODO Auto-generated constructor stub
-			imgIcon = new ImageIcon(image);
 			this.setBorder(new EmptyBorder(20, 20, 20, 20));
 		}
 
@@ -241,9 +244,9 @@ public class ProfileFrame extends JFrame {
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
-
-			g.drawImage(imgIcon.getImage(), 0, 0, this.getWidth(),
-					this.getHeight(), null);
+			if(imgIcon == null)
+				imgIcon = fManager.makeResizedImageIcon(this.getWidth(), this.getHeight(), fManager.defaultProfile);
+			g.drawImage(imgIcon.getImage(), 0, 0, null);
 		
 		}
 		
@@ -326,34 +329,35 @@ public class ProfileFrame extends JFrame {
 			
 			this.setLayout(new GridLayout(1, 4, 20, 0));
 			
-			setBackground(Color.black);
+			this.setBackground(fManager.treezeColor);
+			
 			addLtBtn = new AddLectureBtn(fManager.addLectureDefault, fManager.addLecturePress, fManager.addLectureOver);
-			addLtBtn.setBackground(new Color(0, 0, 0, 0));
+			addLtBtn.setBackground(fManager.treezeColor);
 			addLtBtn.setBorderPainted(false);
 			addLtBtn.setContentAreaFilled(false);
 			addLtBtn.setFocusable(false);
 			delLtBtn = new DeleteLectureBtn(fManager.deleteLectureDefault, fManager.deleteLecturePress, fManager.deleteLectureOver);
-			delLtBtn.setBackground(new Color(0, 0, 0, 0));
+			delLtBtn.setBackground(fManager.treezeColor);
 			delLtBtn.setBorderPainted(false);
 			delLtBtn.setContentAreaFilled(false);
 			delLtBtn.setFocusable(false);
 			ltListBtn = new LectureListBtn(fManager.lectureListDefault, fManager.lectureListPress, fManager.lectureListOver);
-			ltListBtn.setBackground(new Color(0, 0, 0, 0));
+			ltListBtn.setBackground(fManager.treezeColor);
 			ltListBtn.setBorderPainted(false);
 			ltListBtn.setContentAreaFilled(false);
 			ltListBtn.setFocusable(false);
 			profileBtn = new ProfileBtn(fManager.profileDefault, fManager.profilePress, fManager.profileOver);
-			profileBtn.setBackground(new Color(0, 0, 0, 0));
+			profileBtn.setBackground(fManager.treezeColor);
 			profileBtn.setBorderPainted(false);
 			profileBtn.setContentAreaFilled(false);
 			profileBtn.setFocusable(false);
 			addCsBtn = new AddClassBtn(fManager.addClassDefault, fManager.addClassPress, fManager.addClassOver);
-			addCsBtn.setBackground(new Color(0, 0, 0, 0));
+			addCsBtn.setBackground(fManager.treezeColor);
 			addCsBtn.setBorderPainted(false);
 			addCsBtn.setContentAreaFilled(false);
 			addCsBtn.setFocusable(false);
 			delCsBtn = new DeleteClassBtn(fManager.deleteClassDefault, fManager.deleteClassPress, fManager.deleteClassOver);
-			delCsBtn.setBackground(new Color(0, 0, 0, 0));
+			delCsBtn.setBackground(fManager.treezeColor);
 			delCsBtn.setBorderPainted(false);
 			delCsBtn.setContentAreaFilled(false);
 			delCsBtn.setFocusable(false);
@@ -385,13 +389,8 @@ public class ProfileFrame extends JFrame {
 			
 		}
 
-		@Override
-		public void paint(Graphics g) {
-			// TODO Auto-generated method stub
-			super.paint(g);
-
-		}
 	}
+	
 	
 	class AddLectureBtn extends ImgBtn{
 
@@ -402,7 +401,7 @@ public class ProfileFrame extends JFrame {
 
 		@Override
 		protected void Action() {
-			new InputLectureFrame();			
+			new InputLectureFrame();
 		}
 	}
 
@@ -416,6 +415,11 @@ public class ProfileFrame extends JFrame {
 		@Override
 		protected void Action() {
 			// TODO Auto-generated method stub
+			for(int i = 0; i < chkBoxList.size(); i++){
+				JCheckBox tmp = chkBoxList.get(i);
+				if(tmp.isSelected())
+					System.out.println(tmp.getActionCommand());
+			}
 			
 		}
 	}
@@ -558,33 +562,96 @@ public class ProfileFrame extends JFrame {
 	
 	class LectureListItem extends JPanel {
 		JLabel lectureNo;
-		JLabel professorNm;
-//		JLabel stateOfLecture;
-
+		JLabel lectureTitle;
+		JCheckBox delChkBox;
+		JScrollPane jsp;
+		
 		public LectureListItem(int no, final Lecture lecture) {
 			// TODO Auto-generated constructor stub
-			lectureNo = new JLabel("     " + no, JLabel.LEFT);
+			lectureNo = new JLabel(no + "", JLabel.CENTER);
 			lectureNo.setBackground(Color.black);
-			professorNm = new JLabel("       " + lecture.getLectureName(), JLabel.LEFT);
-			professorNm.setBackground(Color.blue);
-//			if(lecture.getStateOfLecture()){
-//				stateOfLecture = new JLabel("Online", JLabel.CENTER);
-//			}
-//			else {
-//				stateOfLecture = new JLabel("Offline", JLabel.CENTER);
-//			}
-			this.setBackground(new Color(0, 0, 0, 0));
+			lectureTitle = new JLabel(lecture.getLectureName(), JLabel.CENTER);
+			lectureTitle.setBackground(Color.blue);
+			
+			delChkBox = new JCheckBox();
+			delChkBox.setActionCommand(lecture.getLectureId() + "");
+			delChkBox.setBackground(Color.white);
+			chkBoxList.add(delChkBox);
+			
+			jsp = new JScrollPane(lectureTitle);
+			jsp.setBorder(null);
+			
+			this.setBackground(Color.white);
 			// this.add(noPanel);
 			this.setLayout(gbl);
 //			this.setLayout(new GridLayout(1, 2));
 			insets.bottom = 5;
 			insets.top = 5;
-//			add(lectureNo);
-//			add(professorNm);
 			addGrid(gbl, gbc, lectureNo, 0, 0, 1, 1, 1, 1, this);
-			addGrid(gbl, gbc, professorNm, 1, 0, 1, 1, 1, 1, this);
-//			addGrid(gbl, gbc, stateOfLecture, 2, 0, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, jsp,       1, 0, 1, 1, 10, 1, this);
+			addGrid(gbl, gbc, delChkBox, 2, 0, 1, 1, 1, 1, this);
 
+			lectureTitle.setPreferredSize(new Dimension(lectureTitle
+					.getWidth(), lectureTitle.getHeight()));
+
+			jsp.getViewport().setBackground(Color.WHITE);
+			jsp.addMouseWheelListener(new MouseWheelListener() {
+				
+				@Override
+				public void mouseWheelMoved(MouseWheelEvent e) {
+					listPanel.getVerticalScrollBar().setValue(
+							listPanel.getVerticalScrollBar().getValue()
+									+ e.getWheelRotation());
+				}
+			});
+			jsp.addMouseListener(new MouseListener() {
+
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					setBackground(new Color(255, 255, 255, 255));
+				}
+
+				public void mousePreswsed(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					setBackground(new Color(10, 10, 100, 100));
+					lectureId  = lecture.getLectureId();
+					networkFlag = NETWORK_FLAG_GET_CLASSLIST;
+				lectureHead.setVisible(false);
+				networkThread = new NetworkThread();
+				networkThread.start();
+				
+				btnPanel.setClassPage();
+				
+				//grid.removeAll();
+				//invalidate();
+					//System.out.println(ticket.getContents());
+				}
+			});
 			this.addMouseListener(new MouseListener() {
 
 				@Override
@@ -1091,6 +1158,8 @@ public class ProfileFrame extends JFrame {
 		}
 		listPanel.updateUI();
 		lectureListPanel.repaint();
+		chkBoxList.clear();
+//		mainFrameRepaint();
 	}
 	void updateGetallClassList(){
 		java.lang.reflect.Type type = new TypeToken<ArrayClass>(){}.getType();
@@ -1104,10 +1173,16 @@ public class ProfileFrame extends JFrame {
 		for(int i=0;i<classList.size();i++){
 			grid.add(new ClassListItem(classList.get(i)));
 		}
-		
 		listPanel.updateUI();
 		lectureListPanel.repaint();
+		chkBoxList.clear();
 		
+		if(classList.size() == 0){
+			setMainFramevisible(false);
+			setMainFramevisible(true);
+			mainFrameRepaint();
+		}
+//		mainFrameRepaint();
 	}
 	
 	public void netErr(){ // not receive
@@ -1118,6 +1193,12 @@ public class ProfileFrame extends JFrame {
 	public void setMainFramevisible(boolean bool){
 		setVisible(bool);
 	}
+	
+	public void mainFrameRepaint(){
+		repaint();
+	}
+	
+	
 	
 }
 // http://manic.tistory.com/99

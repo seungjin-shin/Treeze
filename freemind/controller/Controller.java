@@ -325,7 +325,7 @@ public class Controller  implements MapModuleChangeObserver {
     }
     //dewlit
 
-    public void recurAddTicketNode(NodeAdapter node){
+    public boolean recurAddTicketNode(NodeAdapter node){
     	NodeAdapter selNode = node;
     	NodeAdapter qNode = null;
     	NodeAdapter updateNode = null;
@@ -333,7 +333,7 @@ public class Controller  implements MapModuleChangeObserver {
 		int cnt = selNode.getChildCount();
 		
 		if(selNode.getNodeID().equals(""))
-			return;
+			return false;
 		
 		if(selNode.getNodeID().equals(fManager.getTicket().getParentNodeId())){
 			
@@ -359,13 +359,13 @@ public class Controller  implements MapModuleChangeObserver {
 				}
 			}
 			
-			if(fManager.getTicket().getContents().length() > 10)
-				fManager.setNodeText(fManager.getTicket().getContents().substring(0, 10) + "...");
-			else
-				fManager.setNodeText(fManager.getTicket().getContents());
+//			if(fManager.getTicket().getContents().length() > 10)
+//				fManager.setNodeText(fManager.getTicket().getContents().substring(0, 10) + "...");
+//			else
+//				fManager.setNodeText(fManager.getTicket().getContents());
 			
 			fManager.getMc().addNew(qNode, MindMapController.NEW_CHILD, null);
-//			fManager.getMc().edit.stopEditing();
+			fManager.getMc().edit.stopEditing();
 			
 //			EditNodeTextField tmp2 = (EditNodeTextField)FreemindManager.getInstance().getMc().edit.getmCurrentEditDialog();
 //			tmp2.getTextfield().setEditable(false);
@@ -373,6 +373,11 @@ public class Controller  implements MapModuleChangeObserver {
 //			fManager.getFreemindMainFrame().requestFocus();
 			
 			NodeAdapter tmp = (NodeAdapter) qNode.getChildAt(qNode.getChildCount() - 1);
+
+			if(fManager.getTicket().getContents().length() > 20)
+				tmp.setText(fManager.getTicket().getContents().substring(0, 20) + "...");
+			else
+				tmp.setText(fManager.getTicket().getContents());			
 						
 			tmp.setNodeTypeStr("Ticket");
 			tmp.setNodeID(fManager.getTicket().getId() + "");
@@ -388,12 +393,16 @@ public class Controller  implements MapModuleChangeObserver {
 				fManager.getMc()._setFolded(updateNode, true);
 				fManager.getMc().nodeChanged(updateNode);
 			}
-			return;
+			return true;
 		}
 		
 		for (int i = 0; i < cnt; i++) {
-			recurAddTicketNode((NodeAdapter) selNode.getChildAt(i));
+			boolean tmp;
+			tmp = recurAddTicketNode((NodeAdapter) selNode.getChildAt(i));
+			if(tmp)
+				return true;
 		}
+		return false;
     }
     
     public void makeUploadXml(){
@@ -543,11 +552,11 @@ public class Controller  implements MapModuleChangeObserver {
 		setSequenceIcon();
     	
     	//set Q Node
-    	fManager.setNodeText("Q");
+//    	fManager.setNodeText("Q");
     	addQNode.addNodeForQuestion(fManager.getMc().getRootNode());
     	
 //    	// modify Q node
-//    	addQNode.modifyForQuestion(fManager.getMc().getRootNode());
+    	addQNode.modifyForQuestion(fManager.getMc().getRootNode());
 //    	fManager.getMc().edit.stopEditing();
     	
     	/*
@@ -562,29 +571,29 @@ public class Controller  implements MapModuleChangeObserver {
     	System.out.println("NodeKeyListener : set QuestionNodeInfo");
     	
     	//Set ID
-//		recurSetUploadXmlID((NodeAdapter) fManager.getMc().getRootNode());
+		recurSetUploadXmlID((NodeAdapter) fManager.getMc().getRootNode());
 		
 		//makeXMlFile
-//		makeUploadXml();
+		makeUploadXml();
 			
 		//upload XML
-//		UploadToServer uploadToServer = new UploadToServer();
-//		try {
-//			uploadToServer.doFileUpload();
-//			uploadToServer.doXmlUpload();
-//		} catch (ClientProtocolException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		
-//		new TextDialogue(fManager.getFreemindMainFrame(), "Upload Class", true);
+		UploadToServer uploadToServer = new UploadToServer();
+		try {
+			uploadToServer.doFileUpload();
+			uploadToServer.doXmlUpload();
+		} catch (ClientProtocolException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
-//		fManager.init();
-//		fManager.getProfileFrame().setVisible(true);
-//		fManager.getFreemindMainFrame().setVisible(false);
+		new TextDialogue(fManager.getFreemindMainFrame(), "Upload Class", true);
+		
+		fManager.init();
+		fManager.getProfileFrame().setVisible(true);
+		fManager.getFreemindMainFrame().setVisible(false);
 		
     }
     
