@@ -35,9 +35,7 @@ public class NoteManager {
 	protected static final int IMG_TYPE_STAR = 0;
 	
 	public static final int IMG_SIZE_NO_DECIDED = -1;
-//	public static int IMG_SIZE_WIDTH;
-//	public static int IMG_SIZE_HEIGHT;
-//	
+
 	public static Image STAR_IMG; 	 
 	
 	private NoteManager nm;
@@ -51,14 +49,7 @@ public class NoteManager {
 		gson = new Gson();
 		fim = new FileIOManager();
 		
-//		IMG_SIZE_WIDTH = IMG_SIZE_NO_DECIDED;
-//		IMG_SIZE_HEIGHT = IMG_SIZE_NO_DECIDED;
-		
-		
 		nm = this;
-		
-		
-		
 		
 		jpanel.addComponentListener(new ComponentListener() {
 			
@@ -124,6 +115,15 @@ public class NoteManager {
 		drawobjList.add(this.figureObj);
 		this.figureObj = null;
 //		System.out.println("drawobj size : " + drawobjList.size());
+	}
+	
+	protected void setFeatureByRate() {
+		for(int i = 0; i < drawobjList.size(); i++) {
+			drawobjList.get(i).setFeatureByRate(jpanel.getWidth(), jpanel.getHeight());
+		}
+		for(int i = 0; i < componentList.size(); i++) {
+			componentList.get(i).setFeatureByRate(jpanel.getWidth(), jpanel.getHeight());
+		}
 	}
 	
 	protected void restore() {
@@ -220,7 +220,7 @@ public class NoteManager {
 
 
 	protected void addMemo(int x, int y, int width, int height) {
-		System.out.println("asdfadsfadsfadsadsf");
+		
 		MemoPanel memo = new MemoPanel(x, y, width, height, jpanel.getWidth(), jpanel.getHeight());
 		memo.addToPanel(jpanel, this);
 		componentList.add(memo);		
@@ -236,28 +236,24 @@ public class NoteManager {
 
 	}
 
-
-	protected void changeJson() {
-
-		Gson gson = new Gson();
-		String json = gson.toJson(jpanel);
-
-
-	}
 	
 	protected void restoreNote() {
 		
 		StoredNoteObject sno = loadStoredNote();
 		componentList = sno.getCOList();
 		drawobjList = sno.getDOList();
+		
+		setFeatureByRate();		
+		//패널과 그림을 다시 만들고
 		restore();
+		//repaint 시킴
 		repaint();
+
 	}
 	
 	
 
-	protected StoredNoteObject loadStoredNote() {
-		
+	protected StoredNoteObject loadStoredNote() {	
 		
 		String noteData = null;
 		try {
@@ -266,8 +262,7 @@ public class NoteManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-//		System.out.println(noteData);
+
 		return gson.fromJson(noteData, StoredNoteObject.class);
 		
 		
@@ -275,7 +270,7 @@ public class NoteManager {
 	}
 
 	protected void saveStoredNote() {
-
+		System.out.println("saveStoredNote : " + componentList.size());
 
 		StoredNoteObject sno = new StoredNoteObject(drawobjList, componentList);
 		String noteContent = gson.toJson(sno);
@@ -354,6 +349,43 @@ public class NoteManager {
 			componentList.get(i).setRelativeLocation(this);
 		}
 		
+	}
+	
+	protected void setMoveFlag(int x, int y) {
+		initMoveFlag();
+		for(int i = 0; i < drawobjList.size(); i ++) {
+			if(drawobjList.get(i).isClick(x, y, this)) {
+				drawobjList.get(i).setMoveFlag(true);
+//				System.out.println("asfasdfasfasdfasfasdf");
+				return;
+			}
+		}
+	}
+	
+	protected boolean isMoveFlag() {
+		
+		for(int i = 0; i < drawobjList.size(); i ++) {
+			if(drawobjList.get(i).isMoveFlag()) {
+				return true;				
+			}
+		}
+		return false;
+	}
+	
+	protected void initMoveFlag() {
+		for(int i = 0; i < drawobjList.size(); i ++) {
+			drawobjList.get(i).setMoveFlag(false);;
+			
+		}
+	}	
+	
+	protected void move(int pressX, int pressY, int dragX, int dragY) {
+		for(int i = 0; i < drawobjList.size(); i ++) {
+			if(drawobjList.get(i).isMoveFlag()) {
+				drawobjList.get(i).move(pressX, pressY, dragX, dragY, nm);
+			}
+		}
+		repaint();
 	}
 
 	protected ArrayList<DrawableObject> getDrawobjList() {

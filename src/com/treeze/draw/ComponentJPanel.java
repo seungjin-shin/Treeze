@@ -28,8 +28,6 @@ public abstract class ComponentJPanel extends JPanel {
 		csc = new ComponentSizeController(this);
 	}
 	
-
-	
 	protected abstract void addToPanel(JPanel jpanel , NoteManager nm);
 
 
@@ -82,6 +80,19 @@ public abstract class ComponentJPanel extends JPanel {
 		this.backgroundWidth = backgroundWidth;
 		this.backgroundHeight = backgroundHeight;
 		
+		
+	}
+	
+	protected void setFeatureByRate(int backgroundWidth, int backgroundHeight) {
+		this.backgroundWidth = backgroundWidth;
+		this.backgroundHeight = backgroundHeight;
+		
+		int x = (int)rateX * backgroundWidth;
+		int y = (int)rateY * backgroundWidth;
+		int width = (int)rateWidth * backgroundWidth;
+		int height = (int)rateHeight * backgroundWidth;
+		
+		this.setBounds(x, y, width, height);
 		
 	}
 	
@@ -315,7 +326,7 @@ abstract class ClickComponentPanel extends ClickPanel {
 		ptPanel.remove(this);
 		ptPanel.remove(compJpanel);
 		
-		nm.getComponentList().remove(this);
+		nm.getComponentList().remove(compJpanel);
 		nm.repaint();
 		
 	}

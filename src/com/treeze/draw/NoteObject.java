@@ -20,7 +20,6 @@ public class NoteObject {
 	
 	protected transient ClickPanel clickPanel;
 
-
 	//움직이거나 크기변경시 마지막에 이걸 꼭불러줘야함
 	protected void setRate(int x, int y, int width, int height, int backgroundWidth, int backgroundHeight) {
 		this.x = x;
@@ -35,6 +34,21 @@ public class NoteObject {
 		rateHeight = (double)height/(double)backgroundHeight;
 		
 	}
+	
+	protected void setFeatureByRate(int backgroundWidth, int backgroundHeight) {
+		this.backgroundWidth = backgroundWidth;
+		this.backgroundHeight = backgroundHeight;
+		
+		x = (int)rateX * backgroundWidth;
+		y = (int)rateY * backgroundWidth;
+		width = (int)rateWidth * backgroundWidth;
+		height = (int)rateHeight * backgroundWidth;
+		
+		
+		
+	}
+	
+
 	
 	
 	protected void removeSelectedItem(NoteManager nm) {

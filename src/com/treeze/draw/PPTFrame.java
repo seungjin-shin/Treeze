@@ -22,13 +22,59 @@ public class PPTFrame extends JFrame {
 	public PPTFrame() {
 		// TODO Auto-generated constructor stub
 		
-//		pptPanel = new PPTPanel(Util.PPT_ADDR + "ppt.png");
-//		setBounds(500, 100, 600, 500);
-//		setVisible(true);
-//		pptPanel.setVisible(true);
-//		this.add(pptPanel);
-//		setDefaultCloseOperation(EXIT_ON_CLOSE);
-//		nm = pptPanel.getNoteManager();		
+		//pptPanel = new PPTPanel(Util.PPT_ADDR + "ppt.png");
+		setBounds(500, 100, 600, 500);
+		setVisible(true);
+		pptPanel.setVisible(true);
+		this.add(pptPanel);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		nm = pptPanel.getNoteManager();		
+		
+		this.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				nm.restoreNote();
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				nm.saveStoredNote();
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				
+			}			
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 
 	}
 

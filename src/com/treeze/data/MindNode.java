@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 
 import org.w3c.dom.Node;
 
+import com.treeze.Abstract.ImgBtn;
 import com.treeze.draw.PPTFrame;
 import com.treeze.frame.MindMapMain;
 import com.treeze.frame.TicketFrame;
@@ -27,6 +28,7 @@ import com.treeze.frame.TicketFrame;
 public class MindNode {
 	static ClassInfo classinfo;
 	static MindMapMain mindMapMain;
+
 	public static ClassInfo getClassinfo() {
 		return classinfo;
 	}
@@ -46,6 +48,7 @@ public class MindNode {
 	Image img;
 	Image scaledImage;
 	String imgPath;
+
 	public String getImgPath() {
 		return imgPath;
 	}
@@ -97,13 +100,14 @@ public class MindNode {
 	ArrayList<MindNode> LchildeNodes = new ArrayList<MindNode>();
 	ArrayList<MindNode> RchildeNodes = new ArrayList<MindNode>();
 
-	JButton nodeBtn = new JButton();
+	public NodeBtn nodeBtn = new NodeBtn(TreezeStaticData.NODE_BTN_IMG,
+			TreezeStaticData.NODE_PRESS_IMG, TreezeStaticData.NODE_ENTER_IMG);
 
-	public JButton getNodeBtn() {
+	public NodeBtn getNodeBtn() {
 		return nodeBtn;
 	}
 
-	public void setNodeBtn(JButton nodeBtn) {
+	public void setNodeBtn(NodeBtn nodeBtn) {
 		this.nodeBtn = nodeBtn;
 
 	}
@@ -128,7 +132,8 @@ public class MindNode {
 
 	}
 
-	public MindNode(String nodeID, String str, int x, int y,MindMapMain mindMapMain) { // 占쏙옙트占쏙옙占쏙옙
+	public MindNode(String nodeID, String str, int x, int y,
+			MindMapMain mindMapMain) { // 占쏙옙트占쏙옙占쏙옙
 		this.nodeStr = str;
 		this.mindMapMain = mindMapMain;
 		this.locateX = x;
@@ -144,7 +149,7 @@ public class MindNode {
 		root = this;
 		now = this;
 		ImgIconSet();
-		getNodeBtn().setIcon(rootnodeImgIcon);
+
 		pptBtn.addMouseListener(new MouseListener() {
 
 			@Override
@@ -178,7 +183,7 @@ public class MindNode {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				//new PPTFrame(getnode());
+				// new PPTFrame(getnode());
 			}
 		});
 		ticketBtn.addMouseListener(new MouseListener() {
@@ -228,13 +233,13 @@ public class MindNode {
 	}
 
 	public MindNode(MindNode parentNode, String nodeID, String str,
-			String directionstr,String imgPath) { // 占쏙옙占쏙옙占쏙옙
+			String directionstr, String imgPath) { // 占쏙옙占쏙옙占쏙옙
 		// 占쏙옙占쏙옙占쏙옙
 		// TODO Auto-generated constructor stub
 		nodeStr = str;
 		now.setNext(this);
 		this.setPrev(now);
-		this.setNow(this);
+		MindNode.now = this;
 		this.nodeID = nodeID;
 		// this.scaleX = str.length() * 20;
 		this.scaleY = NODE_HEIGHT;
@@ -260,7 +265,6 @@ public class MindNode {
 		endY = locateY + scaleY;
 		ImgIconSet();
 
-		getNodeBtn().setIcon(nodeImgIcon);
 		pptBtn.addMouseListener(new MouseListener() {
 
 			@Override
@@ -294,7 +298,7 @@ public class MindNode {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-			//	new PPTFrame(getnode());
+				// new PPTFrame(getnode());
 			}
 		});
 		ticketBtn.addMouseListener(new MouseListener() {
@@ -354,8 +358,7 @@ public class MindNode {
 	// }
 	void ImgIconSet() {
 		imageBuff = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
-		
-		
+
 		g = imageBuff.createGraphics();
 		img = TreezeStaticData.NODE_BG;
 		scaledImage = img.getScaledInstance(NODE_WIDTH, NODE_HEIGHT * 2 / 3,
@@ -470,11 +473,13 @@ public class MindNode {
 	private void setLocate(MindNode parentNode) {
 		// TODO Auto-generated method stub
 		if (this.direction == 0)
-			this.locateX = parentNode.endX + DISTANT;  // right
-		else   // left
+			this.locateX = parentNode.endX + DISTANT; // right
+		else
+			// left
 			this.locateX = parentNode.locateX - DISTANT - NODE_WIDTH;
 
-		if (this.parentNodeChildCount() == 0) { // 占싸몌옙 占쌘쏙옙占쏙옙 占쏙옙占쏙옙占�占쏙옙占�占쏙옙占쏙옙占쏙옙 占쏙옙
+		if (this.parentNodeChildCount() == 0) { // 占싸몌옙 占쌘쏙옙占쏙옙
+												// 占쏙옙占쏙옙占�占쏙옙占�占쏙옙占쏙옙占쏙옙 占쏙옙
 												// 占쏙옙치占싹곤옙占쏙옙.
 			this.locateY = parentNode.locateY;
 		} else {
@@ -503,14 +508,14 @@ public class MindNode {
 
 	public void getAllTicket(ArrayList<MindNode> nodes, MindNode node) {
 		for (int i = 0; i < node.getChildeNodes().size(); i++) {
-			if(node.getChildeNodes().get(i) instanceof Ticket){
-			nodes.add(node.getChildeNodes().get(i));
-			
-			if (node.getChildeNodes().get(i).getChildeNodes().size() != 0) {
-				getAllTicket(nodes, node.getChildeNodes().get(i));
+			if (node.getChildeNodes().get(i) instanceof Ticket) {
+				nodes.add(node.getChildeNodes().get(i));
+
+				if (node.getChildeNodes().get(i).getChildeNodes().size() != 0) {
+					getAllTicket(nodes, node.getChildeNodes().get(i));
+				}
 			}
-			}
-			
+
 		}
 
 	}
@@ -629,19 +634,26 @@ public class MindNode {
 
 	public static void setNow(MindNode now) {
 		if (MindNode.now == null) {
+			return;
 		} else {
 			if (MindNode.now == getRoot()) {
-				MindNode.now.getNodeBtn().setIcon(rootnodeImgIcon);
+				// MindNode.now.getNodeBtn().setIcon(rootnodeImgIcon);
 			} else {
-				MindNode.now.getNodeBtn().setIcon(nodeImgIcon);
+				// MindNode.now.getNodeBtn().setIcon(nodeImgIcon);
 			}
 		}
 		MindNode.now = now;
 		if (now == getRoot()) {
-			now.getNodeBtn().setIcon(rootnodePassedImgIcon);
+			now.getNodeBtn().ChangeNodeImg(TreezeStaticData.PASSED_NODE_BG,
+					TreezeStaticData.PASSED_NODE_BG,
+					TreezeStaticData.PASSED_NODE_BG);
 		} else {
-			now.getNodeBtn().setIcon(nodePassedImgIcon);
+
+			now.getNodeBtn().ChangeNodeImg(TreezeStaticData.PASSED_NODE_BG,
+					TreezeStaticData.PASSED_NODE_BG,
+					TreezeStaticData.PASSED_NODE_BG);
 		}
+		now.getNodeBtn().repaint();
 	}
 
 	public boolean isPassed() {
@@ -661,14 +673,17 @@ public class MindNode {
 		this.direction = direction;
 	}
 
-	public static MindNode getNode(MindNode node, String nodeID) {
+	public static MindNode getNodeuseNodeID(MindNode node, String nodeID) {
 		MindNode temp = null;
+		if(node.getNodeID().equals(nodeID)){
+			return node;
+		}
 		for (int i = 0; i < node.getChildeNodes().size(); i++) {
 			// if(node.getChildeNodes().get(i) instanceof Ticket) continue;
 			if (node.getChildeNodes().get(i).getNodeID().equals(nodeID)) {
 				return node.getChildeNodes().get(i);
 			} else if (node.getChildeNodes().get(i).getChildeNodes().size() != 0) {
-				temp = getNode(node.getChildeNodes().get(i), nodeID);
+				temp = getNodeuseNodeID(node.getChildeNodes().get(i), nodeID);
 				if (temp != null) {
 					return temp;
 				}
@@ -720,14 +735,19 @@ public class MindNode {
 
 	public static void setNav(CurrentPositionOfNav naviInfo) {
 		// TODO Auto-generated method stub
-		MindNode temp = root;
+		MindNode now = root;
 		for (int i = 0; i < naviInfo.getPosition().size(); i++) {
-			temp = temp.childeNodes.get(naviInfo.getPosition().get(i));
+			now = now.childeNodes.get(naviInfo.getPosition().get(i));
 		}
 
-		temp.setPassed(true);
-		temp.getNodeBtn().setIcon(nodePassedImgIcon);
-		temp.setNow(temp);
+		now.setPassed(true);
+		MindNode.getNow()
+				.getNodeBtn()
+				.ChangeNodeImg(TreezeStaticData.NODE_BTN_IMG,
+						TreezeStaticData.NODE_PRESS_IMG,
+						TreezeStaticData.NODE_ENTER_IMG);
+
+		MindNode.setNow(now);
 	}
 
 	class NodeMouseListener implements MouseListener {
@@ -737,9 +757,10 @@ public class MindNode {
 		}
 
 		public void mouseExited(MouseEvent e) {
-		
-//			h = new HideBtnThread(getnode().getNodeBtn().getParent(), getnode());
-//			h.start();
+
+			// h = new HideBtnThread(getnode().getNodeBtn().getParent(),
+			// getnode());
+			// h.start();
 		}
 
 		public void mousePressed(MouseEvent e) {
@@ -759,21 +780,35 @@ public class MindNode {
 		public void mouseEntered(MouseEvent arg0) {
 			// TODO Auto-generated method stub
 			// nodeBtn.setLayout(null);
-//
-//			System.out.println("�몃� �����" + getNodeID());
-//			getnode().getNodeBtn().getParent().add(getnode().pptBtn);
-//			getnode().getNodeBtn().getParent().add(getnode().ticketBtn);
-//			getnode().getNodeBtn().getParent()
-//					.setComponentZOrder(getnode().pptBtn, 1);
-//			getnode().getNodeBtn().getParent()
-//					.setComponentZOrder(getnode().ticketBtn, 2);
-//			getnode().getNodeBtn().getParent().repaint();
-//			if (h != null && h.getNode() == getnode()) {
-//				h.stop();
-//			}
-		
+			//
+			// System.out.println("�몃� �����" + getNodeID());
+			// getnode().getNodeBtn().getParent().add(getnode().pptBtn);
+			// getnode().getNodeBtn().getParent().add(getnode().ticketBtn);
+			// getnode().getNodeBtn().getParent()
+			// .setComponentZOrder(getnode().pptBtn, 1);
+			// getnode().getNodeBtn().getParent()
+			// .setComponentZOrder(getnode().ticketBtn, 2);
+			// getnode().getNodeBtn().getParent().repaint();
+			// if (h != null && h.getNode() == getnode()) {
+			// h.stop();
+			// }
 
 		}
+	}
+
+	public class NodeBtn extends ImgBtn {
+
+		public NodeBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void Action(JButton j) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 	class HideBtnThread extends Thread {
@@ -831,14 +866,15 @@ public class MindNode {
 		}
 
 	}
-	public int DepthofTicket(){
+
+	public int DepthofTicket() {
 		int depth = 0;
 		MindNode temp = this;
-		while(temp instanceof Ticket){
+		while (temp instanceof Ticket) {
 			temp = temp.getParentNode();
 			depth++;
 		}
-		
+
 		return depth;
 	}
 }

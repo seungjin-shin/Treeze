@@ -105,10 +105,10 @@ public class LineObject extends DrawableObject {
 	}
 	//이움직임은 panel에서 관장하므로 실제적으로 여기서 불러서 사용하지 않는다.
 	@Override
-	public void move(int x, int y, NoteManager nm) {
+	public void move(int fromX, int fromY, int toX, int toY, NoteManager nm) {
 		// TODO Auto-generated method stub
-		int diffrenceX = x - this.x;
-		int diffrenceY = y - this.y;
+		int diffrenceX = toX - fromX;
+		int diffrenceY = toY - fromY;
 		for (int i = 0; i < path.points.size(); i++) {
 			int curPathX = path.points.get(i).x;
 			int curPathY = path.points.get(i).y;
@@ -170,6 +170,26 @@ public class LineObject extends DrawableObject {
 			path.points.get(i).rateX = (double)curPathX/(double)backgroundWidth;
 			path.points.get(i).rateY = (double)curPathY/(double)backgroundHeight;
 //			System.out.println("rateX : " + path.points.get(i).rateX);
+
+		}
+		
+	}
+	
+	@Override
+	protected void setFeatureByRate(int backgroundWidth, int backgroundHeight) {
+		// TODO Auto-generated method stub
+		super.setFeatureByRate(backgroundWidth, backgroundHeight);
+		
+		if (path.points.size() == 0) {
+			return;
+		}
+		for (int i = 0; i < path.points.size(); i++) {
+
+			double rateX = path.points.get(i).rateX;
+			double rateY = path.points.get(i).rateY;
+
+			path.points.get(i).x = (int)rateX * backgroundWidth;
+			path.points.get(i).y = (int)rateY * backgroundHeight;
 
 		}
 		

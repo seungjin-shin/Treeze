@@ -357,8 +357,7 @@ public class TicketFrame extends JPanel {
 			jsp = new JScrollPane(contentsLabel);
 
 			jsp.setBorder(null);
-			// contentsLabel.setPreferredSize(new Dimension(1000,
-			// contentsLabel.getHeight()));
+			
 			whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
 
 			this.setBackground(Color.WHITE);

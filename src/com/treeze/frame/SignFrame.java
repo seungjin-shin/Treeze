@@ -48,6 +48,9 @@ import javax.swing.border.LineBorder;
 
 import org.apache.http.client.ClientProtocolException;
 
+import JDIalog.JDialogSurvey;
+import JDIalog.StringDialog;
+
 import com.treeze.data.TreezeStaticData;
 import com.treeze.uploadthread.SignUpThread;
 
@@ -298,7 +301,11 @@ public class SignFrame extends JFrame {
 			System.out.println("같음");
 		}
 		else{
-			System.out.println("다름");
+			StringDialog stringDialog  = new StringDialog("두개의 비밀번호가 일치하지 않습니다.");
+			stringDialog.setLocationRelativeTo(SignFrame.this);
+			
+			stringDialog.setVisible(true);
+		
 		}
 		
 		//fManager.uts.signPost(signUser);

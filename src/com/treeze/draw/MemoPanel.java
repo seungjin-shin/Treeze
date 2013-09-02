@@ -103,7 +103,17 @@ public class MemoPanel extends ComponentJPanel {
 		
 		MouseInputAdapter mia = new MouseInputAdapter() {
 
-			public void mouseDragged(MouseEvent e) {}
+			public void mouseDragged(MouseEvent e) {
+				
+				if (csc.isChangeSize(e, margin) || csc.isDrag(e, margin)) {
+					
+					Point point = csc.getTransformedPoint(e);					
+					getClickPanel().relocate(point.x, point.y);
+
+					
+				}
+				
+			}
 
 			public void mousePressed(MouseEvent e) {
 //				textArea.setBackground(Color.white);

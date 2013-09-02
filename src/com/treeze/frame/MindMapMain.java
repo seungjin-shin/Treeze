@@ -3,31 +3,18 @@ package com.treeze.frame;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.ScrollPane;
-import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.CubicCurve2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,31 +24,16 @@ import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-import JDIalog.JDialogSurvey;
-
-import com.sun.j3d.utils.behaviors.mouse.*;
-import javax.print.attribute.standard.Finishings;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
-import javax.swing.text.ZoneView;
-import javax.xml.bind.annotation.XmlAnyElement;
 
-import org.json.simple.parser.Yytoken;
-import org.omg.CORBA.portable.OutputStream;
+import JDIalog.JDialogSurvey;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -69,15 +41,12 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.treeze.data.ArrayLecture;
 import com.treeze.data.ClassInfo;
 import com.treeze.data.CurrentPositionOfNav;
 import com.treeze.data.JsonTicket;
 import com.treeze.data.MindNode;
 import com.treeze.data.ServerSocket;
 import com.treeze.data.Ticket;
-
-
 import com.treeze.data.TreezeData;
 import com.treeze.data.TreezeStaticData;
 import com.treeze.data.User;
@@ -196,6 +165,7 @@ public class MindMapMain extends JPanel {
 				// else{
 				// node.getNodeBtn().setIcon(nodeImgIcon);
 				// }
+				
 				node.getNodeBtn().setBounds(node.getLocateX(),
 						node.getLocateY(), NODE_WIDTH, NODE_HEIGHT);
 				node.getPptBtn().setBounds(node.getLocateX(),
@@ -215,7 +185,7 @@ public class MindMapMain extends JPanel {
 				node.getNodeBtn().setContentAreaFilled(false);
 				node.getNodeBtn().setFocusPainted(false); 
 				node.getNodeBtn().setOpaque(false);
-				//node.getNodeBtn().setMargin(new Insets(5, 5, 5, 5));
+				//node.getNodeBtn().setMargin(new IØnsets(5, 5, 5, 5));
 				
 				
 				this.add(node.getNodeBtn());
@@ -449,6 +419,7 @@ public class MindMapMain extends JPanel {
 								MindNode.setNav(naviInfo);
 							
 							repaint();
+							
 						} else if (jsonResultTreezeData.getDataType().equals(
 								TreezeData.SURVEY)) {
 							type = new TypeToken<Survey>() {
@@ -469,7 +440,7 @@ public class MindMapMain extends JPanel {
 									.fromJson(jsonResultTreezeData
 											.getArgList().get(0), JsonTicket.class);
 							
-							MindNode parentNode =  MindNode.getNode(MindNode.getRoot(),ticket.getticket().getParentNodeId());
+							MindNode parentNode =  MindNode.getNodeuseNodeID(MindNode.getRoot(),ticket.getticket().getParentNodeId());
 							
 							new Ticket(parentNode, ticket.getticket().getId()+"",ticket.getticket().getContents(), ticket.getticket().getUserName());
 							

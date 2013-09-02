@@ -16,6 +16,9 @@ import javax.swing.event.MouseInputAdapter;
  * graphic을 사용한 객체
  */
 public abstract class DrawableObject extends NoteObject {
+	
+	protected boolean moveFlag;
+
 
 	DrawableObject(int x, int y, int width, int height, int backgroundWidth,
 			int backgroundHeight) {
@@ -26,6 +29,7 @@ public abstract class DrawableObject extends NoteObject {
 		this.height = height;
 		this.backgroundWidth = backgroundWidth;
 		this.backgroundHeight = backgroundHeight;
+		
 		setRate(x, y, width, height, backgroundWidth, backgroundHeight);
 	}
 
@@ -43,7 +47,14 @@ public abstract class DrawableObject extends NoteObject {
 	public abstract void setClick(int x, int y, NoteManager nm);
 
 	public abstract boolean isClick(int x, int y, NoteManager nm);
+	
+	protected boolean isMoveFlag() {
+		return moveFlag;
+	}
 
+	protected void setMoveFlag(boolean moveFlag) {
+		this.moveFlag = moveFlag;
+	}
 
 	protected void setRelativeLocation(NoteManager nm) {
 
@@ -62,16 +73,24 @@ public abstract class DrawableObject extends NoteObject {
 	}
 	
 
-	public void move(int x, int y, NoteManager nm) {
+	public void move(int fromX, int fromY, int toX, int toY, NoteManager nm) {
 		// TODO Auto-generated method stub
-		int diffrenceX = x - this.x;
-		int diffrenceY = y - this.y;
+		int diffrenceX = toX - fromX;
+		int diffrenceY = toY - fromY;
+		
+		
+	
 
 		this.x = this.x + diffrenceX;
 		this.y = this.y + diffrenceY;
+		
+
+		
 		setRate(this.x, this.y, this.width, this.height, this.backgroundWidth, this.backgroundHeight);
 
 	}
+	
+
 
 	void setRightBottomSize(int x, int y) {
 
@@ -278,7 +297,9 @@ class ClickGraphicPanel extends ClickPanel {
 		// System.out.println("relocate");
 
 		this.setLocation(x, y);
-		drawableObj.move(x, y, nm);
+//		drawableObj.move(x, y, nm);
+		
+		drawableObj.move(drawableObj.x, drawableObj.y, x, y, nm);
 		nm.repaint();
 
 	}
