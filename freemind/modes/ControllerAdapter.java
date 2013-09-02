@@ -87,6 +87,8 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.filechooser.FileFilter;
 
+import org.apache.batik.dom.util.HashTable;
+
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.sun.pdfview.PDFFile;
@@ -249,7 +251,9 @@ public abstract class ControllerAdapter implements ModeController {
      *  to an node update.
      */
     protected void updateNode(MindMapNode node){
-        for (Iterator iter = mNodeSelectionListeners.iterator(); iter.hasNext();) {
+    	//dewlit
+    	HashSet htClone = (HashSet) mNodeSelectionListeners.clone();
+        for (Iterator iter = htClone.iterator(); iter.hasNext();) {
             NodeSelectionListener listener = (NodeSelectionListener) iter.next();
             listener.onUpdateNodeHook(node);
         }
@@ -257,7 +261,9 @@ public abstract class ControllerAdapter implements ModeController {
 
     public void onSelectHook(NodeView node) {
         // select the new node:
-        for (Iterator iter = mNodeSelectionListeners.iterator(); iter.hasNext();) {
+    	//dewlit
+    	HashSet htClone = (HashSet) mNodeSelectionListeners.clone();
+        for (Iterator iter = htClone.iterator(); iter.hasNext();) {
             NodeSelectionListener listener = (NodeSelectionListener) iter.next();
             listener.onSelectHook(node);
         }

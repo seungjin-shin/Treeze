@@ -127,7 +127,7 @@ public class ProfileFrame extends JFrame {
 //		fManager.setFilePath(DOWNPATH + "/");
 		// TODO Auto-generated constructor stub
 		this.setSize(1000, 600);
-		this.setLocation(300, 200);
+		this.setLocation(400, 100);
 		
 		this.getContentPane().setBackground(new Color(141, 198, 63));
 		//this.setResizable(false);
@@ -1189,8 +1189,6 @@ public class ProfileFrame extends JFrame {
 				System.out.println("FindMindSocket - rcvStr : " + rcvStr);
 			}
 		
-			
-			
 			
 			fManager.setOs(os);
 			fManager.setIn(in);

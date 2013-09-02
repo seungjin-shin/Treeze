@@ -140,9 +140,11 @@ public class MindMapToolBar extends FreeMindToolBar {
 		   return; 
 	   }
 	   fontFamily_IgnoreChangeEvent = true;
-	   fonts.setEditable(true);
-	   fonts.setSelectedItem(fontName) ;
-	   fonts.setEditable(false);
+		if (fonts != null) {
+//			fonts.setEditable(true);
+//			fonts.setSelectedItem(fontName);
+//			fonts.setEditable(false);
+		}
 	   fontFamily_IgnoreChangeEvent = false;
    }
     

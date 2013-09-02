@@ -29,7 +29,7 @@ public class SurveyResultFrame extends JFrame implements ActionListener{
 		setSize(600, 400);
 		setLayout(null);
 		setTitle("Survey result");
-		setLocation(350, 200);
+		this.setLocation(400, 100);
 		
 		getContentPane().setBackground(Color.white);
 		Font f = new Font("Serif", Font.BOLD, 30);

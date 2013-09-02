@@ -138,7 +138,6 @@ public class LoginFrame extends JFrame{
 				@Override
 				public void focusGained(FocusEvent arg0) {
 					pwTf.requestFocus();
-					
 				}
 			});
 			
@@ -152,7 +151,7 @@ public class LoginFrame extends JFrame{
 			addGrid(gbl, gbc, pwTf,     0, 1, 1, 1, 5, 5, loPanel);
 //			setInsets(30, 30, 10, 0);
 			setInsets(30, 30, 0, 0);
-			addGrid(gbl, gbc, loginBtn, 1, 0, 1, 2, 10, 5, loPanel);
+			addGrid(gbl, gbc, loginBtn, 1, 0, 1, 2, 13, 5, loPanel);
 	}
 	
 	public void setServerIP(){

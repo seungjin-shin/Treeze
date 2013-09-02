@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -74,7 +75,10 @@ public class UploadToServer {
 			}
 
            System.out.println("postXmlImg");
-       }catch(Exception e){e.printStackTrace();
+       }catch(Exception e){
+    	   new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
        }
 	  }
 	  
@@ -99,7 +103,10 @@ public class UploadToServer {
         	  HttpEntity resEntity = response.getEntity();
         	  EntityUtils.consume(resEntity);
         	  System.out.println("postLecture");
-          }catch(Exception e){e.printStackTrace();
+          }catch(Exception e){
+        	  new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+  			e.printStackTrace();
+  			System.exit(0);
           }
 	  }
 	  
@@ -128,7 +135,10 @@ public class UploadToServer {
         	  HttpEntity resEntity = response.getEntity();
         	  EntityUtils.consume(resEntity);
         	  System.out.println("delete Lecture");
-          }catch(Exception e){e.printStackTrace();
+          }catch(Exception e){
+        	  new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
           }
 	  }
 	  
@@ -164,7 +174,10 @@ public class UploadToServer {
       	  HttpEntity resEntity = response.getEntity();
       	EntityUtils.consume(resEntity);
       	  System.out.println("postClass");
-        }catch(Exception e){e.printStackTrace();
+        }catch(Exception e){
+        	new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
         }
 	  }
 	  
@@ -200,7 +213,10 @@ public class UploadToServer {
     	  EntityUtils.consume(resEntity);
     	  System.out.println("deleteClass");
     	  
-      }catch(Exception e){e.printStackTrace();
+      }catch(Exception e){
+    	  new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
       }
 	  }
 	  
@@ -250,11 +266,14 @@ public class UploadToServer {
 			EntityUtils.consume(resEntity);
     	  System.out.println("postTicket");
     	  
-      }catch(Exception e){e.printStackTrace();
+      }catch(Exception e){
+    	  new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
       }
 	  }
 	  
-	  public void doXmlUpload() throws IOException{
+	  public void doXmlUpload(){
     	  String xml ="";
     	  BufferedReader br;
     	  String fileName = fManager.getDownPath() + System.getProperty("file.separator") + "upload.mm";
@@ -275,17 +294,26 @@ public class UploadToServer {
        MultipartEntity multipart = new MultipartEntity(
 				HttpMultipartMode.BROWSER_COMPATIBLE, null,
 				Charset.forName("UTF-8"));  // xml, classId, LectureName 		
-       StringBody classBody = new StringBody(fManager.getClassId() + "", Charset.forName("UTF-8"));
-       StringBody xmlBody = new StringBody(xml, Charset.forName("UTF-8"));
-
+       StringBody classBody;
+	try {
+		classBody = new StringBody(fManager.getClassId() + "", Charset.forName("UTF-8"));
+		StringBody xmlBody = new StringBody(xml, Charset.forName("UTF-8"));
+		
 		multipart.addPart("classId", classBody);
 		multipart.addPart("mindmapXML", xmlBody);
-
+		
 		post.setEntity(multipart);
 		HttpResponse response = httpClient.execute(post);
 		HttpEntity resEntity = response.getEntity();
 		EntityUtils.consume(resEntity);
 		System.out.println("UploadtoServer : douploadXml()");
+		
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+		e.printStackTrace();
+		System.exit(0);
+	}
 	  }
 	  
 	  public void signPost(User u) {
@@ -315,8 +343,9 @@ public class UploadToServer {
 			EntityUtils.consume(resEntity);
 			System.out.println("UploadtoServer : singUp()");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
 			e.printStackTrace();
+			System.exit(0);
 		}
 	  }
 	  
@@ -365,10 +394,9 @@ public class UploadToServer {
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			new TextDialogue(fManager.getFreemindMainFrame(), "Server is close, Program end", true);
+			new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
 			e.printStackTrace();
 			System.exit(0);
-			
 		}
 		return false;
 	  }
@@ -405,7 +433,9 @@ public class UploadToServer {
 					
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
 				e.printStackTrace();
+				System.exit(0);
 			}
 			return false;
 	  }

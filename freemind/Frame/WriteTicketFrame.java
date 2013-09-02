@@ -47,6 +47,7 @@ public class WriteTicketFrame extends JFrame{
 		questionTa = new WriteTextArea();
 		// TODO Auto-generated constructor stub
 		this.setSize(800,500);
+		this.setLocation(400, 100);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.setLayout(new BorderLayout());
 		this.add(fullPanel);

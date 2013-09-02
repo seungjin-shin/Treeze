@@ -89,27 +89,6 @@ public class NodeKeyListener implements KeyListener {
 				c.getSlideShow().sendPosition();
 				return;
 			}
- 			c.startSlideShow();
-			
-		} else if (e.getKeyCode() == KeyEvent.VK_F7) {
-			FreemindManager fManager = FreemindManager.getInstance();
-			FreemindManager.getInstance().setNodeText("Q");
-			FreemindManager.getInstance().getMc().addNew(FreemindManager.getInstance().getMc().getSelected(), MindMapController.NEW_CHILD, null);
-			EditNodeTextField tmp = (EditNodeTextField)FreemindManager.getInstance().getMc().edit.getmCurrentEditDialog();
-			tmp.getTextfield().setText("dd");
-			fManager.getFreemindMainFrame().requestFocus();
-			fManager.getMc().nodeChanged(fManager.getMc().getSelected());
-			
-			return;
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_F4){
-			
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_F3){
-						
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_F8){
-			
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F9){
 			//set Q node
@@ -136,17 +115,6 @@ public class NodeKeyListener implements KeyListener {
 //
 //			}
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_F10){
-			
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_F16){
-			
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_F15){
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_F14){
-		}
- 		
 		if (mListener != null)
 			mListener.keyPressed(e);
 	}

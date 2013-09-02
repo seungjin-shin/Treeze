@@ -305,7 +305,6 @@ public class Controller  implements MapModuleChangeObserver {
 	public void startFreemindSocket(){
 		fmSck = new FreemindSocket(this, fManager.getMc(), fManager.getIn());
 		fmSck.start();
-		System.out.println("Controller startFreemindSocket");
 	}
 	
 	public ArrayList<OutputStream> getNaviOs() {
@@ -359,18 +358,8 @@ public class Controller  implements MapModuleChangeObserver {
 				}
 			}
 			
-//			if(fManager.getTicket().getContents().length() > 10)
-//				fManager.setNodeText(fManager.getTicket().getContents().substring(0, 10) + "...");
-//			else
-//				fManager.setNodeText(fManager.getTicket().getContents());
-			
 			fManager.getMc().addNew(qNode, MindMapController.NEW_CHILD, null);
 			fManager.getMc().edit.stopEditing();
-			
-//			EditNodeTextField tmp2 = (EditNodeTextField)FreemindManager.getInstance().getMc().edit.getmCurrentEditDialog();
-//			tmp2.getTextfield().setEditable(false);
-			
-//			fManager.getFreemindMainFrame().requestFocus();
 			
 			NodeAdapter tmp = (NodeAdapter) qNode.getChildAt(qNode.getChildCount() - 1);
 
@@ -423,7 +412,7 @@ public class Controller  implements MapModuleChangeObserver {
 		
 		if(System.getProperty("file.separator").equals("\\"))
 			filePath = filePath.substring(2, filePath.length());
-		//in freemind, can't read such as "C:" windows file separator
+		//in freemind, can't read word such as "C:" windows file separator
 		
 		try {
 			out = new OutputStreamWriter(new FileOutputStream(mmFile), "UTF-8");
@@ -578,16 +567,9 @@ public class Controller  implements MapModuleChangeObserver {
 			
 		//upload XML
 		UploadToServer uploadToServer = new UploadToServer();
-		try {
-			uploadToServer.doFileUpload();
-			uploadToServer.doXmlUpload();
-		} catch (ClientProtocolException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+
+		uploadToServer.doFileUpload();
+		uploadToServer.doXmlUpload();
 		
 		new TextDialogue(fManager.getFreemindMainFrame(), "Upload Class", true);
 		

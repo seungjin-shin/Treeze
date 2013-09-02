@@ -49,6 +49,7 @@ public class TicketAnswerFrame extends JFrame{
 		// TODO Auto-generated constructor stub
 		this.setBackground(fManager.treezeColor);
 		this.setSize(800,1000);
+		this.setLocation(400, 100);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.setLayout(gbl);
 		logoimg =  fManager.treezeLogo;

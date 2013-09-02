@@ -176,16 +176,18 @@ public class NodeNoteRegistration implements HookRegistration, ActorXml, MenuIte
 			catch (Exception e) {} 
 
             // logger.info("onReceiveFocuse for node " + node.toString());
-            String note = node.getNoteText();
-            if (note != null) {
-                noteViewerComponent.setCurrentDocumentContent(note);
-                mLastContentEmpty = false;
-            } else if (!mLastContentEmpty) {
-                noteViewerComponent.setCurrentDocumentContent("");
-                mLastContentEmpty = true;
-            }
-            mNoteDocumentListener.setNode(node);
-			document.addDocumentListener(mNoteDocumentListener);
+			
+			//dewlit
+//            String note = node.getNoteText();
+//            if (note != null) {
+//                noteViewerComponent.setCurrentDocumentContent(note);
+//                mLastContentEmpty = false;
+//            } else if (!mLastContentEmpty) {
+//                noteViewerComponent.setCurrentDocumentContent("");
+//                mLastContentEmpty = true;
+//            }
+//            mNoteDocumentListener.setNode(node);
+//			document.addDocumentListener(mNoteDocumentListener);
         }
 
         public void onUpdateNodeHook(MindMapNode node) {
