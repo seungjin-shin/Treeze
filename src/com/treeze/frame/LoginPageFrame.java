@@ -245,7 +245,7 @@ public class LoginPageFrame extends JFrame{
 		}
 
 		@Override
-		protected void Action(JButton j) {
+		protected void Action() {
 			pushLoginBtn();
 		}
 		
@@ -269,7 +269,8 @@ public class LoginPageFrame extends JFrame{
 //			FreemindManager.getInstance().setProfileFrame(pFrame);
 //		}
 		User user = User.getInstance();
-		user.setUserName("신승진");
+		user.setUserName("신건영");
+		user.setUserEmail("12903812389@naver.com");
 		new ProfileFrame();
 	}
 	

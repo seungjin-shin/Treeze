@@ -804,7 +804,7 @@ public class MindNode {
 		}
 
 		@Override
-		protected void Action(JButton j) {
+		protected void Action() {
 			// TODO Auto-generated method stub
 
 		}

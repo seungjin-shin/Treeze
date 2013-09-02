@@ -56,7 +56,7 @@ import com.treeze.downloadthread.DownLoadAllTicket;
 public class MindMapMain extends JPanel {
 	static MindNode md;
 	final int NODE_WIDTH = 80;
-	final int NODE_HEIGHT = 40;
+	final int NODE_HEIGHT = 30;
 	final int SCROLLFRAME_WIDTH = 4000;
 	final int SCROLLFRAME_HEIGHT = 2000;
 

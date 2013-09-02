@@ -33,6 +33,8 @@ import javax.jws.Oneway;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -43,6 +45,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import JDIalog.TextDialogue;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -58,6 +62,7 @@ import com.treeze.data.TreezeStaticData;
 import com.treeze.data.User;
 import com.treeze.downloadthread.*;
 import com.treeze.frame.TicketWriteFrame.WriteBtn;
+import com.treeze.uploadthread.CreateLecture;
 
 public class ProfileFrame extends JFrame {
 
@@ -78,12 +83,27 @@ public class ProfileFrame extends JFrame {
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
 	LectureHead lectureHead;
-	Lecture lecture;
+
+	MyLectureListBtn myLectureListBtn = new MyLectureListBtn(
+			TreezeStaticData.LECTURELIST_IMG, TreezeStaticData.LECTURELIST_PRESS_IMG,
+			TreezeStaticData.lECTURELIST_ENTER_IMG);
+	AllLectureListBtn allLectureListBtn = new AllLectureListBtn(
+			TreezeStaticData.ALLLECTURE_IMG, TreezeStaticData.ALLLECTURE_PRESS_IMG,
+			TreezeStaticData.ALLLECTURE_IMG);
+	AddLectureListBtn addLectureBtn = new AddLectureListBtn(
+			TreezeStaticData.ADD_LECTURE_IMG,
+			TreezeStaticData.ADD_LECTURE_PRESS_IMG,
+			TreezeStaticData.ADD_LECTURE_ENTER_IMG);
+	AllLectureListBtn logoutBtn = new AllLectureListBtn(
+			TreezeStaticData.PROFILE_IMG, TreezeStaticData.PROFILE_PRESS_IMG,
+			TreezeStaticData.PROFILE_ENTER_IMG);
+
 	static JPanel grid = new JPanel();
 	JPanel fullPanel = new JPanel();
 	final int NETWORK_FLAG_GET_LECTURELIST = 0;
 	final int NETWORK_FLAG_GET_CLASSLIST = 1;
-	final int NETWORK_FLAG_GET_MINDMAP = 2;
+	final int NETWORK_FLAG_GET_MY_LECTURE_LIST = 2;
+	final int NETWORK_FLAG_GET_MINDMAP = 3;
 	int networkFlag;
 	Handler networkHandler;
 	String professorEmail;
@@ -92,24 +112,23 @@ public class ProfileFrame extends JFrame {
 	StringBuffer sbResult = new StringBuffer();
 	Gson gson = new Gson();
 	ClassInfo classInfo;
+	ArrayList<JCheckBox> chkBoxList = new ArrayList<JCheckBox>();
 
 	public ProfileFrame() {
 		// TODO Auto-generated constructor stub
-		this.setSize(1100, 600);
+
 		this.setLocation(300, 200);
 
 		this.getContentPane().setBackground(new Color(141, 198, 63));
 
-		// this.setResizable(false);
+		this.setResizable(false);
 		// imgIcon = new ImageIcon("/Users/Kunyoung/Desktop/treezelogo.png");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		listPanel = new ListPanel();
-		lecture = new Lecture();
-		lecture.setLectureName("ï¿½Óºï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½");
-		lecture.setProfessorName("ï¿½Ì¹Î¼ï¿½");
-		gbc.fill = GridBagConstraints.BOTH;
 
+		gbc.fill = GridBagConstraints.BOTH;
+		user = User.getInstance();
 		// C:\Users\ï¿½Ä°ï¿½\Desktop
 		setLayout(new BorderLayout());
 		this.add(fullPanel);
@@ -117,6 +136,8 @@ public class ProfileFrame extends JFrame {
 		fullPanel.setLayout(gbl);
 		fullPanel.setBackground(TreezeStaticData.TREEZE_BG_COLOR);
 		btnPanel = new BtnPanel();
+		btnPanel.setBtn(myLectureListBtn, allLectureListBtn, addLectureBtn,
+				logoutBtn);
 		profilePanel = new JPanel();
 
 		lectureListPanel = new JPanel();
@@ -127,8 +148,6 @@ public class ProfileFrame extends JFrame {
 		profilePanel.setBackground(new Color(0, 0, 0, 0));
 
 		lectureListPanel.setBackground(Color.WHITE);
-
-		btnPanel.setLayout(new GridLayout(1, 4, 30, 5));
 
 		lectureListPanel.setBorder(new LineBorder(Color.BLACK, 2, false));
 
@@ -171,8 +190,9 @@ public class ProfileFrame extends JFrame {
 		addGrid(gbl, gbc, dumy, 0, 3, 1, 1, 1, 3, profilePanel);
 		listPanel.getViewport().add(grid, null);
 		NetworkThread networkThread = new NetworkThread();
+		networkFlag =NETWORK_FLAG_GET_MY_LECTURE_LIST;
 		networkThread.start();
-
+		this.setSize(1100, 600);
 		this.setVisible(true);
 		grid.addMouseWheelListener(new MouseWheelListener() {
 
@@ -217,6 +237,7 @@ public class ProfileFrame extends JFrame {
 
 	class LogoPanel extends JPanel {
 		ImageIcon icon;
+
 		public LogoPanel() {
 			// TODO Auto-generated constructor stub
 
@@ -226,16 +247,17 @@ public class ProfileFrame extends JFrame {
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
-			if(icon ==null){
-				icon = TreezeStaticData.makeResizedImageIcon(getWidth(), getHeight(), TreezeStaticData.LOGO_IMG);
+			if (icon == null) {
+				icon = TreezeStaticData.makeResizedImageIcon(getWidth(),
+						getHeight(), TreezeStaticData.LOGO_IMG);
 			}
 			g.drawImage(icon.getImage(), 0, 0, null);
 		}
 	}
 
 	class PicturePanel extends JPanel {
-		 ImageIcon icon;
-		
+		ImageIcon icon;
+
 		public PicturePanel(String imgPath) {
 			// TODO Auto-generated constructor stub
 			// imgIcon = new ImageIcon(imgPath);
@@ -246,8 +268,9 @@ public class ProfileFrame extends JFrame {
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
-			if(icon==null){
-				icon = TreezeStaticData.makeResizedImageIcon(getWidth(), getHeight(), TreezeStaticData.PROFILE_DEFAULT_IMG);
+			if (icon == null) {
+				icon = TreezeStaticData.makeResizedImageIcon(getWidth(),
+						getHeight(), TreezeStaticData.PROFILE_DEFAULT_IMG);
 			}
 			g.drawImage(icon.getImage(), 0, 0, null);
 
@@ -317,56 +340,29 @@ public class ProfileFrame extends JFrame {
 	}
 
 	class BtnPanel extends JPanel {
-		ProfileBtn profileBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,
-				TreezeStaticData.WRITE_PRESS_BTN,
-				TreezeStaticData.WRITE_ENTER_BTN);
-		ProfileBtn lectureBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,
-				TreezeStaticData.WRITE_PRESS_BTN,
-				TreezeStaticData.WRITE_ENTER_BTN);
-		ProfileBtn downBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,
-				TreezeStaticData.WRITE_PRESS_BTN,
-				TreezeStaticData.WRITE_ENTER_BTN);
-		ProfileBtn logoutBtn = new ProfileBtn(TreezeStaticData.WRITE_BTN,
-				TreezeStaticData.WRITE_PRESS_BTN,
-				TreezeStaticData.WRITE_ENTER_BTN);
 
 		public BtnPanel() {
-			// TODO Auto-generated constructor stub
-
-			add(profileBtn);
-			add(lectureBtn);
-			add(downBtn);
+			// TODO Auto-generated constructor stu
+			this.setBackground(TreezeStaticData.TREEZE_BG_COLOR);
+			this.setLayout(new GridLayout(1, 4, 30, 5));
+			add(myLectureListBtn);
+			add(addLectureBtn);
+			add(allLectureListBtn);
 			add(logoutBtn);
-			// setBtnImg(logoutBtn.getWidth(),logoutBtn.geth)
-
+			// setBtnImg(logoutBtn.getWidth(),logoutBtn.geth
 		}
 
-		class ProfileBtn extends ImgBtn {
-
-			public ProfileBtn(final Image defaultImg, final Image pressImg,
-					final Image enterImg) {
-				// TODO Auto-generated constructor stub
-				super(defaultImg, pressImg, enterImg);
-
+		public void setBtn(JComponent j1, JComponent j2, JComponent j3,
+				JComponent j4) {
+			for (int i = 0; i < this.getComponentCount(); i++) {
+				this.remove(this.getComponent(i));
 			}
-
-			@Override
-			public void paint(Graphics g) {
-				// TODO Auto-generated method stub
-				super.paint(g);
-
-			}
-
-			@Override
-			protected void Action(JButton jbtn) {
-				if (profileBtn == jbtn) {
-					networkFlag = NETWORK_FLAG_GET_LECTURELIST;
-					NetworkThread networkThread = new NetworkThread();
-					networkThread.start();
-				}
-
-			}
+			add(j1);
+			add(j2);
+			add(j3);
+			add(j4);
 		}
+
 	}
 
 	class LectureHead extends JPanel {
@@ -440,6 +436,50 @@ public class ProfileFrame extends JFrame {
 		}
 	}
 
+	class LectureListItemCheckBox extends JPanel {
+		JLabel lectureNm;
+		JLabel professorNm;
+
+		Lecture lecture;
+		JScrollPane jsp;
+		JCheckBox addChkBox = new JCheckBox();
+
+		public LectureListItemCheckBox(final Lecture lecture) {
+			// TODO Auto-generated constructor stub
+			this.lecture = lecture;
+			this.setBorder(new EmptyBorder(5, 0, 5, 0));
+			lectureNm = new JLabel(lecture.getLectureName(), JLabel.CENTER);
+			professorNm = new JLabel(lecture.getProfessorName(), JLabel.CENTER);
+			addChkBox.setBackground(Color.WHITE);
+			chkBoxList.add(addChkBox);
+			// lectureNm.setFont(new Font("Serif", Font.ITALIC, 18));
+			// professorNm.setFont(new Font("Serif", Font.ITALIC, 18));
+
+			this.setBackground(new Color(0, 0, 0, 0));
+			// this.add(noPanel);
+			this.setLayout(gbl);
+			insets.bottom = 5;
+			insets.top = 5;
+			jsp = new JScrollPane(lectureNm);
+			jsp.setBorder(null);
+			addGrid(gbl, gbc, jsp, 0, 0, 1, 1, 7, 1, this);
+			addGrid(gbl, gbc, professorNm, 1, 0, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, addChkBox, 2, 0, 1, 1, 1, 1, this);
+			lectureNm.setPreferredSize(new Dimension(lectureNm.getWidth(),
+					lectureNm.getHeight()));
+			jsp.getViewport().setBackground(Color.WHITE);
+
+		}
+
+		@Override
+		public void paint(Graphics g) {
+			// TODO Auto-generated method stub
+			super.paint(g);
+			g.drawLine(0, this.getHeight() - 1, this.getWidth(),
+					this.getHeight() - 1);
+		}
+	}
+
 	class ClassListItem extends JPanel {
 		JLabel classNm;
 		ClassInfo classInstance;
@@ -499,6 +539,13 @@ public class ProfileFrame extends JFrame {
 					networkFlag = NETWORK_FLAG_GET_MINDMAP;
 					NetworkThread networkThread = new NetworkThread();
 					networkThread.start();
+					lectureHead.setVisible(false);
+					fullPanel.setVisible(false);
+					fullPanel.setVisible(true);
+					setVisible(true);
+					fullPanel.repaint();
+					btnPanel.setVisible(false);
+					btnPanel.setVisible(true);
 				}
 			});
 
@@ -550,6 +597,7 @@ public class ProfileFrame extends JFrame {
 	class ImgPanel extends JPanel {
 		Image img;
 		ImageIcon icon;
+
 		public ImgPanel(Image img) {
 			// TODO Auto-generated constructor stub
 			this.img = img;
@@ -559,10 +607,11 @@ public class ProfileFrame extends JFrame {
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paint(g);
-			if(icon ==null){
-				icon = TreezeStaticData.makeResizedImageIcon(getWidth(), getHeight(), img);
+			if (icon == null) {
+				icon = TreezeStaticData.makeResizedImageIcon(getWidth(),
+						getHeight(), img);
 			}
-			g.drawImage(icon.getImage(), 0, 0,null);
+			g.drawImage(icon.getImage(), 0, 0, null);
 
 		}
 	}
@@ -578,7 +627,7 @@ public class ProfileFrame extends JFrame {
 
 		@Override
 		public void run() {
-
+			// http://113.198.84.80:8080/treeze/getMyCourses?studentEmail=yukult400@gmail.com
 			HttpURLConnection connection;
 			sbResult.delete(0, sbResult.capacity());
 			try {
@@ -589,9 +638,14 @@ public class ProfileFrame extends JFrame {
 					url = new URL("http://" + ip
 							+ ":8080/treeze/getAllLectures");
 
+				} else if (networkFlag == NETWORK_FLAG_GET_MY_LECTURE_LIST) {
+					url = new URL(
+							"http://"
+									+ ip
+									+ ":8080/treeze/getMyCourses?studentEmail="+user.getUserEmail());
 				} else {
 					url = new URL("http://" + ip
-							+ ":8080/treeze//getClasses?lectureId=" + lectureId);
+							+ ":8080/treeze/getClasses?lectureId=" + lectureId);
 
 				}
 				connection = (HttpURLConnection) url.openConnection();
@@ -623,7 +677,9 @@ public class ProfileFrame extends JFrame {
 						// System.out.println(sbResult.toString());
 					} else if (networkFlag == NETWORK_FLAG_GET_LECTURELIST)
 						updateGetallLectureList();
-					else {
+					else if (networkFlag == NETWORK_FLAG_GET_MY_LECTURE_LIST) {
+						updateGetMyLectureList();
+					} else {
 						updateGetallClassList();
 					}
 
@@ -643,8 +699,10 @@ public class ProfileFrame extends JFrame {
 
 	}
 
-	void updateGetallLectureList() {
-
+	void updateGetMyLectureList() {
+		// TODO Auto-generated method stub
+		btnPanel.setBtn(myLectureListBtn, allLectureListBtn, new JLabel(),
+				logoutBtn);
 		java.lang.reflect.Type type = new TypeToken<ArrayLecture>() {
 		}.getType();
 		ArrayLecture jonResultlecturelist = (ArrayLecture) gson.fromJson(
@@ -664,7 +722,37 @@ public class ProfileFrame extends JFrame {
 		fullPanel.setVisible(true);
 		setVisible(true);
 		fullPanel.repaint();
-	
+		btnPanel.setVisible(false);
+		btnPanel.setVisible(true);
+	}
+
+	void updateGetallLectureList() {
+
+		btnPanel.setBtn(myLectureListBtn, allLectureListBtn, addLectureBtn,
+				logoutBtn);
+		java.lang.reflect.Type type = new TypeToken<ArrayLecture>() {
+		}.getType();
+		ArrayLecture jonResultlecturelist = (ArrayLecture) gson.fromJson(
+				sbResult.toString(), (java.lang.reflect.Type) type);
+
+		lectureList = jonResultlecturelist.getLectures();
+		grid.removeAll();
+		insets.set(5, 0, 5, 0);
+		chkBoxList.clear();
+		for (int i = 0; i < lectureList.size(); i++) {
+			LectureListItemCheckBox lectureListItemCheckBox = new LectureListItemCheckBox(
+					lectureList.get(i));
+			grid.add(lectureListItemCheckBox);
+
+		}
+		lectureHead.setVisible(false);
+		fullPanel.setVisible(false);
+		fullPanel.setVisible(true);
+		setVisible(true);
+		fullPanel.repaint();
+		btnPanel.setVisible(false);
+		btnPanel.setVisible(true);
+
 	}
 
 	void updateGetallClassList() {
@@ -679,6 +767,8 @@ public class ProfileFrame extends JFrame {
 		}
 
 		setVisible(true);
+		btnPanel.setVisible(false);
+		btnPanel.setVisible(true);
 
 	}
 
@@ -688,9 +778,10 @@ public class ProfileFrame extends JFrame {
 		System.out.println(sbResult.toString());
 		Mindmap jsonResultMindmaps = (Mindmap) gson.fromJson(
 				sbResult.toString(), (java.lang.reflect.Type) type);
-		MindMapMain mindmapMain = new MindMapMain(jsonResultMindmaps.getMindmap().getMindmapXML(),
+		MindMapMain mindmapMain = new MindMapMain(jsonResultMindmaps
+				.getMindmap().getMindmapXML(), classInfo);
+		MainFrameManager mainFrameManager = new MainFrameManager(mindmapMain,
 				classInfo);
-       MainFrameManager mainFrameManager = new MainFrameManager(mindmapMain,classInfo);
 	}
 
 	class ProfileMouseListener implements MouseListener {
@@ -748,5 +839,112 @@ public class ProfileFrame extends JFrame {
 		}
 
 	}
+
+	class MyLectureListBtn extends ImgBtn {
+
+		public MyLectureListBtn(final Image defaultImg, final Image pressImg,
+				final Image enterImg) {
+			// TODO Auto-generated constructor stub
+			super(defaultImg, pressImg, enterImg);
+
+		}
+
+		@Override
+		public void paint(Graphics g) {
+			// TODO Auto-generated method stub
+			super.paint(g);
+			fullPanel.setVisible(false);
+			fullPanel.setVisible(true);
+			setVisible(true);
+			fullPanel.repaint();
+			btnPanel.setVisible(false);
+			btnPanel.setVisible(true);
+		}
+
+		@Override
+		protected void Action() {
+
+			networkFlag = NETWORK_FLAG_GET_MY_LECTURE_LIST;
+			NetworkThread networkThread = new NetworkThread();
+			networkThread.start();
+			repaint();
+
+		}
+	}
+
+	class AllLectureListBtn extends ImgBtn {
+
+		public AllLectureListBtn(final Image defaultImg, final Image pressImg,
+				final Image enterImg) {
+			// TODO Auto-generated constructor stub
+			super(defaultImg, pressImg, enterImg);
+
+		}
+
+		@Override
+		public void paint(Graphics g) {
+			// TODO Auto-generated method stub
+			super.paint(g);
+			fullPanel.setVisible(false);
+			fullPanel.setVisible(true);
+			setVisible(true);
+			fullPanel.repaint();
+			btnPanel.setVisible(false);
+			btnPanel.setVisible(true);
+		}
+
+		@Override
+		protected void Action() {
+
+			networkFlag = NETWORK_FLAG_GET_LECTURELIST;
+			NetworkThread networkThread = new NetworkThread();
+			networkThread.start();
+			repaint();
+		}
+	}
+
+	class AddLectureListBtn extends ImgBtn {
+		
+		public AddLectureListBtn(final Image defaultImg, final Image pressImg,
+				final Image enterImg) {
+			// TODO Auto-generated constructor stub
+			super(defaultImg, pressImg, enterImg);
+			
+
+		}
+
+		@Override
+		public void paint(Graphics g) {
+			// TODO Auto-generated method stub
+			super.paint(g);
+			fullPanel.setVisible(false);
+			fullPanel.setVisible(true);
+			setVisible(true);
+			fullPanel.repaint();
+			btnPanel.setVisible(false);
+			btnPanel.setVisible(true);
+		}
+
+		@Override
+		protected void Action() {
+			System.out.println(lectureList.size());
+			for (int i = 0; i < chkBoxList.size(); i++) {
+				JCheckBox tmp = chkBoxList.get(i);
+				if (tmp.isSelected()) {
+					Lecture lecture = lectureList.get(i);
+					CreateLecture createLecture = new CreateLecture(
+							lecture.getLectureId() + "",
+							lecture.getLectureName(), user.getUserEmail());
+					createLecture.start();
+					
+				}
+			}
+			repaint();
+			TextDialogue textDialogue = new TextDialogue(ProfileFrame.this, "¼ö°­½ÅÃ» µÇ¼Ì½À´Ï´Ù.", true);
+			
+		}
+		
+	}
+
 }
 // http://manic.tistory.com/99

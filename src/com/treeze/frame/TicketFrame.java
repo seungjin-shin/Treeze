@@ -485,7 +485,7 @@ public class TicketFrame extends JPanel {
 		}
 
 		@Override
-		protected void Action(JButton jbtn) {
+		protected void Action() {
 			new TicketWriteFrame(node, classInfo);
 
 		}

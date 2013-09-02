@@ -1,0 +1,1 @@
+package com.treeze.data;import java.util.ArrayList;public class ArrayCourse {	ArrayList<Course> courses;	public ArrayList<Course> getCourses() {		return courses;	}	public void setCourses(ArrayList<Course> courses) {		this.courses = courses;	}}

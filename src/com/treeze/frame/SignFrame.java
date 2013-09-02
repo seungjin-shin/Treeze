@@ -50,6 +50,7 @@ import org.apache.http.client.ClientProtocolException;
 
 import JDIalog.JDialogSurvey;
 import JDIalog.StringDialog;
+import JDIalog.TextDialogue;
 
 import com.treeze.data.TreezeStaticData;
 import com.treeze.uploadthread.SignUpThread;
@@ -282,7 +283,7 @@ public class SignFrame extends JFrame {
 		}
 
 		@Override
-		protected void Action(JButton j) {
+		protected void Action() {
 			pushLoginBtn();
 		}
 
@@ -299,6 +300,9 @@ public class SignFrame extends JFrame {
 		
 		if(pwTf.getText().equals(confPwTf.getText())){
 			System.out.println("같음");
+			SignUpThread signUpThread = new SignUpThread(Integer.parseInt(studIDTf.getText()),pwTf.getText(),emailTf.getText(),userTf.getText(),typeBtnGp.getSelection().getActionCommand());
+			signUpThread.start();
+			TextDialogue textDialogue = new TextDialogue(this, "회원가입 되셨습니다.", true);
 		}
 		else{
 			StringDialog stringDialog  = new StringDialog("두개의 비밀번호가 일치하지 않습니다.");
@@ -309,7 +313,7 @@ public class SignFrame extends JFrame {
 		}
 		
 		//fManager.uts.signPost(signUser);
-		//SignUpThread signUpThread = new SignUpThread(Integer.parseInt(studIDTf.getText()),pwTf.getText(),emailTf.getText(),userTf.getText(),typeBtnGp.getSelection().getActionCommand());
+		
 		//setVisible(false);
 		// JFrame pFrame = new ProfileFrame(mc);
 		// FreemindManager.getInstance().setProfileFrame(pFrame);
