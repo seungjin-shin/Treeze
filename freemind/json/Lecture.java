@@ -5,11 +5,22 @@ public class Lecture{
 	/**
 	 * 
 	 */
+	private Long id;
 	private String professorEmail;
 	private String lectureName;
 	private Boolean stateOfLecture;
 	private Long lectureId;
+	private String professorName;
 	
+	public String getProfessorName() {
+		return professorName;
+	}
+	public void setProfessorName(String professorName) {
+		this.professorName = professorName;
+	}
+	public Long getId() {
+		return id;
+	}
 	public Long getLectureId() {
 		return lectureId;
 	}

@@ -87,7 +87,7 @@ public class AddAllTicketThread extends Thread{
 			}
 			
 			System.out.println("Add All tickets");
-			new TextDialogue(fManager.getFreemindMainFrame(), "Loading all tickets", true);
+			new TextDialogue(fManager.getFreemindMainFrame(), "Loaded tickets, Total : " + ticketList.size(), true);
 	}
 
 }

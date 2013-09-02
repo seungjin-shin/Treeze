@@ -6,21 +6,32 @@ public class ClassInfo{
 	/**
 	 * 
 	 */
+	
 	private int classId; /*꺼내서 다시 저장해야함 */
 	private String className;
 	private String classIP;
 	private int port;
-	private String lectureName;
 	private String professorEmail;
-	
-	
+	private long id;
 
-	public String getLectureName() {
-		return lectureName;
+	
+	public long getId() {
+		return id;
 	}
-	public void setLectureName(String lectureName) {
-		this.lectureName = lectureName;
+	public void setId(long id) {
+		this.id = id;
 	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getLectureId() {
+		return lectureId;
+	}
+	public void setLectureId(int lectureId) {
+		this.lectureId = lectureId;
+	}
+	private int lectureId;
+	
 	public String getProfessorEmail() {
 		return professorEmail;
 	}

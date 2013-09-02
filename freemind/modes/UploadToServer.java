@@ -27,8 +27,11 @@ import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 
+import freemind.Frame.TextDialogue;
 import freemind.controller.FreemindManager;
 import freemind.controller.SlideData;
+import freemind.json.ClassInfo;
+import freemind.json.Lecture;
 import freemind.json.Ticket;
 import freemind.json.TreezeData;
 import freemind.json.User;
@@ -100,6 +103,35 @@ public class UploadToServer {
           }
 	  }
 	  
+	  public void deleteLecturePost(Lecture lecture) {
+          try {
+        		HttpClient httpClient = new DefaultHttpClient();
+        	  HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/deleteLecture");
+        	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
+        	  
+        	  StringBody lectureNameBody = new StringBody(lecture.getLectureName(), Charset.forName("UTF-8"));
+        	  StringBody profEmailBody = new StringBody(lecture.getProfessorEmail(), Charset.forName("UTF-8"));
+        	  StringBody lectureState = new StringBody(lecture.getStateOfLecture() + "", Charset.forName("UTF-8"));
+        	  StringBody profssorNameBody = new StringBody(lecture.getProfessorName(), Charset.forName("UTF-8"));
+        	  StringBody idBody = new StringBody(lecture.getId() + "", Charset.forName("UTF-8"));
+        	  StringBody lectureIdBody = new StringBody(lecture.getLectureId() + "", Charset.forName("UTF-8"));
+        	  
+        	  multipart.addPart("id", idBody);
+        	  multipart.addPart("lectureName", lectureNameBody);  
+        	  multipart.addPart("professorEmail", profEmailBody);
+        	  multipart.addPart("stateOfLecture", lectureState);
+        	  multipart.addPart("lectureId", lectureIdBody);
+        	  multipart.addPart("professorName", profssorNameBody);
+        	  
+        	  post.setEntity(multipart);  
+        	  HttpResponse response = httpClient.execute(post);  
+        	  HttpEntity resEntity = response.getEntity();
+        	  EntityUtils.consume(resEntity);
+        	  System.out.println("delete Lecture");
+          }catch(Exception e){e.printStackTrace();
+          }
+	  }
+	  
 	  public void classPost(String lectureId, String profEmail, String className) {
 		  	String jsonStr;
         try {
@@ -134,6 +166,42 @@ public class UploadToServer {
       	  System.out.println("postClass");
         }catch(Exception e){e.printStackTrace();
         }
+	  }
+	  
+	  public void deleteClassPost(ClassInfo classInfo) {
+		  	String jsonStr;
+      try {
+      	HttpClient httpClient = new DefaultHttpClient();
+    	  HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/deleteClass"); 
+    	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
+    	  
+    	  StringBody classId = new StringBody(classInfo.getClassId() + "", Charset.forName("UTF-8"));
+    	  StringBody lectureIdBody = new StringBody(classInfo.getLectureId() + "", Charset.forName("UTF-8"));
+    	  StringBody profEmailBody = new StringBody(classInfo.getProfessorEmail(), Charset.forName("UTF-8"));
+    	  StringBody classNameBody = new StringBody(classInfo.getClassName(), Charset.forName("UTF-8"));
+    	  StringBody portBody = new StringBody(classInfo.getPort() + "", Charset.forName("UTF-8"));
+    	  StringBody ipBody = new StringBody(classInfo.getClassIP(), Charset.forName("UTF-8"));
+    	  StringBody idBody = new StringBody(classInfo.getId() + "", Charset.forName("UTF-8"));
+
+    	  StringBody tmp = new StringBody("false", Charset.forName("UTF-8"));
+    	  
+    	  multipart.addPart("id", idBody);
+    	  multipart.addPart("classIP", ipBody);
+    	  multipart.addPart("port", portBody);
+    	  multipart.addPart("classId", classId);
+    	  multipart.addPart("lectureId", lectureIdBody);  
+    	  multipart.addPart("professorEmail", profEmailBody);
+    	  multipart.addPart("className", classNameBody);
+    	  multipart.addPart("new", tmp);
+    	  
+    	  post.setEntity(multipart);  
+    	  HttpResponse response = httpClient.execute(post);  
+    	  HttpEntity resEntity = response.getEntity();
+    	  EntityUtils.consume(resEntity);
+    	  System.out.println("deleteClass");
+    	  
+      }catch(Exception e){e.printStackTrace();
+      }
 	  }
 	  
 	  public void ticketPost(Ticket t) {
@@ -284,11 +352,11 @@ public class UploadToServer {
 			EntityUtils.consume(resEntity);
 			
 			if(str.equals("emailFalse")){
-				System.out.println("UploadtoServer : login return f");
+				System.out.println("UploadtoServer : login return f, emailFalse");
 				return false;
 			}
 			else if(str.equals("passwordFalse")){
-				System.out.println("UploadtoServer : login return f");
+				System.out.println("UploadtoServer : login return f, passwordFalse");
 				return false;
 			}
 			else{
@@ -297,14 +365,17 @@ public class UploadToServer {
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			new TextDialogue(fManager.getFreemindMainFrame(), "Server is close, Program end", true);
 			e.printStackTrace();
+			System.exit(0);
+			
 		}
 		return false;
 	  }
 	  
 	  public boolean checkClassIsEmpty(int classId){
 			HttpClient httpClient = new DefaultHttpClient();
-		       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/img?classId=" + classId);
+		       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/isRegistedMindmap?classId=" + classId);
 		       
 		       MultipartEntity multipart = new MultipartEntity(
 						HttpMultipartMode.BROWSER_COMPATIBLE, null,
@@ -325,7 +396,7 @@ public class UploadToServer {
 						str += tmp;
 					
 				EntityUtils.consume(resEntity);
-				if(str.equals("{\"imgs\":[]}")){
+				if(str.equals("true")){
 					return true;
 				}
 				else{

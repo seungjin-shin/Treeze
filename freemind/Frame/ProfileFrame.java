@@ -102,6 +102,8 @@ public class ProfileFrame extends JFrame {
 	LectureHead lectureHead;
 //	Lecture lecture;
 	JPanel grid = new JPanel();
+	ArrayList<Lecture> lectureList;
+	ArrayList<ClassInfo> classList;
 
 	
 	final int NETWORK_FLAG_GET_LECTURELIST = 0;
@@ -172,13 +174,10 @@ public class ProfileFrame extends JFrame {
 		insets.left = 10;
 		insets.top = 0;
 		insets.bottom = 0;
-		JLabel noPanel = new JLabel("N o", JLabel.CENTER);
-		JLabel subjectPanel = new JLabel("Subject", JLabel.CENTER);
-		JLabel whritePane = new JLabel("Delete",JLabel.CENTER);
 		lectureHead.setLayout(gbl);
-		addGrid(gbl, gbc, noPanel,      0, 0, 1, 1, 1, 1, lectureHead);
-		addGrid(gbl, gbc, subjectPanel, 1, 0, 1, 1, 10, 1, lectureHead);
-		addGrid(gbl, gbc, whritePane,   2, 0, 1, 1, 1, 1, lectureHead);
+		
+		setLectureHead();
+		
 		lectureListPanel.setLayout(gbl);
 		
 		// lecture List ÆÐ³Î 
@@ -193,9 +192,47 @@ public class ProfileFrame extends JFrame {
 		dumy.setBackground(new Color(0, 0, 0, 0));
 		addGrid(gbl, gbc,dumy, 0, 3, 1, 1, 1, 3, profilePanel);
 		listPanel.getViewport().add(grid, null);
-		networkThread = new NetworkThread();
-		networkThread.start();
+		startNetwortThread();
+		setResizable(false);
 		this.setVisible(true);
+	}
+	
+	public void setLectureHead(){
+		lectureHead.removeAll();
+		
+		JLabel noPanel = new JLabel("N o", JLabel.CENTER);
+		JLabel subjectPanel = new JLabel("Subject", JLabel.CENTER);
+		JLabel whritePane = new JLabel("Delete",JLabel.CENTER);
+		addGrid(gbl, gbc, noPanel,      0, 0, 1, 1, 1, 1, lectureHead);
+		addGrid(gbl, gbc, new JLabel(), 1, 0, 1, 1, 1, 1, lectureHead);
+		addGrid(gbl, gbc, new JLabel(), 2, 0, 1, 1, 1, 1, lectureHead);
+		addGrid(gbl, gbc, subjectPanel, 3, 0, 1, 1, 13, 1, lectureHead);
+		addGrid(gbl, gbc, new JLabel(), 4, 0, 1, 1, 1, 1, lectureHead);
+		addGrid(gbl, gbc, whritePane,   5, 0, 1, 1, 3, 1, lectureHead);
+		
+		lectureHead.updateUI();
+		lectureListPanel.repaint();
+//		mainFrameRepaint();
+	}
+	
+	public void setClassHead(){
+		lectureHead.removeAll();
+		
+		JLabel noPanel = new JLabel("Title", JLabel.CENTER);
+		JLabel subjectPanel = new JLabel("Mode", JLabel.CENTER);
+		JLabel whritePane = new JLabel("Delete",JLabel.CENTER);
+		addGrid(gbl, gbc, noPanel,      0, 0, 1, 1, 22, 1, lectureHead);
+		addGrid(gbl, gbc, new JLabel(), 1, 0, 1, 1, 1, 1, lectureHead);
+		addGrid(gbl, gbc, subjectPanel, 2, 0, 1, 1, 3, 1, lectureHead);
+		addGrid(gbl, gbc, whritePane,   3, 0, 1, 1, 5, 1, lectureHead);
+		
+//		lectureHead.repaint();
+//		lectureHead.invalidate();
+		lectureHead.updateUI();
+		
+		lectureListPanel.repaint();
+//		repaint();
+//		mainFrameRepaint();
 	}
 
 	private void addGrid(GridBagLayout gbl, GridBagConstraints gbc,
@@ -238,6 +275,7 @@ public class ProfileFrame extends JFrame {
 		public PicturePanel() {
 			// TODO Auto-generated constructor stub
 			this.setBorder(new EmptyBorder(20, 20, 20, 20));
+			this.setBackground(FreemindManager.getInstance().treezeColor);
 		}
 
 		@Override
@@ -414,13 +452,19 @@ public class ProfileFrame extends JFrame {
 
 		@Override
 		protected void Action() {
-			// TODO Auto-generated method stub
+			UploadToServer uploadToServer = new UploadToServer();
+			int deleteCnt = 0;
 			for(int i = 0; i < chkBoxList.size(); i++){
 				JCheckBox tmp = chkBoxList.get(i);
-				if(tmp.isSelected())
-					System.out.println(tmp.getActionCommand());
+				if(tmp.isSelected()){
+					deleteCnt++;
+					Lecture lecture = lectureList.get(i);
+					uploadToServer.deleteLecturePost(lecture);
+				}
 			}
 			
+			new TextDialogue(fManager.getProfileFrame(), "Delete lecture, Total : " + deleteCnt, true);
+			startNetwortThread();
 		}
 	}
 	
@@ -434,10 +478,10 @@ public class ProfileFrame extends JFrame {
 		@Override
 		protected void Action() {
 			networkFlag = NETWORK_FLAG_GET_LECTURELIST;
-			networkThread = new NetworkThread();
-			networkThread.start();
+			startNetwortThread();
 			btnPanel.setLecturePage();
-			lectureHead.setVisible(true);			
+			setLectureHead();
+//			lectureHead.setVisible(true);			
 		}
 	}
 	
@@ -463,8 +507,20 @@ public class ProfileFrame extends JFrame {
 
 		@Override
 		protected void Action() {
-			// TODO Auto-generated method stub
+			UploadToServer uploadToServer = new UploadToServer();
+			int deleteCnt = 0;
+			for(int i = 0; i < chkBoxList.size(); i++){
+				JCheckBox tmp = chkBoxList.get(i);
+				if(tmp.isSelected()){
+					deleteCnt++;
+					ClassInfo classInfo = classList.get(i);
+//					System.out.println(tmp.getActionCommand());
+					uploadToServer.deleteClassPost(classInfo);
+				}
+			}
 			
+			new TextDialogue(fManager.getProfileFrame(), "Delete class, Total : " + deleteCnt, true);
+			startNetwortThread();
 		}
 	}
 	
@@ -533,9 +589,8 @@ public class ProfileFrame extends JFrame {
 				uploadToServer.lecturePost(lectureTitle, "minsuk@hansung.ac.kr", "false");
 				
 				this.setVisible(false);
-				
-				networkThread = new NetworkThread();
-				networkThread.start();
+
+				startNetwortThread();
 				
 			}
 		}
@@ -574,7 +629,6 @@ public class ProfileFrame extends JFrame {
 			lectureTitle.setBackground(Color.blue);
 			
 			delChkBox = new JCheckBox();
-			delChkBox.setActionCommand(lecture.getLectureId() + "");
 			delChkBox.setBackground(Color.white);
 			chkBoxList.add(delChkBox);
 			
@@ -588,7 +642,7 @@ public class ProfileFrame extends JFrame {
 			insets.bottom = 5;
 			insets.top = 5;
 			addGrid(gbl, gbc, lectureNo, 0, 0, 1, 1, 1, 1, this);
-			addGrid(gbl, gbc, jsp,       1, 0, 1, 1, 10, 1, this);
+			addGrid(gbl, gbc, jsp,       1, 0, 1, 1, 15, 1, this);
 			addGrid(gbl, gbc, delChkBox, 2, 0, 1, 1, 1, 1, this);
 
 			lectureTitle.setPreferredSize(new Dimension(lectureTitle
@@ -641,11 +695,11 @@ public class ProfileFrame extends JFrame {
 					setBackground(new Color(10, 10, 100, 100));
 					lectureId  = lecture.getLectureId();
 					networkFlag = NETWORK_FLAG_GET_CLASSLIST;
-				lectureHead.setVisible(false);
-				networkThread = new NetworkThread();
-				networkThread.start();
-				
+//				lectureHead.setVisible(false);
+					startNetwortThread();
+					
 				btnPanel.setClassPage();
+				setClassHead();
 				
 				//grid.removeAll();
 				//invalidate();
@@ -689,10 +743,9 @@ public class ProfileFrame extends JFrame {
 					setBackground(new Color(10, 10, 100, 100));
 					lectureId  = lecture.getLectureId();
 					networkFlag = NETWORK_FLAG_GET_CLASSLIST;
-				lectureHead.setVisible(false);
-				networkThread = new NetworkThread();
-				networkThread.start();
-				
+//				lectureHead.setVisible(false);
+
+					startNetwortThread();
 				btnPanel.setClassPage();
 				
 				//grid.removeAll();
@@ -760,21 +813,26 @@ public class ProfileFrame extends JFrame {
 
 				this.setVisible(false);
 				
-				networkThread = new NetworkThread();
-				networkThread.start();
+				startNetwortThread();
 			}
 		}
 	}
-	
+
 	class ClassListItem extends JPanel {
 		JLabel classNm;
 		JButton regBtn = new JButton("Reg Mindmap");
 		JButton goBtn = new JButton("Start Lecture");
+		JCheckBox delChkBox;
+		
 		public ClassListItem(final ClassInfo classInfo) {
 			// TODO Auto-generated constructor stub
 			this.setLayout(gbl);
 			setBackground(Color.white);
 			classNm = new JLabel(classInfo.getClassName(), JLabel.CENTER);
+			
+			delChkBox = new JCheckBox();
+			delChkBox.setBackground(Color.white);
+			chkBoxList.add(delChkBox);
 			
 			regBtn.addActionListener(new ActionListener() {
 				
@@ -803,23 +861,25 @@ public class ProfileFrame extends JFrame {
 				}
 			});
 			
-//			UploadToServer uploadToServer = new UploadToServer();
-//			boolean chkClassEmpty = uploadToServer.checkClassIsEmpty(classInfo.getClassId());
-//			
-//			if(chkClassEmpty)
-//				goBtn.setEnabled(false);
-//			else
-//				regBtn.setEnabled(false);
+			UploadToServer uploadToServer = new UploadToServer();
+			boolean chkClassEmpty = uploadToServer.checkClassIsEmpty(classInfo.getClassId());
+			
+			if(chkClassEmpty)
+				regBtn.setEnabled(false);
+			else
+				goBtn.setEnabled(false);
 			
 			insets.top = 0;
 			insets.bottom = 0;
-			addGrid(gbl, gbc, classNm, 0, 0, 1, 2, 8, 3, this);
+			addGrid(gbl, gbc, classNm,  0, 0, 1, 2, 8, 3, this);
 			insets.top = 10;
 			insets.bottom = 10;
-			addGrid(gbl, gbc, regBtn,  1, 0, 1, 1, 1, 3, this);
+			addGrid(gbl, gbc, regBtn,   1, 0, 1, 1, 1, 3, this);
 			insets.top = 0;
 			insets.bottom = 10;
-			addGrid(gbl, gbc, goBtn,   1, 1, 1, 1, 1, 3, this);
+			addGrid(gbl, gbc, goBtn,    1, 1, 1, 1, 1, 3, this);
+			addGrid(gbl, gbc, delChkBox,2, 0, 1, 2, 1, 1, this);
+			
 
 			this.addMouseListener(new MouseListener() {
 
@@ -917,7 +977,7 @@ public class ProfileFrame extends JFrame {
 
 		@Override
 		public void run() {
-
+			
 			HttpURLConnection connection;
 			sbResult.delete(0, sbResult.capacity());
 			try {
@@ -953,6 +1013,8 @@ public class ProfileFrame extends JFrame {
 
 					connection.disconnect();
 					System.out.println(sbResult.toString());
+					chkBoxList.clear();
+					
 					if(networkFlag == NETWORK_FLAG_GET_MINDMAP){
 //						new MindMap(sbResult.toString());
 						//System.out.println(sbResult.toString());
@@ -1148,34 +1210,34 @@ public class ProfileFrame extends JFrame {
 		java.lang.reflect.Type type = new TypeToken<ArrayLecture>(){}.getType();
 		ArrayLecture jonResultlecturelist = (ArrayLecture) gson.fromJson(sbResult.toString(), (java.lang.reflect.Type) type);
 		if(jonResultlecturelist == null){
-			netErr();
+			startNetwortThread();
 			return;
 		}
-		ArrayList<Lecture> lectureList = jonResultlecturelist.getLectures();
+		lectureList = jonResultlecturelist.getLectures();
+		
 		grid.removeAll();
 		for(int i=0;i<lectureList.size();i++){
 			grid.add(new LectureListItem(i + 1, lectureList.get(i)));
 		}
 		listPanel.updateUI();
 		lectureListPanel.repaint();
-		chkBoxList.clear();
+		
 //		mainFrameRepaint();
 	}
 	void updateGetallClassList(){
 		java.lang.reflect.Type type = new TypeToken<ArrayClass>(){}.getType();
 		ArrayClass jonResultlecturelist = (ArrayClass) gson.fromJson(sbResult.toString(), (java.lang.reflect.Type) type);
 		if(jonResultlecturelist == null){
-			netErr();
+			startNetwortThread();
 			return;
 		}
-		ArrayList<ClassInfo> classList = jonResultlecturelist.getClasses();
+		classList = jonResultlecturelist.getClasses();
 		grid.removeAll();
 		for(int i=0;i<classList.size();i++){
 			grid.add(new ClassListItem(classList.get(i)));
 		}
 		listPanel.updateUI();
 		lectureListPanel.repaint();
-		chkBoxList.clear();
 		
 		if(classList.size() == 0){
 			setMainFramevisible(false);
@@ -1185,7 +1247,7 @@ public class ProfileFrame extends JFrame {
 //		mainFrameRepaint();
 	}
 	
-	public void netErr(){ // not receive
+	public void startNetwortThread(){ // not receive
 		networkThread = new NetworkThread();
 		networkThread.start();
 	}

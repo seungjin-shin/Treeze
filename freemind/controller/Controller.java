@@ -591,10 +591,7 @@ public class Controller  implements MapModuleChangeObserver {
 		
 		new TextDialogue(fManager.getFreemindMainFrame(), "Upload Class", true);
 		
-		fManager.init();
-		fManager.getProfileFrame().setVisible(true);
-		fManager.getFreemindMainFrame().setVisible(false);
-		
+		closeLecture();
     }
     
     public void checkNodeType(){
@@ -703,11 +700,15 @@ public class Controller  implements MapModuleChangeObserver {
 //				e1.printStackTrace();
 //			}
 //		}
-        	fManager.init();
-        	
-      	  fManager.getProfileFrame().setVisible(true);
-      	  fManager.getFreemindMainFrame().setVisible(false);
+        	closeLecture();
            }}
+    
+    public void closeLecture(){
+    	fManager.init();
+    	fManager.getProfileFrame().startNetwortThread();
+  	  fManager.getProfileFrame().setVisible(true);
+  	  fManager.getFreemindMainFrame().setVisible(false);
+    }
     
     public void recurSetSlideShowInfo(NodeAdapter curNode){
     	NodeAdapter cur = curNode;
