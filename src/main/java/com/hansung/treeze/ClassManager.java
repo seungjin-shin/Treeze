@@ -114,15 +114,15 @@ public class ClassManager extends HttpServlet implements Runnable {
 				if (cnt == -1) {
 					// destroyClassManager();
 					System.out.println("Professor Socket failed");
-
-					try {
+					deleteProfessorSocket();
+					
+					/*try {
 						professorSocket.close();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-					setProfessorSocket(null);
-					professorCheck = 0;
+					}*/
+					
 					logger.info("==========================");
 					logger.info("Treeze Professor Manager ("
 							+ classInfo.getClassName() + ") CLOSE");
@@ -131,6 +131,8 @@ public class ClassManager extends HttpServlet implements Runnable {
 							+ "][학생수 :" + getStudentSocketManagerList().size()
 							+ "]");
 					logger.info("==========================");
+					continue;
+				    
 
 				} else {
 					reqMsg = new String(b, 0, cnt, "UTF-8");
@@ -168,6 +170,7 @@ public class ClassManager extends HttpServlet implements Runnable {
 				// TODO: handle exception
 				e.printStackTrace();
 				destroyClassManager();
+				return;
 			}
 
 		} while (!(reqMsg.equals(QUIT)));
@@ -242,7 +245,12 @@ public class ClassManager extends HttpServlet implements Runnable {
 	public Socket getProfessorSocket() {
 		return professorSocket;
 	}
+	public void deleteProfessorSocket() {
+		this.professorSocket = null;
+		professorCheck = 0;
+		logger.info("점검 : 교수 소켓 연결취소");
 
+	}
 	public void setProfessorSocket(Socket professorSocket) {
 		this.professorSocket = professorSocket;
 		professorCheck = 1;

@@ -39,7 +39,7 @@ public class ImageController {
 	}
 	
 	@RequestMapping(value = "/img", method = RequestMethod.GET)
-	public String getLectures(@RequestParam("classId") Long classId, ModelMap map) {
+	public String getImageInfoes(@RequestParam("classId") Long classId, ModelMap map) {
 		Object imgs = imageService.findByClassId(classId);
 		map.put("imgs", imgs);
 		return "jsonView";

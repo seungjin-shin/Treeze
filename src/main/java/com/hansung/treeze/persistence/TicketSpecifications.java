@@ -36,5 +36,17 @@ public class TicketSpecifications {
 		};
 	}
 	
+	public static Specification<Ticket> isTicketId(final Long ticketId){
+		return new Specification<Ticket>() {
+
+			@Override
+			public Predicate toPredicate(Root<Ticket> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				// TODO Auto-generated method stub
+				return cb.and(cb.equal(root.<Long>get(Ticket_.ticketId), ticketId));
+			}
+		};
+	}
+	
 
 }

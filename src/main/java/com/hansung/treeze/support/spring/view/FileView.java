@@ -27,10 +27,11 @@ public class FileView extends AbstractView{
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected void renderMergedOutputModel(Map model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		UploadedFile attachFile = (UploadedFile)model.get("attachFile");
+		//UploadedFile attachFile = (UploadedFile)model.get("attachFile");
+		UploadedFile uploadedFile = (UploadedFile)model.get("uploadedFile");
 		
-		File file = new File(attachFile.getFilePath());
-		String fileName = attachFile.getFileName();
+		File file = new File(uploadedFile.getFilePath());
+		String fileName = uploadedFile.getFileName();
 		
 		flush(response, file, fileName);
 	}

@@ -8,6 +8,6 @@ public class Course_ {
 
 	public static volatile SingularAttribute<Course, Long> lectureId;
 	public static volatile SingularAttribute<Course, String> lectureName;
-	public static volatile SingularAttribute<Course, String> userEmail;
+	public static volatile SingularAttribute<Course, String> studentEmail;
 	
 }

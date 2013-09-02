@@ -13,7 +13,7 @@ public class Course extends AbstractPersistable<Long> {
 	private static final long serialVersionUID = -4685366043349125403L;
 	private Long lectureId;
 	private String lectureName;
-	private String userEmail;
+	private String studentEmail;
 	
 	public Long getLectureId() {
 		return lectureId;
@@ -27,11 +27,12 @@ public class Course extends AbstractPersistable<Long> {
 	public void setLectureName(String lectureName) {
 		this.lectureName = lectureName;
 	}
-	public String getUserEmail() {
-		return userEmail;
+	public String getStudentEmail() {
+		return studentEmail;
 	}
-	public void setUserEmail(String userEmail) {
-		this.userEmail = userEmail;
+	public void setStudentEmail(String studentEmail) {
+		this.studentEmail = studentEmail;
 	}
+
 
 }

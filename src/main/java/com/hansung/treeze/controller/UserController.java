@@ -62,5 +62,26 @@ public class UserController {
 
 		return "jsonView";
 	}
+	
+	@RequestMapping(value = "/existsEmail", method = RequestMethod.GET)
+	public String existsEmail(@RequestParam("userEmail") String userEmail, ModelMap map) {
+		boolean isRegistedUser = userService.existsUserEmail(userEmail);
+		
+		if(isRegistedUser){
+			return "true";
+		}
+		
+		return "false";
+	}
+	
+	@RequestMapping(value = "/existsIdentificationNumber", method = RequestMethod.GET)
+	public String existsIdentificationNumber(@RequestParam("identificationNumber") String identificationNumber, ModelMap map) {
+		boolean isRegistedIdentificationNumber = userService.existsIdentificationNumber(new Integer(identificationNumber));
+		
+		if(isRegistedIdentificationNumber){
+			return "true";
+		}
+		return "false";
+	}
 
 }

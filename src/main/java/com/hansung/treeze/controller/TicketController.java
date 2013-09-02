@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.hansung.treeze.model.ClassInfo;
 import com.hansung.treeze.model.Ticket;
 import com.hansung.treeze.service.TicketService;
 
@@ -38,7 +39,13 @@ public class TicketController {
 	
 	@RequestMapping(value="/createTicket", method=RequestMethod.POST)
 	public String createTicket(Ticket model, ModelMap map) {
-		ticketService.saveTicket(model);
+		
+		Ticket temp = ticketService.saveTicket(model);
+		temp.setTicketId(temp.getId());
+		ticketService.saveTicket(temp);
+		
+		
+		//ticketService.saveTicket(model);
 		//map.put("Ticket",ticketService.saveTicket(model));
 		//map.put("result", "success");
 		return "jsonView";

@@ -138,6 +138,7 @@ public class StudentSocketManager extends HttpServlet implements Runnable {
 					// TODO: handle exception
 				e.printStackTrace();
 				destroyStudentSocketManager();
+				return;
 			}
 
 		}while (!(reqMsg.equals(QUIT)));

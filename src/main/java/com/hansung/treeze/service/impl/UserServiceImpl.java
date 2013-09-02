@@ -2,7 +2,6 @@ package com.hansung.treeze.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hansung.treeze.model.User;
@@ -28,6 +27,29 @@ public class UserServiceImpl implements UserService{
 	public User findByEmail(String email) {
 		// TODO Auto-generated method stub
 		return userRepository.findOne(Specifications.where(UserSpecifications.isEmail(email)));
+	}
+
+	@Override
+	public boolean existsUserEmail(String userEmail) {
+		// TODO Auto-generated method stub
+		User user = userRepository.findOne(Specifications.where(UserSpecifications.isEmail(userEmail)));
+		
+		if(user == null)
+			return false;
+		
+		return true;
+	}
+
+	@Override
+	public boolean existsIdentificationNumber(Integer identificationNumber) {
+		// TODO Auto-generated method stub
+		
+		User user = userRepository.findOne(Specifications.where(UserSpecifications.isIdentificationNumber(identificationNumber)));
+		
+		if(user == null)
+			return false;
+		
+		return true;
 	}
 
 }

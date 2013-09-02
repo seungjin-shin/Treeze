@@ -29,4 +29,21 @@ public class ClassInfoServiceImpl implements ClassInfoService {
 
 	}
 
+	@Override
+	public void deleteClass(ClassInfo classInfo) {
+		// TODO Auto-generated method stub
+		//classRepository.delete(classInfo);
+		classInfo = classRepository.findOne(Specifications.where(ClassInfoSpecifications.isClassId(classInfo.getClassId())));
+		classRepository.delete(classInfo);
+		
+	}
+	
+	@Override
+	public ClassInfo findClass(Long classId) {
+		// TODO Auto-generated method stub
+
+		return classRepository.findOne(classId);
+		
+	}
+
 }

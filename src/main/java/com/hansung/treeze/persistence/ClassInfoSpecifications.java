@@ -28,6 +28,13 @@ public class ClassInfoSpecifications {
 			}
 		};
 	}
-	
+	public static Specification<ClassInfo> isClassId(final Long classId){
+		return new Specification<ClassInfo>() {
+			@Override
+			public Predicate toPredicate(Root<ClassInfo> root, CriteriaQuery<?> query, CriteriaBuilder cb){
+				return cb.equal(root.<Long>get(ClassInfo_.classId), classId);
+			}
+		};
+	}
 		
 }

@@ -48,4 +48,11 @@ public class LectureServiceImpl implements LectureService{
 		
 	}
 
+		@Override
+		public void deleteLecture(Lecture lecture) {
+			// TODO Auto-generated method stub
+			lecture = lectureRepository.findOne(Specifications.where(LectureSpecifications.isLectureId(lecture.getLectureId())));
+			lectureRepository.delete(lecture);
+		}
+
 }

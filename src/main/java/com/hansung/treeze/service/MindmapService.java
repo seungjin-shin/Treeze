@@ -7,5 +7,6 @@ public interface MindmapService {
 
 	Mindmap saveMindmap(Mindmap mindmap);
 	Mindmap findByclassId(Long classId);
-
+	boolean exists(Long classId);
+	
 }

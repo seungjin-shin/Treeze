@@ -28,4 +28,16 @@ public class MindmapServiceImpl implements MindmapService{
 		return mindmapRepository.findOne(Specifications.where(MindmapSpecifications.isClassId(classId)));
 	}
 
+	@Override
+	public boolean exists(Long classId) {
+		// TODO Auto-generated method stub
+		Mindmap mindmap = null;
+		mindmap = mindmapRepository.findOne(Specifications.where(MindmapSpecifications.isClassId(classId)));
+		
+		if(mindmap == null)
+			return false;
+			
+		return mindmapRepository.exists(mindmap.getId());
+	}
+
 }

@@ -38,6 +38,7 @@ public class TicketServiceImpl implements TicketService{
 	@Override
 	public void deleteTicket(Ticket ticket) {
 		// TODO Auto-generated method stub
+		ticket = ticketRepository.findOne(TicketSpecifications.isTicketId(ticket.getTicketId()));
 		ticketRepository.delete(ticket);
 		
 	}

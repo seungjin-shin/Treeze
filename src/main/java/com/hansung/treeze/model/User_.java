@@ -8,7 +8,11 @@ public class User_ {
 	
 	
 	public static volatile SingularAttribute<User, Integer> userImgId;
+	public static volatile SingularAttribute<User, String> userType;
 	public static volatile SingularAttribute<User, String> userName;
 	public static volatile SingularAttribute<User, String> userEmail;
+	public static volatile SingularAttribute<User, Integer> identificationNumber;
+	public static volatile SingularAttribute<User, String> password;
+	 
 	
 }

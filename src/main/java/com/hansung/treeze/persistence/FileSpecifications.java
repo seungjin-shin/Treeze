@@ -22,6 +22,15 @@ public class FileSpecifications {
 		};
 	}
 
+	public static Specification<UploadedFile> isVersionId(final Long versionId){
+		return new Specification<UploadedFile>(){
+			@Override
+			public Predicate toPredicate(Root<UploadedFile> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.equal(root.<Long>get(UploadedFile_.versionId), versionId);
+			}
+		};
+	}
+
 	public static Specification<UploadedFile> isClassId(final Long classId){
 		return new Specification<UploadedFile>(){
 			@Override
@@ -30,7 +39,7 @@ public class FileSpecifications {
 			}
 		};
 	}
-
+	
 	private static String getLikePattern(final String searchTerm) {
 		StringBuilder pattern = new StringBuilder();
 		pattern.append("%");
