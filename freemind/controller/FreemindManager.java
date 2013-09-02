@@ -12,7 +12,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import freemind.Frame.ProfileFrame;
+import freemind.json.Lecture;
 import freemind.json.Ticket;
+import freemind.json.User;
 import freemind.modes.NodeAdapter;
 import freemind.modes.mindmapmode.MindMapController;
 import freemind.modes.mindmapmode.MindMapMapModel;
@@ -104,7 +106,10 @@ public class FreemindManager {
 	private ProfileFrame profileFrame;
 	private JFrame freemindMainFrame;
 	private Ticket ticket;
+	private Lecture lecture;
 	
+
+
 	SlideShow slideShow;
 	
 	public Color treezeColor = new Color(141, 198, 63);
@@ -112,6 +117,23 @@ public class FreemindManager {
 	
 	private NodeAdapter receiveQNode;
 	
+	private User user;
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Lecture getLecture() {
+		return lecture;
+	}
+	
+	public void setLecture(Lecture lecture) {
+		this.lecture = lecture;
+	}
 	public ImageIcon makeResizedImageIcon(int width, int height, Image imgs) {
 
 		BufferedImage imageBuff = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);

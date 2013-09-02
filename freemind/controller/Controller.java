@@ -690,6 +690,9 @@ public class Controller  implements MapModuleChangeObserver {
     	fManager.getProfileFrame().startNetwortThread();
   	  fManager.getProfileFrame().setVisible(true);
   	  fManager.getFreemindMainFrame().setVisible(false);
+  	
+  	  UploadToServer uploadToServer = new UploadToServer();
+  	  uploadToServer.setStateOfLecture(fManager.getLecture(), false);
     }
     
     public void recurSetSlideShowInfo(NodeAdapter curNode){

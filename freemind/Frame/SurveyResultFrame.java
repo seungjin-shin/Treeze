@@ -3,6 +3,7 @@ package freemind.Frame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,6 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import freemind.controller.FreemindManager;
+import freemind.controller.ImgBtn;
 
 public class SurveyResultFrame extends JFrame implements ActionListener{
 	int yesCnt;
@@ -26,7 +30,7 @@ public class SurveyResultFrame extends JFrame implements ActionListener{
 		yesPer = (int)(((double)y/(double)(y + n)) * 100);
 		noPer = (int)(((double)n/(double)(y + n)) * 100);
 		
-		setSize(600, 400);
+		setSize(500, 400);
 		setLayout(null);
 		setTitle("Survey result");
 		this.setLocation(400, 100);
@@ -46,12 +50,10 @@ public class SurveyResultFrame extends JFrame implements ActionListener{
 		StringLb.setLocation(10, 60);
 		add(StringLb);
 		
-		JButton okBtn = new JButton("OK");
+		CloseBtn closeBtn = new CloseBtn(FreemindManager.getInstance().closeDefault, FreemindManager.getInstance().closePress, FreemindManager.getInstance().closeOver);
 		
-		okBtn.addActionListener(this);
-		okBtn.setSize(130, 30);
-		okBtn.setLocation(300, 300);
-		add(okBtn);
+		closeBtn.setLocation(300, 300);
+		add(closeBtn);
 
 		JPanel resultPn2 = new ResultPanel2();
 		resultPn2.setSize(460, 100);
@@ -75,6 +77,24 @@ public class SurveyResultFrame extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		this.setVisible(false);
+	}
+	
+	public void mainFrameVisibleFalse(){
+		setVisible(false);
+	}
+	
+	class CloseBtn extends ImgBtn{
+
+		public CloseBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void Action() {
+			mainFrameVisibleFalse();
+		}
+		
 	}
 	class ResultPanel extends JPanel{
 		public ResultPanel() {

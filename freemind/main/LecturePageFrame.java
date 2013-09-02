@@ -237,7 +237,7 @@ public class LecturePageFrame extends JFrame {
 			}
 			else{
 				UploadToServer uploadToServer = new UploadToServer();
-				uploadToServer.classPost(lectureId, "minsuk@hansung.ac.kr", classTitle);
+				uploadToServer.classPost(lectureId, classTitle);
 
 				frame.init();
 				frame.update(frame.getGraphics());

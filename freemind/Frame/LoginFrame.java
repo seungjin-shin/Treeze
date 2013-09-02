@@ -71,6 +71,10 @@ public class LoginFrame extends JFrame{
 	
 	
 	public LoginFrame(MindMapController mc) {
+		
+		//ddasljdl
+		//sysout exti
+		
 		this.mc = mc;
 		this.getContentPane().setBackground(treezeColor);
 		this.setSize(600, 394);
@@ -289,14 +293,14 @@ public class LoginFrame extends JFrame{
 	
 	public void pushLoginBtn(){
 		boolean loginChk = false;
-		UploadToServer uploadToServer = new UploadToServer();
+		UploadToServer uploadToServer = new UploadToServer("tmpForSignConstruction");
 		loginChk = uploadToServer.signIn(emailTf.getText(), pwTf.getText());
 		System.out.println("loginChk" + loginChk);
-//		if (loginChk) {
+		if (loginChk) {
 			setVisible(false);
 			JFrame pFrame = new ProfileFrame(mc);
 			FreemindManager.getInstance().setProfileFrame(pFrame);
-//		}
+		}
 	}
 	
 	class LogoPanel extends JPanel{

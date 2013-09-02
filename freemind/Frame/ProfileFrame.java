@@ -78,7 +78,8 @@ import freemind.modes.mindmapmode.MindMapController;
 public class ProfileFrame extends JFrame {
 	final String SERVERIP = FreemindManager.getInstance().getSERVERIP();
 	final int PORT = FreemindManager.getInstance().getPORT();
-	String myEmail = "minsuk@hansung.ac.kr";
+	String userEmail;
+	String userName;
 	final String DOWNPATH = FreemindManager.getInstance().getDownPath();
 	
 	JButton createLtBtn;
@@ -91,7 +92,7 @@ public class ProfileFrame extends JFrame {
 	LogoPanel logoPanel;
 	Image imgIcon;
 //	ArrayList<Data.Class> classList = new ArrayList<Data.Class>();	
-	NameLabel nameLabel = new NameLabel("¿Ã πŒºÆ");
+	NameLabel nameLabel;
 	PersonalInfo personalInfo = new PersonalInfo("Hansung Univ", "Professor", "Computer engineering");
 //	ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
 	ListPanel listPanel;
@@ -123,7 +124,9 @@ public class ProfileFrame extends JFrame {
 	public ProfileFrame(MindMapController mc) {
 		this.mc = mc;
 		fManager = FreemindManager.getInstance();
-		
+		userEmail = fManager.getUser().getUserEmail();
+		userName = fManager.getUser().getUserName();
+		nameLabel = new NameLabel(userName);
 //		fManager.setFilePath(DOWNPATH + "/");
 		// TODO Auto-generated constructor stub
 		this.setSize(1000, 600);
@@ -365,7 +368,7 @@ public class ProfileFrame extends JFrame {
 //			loginBtn.setContentAreaFilled(false);
 //			loginBtn.setFocusable(false);
 			
-			this.setLayout(new GridLayout(1, 4, 20, 0));
+			this.setLayout(gbl);
 			
 			this.setBackground(fManager.treezeColor);
 			
@@ -401,7 +404,10 @@ public class ProfileFrame extends JFrame {
 			delCsBtn.setFocusable(false);
 			
 			nullBtn = new JButton();
-			nullBtn.setVisible(false);
+			nullBtn.setBackground(fManager.treezeColor);
+			nullBtn.setBorderPainted(false);
+			nullBtn.setContentAreaFilled(false);
+			nullBtn.setFocusable(false);
 			
 			setLecturePage();
 		}
@@ -409,20 +415,29 @@ public class ProfileFrame extends JFrame {
 		void setLecturePage(){
 			removeAll();
 			
-			add(addLtBtn);
-			add(delLtBtn);
-			add(nullBtn);
-			add(profileBtn);
+//			add(addLtBtn);
+//			add(delLtBtn);
+//			add(nullBtn);
+//			add(profileBtn);
+			addGrid(gbl, gbc, addLtBtn,   0, 0, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, delLtBtn,   1, 0, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, nullBtn,    2, 0, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, profileBtn, 3, 0, 1, 1, 1, 1, this);
 			
 			parentFrame.repaint();
 		}
 		
 		void setClassPage(){
 			removeAll();
-			add(ltListBtn);
-			add(addCsBtn);
-			add(delCsBtn);
-			add(profileBtn);
+//			add(ltListBtn);
+//			add(addCsBtn);
+//			add(delCsBtn);
+//			add(profileBtn);
+			addGrid(gbl, gbc, ltListBtn,   0, 0, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, addCsBtn,    1, 0, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, delCsBtn,    2, 0, 1, 1, 1, 1, this);
+			insets.right = 5;
+			addGrid(gbl, gbc, profileBtn,  3, 0, 1, 1, 1, 1, this);
 			parentFrame.repaint();
 			
 		}
@@ -586,7 +601,7 @@ public class ProfileFrame extends JFrame {
 			}
 			else{
 				UploadToServer uploadToServer = new UploadToServer();
-				uploadToServer.lecturePost(lectureTitle, "minsuk@hansung.ac.kr", "false");
+				uploadToServer.lecturePost(lectureTitle);
 				
 				this.setVisible(false);
 
@@ -694,6 +709,7 @@ public class ProfileFrame extends JFrame {
 					// TODO Auto-generated method stub
 					setBackground(new Color(10, 10, 100, 100));
 					lectureId  = lecture.getLectureId();
+					fManager.setLecture(lecture);
 					networkFlag = NETWORK_FLAG_GET_CLASSLIST;
 //				lectureHead.setVisible(false);
 					startNetwortThread();
@@ -742,6 +758,7 @@ public class ProfileFrame extends JFrame {
 					// TODO Auto-generated method stub
 					setBackground(new Color(10, 10, 100, 100));
 					lectureId  = lecture.getLectureId();
+					fManager.setLecture(lecture);
 					networkFlag = NETWORK_FLAG_GET_CLASSLIST;
 //				lectureHead.setVisible(false);
 
@@ -809,7 +826,7 @@ public class ProfileFrame extends JFrame {
 			}
 			else{
 				UploadToServer UTS = new UploadToServer();
-				UTS.classPost(lectureId + "", "minsuk@hansung.ac.kr", classTitle);
+				UTS.classPost(lectureId + "", classTitle);
 
 				this.setVisible(false);
 				
@@ -849,6 +866,9 @@ public class ProfileFrame extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					classId = classInfo.getClassId();
 					fManager.setClassId((int) classId);
+					
+					UploadToServer uploadToServer = new UploadToServer();
+					uploadToServer.setStateOfLecture(fManager.getLecture(), true);
 					
 					DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(classId);
 					downLoadNetworkThread.start();
@@ -983,7 +1003,7 @@ public class ProfileFrame extends JFrame {
 			try {
 				if (networkFlag == NETWORK_FLAG_GET_LECTURELIST) {
 					url = new URL(
-							"http://" + SERVERIP + ":8080/treeze/getMyLectures?professorEmail=" + myEmail);
+							"http://" + SERVERIP + ":8080/treeze/getMyLectures?professorEmail=" + userEmail);
 					
 				} else {
 					url = new URL(

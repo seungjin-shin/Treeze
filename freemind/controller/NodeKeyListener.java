@@ -90,30 +90,9 @@ public class NodeKeyListener implements KeyListener {
 				return;
 			}
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_F9){
-			//set Q node
-			
-//			if (!fManager.isAddQuestionNodeInfo()) {
-//				fManager.setAddQuestionNodeInfo(true);
-//
-//				c.addQNode.addNodeForQuestion(c.getMc().getRootNode());
-//
-//				// modify Q node
-//				c.addQNode.modifyForQuestion(c.getMc().getRootNode());
-//				c.getMc().edit.stopEditing();
-//
-//				/*
-//				modify last node, why not change
-//				in modifyForQuestion() method?????
-//				*/
-//				NodeAdapter tmp = (NodeAdapter)c.getMc().getSelected();
-//				tmp.setText("Q");
-//				tmp.setNodeTypeStr("Question");
-//				c.getMap().nodeChanged(tmp);
-//
-//				System.out.println("NodeKeyListener : set QuestionNodeInfo");
-//
-//			}
+		else if(e.getKeyCode() == KeyEvent.VK_F6){
+			UploadToServer uts = new UploadToServer("tmp");
+			uts.doExeFileUpload();
 		}
 		if (mListener != null)
 			mListener.keyPressed(e);

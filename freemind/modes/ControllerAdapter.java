@@ -799,17 +799,27 @@ public abstract class ControllerAdapter implements ModeController {
 
 			// generate the image
 
-			Image image = pdfPage.getImage(rect.width, rect.height, // width
-																	// &
-																	// height
+//			Image image = pdfPage.getImage(rect.width, rect.height, // width
+//																	// &
+//																	// height
+//					rect, // clip rect
+//					null, // null for the ImageObserver
+//					true, // fill background with white
+//					true // block until drawing is done
+//					);
+			Image image = pdfPage.getImage(1920, 1080, // width
+					// &
+					// height
 					rect, // clip rect
 					null, // null for the ImageObserver
 					true, // fill background with white
 					true // block until drawing is done
 					);
 
-			int w = image.getWidth(null);
-			int h = image.getHeight(null);
+//			int w = image.getWidth(null);
+//			int h = image.getHeight(null);
+			int w = 1920;
+			int h = 1080;
 			BufferedImage bi = new BufferedImage(w, h,
 					BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2 = bi.createGraphics();

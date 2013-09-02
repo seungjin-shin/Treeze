@@ -90,7 +90,6 @@ public class TicketFrame extends JFrame{
 		// TODO Auto-generated constructor stub
 		this.setSize(800, 600);
 		this.setLocation(400, 100);
-		
 		this.getContentPane().setBackground(new Color(141, 198, 63));
 		ticketTitleLabel = new TicketTitleLabel();
 		gbc.fill = GridBagConstraints.BOTH; //

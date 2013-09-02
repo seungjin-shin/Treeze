@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import freemind.Frame.TextDialogue;
 import freemind.controller.FreemindManager;
 import freemind.controller.SlideData;
+import freemind.json.ArrayUser;
 import freemind.json.ClassInfo;
 import freemind.json.Lecture;
 import freemind.json.Ticket;
@@ -39,12 +40,22 @@ import freemind.json.User;
 
 
 public class UploadToServer {
-	ArrayList<SlideData> sList;
-	SlideData tmp;
-	FreemindManager fManager = FreemindManager.getInstance();
-	final String SERVERIP = fManager.SERVERIP;
-  
+	FreemindManager fManager;
+	String SERVERIP;
+	String userName;
+	String userEmail;
 	
+	public UploadToServer() {
+		fManager = FreemindManager.getInstance();
+		SERVERIP = fManager.SERVERIP;
+		userName = fManager.getUser().getUserName();
+		userEmail = fManager.getUser().getUserEmail();
+	}
+
+	public UploadToServer(String tmpForSignConstruction){
+		fManager = FreemindManager.getInstance();
+		SERVERIP = fManager.SERVERIP;
+	}
 	  public void doFileUpload() {
           try {
         	  File saveFile;//
@@ -82,16 +93,16 @@ public class UploadToServer {
        }
 	  }
 	  
-	  public void lecturePost(String lectureName, String profEmail, String state) {
+	  public void lecturePost(String lectureName) {
           try {
         		HttpClient httpClient = new DefaultHttpClient();
         	  HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createLecture");
         	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
         	  
         	  StringBody lectureTitle = new StringBody(lectureName, Charset.forName("UTF-8"));
-        	  StringBody profEmailBody = new StringBody(profEmail, Charset.forName("UTF-8"));
-        	  StringBody lectureState = new StringBody(state, Charset.forName("UTF-8"));
-        	  StringBody profssorNameBody = new StringBody("¿ÃπŒºÆ", Charset.forName("UTF-8"));
+        	  StringBody profEmailBody = new StringBody(userEmail, Charset.forName("UTF-8"));
+        	  StringBody lectureState = new StringBody("false", Charset.forName("UTF-8"));
+        	  StringBody profssorNameBody = new StringBody(userName, Charset.forName("UTF-8"));
            
         	  multipart.addPart("lectureName", lectureTitle);  
         	  multipart.addPart("professorEmail", profEmailBody);
@@ -142,7 +153,7 @@ public class UploadToServer {
           }
 	  }
 	  
-	  public void classPost(String lectureId, String profEmail, String className) {
+	  public void classPost(String lectureId, String className) {
 		  	String jsonStr;
         try {
         	HttpClient httpClient = new DefaultHttpClient();
@@ -157,7 +168,7 @@ public class UploadToServer {
 			}
       	StringBody classId = new StringBody("0", Charset.forName("UTF-8"));
       	  StringBody lectureTitle = new StringBody(lectureId, Charset.forName("UTF-8"));
-      	  StringBody profEmailBody = new StringBody(profEmail, Charset.forName("UTF-8"));
+      	  StringBody profEmailBody = new StringBody(userEmail, Charset.forName("UTF-8"));
       	  StringBody classNameBody = new StringBody(className, Charset.forName("UTF-8"));
       	  StringBody portBody = new StringBody("2141", Charset.forName("UTF-8"));
       	  StringBody ipBody = new StringBody(ipStr, Charset.forName("UTF-8"));
@@ -196,8 +207,6 @@ public class UploadToServer {
     	  StringBody ipBody = new StringBody(classInfo.getClassIP(), Charset.forName("UTF-8"));
     	  StringBody idBody = new StringBody(classInfo.getId() + "", Charset.forName("UTF-8"));
 
-    	  StringBody tmp = new StringBody("false", Charset.forName("UTF-8"));
-    	  
     	  multipart.addPart("id", idBody);
     	  multipart.addPart("classIP", ipBody);
     	  multipart.addPart("port", portBody);
@@ -205,7 +214,6 @@ public class UploadToServer {
     	  multipart.addPart("lectureId", lectureIdBody);  
     	  multipart.addPart("professorEmail", profEmailBody);
     	  multipart.addPart("className", classNameBody);
-    	  multipart.addPart("new", tmp);
     	  
     	  post.setEntity(multipart);  
     	  HttpResponse response = httpClient.execute(post);  
@@ -328,9 +336,9 @@ public class UploadToServer {
 		try {
 			typeBoby = new StringBody(user.getUserType(), Charset.forName("UTF-8"));
 			StringBody idBody = new StringBody(user.getIdentificationNumber() + "", Charset.forName("UTF-8"));
-			StringBody nameBody = new StringBody(user.getUserName(), Charset.forName("UTF-8"));
-			StringBody emailBody = new StringBody(user.getUserEmail(), Charset.forName("UTF-8"));
-			StringBody pwBody = new StringBody(user.getPassword(), Charset.forName("UTF-8"));
+			StringBody nameBody = new StringBody(user.getUserName().trim(), Charset.forName("UTF-8"));
+			StringBody emailBody = new StringBody(user.getUserEmail().trim(), Charset.forName("UTF-8"));
+			StringBody pwBody = new StringBody(user.getPassword().trim(), Charset.forName("UTF-8"));
 			multipart.addPart("userType", typeBoby);
 			multipart.addPart("identificationNumber", idBody);
 			multipart.addPart("userName", nameBody);
@@ -381,15 +389,18 @@ public class UploadToServer {
 			EntityUtils.consume(resEntity);
 			
 			if(str.equals("emailFalse")){
-				System.out.println("UploadtoServer : login return f, emailFalse");
+				new TextDialogue(fManager.getFreemindMainFrame(), "Email is not exist.", true);
 				return false;
 			}
 			else if(str.equals("passwordFalse")){
-				System.out.println("UploadtoServer : login return f, passwordFalse");
+				new TextDialogue(fManager.getFreemindMainFrame(), "Incorrect password", true);
 				return false;
 			}
 			else{
-				System.out.println("UploadtoServer : login return true");
+				Gson gson = new Gson();
+				ArrayUser arrayUser = gson.fromJson(str, ArrayUser.class);
+				User user = arrayUser.getUser();
+				fManager.setUser(user);
 				return true;
 			}
 		} catch (IOException e) {
@@ -438,5 +449,78 @@ public class UploadToServer {
 				System.exit(0);
 			}
 			return false;
+	  }
+	  
+	  public void setStateOfLecture(Lecture lecture, boolean state){
+	
+	  	HttpClient httpClient = new DefaultHttpClient();  
+		  HttpPost post = new HttpPost("http://" + fManager.SERVERIP + ":8080/treeze/setStateOfLecture");
+		  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
+		  
+		  
+		  try {
+      	  
+      	  StringBody lectureNameBody = new StringBody(lecture.getLectureName(), Charset.forName("UTF-8"));
+      	  StringBody profEmailBody = new StringBody(lecture.getProfessorEmail(), Charset.forName("UTF-8"));
+      	  StringBody lectureState = new StringBody(state + "", Charset.forName("UTF-8"));
+      	  StringBody profssorNameBody = new StringBody(lecture.getProfessorName(), Charset.forName("UTF-8"));
+      	  StringBody idBody = new StringBody(lecture.getId() + "", Charset.forName("UTF-8"));
+      	  StringBody lectureIdBody = new StringBody(lecture.getLectureId() + "", Charset.forName("UTF-8"));
+      	  
+      	  multipart.addPart("id", idBody);
+      	  multipart.addPart("lectureName", lectureNameBody);  
+      	  multipart.addPart("professorEmail", profEmailBody);
+      	  multipart.addPart("stateOfLecture", lectureState);
+      	  multipart.addPart("lectureId", lectureIdBody);
+      	  multipart.addPart("professorName", profssorNameBody);
+      	  
+      	  post.setEntity(multipart);  
+      	  HttpResponse response = httpClient.execute(post);  
+      	  HttpEntity resEntity = response.getEntity();
+      	  EntityUtils.consume(resEntity);
+      	  
+        }catch(Exception e){
+      	  new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
+        }
+		  
+		  System.out.println("change state : " + state);
+	  }
+	  
+	  public void doExeFileUpload() {
+          try {
+        	  File saveFile;//
+        	  FileBody bin = null;
+        	HttpClient httpClient = new DefaultHttpClient();
+			saveFile = new File("C:\\Users\\Shin\\Desktop\\treeze\\prof_v2.3.exe");
+
+				if (saveFile.exists())
+					bin = new FileBody(saveFile, "UTF-8");
+				
+				HttpPost post = new HttpPost("http://" + SERVERIP
+						+ ":8080/treeze/upload/file");
+
+				StringBody versionIdBody = new StringBody("2",
+						Charset.forName("UTF-8"));
+
+				MultipartEntity multipart = new MultipartEntity(
+						HttpMultipartMode.BROWSER_COMPATIBLE, null,
+						Charset.forName("UTF-8")); // xml, classId, LectureName
+				multipart.addPart("versionId", versionIdBody);
+				multipart.addPart("upload", bin);
+
+				post.setEntity(multipart);
+				HttpResponse response = httpClient.execute(post);
+				HttpEntity resEntity = response.getEntity();
+				EntityUtils.consume(resEntity);
+
+           System.out.println("postExeFile");
+           
+       }catch(Exception e){
+    	   new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
+       }
 	  }
 }

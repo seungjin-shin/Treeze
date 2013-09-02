@@ -14,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 
@@ -155,7 +156,9 @@ public class SlideShow {
 	public void show() {
 		// TODO Auto-generated method stub
 		if(focus.getImgPath() != null){
+			imgFrame.setCurrentImage();
 			imgFrame.show();
+			imgFrame.repaint();
 		}
 
 	}
@@ -165,6 +168,7 @@ public class SlideShow {
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		double xsize = tk.getScreenSize().getWidth();
 		double ysize = tk.getScreenSize().getHeight();
+		Image curImage;
 		
 		public ImgFrame(SlideShow slideShow) {
 			// TODO Auto-generated constructor stub
@@ -191,88 +195,18 @@ public class SlideShow {
 					// TODO Auto-generated method stub
 					if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 						nextShow();
-						// 학생 보내야대
-						//ArrayList<Integer> idxList = focus.getIdxList();
-						
-//						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
-//						
-//						String jsonString;
-//						FreemindGson myGson = new FreemindGson();
-//
-//						//sendPs.setPosition(idxList);
-//
-//						jsonString = myGson.toJson(sendPs);
-//						System.out.println(jsonString);
-//						
-//						for(int i = 0; i < c.getNaviOs().size(); i++){
-//							os = c.getNaviOs().get(i);
-//							try {
-//								if(os != null)
-//									os.write((NAVINUM + jsonString).getBytes()); // 다 보내
-//							} catch (IOException e1) {
-//								// TODO Auto-generated catch block
-//								e1.printStackTrace();
-//							}
-//						}
-						
 						sendPosition();
 						System.out.println("Sldie Space");
-						
-						
 						
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						showpause();
 					} else if(e.getKeyCode() == KeyEvent.VK_PAGE_DOWN){
 						nextShow();
 						sendPosition();
-//						ArrayList<Integer> idxList = focus.getIdxList();
-//						
-//						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
-//						
-//						String jsonString;
-//						FreemindGson myGson = new FreemindGson();
-//
-//						sendPs.setPosition(idxList);
-//
-//						jsonString = myGson.toJson(sendPs);
-//						System.out.println(jsonString);
-//						
-//						for(int i = 0; i < c.getNaviOs().size(); i++){
-//							os = c.getNaviOs().get(i);
-//							try {
-//								if(os != null)
-//									os.write((NAVINUM + jsonString).getBytes()); // 다 보내
-//							} catch (IOException e1) {
-//								// TODO Auto-generated catch block
-//								e1.printStackTrace();
-//							}
-//						}
 					}
 					else if(e.getKeyCode() == KeyEvent.VK_PAGE_UP){
 						prevShow();
 						sendPosition();
-//						ArrayList<Integer> idxList = focus.getIdxList();
-//						
-//						CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
-//						
-//						String jsonString;
-//						FreemindGson myGson = new FreemindGson();
-//
-//						sendPs.setPosition(idxList);
-//
-//						jsonString = myGson.toJson(sendPs);
-//						System.out.println(jsonString);
-//						
-//						for(int i = 0; i < c.getNaviOs().size(); i++){
-//							os = c.getNaviOs().get(i);
-//							try {
-//								if(os != null)
-//									os.write((NAVINUM + jsonString).getBytes()); // 다 보내
-//							} catch (IOException e1) {
-//								// TODO Auto-generated catch block
-//								e1.printStackTrace();
-//							}
-//						}
 					}
 					else if(e.getKeyCode() == KeyEvent.VK_F4){
 						new SurveyFrame();
@@ -294,20 +228,47 @@ public class SlideShow {
 		@Override
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
-			BufferedImage i = null;
+//			ImageIcon imgIcon;
+//			
+//			Image img = new ImageIcon(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId(), slideShow.getfocus().getImgPath() + ".jpg").getImage();
+//			
+//			imgIcon = fManager.makeResizedImageIcon((int)xsize, (int)ysize, img);
+//			BufferedImage i = null;
+//			try {
+//					i = ImageIO.read(new File(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId(), slideShow.getfocus().getImgPath() + ".jpg")); 
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} 
+//			
+////			i.get
+//			
+//			Image img = i.getScaledInstance((int)xsize, (int)ysize,
+//					Image.SCALE_DEFAULT); // 사이즈 변경
+//			
+////			ImageIcon tmpIcon = fManager.makeResizedImageIcon((int)xsize, (int)ysize, img);
+//			
+//			g.drawImage(img, 0, 0, this);
+//			g.drawImage(tmpIcon.getImage(), 0, 0, this); // 이미지 그리기. 좌표 수정
+			g.drawImage(curImage, 0, 0, this);
+		}
+		
+		public void setCurrentImage(){
+			Image i = null;
 			try {
-					i = ImageIO.read(new File(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId(), slideShow.getfocus().getImgPath() + ".jpg")); 
+				
+				i = ImageIO.read(new File(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId(), slideShow.getfocus().getImgPath() + ".jpg"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} 
-			Image img = i.getScaledInstance((int) xsize, (int) ysize,
-					Image.SCALE_DEFAULT); // 사이즈 변경
-			g.drawImage(img, 0, 0, this); // 이미지 그리기. 좌표 수정
-
+			}
+			curImage = (fManager.makeResizedImageIcon((int)xsize, (int)ysize, i)).getImage();
+			
+//			ImageIcon imgIcon = new ImageIcon(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId(), slideShow.getfocus().getImgPath() + ".jpg");
+//			curImage = imgIcon.getImage();
 		}
-
 	}
+	
 	
 	public void sendPosition(){
 		ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
