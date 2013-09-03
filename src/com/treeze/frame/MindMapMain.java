@@ -171,7 +171,7 @@ public class MindMapMain extends JPanel {
 				node.getPptBtn().setBounds(node.getLocateX(),
 						node.getLocateY()-10, 20, 20);
 				node.getTicketBtn().setBounds(node.getEndX()-20,
-						node.getLocateY()-10, 20, 20);
+						node.getLocateY()-20, 20, 20);
 				node.getNodeBtn().setFont(new Font("Serif",Font.BOLD,10));
 				node.getNodeBtn().setText(node.getNodeStr());
 				node.getNodeBtn()
@@ -189,7 +189,8 @@ public class MindMapMain extends JPanel {
 				
 				
 				this.add(node.getNodeBtn());
-				//this.add(node.getTicketBtn());
+				this.add(node.getTicketBtn());
+				node.getTicketBtn().setVisible(false);
 				//this.setComponentZOrder(this.getGraphics(), 0);
 //				this.setComponentZOrder(node.getNodeBtn(), 1);
 //				this.setComponentZOrder(node.j, 0);
@@ -448,6 +449,7 @@ public class MindMapMain extends JPanel {
 							while(node instanceof Ticket){
 								node = node.getParentNode();
 							}
+							node.getTicketBtn().setVisible(true); // New Icon add
 							mainFrameManager.ticketRepaint(node);
 							
 							

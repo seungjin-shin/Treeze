@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -213,13 +214,13 @@ public class LoginPageFrame extends JFrame{
 				@Override
 				public void mouseExited(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-					
+					LoginPageFrame.this.setCursor(Cursor.DEFAULT_CURSOR);
 				}
 				
 				@Override
 				public void mouseEntered(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-					
+					LoginPageFrame.this.setCursor(Cursor.HAND_CURSOR);
 				}
 				
 				@Override

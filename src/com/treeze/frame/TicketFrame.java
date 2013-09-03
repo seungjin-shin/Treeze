@@ -87,7 +87,7 @@ public class TicketFrame extends JPanel {
 		this.classInfo = classInfo;
 		this.user = user;
 		this.setBackground(new Color(141, 198, 63));
-		
+		node.getTicketBtn().setVisible(false);
 		ticketTitleLabel = new TicketTitleLabel();
 		gbc.fill = GridBagConstraints.BOTH;
 		this.setLayout(gbl);
