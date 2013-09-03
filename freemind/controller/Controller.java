@@ -328,6 +328,7 @@ public class Controller  implements MapModuleChangeObserver {
     	NodeAdapter selNode = node;
     	NodeAdapter qNode = null;
     	NodeAdapter updateNode = null;
+    	NodeAdapter tmp;
 		// Question 노드 추가 하기 전 카운트
 		int cnt = selNode.getChildCount();
 		
@@ -337,22 +338,35 @@ public class Controller  implements MapModuleChangeObserver {
 		if(selNode.getNodeID().equals(fManager.getTicket().getParentNodeId())){
 			
 			for(int j = 0; j < selNode.getChildCount(); j++){
-				if(((NodeAdapter)selNode.getChildAt(j)).getText().equals("Q")){
-					qNode = (NodeAdapter)selNode.getChildAt(j);
-					updateNode = qNode;
-					break;
+				tmp = (NodeAdapter)selNode.getChildAt(j);
+				if(tmp.getIcons() != null){
+					if(!tmp.getIcons().isEmpty()){
+						if(tmp.getIcons().get(0)
+								.equals(MindIcon.factory("help"))){
+							qNode = tmp;
+							updateNode = qNode;
+							break;
+						}
+					}
 				}
+				
 			}
 			
 			if(qNode == null){
 				qNode = selNode;
-				NodeAdapter tmp;
 				NodeAdapter recurForNode = qNode;
 				
 				while(true){
-					if((tmp = (NodeAdapter) recurForNode.getParentNode()).getText().equals("Q")){
-						updateNode = tmp;
-						break;
+//					if(!(recurForNode.getParentNode()).getIcons().isEmpty(){)
+					tmp = (NodeAdapter) recurForNode.getParentNode();
+					if(tmp.getIcons() != null){
+						if(!tmp.getIcons().isEmpty()){
+							if (tmp.getIcons().get(0)
+									.equals(MindIcon.factory("help"))) {
+								updateNode = tmp;
+								break;
+							}
+						}
 					}
 					recurForNode = tmp;
 				}
@@ -361,7 +375,7 @@ public class Controller  implements MapModuleChangeObserver {
 			fManager.getMc().addNew(qNode, MindMapController.NEW_CHILD, null);
 			fManager.getMc().edit.stopEditing();
 			
-			NodeAdapter tmp = (NodeAdapter) qNode.getChildAt(qNode.getChildCount() - 1);
+			tmp = (NodeAdapter) qNode.getChildAt(qNode.getChildCount() - 1);
 
 			if(fManager.getTicket().getContents().length() > 20)
 				tmp.setText(fManager.getTicket().getContents().substring(0, 20) + "...");
@@ -386,9 +400,9 @@ public class Controller  implements MapModuleChangeObserver {
 		}
 		
 		for (int i = 0; i < cnt; i++) {
-			boolean tmp;
-			tmp = recurAddTicketNode((NodeAdapter) selNode.getChildAt(i));
-			if(tmp)
+			boolean isSearch;
+			isSearch = recurAddTicketNode((NodeAdapter) selNode.getChildAt(i));
+			if(isSearch)
 				return true;
 		}
 		return false;

@@ -44,6 +44,7 @@ import org.apache.http.client.ClientProtocolException;
 
 import freemind.controller.FreemindManager;
 import freemind.controller.ImgBtn;
+import freemind.controller.UpdateThread;
 import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
 
@@ -72,9 +73,6 @@ public class LoginFrame extends JFrame{
 	
 	public LoginFrame(MindMapController mc) {
 		
-		//ddasljdl
-		//sysout exti
-		
 		this.mc = mc;
 		this.getContentPane().setBackground(treezeColor);
 		this.setSize(600, 394);
@@ -100,7 +98,7 @@ public class LoginFrame extends JFrame{
 		setInsets(10, 10, 10, 10);
 		addGrid(gbl, gbc, mPanel, 0, 0, 1, 1, 1, 1, this);
 		
-		setServerIP();
+		setTreezeInfo();
 		setResizable(false);
 		setVisible(true);
 	}
@@ -158,10 +156,11 @@ public class LoginFrame extends JFrame{
 			addGrid(gbl, gbc, loginBtn, 1, 0, 1, 2, 13, 5, loPanel);
 	}
 	
-	public void setServerIP(){
+	public void setTreezeInfo(){
 		String tmp;
 		String ip = null;
 		int port = -1;
+		String version = null;
 		File file = new File(System.getProperty("user.dir"), "treeze.cnf");
 
 		try {
@@ -172,6 +171,8 @@ public class LoginFrame extends JFrame{
 					ip = in.readLine();
 				if(tmp.equals("[serverPort]"))
 					port = Integer.parseInt(in.readLine());
+				if(tmp.equals("[profVersion]"))
+					version = in.readLine();
 			}
 
 		} catch (IOException e) {
@@ -184,7 +185,19 @@ public class LoginFrame extends JFrame{
 		}
 		fManager.setSERVERIP(ip);
 		fManager.setPORT(port);
+		
+//		UploadToServer uploadToServer = new UploadToServer("tmp");
+//		String curVersion = uploadToServer.checkVersion();
+		
+//		if(!version.equals(curVersion)){
+//			executeUpdateProgram();
+//		Thread updateThread = new UpdateThread();
+//		updateThread.start();
+//			System.exit(0);
+//		}
+			
 	}
+	
 	
 	public void setInsets(int t, int b, int l, int r){
 		insets.top = t;
@@ -294,13 +307,13 @@ public class LoginFrame extends JFrame{
 	public void pushLoginBtn(){
 		boolean loginChk = false;
 		UploadToServer uploadToServer = new UploadToServer("tmpForSignConstruction");
-		loginChk = uploadToServer.signIn(emailTf.getText(), pwTf.getText());
+//		loginChk = uploadToServer.signIn(emailTf.getText(), pwTf.getText());
 		System.out.println("loginChk" + loginChk);
-		if (loginChk) {
+//		if (loginChk) {
 			setVisible(false);
 			JFrame pFrame = new ProfileFrame(mc);
 			FreemindManager.getInstance().setProfileFrame(pFrame);
-		}
+//		}
 	}
 	
 	class LogoPanel extends JPanel{

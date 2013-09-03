@@ -7,9 +7,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 public class AddGrid {
-	Insets insets = new Insets(0, 0, 0, 0);
-	GridBagLayout gbl = new GridBagLayout();
-	GridBagConstraints gbc = new GridBagConstraints();
+	public Insets insets = new Insets(0, 0, 0, 0);
+	public GridBagLayout gbl = new GridBagLayout();
+	public GridBagConstraints gbc = new GridBagConstraints();
 	
 	public AddGrid() {
 		gbc.fill = GridBagConstraints.BOTH;

@@ -36,8 +36,10 @@ public class QuestionType extends NodeType{
 			}
 		}
 		else{
-			if(!node.getIcons().isEmpty())
-    			node.removeIcon(0); 
+			if(node.getIcons() != null)
+				if(!node.getIcons().isEmpty())
+					if(node.getIcons().size() == 2)
+						node.removeIcon(1);
     		
 			fm.updateTickets();
 			fm.setVisible(true);

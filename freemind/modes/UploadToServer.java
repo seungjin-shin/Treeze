@@ -32,11 +32,13 @@ import freemind.Frame.TextDialogue;
 import freemind.controller.FreemindManager;
 import freemind.controller.SlideData;
 import freemind.json.ArrayUser;
+import freemind.json.ArrayVersion;
 import freemind.json.ClassInfo;
 import freemind.json.Lecture;
 import freemind.json.Ticket;
 import freemind.json.TreezeData;
 import freemind.json.User;
+import freemind.json.Version;
 
 
 public class UploadToServer {
@@ -183,8 +185,17 @@ public class UploadToServer {
       	  post.setEntity(multipart);  
       	  HttpResponse response = httpClient.execute(post);  
       	  HttpEntity resEntity = response.getEntity();
+      	InputStream inputStream = resEntity.getContent();
+  	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+  	  String str = "";
+  	  String tmp;
+  	  
+			while((tmp = in.readLine()) != null )
+				str += tmp;
+      	  
       	EntityUtils.consume(resEntity);
-      	  System.out.println("postClass");
+      	  System.out.println("postClass : " + str);
         }catch(Exception e){
         	new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
 			e.printStackTrace();
@@ -218,8 +229,16 @@ public class UploadToServer {
     	  post.setEntity(multipart);  
     	  HttpResponse response = httpClient.execute(post);  
     	  HttpEntity resEntity = response.getEntity();
+    	  InputStream inputStream = resEntity.getContent();
+    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+    	  String str = "";
+    	  String tmp;
+    	  
+			while((tmp = in.readLine()) != null )
+				str += tmp;
     	  EntityUtils.consume(resEntity);
-    	  System.out.println("deleteClass");
+    	  System.out.println("deleteClass : " + str);
     	  
       }catch(Exception e){
     	  new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
@@ -313,8 +332,16 @@ public class UploadToServer {
 		post.setEntity(multipart);
 		HttpResponse response = httpClient.execute(post);
 		HttpEntity resEntity = response.getEntity();
+		InputStream inputStream = resEntity.getContent();
+  	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+  	  String str = "";
+  	  String tmp;
+  	  
+			while((tmp = in.readLine()) != null )
+				str += tmp;
 		EntityUtils.consume(resEntity);
-		System.out.println("UploadtoServer : douploadXml()");
+		System.out.println("UploadtoServer : douploadXml() : " + str);
 		
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
@@ -348,8 +375,18 @@ public class UploadToServer {
 			post.setEntity(multipart);
 			HttpResponse response = httpClient.execute(post);
 			HttpEntity resEntity = response.getEntity();
-			EntityUtils.consume(resEntity);
-			System.out.println("UploadtoServer : singUp()");
+			
+			InputStream inputStream = resEntity.getContent();
+	    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+	    	  String str = "";
+	    	  String tmp;
+	    	  
+				while((tmp = in.readLine()) != null )
+					str += tmp;
+			
+				EntityUtils.consume(resEntity);
+			System.out.println("UploadtoServer : singUp() : " + str);
 		} catch (IOException e) {
 			new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
 			e.printStackTrace();
@@ -434,6 +471,7 @@ public class UploadToServer {
 					while((tmp = in.readLine()) != null )
 						str += tmp;
 					
+					System.out.println("checkEmpty : " + str);
 				EntityUtils.consume(resEntity);
 				if(str.equals("true")){
 					return true;
@@ -457,6 +495,7 @@ public class UploadToServer {
 		  HttpPost post = new HttpPost("http://" + fManager.SERVERIP + ":8080/treeze/setStateOfLecture");
 		  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
 		  
+		  String str = "";
 		  
 		  try {
       	  
@@ -477,6 +516,13 @@ public class UploadToServer {
       	  post.setEntity(multipart);  
       	  HttpResponse response = httpClient.execute(post);  
       	  HttpEntity resEntity = response.getEntity();
+      	InputStream inputStream = resEntity.getContent();
+  	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+  	  String tmp;
+  	  
+			while((tmp = in.readLine()) != null )
+				str += tmp;
       	  EntityUtils.consume(resEntity);
       	  
         }catch(Exception e){
@@ -485,7 +531,7 @@ public class UploadToServer {
 			System.exit(0);
         }
 		  
-		  System.out.println("change state : " + state);
+		  System.out.println("change state : " + state + ", : " + str);
 	  }
 	  
 	  public void doExeFileUpload() {
@@ -493,7 +539,7 @@ public class UploadToServer {
         	  File saveFile;//
         	  FileBody bin = null;
         	HttpClient httpClient = new DefaultHttpClient();
-			saveFile = new File("C:\\Users\\Shin\\Desktop\\treeze\\prof_v2.3.exe");
+			saveFile = new File("C:\\Users\\Shin\\Desktop\\treeze\\prof_v3.0.exe");
 
 				if (saveFile.exists())
 					bin = new FileBody(saveFile, "UTF-8");
@@ -501,7 +547,7 @@ public class UploadToServer {
 				HttpPost post = new HttpPost("http://" + SERVERIP
 						+ ":8080/treeze/upload/file");
 
-				StringBody versionIdBody = new StringBody("2",
+				StringBody versionIdBody = new StringBody("3.4",
 						Charset.forName("UTF-8"));
 
 				MultipartEntity multipart = new MultipartEntity(
@@ -513,14 +559,60 @@ public class UploadToServer {
 				post.setEntity(multipart);
 				HttpResponse response = httpClient.execute(post);
 				HttpEntity resEntity = response.getEntity();
+				InputStream inputStream = resEntity.getContent();
+		    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+		    	  String str = "";
+		    	  String tmp;
+		    	  
+					while((tmp = in.readLine()) != null )
+						str += tmp;
 				EntityUtils.consume(resEntity);
 
-           System.out.println("postExeFile");
+           System.out.println("postExeFile : " + str);
            
        }catch(Exception e){
     	   new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
 			e.printStackTrace();
 			System.exit(0);
        }
+	  }
+	  
+	  public String checkVersion(){
+		  HttpClient httpClient = new DefaultHttpClient();
+	       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/getLastVersion?userType=" + Version.PROFESSOR);
+	       String str = "";
+	       MultipartEntity multipart = new MultipartEntity(
+					HttpMultipartMode.BROWSER_COMPATIBLE, null,
+					Charset.forName("UTF-8"));  // xml, classId, LectureName 				
+		try {
+			HttpResponse response = httpClient.execute(get);
+			
+			HttpEntity resEntity = response.getEntity();
+			
+			InputStream inputStream = resEntity.getContent();
+	    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+	    	  
+	    	  String tmp;
+	    	  
+				while((tmp = in.readLine()) != null )
+					str += tmp;
+				
+				System.out.println("checkVersion : " + str);
+				Gson gson = new Gson();
+				ArrayVersion arrayVersion = gson.fromJson(str, ArrayVersion.class);
+				Version version = arrayVersion.getVersion();
+				
+			EntityUtils.consume(resEntity);
+			return version.getVersionId();
+				
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
+		}
+		return null;
 	  }
 }

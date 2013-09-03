@@ -35,6 +35,9 @@ public class FreemindManager {
 	
 	private FreemindManager(){
 		slideShow = new SlideShow(this);
+		user = new User();
+		user.setUserEmail("minsuk@hansung.ac.kr");
+		user.setUserName("¿ÃπŒºÆ");
 	}
 	
 	

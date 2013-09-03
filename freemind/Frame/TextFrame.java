@@ -1,6 +1,5 @@
 package freemind.Frame;
 
-
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -23,12 +22,12 @@ public class TextFrame extends JFrame{
 	FreemindManager fManager = FreemindManager.getInstance();
 	AddGrid addGrid = new AddGrid();
 	
-	public TextFrame(JFrame parentFrame, String text, boolean modal) {
-//		super(parentFrame, "", modal);
+	public TextFrame(String text, int x, int y) {
 		this.text = text;
 		JLabel msgLb = new JLabel(text, JLabel.CENTER);
 		Font f = new Font("text", Font.PLAIN, 25);
 		msgLb.setFont(f);
+		this.setUndecorated(true);
 		
 		CloseBtn closeBtn = new CloseBtn(fManager.closeDefault, fManager.closePress, fManager.closeOver);
 		closeBtn.setBackground(new Color(0, 0, 0, 0));
@@ -45,8 +44,8 @@ public class TextFrame extends JFrame{
 		Point parentPrameLoc = fManager.getFreemindMainFrame().getLocation();
 		int parentWidth = fManager.getFreemindMainFrame().getWidth();
 		int parentHeight = fManager.getFreemindMainFrame().getHeight();
-		
-		this.setBounds((int)(parentPrameLoc.getX() + parentWidth / 3), (int)(parentPrameLoc.getY() + parentHeight / 3), parentWidth / 3, parentHeight / 4);
+		this.setSize((int)(parentWidth / 3), (int)(parentHeight / 4));
+		this.setLocation(x - this.getWidth(), y);
 		this.setResizable(false);
 		this.setVisible(true);
 	}

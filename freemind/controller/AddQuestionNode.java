@@ -1,6 +1,7 @@
 package freemind.controller;
 
 import freemind.modes.ControllerAdapter;
+import freemind.modes.MindIcon;
 import freemind.modes.MindMapNode;
 import freemind.modes.NodeAdapter;
 import freemind.modes.mindmapmode.MindMapController;
@@ -42,7 +43,8 @@ public class AddQuestionNode {
 		int cnt = modifyForQuestion.getChildCount();
 		if(cnt != 0){
 			forModifyNodeName = (NodeAdapter)modifyForQuestion.getChildAt(cnt - 1);
-			forModifyNodeName.setText("Q");
+			MindIcon icon = MindIcon.factory("help");
+			forModifyNodeName.addIcon(icon, -1);
 			forModifyNodeName.setNodeTypeStr("Question");
 			FreemindManager.getInstance().getMc().nodeChanged(forModifyNodeName);
 		}

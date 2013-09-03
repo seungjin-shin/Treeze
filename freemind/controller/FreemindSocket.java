@@ -272,7 +272,6 @@ import com.google.gson.Gson;
 import freemind.Frame.SurveyFrame;
 import freemind.Frame.SurveyResultFrame;
 import freemind.Frame.TextDialogue;
-import freemind.Frame.TextFrame;
 import freemind.json.ArrayLecture;
 import freemind.json.Survey;
 import freemind.json.Ticket;
