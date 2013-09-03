@@ -844,17 +844,6 @@ public class MindNode {
 			int a = 0;
 			try {
 				sleep(1000);
-
-				// while(true){
-				//
-				// component.setLocation(component.getLocation().x,component.getLocation().y+a);
-				// container.repaint();
-				// a++;
-				// if(a==10){
-				// break;
-				// }
-				// sleep(100);
-				// }
 				container.remove(node.getPptBtn());
 				container.remove(node.getTicketBtn());
 				container.repaint();

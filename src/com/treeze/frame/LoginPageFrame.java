@@ -270,7 +270,7 @@ public class LoginPageFrame extends JFrame{
 //		}
 		User user = User.getInstance();
 		user.setUserName("신건영");
-		user.setUserEmail("12903812389@naver.com");
+		user.setUserEmail("lovesigma@naver.com");
 		new ProfileFrame();
 	}
 	

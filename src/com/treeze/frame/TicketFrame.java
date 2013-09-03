@@ -324,8 +324,10 @@ public class TicketFrame extends JPanel {
 			jsp.setBorder(null);
 			// contentsLabel.setPreferredSize(new Dimension(1000,
 			// contentsLabel.getHeight()));
+			if(ticket.getuserName().equals("교수"))
 			whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
-
+			else
+				whriterLabel = new JLabel("학생", JLabel.CENTER);
 			this.setBackground(Color.WHITE);
 			// this.add(noPanel);
 			this.setLayout(gbl);
@@ -357,8 +359,10 @@ public class TicketFrame extends JPanel {
 			jsp = new JScrollPane(contentsLabel);
 
 			jsp.setBorder(null);
-			
-			whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
+			if(ticket.getuserName().equals("교수"))
+				whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
+				else
+					whriterLabel = new JLabel("학생", JLabel.CENTER);
 
 			this.setBackground(Color.WHITE);
 			// this.add(noPanel);

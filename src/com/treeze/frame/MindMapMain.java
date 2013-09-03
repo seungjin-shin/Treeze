@@ -352,7 +352,7 @@ public class MindMapMain extends JPanel {
 				User user = User.getInstance();
 				// user 쨉?占승올��� 쨘쨘?占썩�
 				user.setUserType(User.STUDENT);
-				user.setUserEmail("Kunyoungsin@hansung.ac.kr");
+				
 
 				// classInfo 쨉?占승올��� 쨘쨘?占썩�
 				classInfo.setClassName("������");
