@@ -191,6 +191,8 @@ public class LoginFrame extends JFrame{
 		fManager.setSERVERIP(ip);
 		fManager.setPORT(port);
 		
+		fManager.getUploadToServer().setSERVERIP(ip);
+		
 //		UploadToServer uploadToServer = new UploadToServer("tmp");
 //		String curVersion = uploadToServer.checkVersion();
 		

@@ -46,6 +46,11 @@ import freemind.json.Version;
 public class UploadToServer {
 	FreemindManager fManager;
 	String SERVERIP;
+	
+	public void setSERVERIP(String sERVERIP) {
+		SERVERIP = sERVERIP;
+	}
+
 	JFrame curFrame;
 	
 	public JFrame getCurFrame() {
@@ -58,7 +63,6 @@ public class UploadToServer {
 
 	public UploadToServer(FreemindManager f) {
 		fManager = f;
-		SERVERIP = fManager.SERVERIP;
 	}
 
 	  public void doFileUpload() {

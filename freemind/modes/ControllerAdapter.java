@@ -101,7 +101,6 @@ import freemind.controller.FreemindManager;
 import freemind.controller.MapModuleManager;
 import freemind.controller.MindMapNodesSelection;
 import freemind.controller.ProgressFrame;
-import freemind.controller.ProgressFrame2;
 import freemind.controller.ProgressThread;
 import freemind.controller.SlideData;
 import freemind.controller.StructuredMenuHolder;
@@ -152,7 +151,7 @@ public abstract class ControllerAdapter implements ModeController {
     private MindMapController mc;
     FreemindManager fManager = FreemindManager.getInstance();
     private ArrayList<String> firstWordArr = new ArrayList<String>();
-    private ProgressFrame2 progFrame;
+    private ProgressFrame progFrame;
     
     public MindMapController getMc() {
 		return mc;
