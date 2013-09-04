@@ -261,7 +261,7 @@ public class MindNode {
 		parentNode.ChildCount++;
 		this.paretNodeChildCntAdd();
 		this.endX = this.locateX + NODE_WIDTH;
-		middleY = locateY + scaleY / 2;
+		middleY = locateY +NODE_HEIGHT / 2;
 		endY = locateY + scaleY;
 		ImgIconSet();
 
@@ -733,12 +733,10 @@ public class MindNode {
 		this.childeNodes = childeNodes;
 	}
 
-	public static void setNav(CurrentPositionOfNav naviInfo) {
+	public static void setNav(MindNode node) {
 		// TODO Auto-generated method stub
-		MindNode now = root;
-		for (int i = 0; i < naviInfo.getPosition().size(); i++) {
-			now = now.childeNodes.get(naviInfo.getPosition().get(i));
-		}
+		MindNode now = node;
+
 
 		now.setPassed(true);
 		MindNode.getNow()

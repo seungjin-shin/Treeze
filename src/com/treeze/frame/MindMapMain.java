@@ -45,6 +45,7 @@ import com.treeze.data.ClassInfo;
 import com.treeze.data.CurrentPositionOfNav;
 import com.treeze.data.JsonTicket;
 import com.treeze.data.MindNode;
+import com.treeze.data.NaviInfo;
 import com.treeze.data.ServerSocket;
 import com.treeze.data.Ticket;
 import com.treeze.data.TreezeData;
@@ -127,8 +128,8 @@ public class MindMapMain extends JPanel {
 		
 		setVisible(true);
 		init(); // 占썬�占썸에占쏙옙占쏙옙占쏙옙占�(?占썩�占썹�占썰빳占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙);
-		
-		
+
+	
 		
 
 	}
@@ -411,13 +412,17 @@ public class MindMapMain extends JPanel {
 								.get(0));
 						if (jsonResultTreezeData.getDataType().equals(
 								TreezeData.NAVI)) {
-
-								type = new TypeToken<CurrentPositionOfNav>() {
-								}.getType();
-								CurrentPositionOfNav naviInfo = (CurrentPositionOfNav) gson
-										.fromJson(jsonResultTreezeData
-												.getArgList().get(0), type);
-								MindNode.setNav(naviInfo);
+							
+							NaviInfo naviInfo = (NaviInfo) gson
+									.fromJson(jsonResultTreezeData
+											.getArgList().get(0), NaviInfo.class);
+							
+							MindNode naviNode =  MindNode.getNodeuseNodeID(MindNode.getRoot(),naviInfo.getNodeID());
+							
+								MindNode.setNav(naviNode);
+							
+							
+							
 							
 							repaint();
 							
