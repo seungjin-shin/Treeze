@@ -12,16 +12,21 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
+import org.apache.batik.dom.util.HashTable;
+
 
 import freemind.Frame.SurveyFrame;
 import freemind.json.CurrentPositionOfNav;
 import freemind.json.FreemindGson;
+import freemind.json.NaviInfo;
 import freemind.json.TreezeData;
+import freemind.modes.MindIcon;
 import freemind.modes.NodeAdapter;
 
 public class SlideShow {
@@ -37,6 +42,12 @@ public class SlideShow {
 	String jsonString;
 	FreemindGson myGson = new FreemindGson();
 	
+	HashMap<String, Image> resizeImgHashMap = new HashMap<String, Image>();
+
+	public HashMap<String, Image> getResizeImgHashMap() {
+		return resizeImgHashMap;
+	}
+
 	public OutputStream getOs() {
 		return os;
 	}
@@ -64,25 +75,30 @@ public class SlideShow {
 	}
 	
 	public void setfocus(NodeAdapter focus) {
-//		if(focus.getPrev() == null){
-//			this.focus = focus;
-//			show();
-//		}
-//		else{
-//			if (this.focus != null && this.focus.imgCnt > 1
-//				&& this.focus.imgCnt > pagenum + 1) {
-//			pagenum++;
-//		} else {
-//			pagenum = 0;
-//			while (focus.imgCnt == 0)
-//				focus = focus.next;
-//			this.focus = focus;
-//		}
-//		str = focus.imgPath + focus.nodeName + ".jpg";
-//		System.out.println(focus.imgPath + focus.nodeName + ".jpg");
-//		show();
-//		}
+		setAndRemoveCurruntIcon(focus);
 		this.focus = focus;
+	}
+	
+	public void setAndRemoveCurruntIcon(NodeAdapter cur){
+		NodeAdapter prev = this.focus;
+		int pos;
+		
+		if(prev != null){
+			if(prev.getIcons() != null){
+				prev.getIcons().remove(MindIcon.factory("button_ok"));
+			}
+			FreemindManager.getInstance().getMc().nodeChanged(prev);
+		}
+		
+		if(cur.getIcons() != null){
+			pos = cur.getIcons().size();
+		}
+		else{
+			pos = -1;
+		}
+		cur.addIcon(MindIcon.factory("button_ok"), pos);
+		FreemindManager.getInstance().getMc().nodeChanged(cur);
+		
 	}
 
 	NodeAdapter getfocus() {
@@ -176,6 +192,7 @@ public class SlideShow {
 			this.setSize((int) xsize, (int) ysize);
 			this.slideShow = slideShow;
 			this.setUndecorated(true);
+			this.setAlwaysOnTop(true);
 			this.addKeyListener(new KeyListener() {
 				
 				@Override
@@ -254,29 +271,15 @@ public class SlideShow {
 		}
 		
 		public void setCurrentImage(){
-			Image i = null;
-			try {
-				
-				i = ImageIO.read(new File(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId(), slideShow.getfocus().getImgPath() + ".jpg"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			curImage = (fManager.makeResizedImageIcon((int)xsize, (int)ysize, i)).getImage();
-			
-//			ImageIcon imgIcon = new ImageIcon(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId(), slideShow.getfocus().getImgPath() + ".jpg");
-//			curImage = imgIcon.getImage();
+			curImage = resizeImgHashMap.get(focus.getImgPath());
 		}
 	}
 	
 	
 	public void sendPosition(){
-		ArrayList<Integer> idxReverseList = new ArrayList<Integer>();
 		int idx;
-		ArrayList<Integer> idxList = new ArrayList<Integer>();
 		NodeAdapter selNode = c.getSlideShow().getfocus();
-		NodeAdapter selNodeParent;
-		
+		String nodeID;
 		if (selNode.isRoot()){
 			treezeData.setDataType(TreezeData.NAVI);
 			treezeData.getArgList().clear();
@@ -288,7 +291,6 @@ public class SlideShow {
 					
 			try {
 				if (os != null) {
-					System.out.println("sendPosition");
 					os.write(jsonString.getBytes("UTF-8"));
 					os.flush();
 				}
@@ -303,23 +305,15 @@ public class SlideShow {
 			System.out.println("start");
 			return;
 		}
-		
-		while (!selNode.isRoot()) {
-			selNodeParent = (NodeAdapter) selNode.getParentNode();
-			idx = selNodeParent.getChildPosition(selNode);
-			idxReverseList.add(idx);
-			selNode = selNodeParent;
+		else{
+			nodeID = selNode.getNodeID();
 		}
 		
-		for (int i = idxReverseList.size(); i > 0; i--) {
-			idxList.add(idxReverseList.get(i - 1));
-		}
-		
-		CurrentPositionOfNav sendPs = new CurrentPositionOfNav();
+		NaviInfo naviInfo = new NaviInfo();
 
-		sendPs.setPosition(idxList);
+		naviInfo.setNodeID(nodeID);
 
-		jsonString = myGson.toJson(sendPs);
+		jsonString = myGson.toJson(naviInfo);
 		
 		treezeData.setDataType(TreezeData.NAVI);
 		treezeData.getArgList().clear();
@@ -330,7 +324,6 @@ public class SlideShow {
 		
 		try {
 			if (os != null) {
-				System.out.println("sendPosition");
 				os.write(jsonString.getBytes("UTF-8"));
 				os.flush();
 			}

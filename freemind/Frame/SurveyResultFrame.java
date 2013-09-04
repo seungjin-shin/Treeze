@@ -65,6 +65,7 @@ public class SurveyResultFrame extends JFrame implements ActionListener{
 		resultPn.setLocation(10, 120);
 		add(resultPn);
 		
+		setAlwaysOnTop(true);
 		setVisible(true);
 	}
 	public void paint(Graphics g){

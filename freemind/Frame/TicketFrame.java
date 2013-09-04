@@ -23,6 +23,8 @@ import java.awt.RenderingHints;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
@@ -52,6 +54,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.google.gson.Gson;
+import com.sun.org.apache.xpath.internal.FoundIndex;
 
 import freemind.controller.Controller;
 import freemind.controller.FreemindManager;
@@ -147,6 +150,27 @@ public class TicketFrame extends JFrame{
 		listPanel.getViewport().add(grid, null);
 		
 		addWindowListener(new WindowCloseListener());
+		
+		setAlwaysOnTop(true);
+		
+//		addFocusListener(new FocusListener() {
+//			
+//			@Override
+//			public void focusLost(FocusEvent e) {
+//				requestFocus();
+////				requestFocusMainFrame();
+//			}
+//			
+//			@Override
+//			public void focusGained(FocusEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
+	}
+	
+	public void requestFocusMainFrame(){
+//		setAlwaysOnTop(true)
 	}
 	
 	class WindowCloseListener implements WindowListener{

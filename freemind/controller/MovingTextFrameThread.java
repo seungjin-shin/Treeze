@@ -1,6 +1,8 @@
 package freemind.controller;
 
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import freemind.Frame.TextFrame;
 
@@ -18,7 +20,7 @@ public class MovingTextFrameThread extends Thread{
 		boolean overHalf = false;
 		while(true){
 			try {
-				Thread.sleep(10);
+				Thread.sleep(3);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -37,5 +39,6 @@ public class MovingTextFrameThread extends Thread{
 				break;
 			}
 		}
+		FreemindManager.getInstance().slideShow.getImgFrame().requestFocus();
 	}
 }

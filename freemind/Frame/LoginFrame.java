@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -63,7 +64,7 @@ public class LoginFrame extends JFrame{
 //	LoginPanel loPanel = new LoginPanel(Toolkit.getDefaultToolkit().getImage("images/LoginInputBar.png"),
 //			Toolkit.getDefaultToolkit().getImage("images/login.png"));
 	LoginPanel loPanel; 
-	SignPanel sPanel = new SignPanel();
+	SignPanel sPanel;
 	RightPanel rPanel = new RightPanel();
 	MindMapController mc;
 	JTextField emailTf = new HintTextField("e-mail address");;
@@ -79,11 +80,11 @@ public class LoginFrame extends JFrame{
 		this.setLayout(gbl);
 		this.setLocation(400, 100);
 		loPanel = new LoginPanel();
-		
+		sPanel = new SignPanel();
 		//setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		gbc.fill = GridBagConstraints.BOTH;
-		setInsets(40, 45, 120, 120);
+		setInsets(30, 35, 120, 120);
 		addGrid(gbl, gbc, lPanel, 0, 0, 1, 1, 1, 30, mPanel);
 
 		setLoginPanel();
@@ -101,6 +102,10 @@ public class LoginFrame extends JFrame{
 		setTreezeInfo();
 		setResizable(false);
 		setVisible(true);
+	}
+	
+	public void setMainCursor(int cursor){
+		setCursor(cursor);
 	}
 	
 	public void setLoginPanel(){
@@ -243,31 +248,31 @@ public class LoginFrame extends JFrame{
 			forgotPw.setFont(f);
 			signUp.setForeground(Color.white);
 			signUp.addMouseListener(new MouseListener() {
-				
+
 				@Override
 				public void mouseReleased(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 				@Override
 				public void mousePressed(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 				@Override
 				public void mouseExited(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-					
+					setMainCursor(Cursor.DEFAULT_CURSOR);
 				}
-				
+
 				@Override
 				public void mouseEntered(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-					
+					setMainCursor(Cursor.HAND_CURSOR);
 				}
-				
+
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					new SignFrame();

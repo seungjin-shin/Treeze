@@ -18,13 +18,11 @@ import freemind.controller.FreemindManager;
 import freemind.controller.ImgBtn;
 
 public class TextDialogue extends JDialog{
-	String text;
 	FreemindManager fManager = FreemindManager.getInstance();
 	AddGrid addGrid = new AddGrid();
 	
 	public TextDialogue(JFrame parentFrame, String text, boolean modal) {
 		super(parentFrame, "", modal);
-		this.text = text;
 		JLabel msgLb = new JLabel(text, JLabel.CENTER);
 		Font f = new Font("text", Font.PLAIN, 25);
 		msgLb.setFont(f);
@@ -37,7 +35,7 @@ public class TextDialogue extends JDialog{
 		this.getContentPane().setBackground(fManager.treezeColor);
 		this.setLayout(addGrid.getGbl());
 		
-		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), msgLb, 0, 0, 1, 1, 1, 1, this);
+		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), msgLb,    0, 0, 1, 1, 1, 1, this);
 		addGrid.getInsets().set(0, 70, 30, 70);
 		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), closeBtn, 0, 1, 1, 1, 1, 1, this);
 		
@@ -46,7 +44,37 @@ public class TextDialogue extends JDialog{
 		int parentHeight = fManager.getFreemindMainFrame().getHeight();
 		
 		this.setBounds((int)(parentPrameLoc.getX() + parentWidth / 3), (int)(parentPrameLoc.getY() + parentHeight / 3), parentWidth / 3, parentHeight / 4);
-		this.setResizable(false);
+//		this.setResizable(false);
+		this.setVisible(true);
+	}
+	
+	public TextDialogue(JFrame parentFrame, String text, String text2, boolean modal) {
+		super(parentFrame, "", modal);
+		JLabel msgLb = new JLabel(text, JLabel.CENTER);
+		JLabel msgLb2 = new JLabel(text2, JLabel.CENTER);
+		Font f = new Font(text, Font.PLAIN, 25);
+		msgLb.setFont(f);
+		msgLb2.setFont(f);
+		
+		CloseBtn closeBtn = new CloseBtn(fManager.closeDefault, fManager.closePress, fManager.closeOver);
+		closeBtn.setBackground(new Color(0, 0, 0, 0));
+		closeBtn.setBorderPainted(false);
+		closeBtn.setContentAreaFilled(false);
+		
+		this.getContentPane().setBackground(fManager.treezeColor);
+		this.setLayout(addGrid.getGbl());
+		
+		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), msgLb,    0, 0, 1, 1, 1, 1, this);
+		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), msgLb2,    0, 1, 1, 1, 1, 1, this);
+		addGrid.getInsets().set(0, 70, 10, 70);
+		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), closeBtn, 0, 2, 1, 1, 1, 1, this);
+		
+		Point parentPrameLoc = fManager.getFreemindMainFrame().getLocation();
+		int parentWidth = fManager.getFreemindMainFrame().getWidth();
+		int parentHeight = fManager.getFreemindMainFrame().getHeight();
+		
+		this.setBounds((int)(parentPrameLoc.getX() + parentWidth / 3), (int)(parentPrameLoc.getY() + parentHeight / 3), parentWidth / 3, parentHeight / 4);
+//		this.setResizable(false);
 		this.setVisible(true);
 	}
 	

@@ -37,9 +37,7 @@ public class QuestionType extends NodeType{
 		}
 		else{
 			if(node.getIcons() != null)
-				if(!node.getIcons().isEmpty())
-					if(node.getIcons().size() == 2)
-						node.removeIcon(1);
+				node.getIcons().remove(MindIcon.factory("Mail"));
     		
 			fm.updateTickets();
 			fm.setVisible(true);

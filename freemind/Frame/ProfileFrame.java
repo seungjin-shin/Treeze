@@ -62,6 +62,7 @@ import com.google.gson.reflect.TypeToken;
 import freemind.controller.AddAllTicketThread;
 import freemind.controller.FreemindManager;
 import freemind.controller.ImgBtn;
+import freemind.controller.SetResizeImgThread;
 import freemind.json.ArrayClass;
 import freemind.json.ArrayLecture;
 import freemind.json.ClassInfo;
@@ -224,7 +225,7 @@ public class ProfileFrame extends JFrame {
 		JLabel noPanel = new JLabel("Title", JLabel.CENTER);
 		JLabel subjectPanel = new JLabel("Mode", JLabel.CENTER);
 		JLabel whritePane = new JLabel("Delete",JLabel.CENTER);
-		addGrid(gbl, gbc, noPanel,      0, 0, 1, 1, 22, 1, lectureHead);
+		addGrid(gbl, gbc, noPanel,      0, 0, 1, 1, 24, 1, lectureHead);
 		addGrid(gbl, gbc, new JLabel(), 1, 0, 1, 1, 1, 1, lectureHead);
 		addGrid(gbl, gbc, subjectPanel, 2, 0, 1, 1, 3, 1, lectureHead);
 		addGrid(gbl, gbc, whritePane,   3, 0, 1, 1, 5, 1, lectureHead);
@@ -834,13 +835,65 @@ public class ProfileFrame extends JFrame {
 			}
 		}
 	}
+	
+	class RegistBtn extends ImgBtn{
+		int classId;
+		
+		public void setClassId(int classId) {
+			this.classId = classId;
+		}
 
+		public RegistBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void Action() {
+			fManager.setClassId(classId);
+			mc.open();
+		}
+		
+		
+	}
+	
+	class StartLectureBtn extends ImgBtn{
+		ClassInfo classInfo;
+		public void setClassInfo(ClassInfo classInfo) {
+			this.classInfo = classInfo;
+		}
+
+		public StartLectureBtn(Image defaultImg, Image pressImg, Image enterImg) {
+			super(defaultImg, pressImg, enterImg);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void Action() {
+			fManager.setClassId((int) classInfo.getClassId());
+			
+			UploadToServer uploadToServer = new UploadToServer();
+			uploadToServer.setStateOfLecture(fManager.getLecture(), true);
+			
+			DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(classInfo.getClassId());
+			downLoadNetworkThread.start();
+			
+			setMainFramevisible(false);
+			FreemindManager.getInstance().getFreemindMainFrame().setVisible(true);
+			
+			MakeXMLFileThread makeXMLThread = new MakeXMLFileThread(classInfo);
+			makeXMLThread.start();
+		}
+		
+	}
+	
 	class ClassListItem extends JPanel {
 		JLabel classNm;
-		JButton regBtn = new JButton("Reg Mindmap");
-		JButton goBtn = new JButton("Start Lecture");
+		RegistBtn regBtn;
+		StartLectureBtn startBtn;
 		JCheckBox delChkBox;
-		
+		JPanel btnPanel = new JPanel();
+		JButton tmp, tmp2;
 		public ClassListItem(final ClassInfo classInfo) {
 			// TODO Auto-generated constructor stub
 			this.setLayout(gbl);
@@ -851,102 +904,44 @@ public class ProfileFrame extends JFrame {
 			delChkBox.setBackground(Color.white);
 			chkBoxList.add(delChkBox);
 			
-			regBtn.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					fManager.setClassId(classInfo.getClassId());
-					mc.open();
-				}
-			});
-			
-			goBtn.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					classId = classInfo.getClassId();
-					fManager.setClassId((int) classId);
-					
-					UploadToServer uploadToServer = new UploadToServer();
-					uploadToServer.setStateOfLecture(fManager.getLecture(), true);
-					
-					DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(classId);
-					downLoadNetworkThread.start();
-					
-					setMainFramevisible(false);
-					FreemindManager.getInstance().getFreemindMainFrame().setVisible(true);
-					
-					MakeXMLFileThread makeXMLThread = new MakeXMLFileThread(classInfo);
-					makeXMLThread.start();
-				}
-			});
+			btnPanel.setBackground(fManager.noColor);
+			btnPanel.setLayout(new GridLayout(2, 1, 0, 5));
 			
 			UploadToServer uploadToServer = new UploadToServer();
 			boolean chkClassEmpty = uploadToServer.checkClassIsEmpty(classInfo.getClassId());
-			
-			if(chkClassEmpty)
+
+			if(chkClassEmpty){
+				regBtn = new RegistBtn(fManager.regFalse, fManager.regFalse, fManager.regFalse);
 				regBtn.setEnabled(false);
-			else
-				goBtn.setEnabled(false);
+				startBtn = new StartLectureBtn(fManager.startDefault, fManager.startPress, fManager.startOver);
+				startBtn.setClassInfo(classInfo);
+			}
+			else{
+				startBtn = new StartLectureBtn(fManager.startFalse, fManager.startFalse, fManager.startFalse);
+				startBtn.setEnabled(false);
+				regBtn = new RegistBtn(fManager.regDefault, fManager.regPress, fManager.regOver);
+				regBtn.setClassId(classInfo.getClassId());
+			}
 			
-			insets.top = 0;
-			insets.bottom = 0;
-			addGrid(gbl, gbc, classNm,  0, 0, 1, 2, 8, 3, this);
+			regBtn.setBorderPainted(false);
+			regBtn.setContentAreaFilled(false);
+			regBtn.setFocusable(false);
+			startBtn.setBorderPainted(false);
+			startBtn.setContentAreaFilled(false);
+			startBtn.setFocusable(false);
+			
+			btnPanel.add(regBtn);
+			btnPanel.add(startBtn);
+			
+			insets.top = 30;
+			insets.bottom = 30;
+			addGrid(gbl, gbc, classNm,      0, 1, 1, 1, 8, 1, this);
 			insets.top = 10;
 			insets.bottom = 10;
-			addGrid(gbl, gbc, regBtn,   1, 0, 1, 1, 1, 3, this);
-			insets.top = 0;
+			addGrid(gbl, gbc, btnPanel,     1, 0, 1, 3, 2, 1, this);
+			insets.top = 10;
 			insets.bottom = 10;
-			addGrid(gbl, gbc, goBtn,    1, 1, 1, 1, 1, 3, this);
-			addGrid(gbl, gbc, delChkBox,2, 0, 1, 2, 1, 1, this);
-			
-
-			this.addMouseListener(new MouseListener() {
-
-				@Override
-				public void mouseReleased(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-					
-					setBackground(new Color(255, 255, 255, 255));
-				}
-
-				public void mousePreswsed(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseExited(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {
-					// TODO Auto-generated method stub
-					setBackground(new Color(10, 10, 100, 100));
-					
-//					lectureId  = lecture.getLectureId();
-//					networkFlag = NETWORK_FLAG_GET_MINDMAP;
-//					NetworkThread networkThread = new NetworkThread();
-//					networkThread.start();
-//					lectureHead.setVisible(false);
-//					grid.removeAll();
-				}
-			});
-
+			addGrid(gbl, gbc, delChkBox,    2, 0, 1, 3, 1, 1, this);
 		}
 
 		@Override
@@ -1076,7 +1071,7 @@ public class ProfileFrame extends JFrame {
 			sbResult.delete(0, sbResult.capacity());
 			try {
 				url = new URL(
-					"http://" + SERVERIP + ":8080/treeze/getMindMap?classId="+classId);
+					"http://" + SERVERIP + ":8080/treeze/getMindMap?classId=" + cInfo.getClassId());
 				
 				connection = (HttpURLConnection) url.openConnection();
 				
@@ -1116,7 +1111,7 @@ public class ProfileFrame extends JFrame {
 				if(!dirPath.exists())
 					dirPath.mkdir();
 				
-				File file = new File(DOWNPATH + System.getProperty("file.separator") + fManager.getClassId(), classId + ".mm");
+				File file = new File(DOWNPATH + System.getProperty("file.separator") + fManager.getClassId(), cInfo.getClassId() + ".mm");
 				
 				OutputStreamWriter fileOutput;
 				fileOutput = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
@@ -1140,6 +1135,11 @@ public class ProfileFrame extends JFrame {
 				
 				fManager.setMode(FreemindManager.LECMODE);
 				fManager.setEnableMenuBar();
+				
+				fManager.getC().setSlideShowInfo();
+				
+				Thread setResizeImgThread = new SetResizeImgThread();
+				setResizeImgThread.start();
 				
 				Gson gson = new Gson();
 				User user = new User();

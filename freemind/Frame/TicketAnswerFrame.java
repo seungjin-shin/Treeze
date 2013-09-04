@@ -58,6 +58,7 @@ public class TicketAnswerFrame extends JFrame{
 		//fullPanel.setLayout(gbl);
 		//addGrid(gbl, gbc, new RoundPanel(), 0, 0, 1, 1, 1, 1, fullPanel);
 		//this.setResizable(false);
+		setAlwaysOnTop(true);
 		setVisible(true);
 		logoPanel.setVisible(true);
 	}

@@ -357,7 +357,6 @@ public class Controller  implements MapModuleChangeObserver {
 				NodeAdapter recurForNode = qNode;
 				
 				while(true){
-//					if(!(recurForNode.getParentNode()).getIcons().isEmpty(){)
 					tmp = (NodeAdapter) recurForNode.getParentNode();
 					if(tmp.getIcons() != null){
 						if(!tmp.getIcons().isEmpty()){
@@ -610,36 +609,40 @@ public class Controller  implements MapModuleChangeObserver {
         }}
     
     public void startSlideShow(){
-		
-		if (!fManager.isSlideShowInfo()) {
-
-			NodeAdapter root = (NodeAdapter) fManager.getMc().getRootNode();
-			NodeAdapter next;// = (NodeAdapter)mc.getRootNode();
-
-			// set FreemindManager isSlideshow
-			fManager.setSlideShowInfo(true);
-
-			// set root
-			root.setPrev(null);
-			if (root.hasChildren()) {
-				next = (NodeAdapter) root.getChildAt(0);
-				root.setNext(next);
-
-				for (int i = 0; i < root.getChildCount(); i++) { // root direct
-																	// childs
-																	// set
-					recurSetSlideShowInfo((NodeAdapter) root.getChildAt(i));
-				}
-				System.out.println("Controller : set slideShowInfo");
-			} else {
-				System.out.println("Controller : only root");
-				return;
-			}
+		if(fManager.getMc().getRootNode().getChildCount() == 0){
+			new TextDialogue(fManager.getFreemindMainFrame(), "Only root.", true);
+			return;
+		}
+    	if(!fManager.isSlideShowInfo()){
+    		new TextDialogue(fManager.getFreemindMainFrame(), "Setting SlideShow info.", "Please waiting.", true);
+    		return;
     	}
-    	
     	getSlideShow().setfocus((NodeAdapter)fManager.getMc().getRootNode().getChildAt(0));
 		getSlideShow().show();
 		getSlideShow().sendPosition();
+    }
+    
+    public void setSlideShowInfo(){
+
+		NodeAdapter root = (NodeAdapter) fManager.getMc().getRootNode();
+		NodeAdapter next;// = (NodeAdapter)mc.getRootNode();
+
+		// set root
+		root.setPrev(null);
+		if (root.hasChildren()) {
+			next = (NodeAdapter) root.getChildAt(0);
+			root.setNext(next);
+
+			for (int i = 0; i < root.getChildCount(); i++) { // root direct
+																// childs
+																// set
+				recurSetSlideShowInfo((NodeAdapter) root.getChildAt(i));
+			}
+			System.out.println("Controller : set slideShowInfo");
+		} else {
+			System.out.println("Controller : only root");
+			return;
+		}
     }
     
     protected class CloseLectureAction extends AbstractAction {

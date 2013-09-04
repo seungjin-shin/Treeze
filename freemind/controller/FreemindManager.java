@@ -82,6 +82,15 @@ public class FreemindManager {
 	public Image signOver = new ImageIcon(getClass().getClassLoader().getResource("images/sign2.png")).getImage();
 	public Image signPress = new ImageIcon(getClass().getClassLoader().getResource("images/sign3.png")).getImage();
 	
+	public Image regFalse = new ImageIcon(getClass().getClassLoader().getResource("images/regmindmap2.png")).getImage();
+	public Image regDefault = new ImageIcon(getClass().getClassLoader().getResource("images/regmindmap1.png")).getImage();
+	public Image regOver = new ImageIcon(getClass().getClassLoader().getResource("images/regmindmap3.png")).getImage();
+	public Image regPress = new ImageIcon(getClass().getClassLoader().getResource("images/regmindmap4.png")).getImage();
+	public Image startFalse = new ImageIcon(getClass().getClassLoader().getResource("images/startlecture2.png")).getImage();
+	public Image startDefault = new ImageIcon(getClass().getClassLoader().getResource("images/startlecture1.png")).getImage();
+	public Image startOver = new ImageIcon(getClass().getClassLoader().getResource("images/startlecture3.png")).getImage();
+	public Image startPress = new ImageIcon(getClass().getClassLoader().getResource("images/startlecture4.png")).getImage();
+	
 	
 	MindMapController mc;
 	Controller c;
