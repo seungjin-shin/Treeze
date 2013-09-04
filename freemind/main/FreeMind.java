@@ -271,8 +271,8 @@ public class FreeMind extends JFrame implements FreeMindMain {
 			
 			@Override
 			public void windowClosing(WindowEvent e) {
-				 UploadToServer uploadToServer = new UploadToServer();
-			  	  uploadToServer.setStateOfLecture(FreemindManager.getInstance().getLecture(), false);
+				setCurFrame();
+			  	  FreemindManager.getInstance().getUploadToServer().setStateOfLecture(FreemindManager.getInstance().getLecture(), false);
 			}
 			
 			@Override
@@ -288,7 +288,10 @@ public class FreeMind extends JFrame implements FreeMindMain {
 			}
 		});
 	}
-
+	
+	public void setCurFrame(){
+		FreemindManager.getInstance().getUploadToServer().setCurFrame(FreemindManager.getInstance().getFreemindMainFrame());
+	}
 	
 	void init(FeedBack feedback) {
 		/* This is only for apple but does not harm for the others. */

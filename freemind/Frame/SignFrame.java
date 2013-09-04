@@ -300,15 +300,17 @@ public class SignFrame extends JFrame {
 		signUser.setUserEmail(emailTf.getText());
 		signUser.setUserName(userTf.getText());
 		signUser.setUserType(typeBtnGp.getSelection().getActionCommand());
-		
-		UploadToServer uploadToServer = new UploadToServer();
-		uploadToServer.signPost(signUser);
+		setCurFrame();
+		fManager.getUploadToServer().signPost(signUser);
 		
 		setVisible(false);
 		// JFrame pFrame = new ProfileFrame(mc);
 		// FreemindManager.getInstance().setProfileFrame(pFrame);
 	}
-
+	
+	public void setCurFrame(){
+		fManager.getUploadToServer().setCurFrame(this);
+	}
 	class LogoPanel extends JPanel {
 		ImageIcon icon;
 

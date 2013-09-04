@@ -14,6 +14,8 @@ import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -44,20 +46,21 @@ import freemind.json.Version;
 public class UploadToServer {
 	FreemindManager fManager;
 	String SERVERIP;
-	String userName;
-	String userEmail;
+	JFrame curFrame;
 	
-	public UploadToServer() {
-		fManager = FreemindManager.getInstance();
-		SERVERIP = fManager.SERVERIP;
-		userName = fManager.getUser().getUserName();
-		userEmail = fManager.getUser().getUserEmail();
+	public JFrame getCurFrame() {
+		return curFrame;
 	}
 
-	public UploadToServer(String tmpForSignConstruction){
-		fManager = FreemindManager.getInstance();
+	public void setCurFrame(JFrame curFrame) {
+		this.curFrame = curFrame;
+	}
+
+	public UploadToServer(FreemindManager f) {
+		fManager = f;
 		SERVERIP = fManager.SERVERIP;
 	}
+
 	  public void doFileUpload() {
           try {
         	  File saveFile;//
@@ -89,7 +92,7 @@ public class UploadToServer {
 
            System.out.println("postXmlImg");
        }catch(Exception e){
-    	   new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+    	   new TextDialogue(getCurFrame(), "Server down, Program end", true);
 			e.printStackTrace();
 			System.exit(0);
        }
@@ -102,9 +105,9 @@ public class UploadToServer {
         	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
         	  
         	  StringBody lectureTitle = new StringBody(lectureName, Charset.forName("UTF-8"));
-        	  StringBody profEmailBody = new StringBody(userEmail, Charset.forName("UTF-8"));
+        	  StringBody profEmailBody = new StringBody(fManager.getUser().getUserEmail(), Charset.forName("UTF-8"));
         	  StringBody lectureState = new StringBody("false", Charset.forName("UTF-8"));
-        	  StringBody profssorNameBody = new StringBody(userName, Charset.forName("UTF-8"));
+        	  StringBody profssorNameBody = new StringBody(fManager.getUser().getUserName(), Charset.forName("UTF-8"));
            
         	  multipart.addPart("lectureName", lectureTitle);  
         	  multipart.addPart("professorEmail", profEmailBody);
@@ -117,7 +120,7 @@ public class UploadToServer {
         	  EntityUtils.consume(resEntity);
         	  System.out.println("postLecture");
           }catch(Exception e){
-        	  new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+        	  new TextDialogue(getCurFrame(), "Server down, Program end", true);
   			e.printStackTrace();
   			System.exit(0);
           }
@@ -149,7 +152,7 @@ public class UploadToServer {
         	  EntityUtils.consume(resEntity);
         	  System.out.println("delete Lecture");
           }catch(Exception e){
-        	  new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+        	  new TextDialogue(getCurFrame(), "Server down, Program end", true);
 			e.printStackTrace();
 			System.exit(0);
           }
@@ -170,7 +173,7 @@ public class UploadToServer {
 			}
       	StringBody classId = new StringBody("0", Charset.forName("UTF-8"));
       	  StringBody lectureTitle = new StringBody(lectureId, Charset.forName("UTF-8"));
-      	  StringBody profEmailBody = new StringBody(userEmail, Charset.forName("UTF-8"));
+      	  StringBody profEmailBody = new StringBody(fManager.getUser().getUserEmail(), Charset.forName("UTF-8"));
       	  StringBody classNameBody = new StringBody(className, Charset.forName("UTF-8"));
       	  StringBody portBody = new StringBody("2141", Charset.forName("UTF-8"));
       	  StringBody ipBody = new StringBody(ipStr, Charset.forName("UTF-8"));
@@ -197,7 +200,7 @@ public class UploadToServer {
       	EntityUtils.consume(resEntity);
       	  System.out.println("postClass : " + str);
         }catch(Exception e){
-        	new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+        	new TextDialogue(getCurFrame(), "Server down, Program end", true);
 			e.printStackTrace();
 			System.exit(0);
         }
@@ -241,7 +244,7 @@ public class UploadToServer {
     	  System.out.println("deleteClass : " + str);
     	  
       }catch(Exception e){
-    	  new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+    	  new TextDialogue(getCurFrame(), "Server down, Program end", true);
 			e.printStackTrace();
 			System.exit(0);
       }
@@ -294,7 +297,7 @@ public class UploadToServer {
     	  System.out.println("postTicket");
     	  
       }catch(Exception e){
-    	  new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+    	  new TextDialogue(getCurFrame(), "Server down, Program end", true);
 			e.printStackTrace();
 			System.exit(0);
       }
@@ -345,7 +348,7 @@ public class UploadToServer {
 		
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
-		new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+		new TextDialogue(getCurFrame(), "Server down, Program end", true);
 		e.printStackTrace();
 		System.exit(0);
 	}
@@ -386,9 +389,20 @@ public class UploadToServer {
 					str += tmp;
 			
 				EntityUtils.consume(resEntity);
+				
+				Gson gson = new Gson();
+				ArrayUser arrayUser = gson.fromJson(str, ArrayUser.class);
+				User checkUser = arrayUser.getUser();
+				
+				if(user.getUserEmail().equals(checkUser.getUserEmail())){
+					new TextDialogue(getCurFrame(), "Success sign up.", true);
+				}
+				else{
+					new TextDialogue(getCurFrame(), "Fail sign up.", true);
+				}
 			System.out.println("UploadtoServer : singUp() : " + str);
 		} catch (IOException e) {
-			new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+			new TextDialogue(getCurFrame(), "Server down, Program end", true);
 			e.printStackTrace();
 			System.exit(0);
 		}
@@ -426,11 +440,11 @@ public class UploadToServer {
 			EntityUtils.consume(resEntity);
 			
 			if(str.equals("emailFalse")){
-				new TextDialogue(fManager.getFreemindMainFrame(), "Email is not exist.", true);
+				new TextDialogue(getCurFrame(), "Email is not exist.", true);
 				return false;
 			}
 			else if(str.equals("passwordFalse")){
-				new TextDialogue(fManager.getFreemindMainFrame(), "Incorrect password", true);
+				new TextDialogue(getCurFrame(), "Incorrect password.", true);
 				return false;
 			}
 			else{
@@ -442,7 +456,7 @@ public class UploadToServer {
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+			new TextDialogue(getCurFrame(), "Server down, Program end", true);
 			e.printStackTrace();
 			System.exit(0);
 		}
@@ -482,7 +496,7 @@ public class UploadToServer {
 					
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+				new TextDialogue(getCurFrame(), "Server down, Program end", true);
 				e.printStackTrace();
 				System.exit(0);
 			}
@@ -526,7 +540,7 @@ public class UploadToServer {
       	  EntityUtils.consume(resEntity);
       	  
         }catch(Exception e){
-      	  new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+      	  new TextDialogue(getCurFrame(), "Server down, Program end", true);
 			e.printStackTrace();
 			System.exit(0);
         }
@@ -572,7 +586,7 @@ public class UploadToServer {
            System.out.println("postExeFile : " + str);
            
        }catch(Exception e){
-    	   new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+    	   new TextDialogue(getCurFrame(), "Server down, Program end", true);
 			e.printStackTrace();
 			System.exit(0);
        }
@@ -609,7 +623,7 @@ public class UploadToServer {
 				
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			new TextDialogue(fManager.getFreemindMainFrame(), "Server down, Program end", true);
+			new TextDialogue(getCurFrame(), "Server down, Program end", true);
 			e.printStackTrace();
 			System.exit(0);
 		}

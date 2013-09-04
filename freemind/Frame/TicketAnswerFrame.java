@@ -367,9 +367,8 @@ public class TicketAnswerFrame extends JFrame{
 			t.setParentNodeId(parentID);
 			t.setContents(reStr + answerTa.getTextArea().getText());
 			t.setUserName("±³¼ö");
-			UploadToServer uploadToServer = new UploadToServer();
-			
-			uploadToServer.ticketPost(t);
+			setCurFrame();
+			fManager.getUploadToServer().ticketPost(t);
 			
 //			fManager.getMc().addNew(selNode, MindMapController.NEW_CHILD, null);
 //			fManager.getMc().edit.stopEditing();
@@ -391,6 +390,10 @@ public class TicketAnswerFrame extends JFrame{
 //			tFrame.updateTickets();
 			setVisibleTicketAnswerFrame(false);
 		}
+	}
+	
+	public void setCurFrame(){
+		fManager.getUploadToServer().setCurFrame(this);
 	}
 	
 	public void setVisibleTicketAnswerFrame(boolean visible){

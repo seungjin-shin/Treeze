@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
+import com.itextpdf.text.log.SysoLogger;
 
 import freemind.Frame.TextDialogue;
 import freemind.json.ArrayTicket;
@@ -74,16 +75,24 @@ public class AddAllTicketThread extends Thread{
 				return;
 			}
 			ArrayList<Ticket> ticketList = jonResultlecturelist.getTickets();
-			
-			for(int i = 0; i < ticketList.size(); i++){
+		try {
+			for (int i = 0; i < ticketList.size(); i++) {
 				fManager.setTicket(ticketList.get(i));
-//				try {
-//					Thread.sleep(100);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-				fManager.getC().recurAddTicketNode((NodeAdapter) fManager.getMc().getRootNode());
+				// try {
+				// Thread.sleep(100);
+				// } catch (InterruptedException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
+
+				fManager.getC().recurAddTicketNode(
+						(NodeAdapter) fManager.getMc().getRootNode());
+			}
+		}
+		
+			catch (Exception e) {
+				System.out.println("Add all tickets Err");
+				
 			}
 			
 			System.out.println("Add All tickets");

@@ -39,9 +39,9 @@ public class TextDialogue extends JDialog{
 		addGrid.getInsets().set(0, 70, 30, 70);
 		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), closeBtn, 0, 1, 1, 1, 1, 1, this);
 		
-		Point parentPrameLoc = fManager.getFreemindMainFrame().getLocation();
-		int parentWidth = fManager.getFreemindMainFrame().getWidth();
-		int parentHeight = fManager.getFreemindMainFrame().getHeight();
+		Point parentPrameLoc = parentFrame.getLocation();
+		int parentWidth = parentFrame.getWidth();
+		int parentHeight = parentFrame.getHeight();
 		
 		this.setBounds((int)(parentPrameLoc.getX() + parentWidth / 3), (int)(parentPrameLoc.getY() + parentHeight / 3), parentWidth / 3, parentHeight / 4);
 //		this.setResizable(false);
@@ -69,9 +69,9 @@ public class TextDialogue extends JDialog{
 		addGrid.getInsets().set(0, 70, 10, 70);
 		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), closeBtn, 0, 2, 1, 1, 1, 1, this);
 		
-		Point parentPrameLoc = fManager.getFreemindMainFrame().getLocation();
-		int parentWidth = fManager.getFreemindMainFrame().getWidth();
-		int parentHeight = fManager.getFreemindMainFrame().getHeight();
+		Point parentPrameLoc = parentFrame.getLocation();
+		int parentWidth = parentFrame.getWidth();
+		int parentHeight = parentFrame.getHeight();
 		
 		this.setBounds((int)(parentPrameLoc.getX() + parentWidth / 3), (int)(parentPrameLoc.getY() + parentHeight / 3), parentWidth / 3, parentHeight / 4);
 //		this.setResizable(false);

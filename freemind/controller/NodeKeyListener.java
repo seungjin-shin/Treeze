@@ -91,12 +91,8 @@ public class NodeKeyListener implements KeyListener {
 			}
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F6){
-			UploadToServer uts = new UploadToServer("tmp");
-			uts.doExeFileUpload();
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_F7){
-			MovingTextFrameThread movingTextFrame = new MovingTextFrameThread();
-			movingTextFrame.start();
 		}
 		
 		if (mListener != null)

@@ -312,10 +312,13 @@ public class WriteTicketFrame extends JFrame{
 			t.setParentNodeId(parentID);
 			t.setContents(questionTa.getTextArea().getText());
 			t.setUserName("±³¼ö");
-			UploadToServer uploadToServer = new UploadToServer();
+			setCurFrame();
 			setVisibleWriteFrame();
-			uploadToServer.ticketPost(t);
+			fManager.getUploadToServer().ticketPost(t);
 		}
+	}
+	public void setCurFrame(){
+		fManager.getUploadToServer().setCurFrame(this);
 	}
 	public void setVisibleWriteFrame(){
 		setVisible(false);

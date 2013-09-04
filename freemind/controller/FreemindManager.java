@@ -16,6 +16,7 @@ import freemind.json.Lecture;
 import freemind.json.Ticket;
 import freemind.json.User;
 import freemind.modes.NodeAdapter;
+import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
 import freemind.modes.mindmapmode.MindMapMapModel;
 
@@ -35,6 +36,7 @@ public class FreemindManager {
 	
 	private FreemindManager(){
 		slideShow = new SlideShow(this);
+		uploadToServer = new UploadToServer(this);
 		user = new User();
 		user.setUserEmail("minsuk@hansung.ac.kr");
 		user.setUserName("¿ÃπŒºÆ");
@@ -124,6 +126,8 @@ public class FreemindManager {
 	private Lecture lecture;
 	
 
+	UploadToServer uploadToServer;
+
 
 	SlideShow slideShow;
 	
@@ -134,6 +138,9 @@ public class FreemindManager {
 	
 	private User user;
 	
+	public UploadToServer getUploadToServer() {
+		return uploadToServer;
+	}
 	public boolean isReadyFreemind() {
 		return isReadyFreemind;
 	}

@@ -100,6 +100,9 @@ import freemind.controller.Controller;
 import freemind.controller.FreemindManager;
 import freemind.controller.MapModuleManager;
 import freemind.controller.MindMapNodesSelection;
+import freemind.controller.ProgressFrame;
+import freemind.controller.ProgressFrame2;
+import freemind.controller.ProgressThread;
 import freemind.controller.SlideData;
 import freemind.controller.StructuredMenuHolder;
 import freemind.controller.TableData;
@@ -149,6 +152,7 @@ public abstract class ControllerAdapter implements ModeController {
     private MindMapController mc;
     FreemindManager fManager = FreemindManager.getInstance();
     private ArrayList<String> firstWordArr = new ArrayList<String>();
+    private ProgressFrame2 progFrame;
     
     public MindMapController getMc() {
 		return mc;
@@ -700,7 +704,14 @@ public abstract class ControllerAdapter implements ModeController {
 						fManager.setFilePath(foldName.substring(0, foldName.length() - 4));
 						
 						firstWordArr.clear();
-						
+//						new ProgressFrame2();
+//						startProgThread();
+//						try {
+//							Thread.sleep(2000);
+//						} catch (InterruptedException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
 						pdf2img(filePath, theFile.getName());
 						newpdf2mm(filePath, fileName);
 						theFile = new File(foldName.substring(0, foldName.length() - 4) + ".mm");
@@ -740,6 +751,11 @@ public abstract class ControllerAdapter implements ModeController {
         getController().setTitle();
     }
     
+    public void startProgThread(){
+    	ProgressThread progThread = new ProgressThread();
+		progThread.start();
+    }
+    
     public class OpenAction extends AbstractAction {
         ControllerAdapter mc;
         public OpenAction(ControllerAdapter modeController) {
@@ -776,7 +792,6 @@ public abstract class ControllerAdapter implements ModeController {
         FileChannel channel = raf.getChannel();
         ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
 		
-        
 		for (int i = 1; i <= page; i++) {
 			PDFFile pdffile = new PDFFile(buf);
 			String str = PdfTextExtractor.getTextFromPage(reader, i);
@@ -789,7 +804,9 @@ public abstract class ControllerAdapter implements ModeController {
 				firstWordArr.add(forFirstWordArray[0]);
 				
 			System.out.flush();
-
+			
+//			progFrame.getBar().setValue((int)(i / page));
+			
 			// draw the first page to an image
 			PDFPage pdfPage = pdffile.getPage(i);
 
@@ -834,6 +851,8 @@ public abstract class ControllerAdapter implements ModeController {
 			}
 		}
 		reader.close();
+//		progFrame.getBar().setValue(100);
+//		progFrame.setVisible(false);
     }
     
     public void newpdf2mm(String filePath, String fileName) throws IOException{

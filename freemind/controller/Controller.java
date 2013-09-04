@@ -579,15 +579,19 @@ public class Controller  implements MapModuleChangeObserver {
 		makeUploadXml();
 			
 		//upload XML
-		UploadToServer uploadToServer = new UploadToServer();
-
-		uploadToServer.doFileUpload();
-		uploadToServer.doXmlUpload();
+		setCurFrame();
+		fManager.getUploadToServer().doFileUpload();
+		fManager.getUploadToServer().doXmlUpload();
 		
 		new TextDialogue(fManager.getFreemindMainFrame(), "Upload Class", true);
 		
 		closeLecture();
     }
+    
+    public void setCurFrame(){
+    	fManager.getUploadToServer().setCurFrame(fManager.getFreemindMainFrame());
+    }
+    
     
     public void checkNodeType(){
 		chkNodeType.checkNodeType((NodeAdapter) fManager.getMc().getRootNode());
@@ -707,9 +711,8 @@ public class Controller  implements MapModuleChangeObserver {
     	fManager.getProfileFrame().startNetwortThread();
   	  fManager.getProfileFrame().setVisible(true);
   	  fManager.getFreemindMainFrame().setVisible(false);
-  	
-  	  UploadToServer uploadToServer = new UploadToServer();
-  	  uploadToServer.setStateOfLecture(fManager.getLecture(), false);
+  	  setCurFrame();
+  	fManager.getUploadToServer().setStateOfLecture(fManager.getLecture(), false);
     }
     
     public void recurSetSlideShowInfo(NodeAdapter curNode){

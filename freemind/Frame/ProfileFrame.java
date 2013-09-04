@@ -62,6 +62,7 @@ import com.google.gson.reflect.TypeToken;
 import freemind.controller.AddAllTicketThread;
 import freemind.controller.FreemindManager;
 import freemind.controller.ImgBtn;
+import freemind.controller.ProgressThread;
 import freemind.controller.SetResizeImgThread;
 import freemind.json.ArrayClass;
 import freemind.json.ArrayLecture;
@@ -459,6 +460,7 @@ public class ProfileFrame extends JFrame {
 
 		@Override
 		protected void Action() {
+			setCurFrame();
 			new InputLectureFrame();
 		}
 	}
@@ -472,20 +474,24 @@ public class ProfileFrame extends JFrame {
 
 		@Override
 		protected void Action() {
-			UploadToServer uploadToServer = new UploadToServer();
+			setCurFrame();
 			int deleteCnt = 0;
 			for(int i = 0; i < chkBoxList.size(); i++){
 				JCheckBox tmp = chkBoxList.get(i);
 				if(tmp.isSelected()){
 					deleteCnt++;
 					Lecture lecture = lectureList.get(i);
-					uploadToServer.deleteLecturePost(lecture);
+					fManager.getUploadToServer().deleteLecturePost(lecture);
 				}
 			}
 			
 			new TextDialogue(fManager.getProfileFrame(), "Delete lecture, Total : " + deleteCnt, true);
 			startNetwortThread();
 		}
+	}
+	
+	public void setCurFrame(){
+		fManager.getUploadToServer().setCurFrame(this);
 	}
 	
 	class LectureListBtn extends ImgBtn{
@@ -497,6 +503,7 @@ public class ProfileFrame extends JFrame {
 
 		@Override
 		protected void Action() {
+			setCurFrame();
 			networkFlag = NETWORK_FLAG_GET_LECTURELIST;
 			startNetwortThread();
 			btnPanel.setLecturePage();
@@ -514,6 +521,7 @@ public class ProfileFrame extends JFrame {
 
 		@Override
 		protected void Action() {
+			setCurFrame();
 			new InputClassFrame();
 		}
 	}
@@ -527,7 +535,7 @@ public class ProfileFrame extends JFrame {
 
 		@Override
 		protected void Action() {
-			UploadToServer uploadToServer = new UploadToServer();
+			setCurFrame();
 			int deleteCnt = 0;
 			for(int i = 0; i < chkBoxList.size(); i++){
 				JCheckBox tmp = chkBoxList.get(i);
@@ -535,7 +543,7 @@ public class ProfileFrame extends JFrame {
 					deleteCnt++;
 					ClassInfo classInfo = classList.get(i);
 //					System.out.println(tmp.getActionCommand());
-					uploadToServer.deleteClassPost(classInfo);
+					fManager.getUploadToServer().deleteClassPost(classInfo);
 				}
 			}
 			
@@ -557,8 +565,6 @@ public class ProfileFrame extends JFrame {
 			
 		}
 	}
-	
-	
 	
 	class InputLectureFrame extends JFrame implements ActionListener{
 		JTextField lecturetf;
@@ -605,8 +611,7 @@ public class ProfileFrame extends JFrame {
 				return;
 			}
 			else{
-				UploadToServer uploadToServer = new UploadToServer();
-				uploadToServer.lecturePost(lectureTitle);
+				fManager.getUploadToServer().lecturePost(lectureTitle);
 				
 				this.setVisible(false);
 
@@ -830,8 +835,7 @@ public class ProfileFrame extends JFrame {
 				return;
 			}
 			else{
-				UploadToServer UTS = new UploadToServer();
-				UTS.classPost(lectureId + "", classTitle);
+				fManager.getUploadToServer().classPost(lectureId + "", classTitle);
 
 				this.setVisible(false);
 				
@@ -856,6 +860,7 @@ public class ProfileFrame extends JFrame {
 		protected void Action() {
 			if(!fManager.isReadyFreemind()){
 				showTextDialogue("Loading Freemind.", "Please waiting.");
+				return;
 			}
 			fManager.setClassId(classId);
 			mc.open();
@@ -879,12 +884,12 @@ public class ProfileFrame extends JFrame {
 		protected void Action() {
 			if(!fManager.isReadyFreemind()){
 				showTextDialogue("Loading Freemind.", "Please waiting.");
+				return;
 			}
 			
 			fManager.setClassId((int) classInfo.getClassId());
 			
-			UploadToServer uploadToServer = new UploadToServer();
-			uploadToServer.setStateOfLecture(fManager.getLecture(), true);
+			fManager.getUploadToServer().setStateOfLecture(fManager.getLecture(), true);
 			
 			DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(classInfo.getClassId());
 			downLoadNetworkThread.start();
@@ -918,8 +923,7 @@ public class ProfileFrame extends JFrame {
 			btnPanel.setBackground(fManager.noColor);
 			btnPanel.setLayout(new GridLayout(2, 1, 0, 5));
 			
-			UploadToServer uploadToServer = new UploadToServer();
-			boolean chkClassEmpty = uploadToServer.checkClassIsEmpty(classInfo.getClassId());
+			boolean chkClassEmpty = fManager.getUploadToServer().checkClassIsEmpty(classInfo.getClassId());
 
 			if(chkClassEmpty){
 				regBtn = new RegistBtn(fManager.regFalse, fManager.regFalse, fManager.regFalse);

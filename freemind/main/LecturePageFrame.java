@@ -236,14 +236,14 @@ public class LecturePageFrame extends JFrame {
 				return;
 			}
 			else{
-				UploadToServer uploadToServer = new UploadToServer();
-				uploadToServer.classPost(lectureId, classTitle);
-
-				frame.init();
-				frame.update(frame.getGraphics());
-				sPanel.updateUI();
-				
-				this.setVisible(false);
+//				UploadToServer uploadToServer = new UploadToServer();
+//				uploadToServer.classPost(lectureId, classTitle);
+//
+//				frame.init();
+//				frame.update(frame.getGraphics());
+//				sPanel.updateUI();
+//				
+//				this.setVisible(false);
 			}
 		}
 	}
