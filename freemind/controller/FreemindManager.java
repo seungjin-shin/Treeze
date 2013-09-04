@@ -99,7 +99,10 @@ public class FreemindManager {
 	InputStream in;
 	
 	private boolean isSlideShowInfo = false;
+	private boolean isReadyFreemind = false;
 	
+
+
 	public String mode; 
 	public static String REGMODE = "regMode";
 	public static String LECMODE = "lecMode";
@@ -131,6 +134,13 @@ public class FreemindManager {
 	
 	private User user;
 	
+	public boolean isReadyFreemind() {
+		return isReadyFreemind;
+	}
+	
+	public void setReadyFreemind(boolean isReadyFreemind) {
+		this.isReadyFreemind = isReadyFreemind;
+	}
 	public User getUser() {
 		return user;
 	}

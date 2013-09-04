@@ -418,7 +418,7 @@ public abstract class ControllerAdapter implements ModeController {
     			model.setSaved(true);
 //    		}});
         logger.info("Finished loading " + file);
-        
+        fManager.setReadyFreemind(true);
     	return newModeController;
     }
     

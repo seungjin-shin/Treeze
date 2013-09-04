@@ -201,6 +201,10 @@ public class ProfileFrame extends JFrame {
 		this.setVisible(true);
 	}
 	
+	public void showTextDialogue(String msg, String msg2){
+		new TextDialogue(this, msg, msg2, true);
+	}
+	
 	public void setLectureHead(){
 		lectureHead.removeAll();
 		
@@ -850,6 +854,9 @@ public class ProfileFrame extends JFrame {
 
 		@Override
 		protected void Action() {
+			if(!fManager.isReadyFreemind()){
+				showTextDialogue("Loading Freemind.", "Please waiting.");
+			}
 			fManager.setClassId(classId);
 			mc.open();
 		}
@@ -870,6 +877,10 @@ public class ProfileFrame extends JFrame {
 
 		@Override
 		protected void Action() {
+			if(!fManager.isReadyFreemind()){
+				showTextDialogue("Loading Freemind.", "Please waiting.");
+			}
+			
 			fManager.setClassId((int) classInfo.getClassId());
 			
 			UploadToServer uploadToServer = new UploadToServer();
