@@ -147,6 +147,9 @@ abstract class ClickPanel extends JPanel {
 	StateManager sm;
 
 	int margin = 3;
+	
+	public static final int imageWidth = 10;
+	public static final int imageHeight = 10;
 
 	protected ClickPanel(int x, int y, int width, int height,
 			ComponentJPanel compJpanel, NoteManager nm) {
@@ -262,9 +265,25 @@ abstract class ClickPanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paintComponent(g);
+//		Image bg = new ImageIcon(getClass().getResource(
+//				Util.IMG_ADDR + "click_image.png")).getImage();
+//		g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
+		
 		Image bg = new ImageIcon(getClass().getResource(
-				Util.IMG_ADDR + "click_image.png")).getImage();
-		g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
+		Util.IMG_ADDR + "eraser.png")).getImage();
+		
+		
+		
+		g.drawImage(bg, 0, 0, imageWidth, imageHeight, this);
+		g.drawImage(bg, getWidth()/2, 0, imageWidth, imageHeight, this);
+		g.drawImage(bg, getWidth() - imageWidth, 0, imageWidth, imageHeight, this);
+		
+		g.drawImage(bg, 0, getHeight()/2 - imageHeight, imageWidth, imageHeight, this);
+		g.drawImage(bg, getWidth() - imageWidth, getHeight()/2 - imageHeight, imageWidth, imageHeight, this);
+		
+		g.drawImage(bg, 0, getHeight() - imageHeight, imageWidth, imageHeight, this);
+		g.drawImage(bg, getWidth()/2, getHeight() - imageHeight, imageWidth, imageHeight, this);
+		g.drawImage(bg, getWidth() - imageWidth, getHeight() - imageHeight, imageWidth, imageHeight, this);
 
 	}
 
@@ -294,11 +313,7 @@ class ClickGraphicPanel extends ClickPanel {
 	@Override
 	protected void relocate(int x, int y) {
 		// TODO Auto-generated method stub
-		// System.out.println("relocate");
-
-		this.setLocation(x, y);
-//		drawableObj.move(x, y, nm);
-		
+		this.setLocation(x, y);		
 		drawableObj.move(drawableObj.x, drawableObj.y, x, y, nm);
 		nm.repaint();
 

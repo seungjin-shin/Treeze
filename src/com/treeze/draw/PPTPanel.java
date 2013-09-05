@@ -287,21 +287,7 @@ public class PPTPanel extends JPanel {
 				if (keyCode == StateManager.KEY_CODE_DEL) {
 					nm.removeSelectedItem();
 				}
-				// mode change
-				// if (keyCode == 192) {
-				//
-				// if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
-				//
-				// setCursor(StateManager.blackPenCursor);
-				// sm.setCurNoteMode(StateManager.NOTE_MODE_PEN);
-				//
-				// } else {
-				//
-				// setCursor(StateManager.figureCursor);
-				// sm.setCurNoteMode(StateManager.NOTE_MODE_FIGURE);
-				//
-				// }
-				// }
+
 
 				if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
 

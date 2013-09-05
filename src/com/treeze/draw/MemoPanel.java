@@ -31,6 +31,13 @@ public class MemoPanel extends ComponentJPanel {
 
 	private PPTPanel ptPanel;
 	private NoteManager nm;
+	
+	
+	public void setAllFocusable(boolean arg0) {
+		// TODO Auto-generated method stub
+		super.setFocusable(arg0);
+		textArea.setFocusable(arg0);
+	}
 
 	public MemoPanel(final int x, final int y, final int width,
 			final int height, int backgroundWidth, int backgroundHeight) {
@@ -60,6 +67,8 @@ public class MemoPanel extends ComponentJPanel {
 			public void focusLost(FocusEvent arg0) {
 				// TODO Auto-generated method stub
 				ptPanel.repaint();
+//				textArea.setBackground(Color.white);
+//				memoPanel.setBackground(Color.gray);
 				textArea.setBackground(new Color(0, 0, 0, 0));
 				memoPanel.setBackground(new Color(0, 0, 0, 0));
 
@@ -82,11 +91,17 @@ public class MemoPanel extends ComponentJPanel {
 
 				// TODO Auto-generated method stub
 				System.out.println("type");
+				
+//				if(textAreaDimention.width )
+				Dimension textAreaDimention = textArea.getPreferredSize();
+				getClickPanel().setVisible(false);
+				if(textAreaDimention.width < 10) {
+					System.out.println("textAreaDimention.width < 10");
+					csc.setSize(60, 60);
+					return;
+				}
 
-				if (arg0.getKeyCode() == 10) {// Enter key
-
-					getClickPanel().setVisible(false);
-					Dimension textAreaDimention = textArea.getPreferredSize();
+				if (arg0.getKeyCode() == 10) {// Enter key					
 
 					textArea.setSize(textArea.getPreferredSize());
 					csc.setSize(textAreaDimention.width
@@ -104,10 +119,8 @@ public class MemoPanel extends ComponentJPanel {
 									+ textArea.getFont().getSize()
 									+ TEXTAREA_MARGIN);
 				} else {
-					getClickPanel().setVisible(false);
-					Dimension textAreaDimention = textArea.getPreferredSize();
+					
 					textArea.setSize(textArea.getPreferredSize());
-
 					csc.setSize(textAreaDimention.width
 							+ textArea.getFont().getSize() + TEXTAREA_MARGIN,
 							textAreaDimention.height
@@ -152,10 +165,14 @@ public class MemoPanel extends ComponentJPanel {
 				// memoPanel.setBackground(Color.gray);
 
 				if (csc.isChangeSize(e, margin) || csc.isDrag(e, margin)) {
-
+					
+					getClickPanel().setFocusable(true);
+					memoPanel.setFocusable(false);
 					getClickPanel().requestFocus();
 					getClickPanel().grabFocus();
 					getClickPanel().setVisible(true);
+					
+					
 
 				}
 
@@ -187,10 +204,17 @@ public class MemoPanel extends ComponentJPanel {
 		csc.setSize(textAreaDimention.width, textAreaDimention.height);
 		textArea.setSize(textArea.getPreferredSize());
 	}
+	
+	private void setAllBackground(Color color) {
+		this.setBackground(color);
+		textArea.setBackground(color);
+	}
 
 	public String getText() {
 		return textArea.getText();
 	}
+	
+
 
 	// private void unfold() {
 	// psc.setCurFoldMode(ComponentSizeController.FOLD_MODE_UNFOLD);
@@ -215,11 +239,39 @@ public class MemoPanel extends ComponentJPanel {
 		// TODO Auto-generated method stub
 		ptPanel = (PPTPanel) jpanel;
 		this.nm = nm;
+		
 		setClickPanel(new ClickMemoPanel(this.getX(), this.getY(),
-				this.getWidth(), this.getHeight(), memoPanel, nm));
+				this.getWidth(), this.getHeight(), memoPanel, nm));		
+		
 		jpanel.add(this);
 		jpanel.setVisible(false);
 		jpanel.setVisible(true);
+		
+		getClickPanel().setVisible(false);
+		this.setAllFocusable(true);
+		this.setAllBackground(new Color(0,0,0,0));
+
+		jpanel.repaint();
+
+	}
+	
+	public void addToPanelByClick(JPanel jpanel, NoteManager nm) {
+		// TODO Auto-generated method stub
+		ptPanel = (PPTPanel) jpanel;
+		this.nm = nm;
+		
+		setClickPanel(new ClickMemoPanel(this.getX(), this.getY(),
+				this.getWidth(), this.getHeight(), memoPanel, nm));		
+		
+		jpanel.add(this);
+		jpanel.setVisible(false);
+		jpanel.setVisible(true);
+		
+		getClickPanel().setVisible(false);
+		this.setAllFocusable(true);
+		
+
+		
 
 	}
 
@@ -243,8 +295,10 @@ class ClickMemoPanel extends ClickComponentPanel {
 			public void focusGained(FocusEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println("ClickMemoPanel focus gain");
-				JPanel pptPanel = (JPanel)compJpanel.getParent();
-				pptPanel.repaint();
+				
+				compJpanel.setFocusable(false);
+//				JPanel pptPanel = (JPanel)compJpanel.getParent();
+//				pptPanel.repaint();
 				
 			}
 		});
@@ -253,10 +307,20 @@ class ClickMemoPanel extends ClickComponentPanel {
 	@Override
 	protected void contentFocused() {
 		// TODO Auto-generated method stub
-//		System.out.println("content focused");
+		System.out.println("content focused");
+		
 		MemoPanel mp = (MemoPanel) compJpanel;
-		mp.textArea.grabFocus();
-		mp.textArea.requestFocus();
+		mp.textArea.setBackground(Color.white);
+		mp.setBackground(Color.gray);
+		if(!mp.textArea.hasFocus()) {
+
+			mp.textArea.grabFocus();
+			mp.textArea.requestFocus();
+			this.setFocusable(false);
+			mp.setFocusable(true);
+
+		}
+		
 		setCursor(mp.textArea.getCursor());
 
 	}

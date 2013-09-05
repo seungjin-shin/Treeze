@@ -229,9 +229,6 @@ abstract class ClickComponentPanel extends ClickPanel {
 		});
 		
 		
-		
-		
-		
 		MouseInputAdapter mia  = new MouseInputAdapter() {
 
 			public void mouseReleased(MouseEvent e) {

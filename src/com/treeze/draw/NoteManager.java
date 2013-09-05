@@ -219,7 +219,7 @@ public class NoteManager {
 
 		MemoPanel memo = new MemoPanel(x, y, width, height, jpanel.getWidth(),
 				jpanel.getHeight());
-		memo.addToPanel(jpanel, this);
+		memo.addToPanelByClick(jpanel, this);
 		componentList.add(memo);
 		repaint();
 
@@ -234,6 +234,7 @@ public class NoteManager {
 	protected void loadNote(String nodeId) {
 		 
 		try {
+			System.out.println("hererererererer");
 			StoredNoteObject sno = loadStoredNote(nodeId);
 
 			componentList = sno.getCOList();
@@ -243,13 +244,21 @@ public class NoteManager {
 			// 패널과 그림을 다시 만들고
 			restore();
 			// repaint 시킴
+
+			
 			repaint();
+			
+			jpanel.setVisible(false);
+			jpanel.setVisible(true);
+
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
 			System.out.println("저장된 필기가없습니다.");
 		}
+		
+		repaint();
 
 	}
 
@@ -347,7 +356,7 @@ public class NoteManager {
 	protected void setMoveFlag(int x, int y) {
 		initMoveFlag();
 		for (int i = 0; i < drawobjList.size(); i++) {
-			if (drawobjList.get(i).isClick(x, y, this)) {
+			if (drawobjList.get(i).isClick(x, y, this) && drawobjList.get(i).clickPanel == null) {
 				drawobjList.get(i).setMoveFlag(true);
 				// System.out.println("asfasdfasfasdfasfasdf");
 				return;
