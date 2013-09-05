@@ -20,7 +20,7 @@ import javax.swing.JLabel;
 import org.w3c.dom.Node;
 
 import com.treeze.Abstract.ImgBtn;
-import com.treeze.draw.PPTFrame;
+import com.treeze.draw.PPTParentPanel;
 import com.treeze.frame.MindMapMain;
 import com.treeze.frame.TicketFrame;
 

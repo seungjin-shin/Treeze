@@ -35,6 +35,8 @@ public class PostItPanel extends ComponentJPanel {
 	private WasteBasketButton wasteBasketButton;
 	private PostItHeadPanel headPanel;
 	private PostItBodyPanel bodyPanel;
+	
+
 
 	public PostItPanel(int x, int y, int width, int height, int backgroundWidth, int backgroundHeight) {
 		// TODO Auto-generated constructor stub

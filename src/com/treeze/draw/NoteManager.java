@@ -22,22 +22,21 @@ public class NoteManager {
 
 	protected ArrayList<DrawableObject> drawobjList;
 	protected ArrayList<ComponentJPanel> componentList;
-	
+
 	protected Path path;
 	private JPanel jpanel;
-
 
 	protected FigureObject figureObj;
 
 	protected Gson gson;
 	protected FileIOManager fim;
-	
+
 	protected static final int IMG_TYPE_STAR = 0;
-	
+
 	public static final int IMG_SIZE_NO_DECIDED = -1;
 
-	public static Image STAR_IMG; 	 
-	
+	public static Image STAR_IMG;
+
 	private NoteManager nm;
 
 	protected NoteManager(JPanel jpanel) {
@@ -48,36 +47,35 @@ public class NoteManager {
 
 		gson = new Gson();
 		fim = new FileIOManager();
-		
+
 		nm = this;
-		
+
 		jpanel.addComponentListener(new ComponentListener() {
-			
+
 			@Override
 			public void componentShown(ComponentEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void componentResized(ComponentEvent arg0) {
 				// TODO Auto-generated method stub
 				nm.setRelativeLocation();
 				nm.repaint();
-				
-				
+
 			}
-			
+
 			@Override
 			public void componentMoved(ComponentEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void componentHidden(ComponentEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 
@@ -93,20 +91,22 @@ public class NoteManager {
 
 		path.setBs(bs);
 		path.setColor(color);
-//		path.getPoints().add(point);
+		// path.getPoints().add(point);
 		path.points.add(point);
 		repaint();
 
 	}
 
 	protected void makePathComplete() {
-		drawobjList.add(new LineObject(this.path, jpanel.getWidth(), jpanel.getHeight()));
+		drawobjList.add(new LineObject(this.path, jpanel.getWidth(), jpanel
+				.getHeight()));
 		this.path = null;
-//		System.out.println("drawobj size : " + drawobjList.size());
+		// System.out.println("drawobj size : " + drawobjList.size());
 	}
 
 	protected void makeFigure(int x, int y, int width, int height, int type) {
-		this.figureObj = new FigureObject(x, y, width, height,jpanel.getWidth(),jpanel.getHeight(), type);
+		this.figureObj = new FigureObject(x, y, width, height,
+				jpanel.getWidth(), jpanel.getHeight(), type);
 		repaint();
 
 	}
@@ -114,33 +114,35 @@ public class NoteManager {
 	protected void makeFigureComplete() {
 		drawobjList.add(this.figureObj);
 		this.figureObj = null;
-//		System.out.println("drawobj size : " + drawobjList.size());
+		// System.out.println("drawobj size : " + drawobjList.size());
 	}
-	
+
 	protected void setFeatureByRate() {
-		for(int i = 0; i < drawobjList.size(); i++) {
-			drawobjList.get(i).setFeatureByRate(jpanel.getWidth(), jpanel.getHeight());
+		for (int i = 0; i < drawobjList.size(); i++) {
+			drawobjList.get(i).setFeatureByRate(jpanel.getWidth(),
+					jpanel.getHeight());
 		}
-		for(int i = 0; i < componentList.size(); i++) {
-			componentList.get(i).setFeatureByRate(jpanel.getWidth(), jpanel.getHeight());
+		for (int i = 0; i < componentList.size(); i++) {
+			componentList.get(i).setFeatureByRate(jpanel.getWidth(),
+					jpanel.getHeight());
 		}
 	}
-	
+
 	protected void restore() {
 		drawAll(jpanel.getGraphics());
 		addAllToPanel();
 	}
 
 	protected void drawAll(Graphics g) {
-		
+
 		for (int i = 0; i < drawobjList.size(); i++) {
-			
+
 			drawobjList.get(i).draw(g, jpanel);
 
 		}
 
 	}
-	
+
 	protected void addAllToPanel() {
 		for (int i = 0; i < componentList.size(); i++) {
 
@@ -169,8 +171,8 @@ public class NoteManager {
 	}
 
 	protected void drawFigureByRealTime(Graphics g) {
-		
-//		System.out.println(figureObj);
+
+		// System.out.println(figureObj);
 
 		if (figureObj != null) {
 			figureObj.draw(g, jpanel);
@@ -179,18 +181,18 @@ public class NoteManager {
 	}
 
 	protected void drawFigure(int x, int y, int width, int height, int type) {
-		drawobjList.add(new FigureObject(x, y, width, height, jpanel.getWidth(),jpanel.getHeight(),type));
+		drawobjList.add(new FigureObject(x, y, width, height,
+				jpanel.getWidth(), jpanel.getHeight(), type));
 		repaint();
 	}
 
-
-	protected void drawImage(int x, int y, double width, double height,
-			int  type) {
-//		if(IMG_SIZE_WIDTH != IMG_SIZE_NO_DECIDED) {
-//			width = IMG_SIZE_WIDTH;
-//			height = IMG_SIZE_HEIGHT;
-//		}
-		drawobjList.add(new ImageObject(x, y, (int)width, (int)height,jpanel.getWidth(), jpanel.getHeight(), type));
+	protected void drawImage(int x, int y, double width, double height, int type) {
+		// if(IMG_SIZE_WIDTH != IMG_SIZE_NO_DECIDED) {
+		// width = IMG_SIZE_WIDTH;
+		// height = IMG_SIZE_HEIGHT;
+		// }
+		drawobjList.add(new ImageObject(x, y, (int) width, (int) height, jpanel
+				.getWidth(), jpanel.getHeight(), type));
 		repaint();
 	}
 
@@ -200,35 +202,28 @@ public class NoteManager {
 
 	}
 
-
-
 	protected void addPostIt(int x, int y, int width, int height) {
-		
-		PostItPanel postItPanel = new PostItPanel(x,y,width,height,jpanel.getWidth(), jpanel.getHeight());
-		
+
+		PostItPanel postItPanel = new PostItPanel(x, y, width, height,
+				jpanel.getWidth(), jpanel.getHeight());
 
 		jpanel.add(postItPanel);
 		jpanel.validate();
-		
+
 		componentList.add(postItPanel);
 		repaint();
-		
-
-
 
 	}
 
-
 	protected void addMemo(int x, int y, int width, int height) {
-		
-		MemoPanel memo = new MemoPanel(x, y, width, height, jpanel.getWidth(), jpanel.getHeight());
+
+		MemoPanel memo = new MemoPanel(x, y, width, height, jpanel.getWidth(),
+				jpanel.getHeight());
 		memo.addToPanel(jpanel, this);
-		componentList.add(memo);		
+		componentList.add(memo);
 		repaint();
 
 	}
-	
-
 
 	protected void removeLastDrawableObj() {
 
@@ -236,152 +231,151 @@ public class NoteManager {
 
 	}
 
-	
-	protected void restoreNote() {
-		
-		StoredNoteObject sno = loadStoredNote();
-		componentList = sno.getCOList();
-		drawobjList = sno.getDOList();
-		
-		setFeatureByRate();		
-		//패널과 그림을 다시 만들고
-		restore();
-		//repaint 시킴
-		repaint();
-
-	}
-	
-	
-
-	protected StoredNoteObject loadStoredNote() {	
-		
-		String noteData = null;
+	protected void loadNote(String nodeId) {
+		 
 		try {
-			noteData = fim.read(Util.NOTE_ADDR + "content.txt");
+			StoredNoteObject sno = loadStoredNote(nodeId);
+
+			componentList = sno.getCOList();
+			drawobjList = sno.getDOList();
+
+			setFeatureByRate();
+			// 패널과 그림을 다시 만들고
+			restore();
+			// repaint 시킴
+			repaint();
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
+			System.out.println("저장된 필기가없습니다.");
 		}
-
-		return gson.fromJson(noteData, StoredNoteObject.class);
-		
-		
 
 	}
 
-	protected void saveStoredNote() {
+	protected StoredNoteObject loadStoredNote(String nodeId) throws IOException {
+
+		String noteData = null;
+
+		noteData = fim.read(Util.NOTE_ADDR + nodeId + ".txt");
+
+		return gson.fromJson(noteData, StoredNoteObject.class);
+
+	}
+
+	protected void saveStoredNote(String nodeId) {
 		System.out.println("saveStoredNote : " + componentList.size());
 
 		StoredNoteObject sno = new StoredNoteObject(drawobjList, componentList);
 		String noteContent = gson.toJson(sno);
 
 		try {
-			fim.write(Util.NOTE_ADDR + "content.txt", noteContent);
+			fim.write(Util.NOTE_ADDR + nodeId + ".txt", noteContent);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
-	
+
 	protected void setClick(int x, int y) {
 		setUnClicked();
-		for(int i = 0; i< drawobjList.size(); i++) {
-//			System.out.println("asdfadsfasdfsdasdafasdfasdfsadf");
+		for (int i = 0; i < drawobjList.size(); i++) {
+			// System.out.println("asdfadsfasdfsdasdafasdfasdfsadf");
 			drawobjList.get(i).setClick(x, y, this);
-			
-				
+
 		}
 		repaint();
-		
+
 	}
-	
+
 	protected boolean isClickableItem(int x, int y) {
-		for(int i = 0; i < drawobjList.size(); i++) {
-			if(drawobjList.get(i).isClick(x, y, this)) {
+		for (int i = 0; i < drawobjList.size(); i++) {
+			if (drawobjList.get(i).isClick(x, y, this)) {
 				return true;
 			}
 		}
-		
-		for(int i = 0; i < drawobjList.size(); i++) {
-			if(drawobjList.get(i).isClick(x, y, this)) {
+
+		for (int i = 0; i < drawobjList.size(); i++) {
+			if (drawobjList.get(i).isClick(x, y, this)) {
 				return true;
 			}
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 	protected void removeSelectedItem() {
-		for(int i = 0; i < drawobjList.size(); i++) {
+		for (int i = 0; i < drawobjList.size(); i++) {
 			drawobjList.get(i).removeSelectedItem(this);
 		}
-		
-		for(int i = 0; i < componentList.size(); i++) {
-//			System.out.println("코맥이");
+
+		for (int i = 0; i < componentList.size(); i++) {
+			// System.out.println("코맥이");
 			componentList.get(i).removeSelectedItem(this);
 		}
 		repaint();
 	}
-	
+
 	protected void setUnClicked() {
-//		System.out.println("unclick size : " +drawobjList.size());
-		for(int i = 0; i < drawobjList.size(); i++) {
+		// System.out.println("unclick size : " +drawobjList.size());
+		for (int i = 0; i < drawobjList.size(); i++) {
 			drawobjList.get(i).setUnClicked(this);
 		}
-		
-		for(int i = 0; i < componentList.size(); i++) {
-//			System.out.println("코맥이");
+
+		for (int i = 0; i < componentList.size(); i++) {
+			// System.out.println("코맥이");
 			componentList.get(i).setUnClicked(this);
 		}
 		repaint();
 	}
-	
+
 	protected void setRelativeLocation() {
-		
-		for(int i = 0; i < drawobjList.size(); i++) {
+
+		for (int i = 0; i < drawobjList.size(); i++) {
 			drawobjList.get(i).setRelativeLocation(this);
 		}
-		
-		for(int i = 0; i < componentList.size(); i++) {
-			
+
+		for (int i = 0; i < componentList.size(); i++) {
+
 			componentList.get(i).setRelativeLocation(this);
 		}
-		
+
 	}
-	
+
 	protected void setMoveFlag(int x, int y) {
 		initMoveFlag();
-		for(int i = 0; i < drawobjList.size(); i ++) {
-			if(drawobjList.get(i).isClick(x, y, this)) {
+		for (int i = 0; i < drawobjList.size(); i++) {
+			if (drawobjList.get(i).isClick(x, y, this)) {
 				drawobjList.get(i).setMoveFlag(true);
-//				System.out.println("asfasdfasfasdfasfasdf");
+				// System.out.println("asfasdfasfasdfasfasdf");
 				return;
 			}
 		}
 	}
-	
+
 	protected boolean isMoveFlag() {
-		
-		for(int i = 0; i < drawobjList.size(); i ++) {
-			if(drawobjList.get(i).isMoveFlag()) {
-				return true;				
+
+		for (int i = 0; i < drawobjList.size(); i++) {
+			if (drawobjList.get(i).isMoveFlag()) {
+				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	protected void initMoveFlag() {
-		for(int i = 0; i < drawobjList.size(); i ++) {
-			drawobjList.get(i).setMoveFlag(false);;
-			
+		for (int i = 0; i < drawobjList.size(); i++) {
+			drawobjList.get(i).setMoveFlag(false);
+			;
+
 		}
-	}	
-	
+	}
+
 	protected void move(int pressX, int pressY, int dragX, int dragY) {
-		for(int i = 0; i < drawobjList.size(); i ++) {
-			if(drawobjList.get(i).isMoveFlag()) {
+		for (int i = 0; i < drawobjList.size(); i++) {
+			if (drawobjList.get(i).isMoveFlag()) {
 				drawobjList.get(i).move(pressX, pressY, dragX, dragY, nm);
 			}
 		}
@@ -395,7 +389,7 @@ public class NoteManager {
 	protected void setDrawobjList(ArrayList<DrawableObject> drawobjList) {
 		this.drawobjList = drawobjList;
 	}
-	
+
 	protected ArrayList<ComponentJPanel> getComponentList() {
 		return componentList;
 	}
@@ -403,7 +397,7 @@ public class NoteManager {
 	protected void setComponentList(ArrayList<ComponentJPanel> componentList) {
 		this.componentList = componentList;
 	}
-	
+
 	protected JPanel getJpanel() {
 		return jpanel;
 	}
@@ -411,13 +405,5 @@ public class NoteManager {
 	protected void setJpanel(JPanel jpanel) {
 		this.jpanel = jpanel;
 	}
-	
-
-
 
 }
-
-
-
-
-

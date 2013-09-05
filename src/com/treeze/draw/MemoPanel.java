@@ -51,12 +51,15 @@ public class MemoPanel extends ComponentJPanel {
 		csc = new ComponentSizeController(this);
 		csc.setBound(x, y, width, height);
 		setRate(backgroundWidth, backgroundHeight);
+		
+
 
 		textArea.addFocusListener(new FocusListener() {
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				// TODO Auto-generated method stub
+				ptPanel.repaint();
 				textArea.setBackground(new Color(0, 0, 0, 0));
 				memoPanel.setBackground(new Color(0, 0, 0, 0));
 
@@ -67,6 +70,7 @@ public class MemoPanel extends ComponentJPanel {
 				// TODO Auto-generated method stub
 				textArea.setBackground(Color.white);
 				memoPanel.setBackground(Color.gray);
+				
 
 			}
 		});
@@ -77,6 +81,7 @@ public class MemoPanel extends ComponentJPanel {
 			public void keyTyped(KeyEvent arg0) {
 
 				// TODO Auto-generated method stub
+				System.out.println("type");
 
 				if (arg0.getKeyCode() == 10) {// Enter key
 
@@ -125,6 +130,7 @@ public class MemoPanel extends ComponentJPanel {
 
 			@Override
 			public void keyPressed(KeyEvent arg0) {
+				System.out.println("pressss");
 			}
 		});
 
@@ -157,7 +163,8 @@ public class MemoPanel extends ComponentJPanel {
 
 			public void mouseMoved(MouseEvent e) {
 
-				repaint();
+				
+				
 
 				if (csc.isChangeSize(e, margin) || csc.isDrag(e, margin)) {
 
@@ -221,14 +228,32 @@ public class MemoPanel extends ComponentJPanel {
 class ClickMemoPanel extends ClickComponentPanel {
 
 	protected ClickMemoPanel(int x, int y, int width, int height,
-			ComponentJPanel compJpanel, NoteManager nm) {
+			final ComponentJPanel compJpanel, NoteManager nm) {
 		super(x, y, width, height, compJpanel, nm);
 		// TODO Auto-generated constructor stub
+		this.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("ClickMemoPanel focus gain");
+				JPanel pptPanel = (JPanel)compJpanel.getParent();
+				pptPanel.repaint();
+				
+			}
+		});
 	}
 
 	@Override
 	protected void contentFocused() {
 		// TODO Auto-generated method stub
+//		System.out.println("content focused");
 		MemoPanel mp = (MemoPanel) compJpanel;
 		mp.textArea.grabFocus();
 		mp.textArea.requestFocus();

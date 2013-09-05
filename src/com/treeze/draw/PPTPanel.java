@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import com.treeze.data.MindNode;
 import com.treeze.data.TreezeStaticData;
+import com.treeze.frame.MainFrameManager;
 
 /*
  * pptpanel을 나타냄
@@ -25,25 +26,36 @@ public class PPTPanel extends JPanel {
 	public static int x2;
 	public static int pressY;
 	public static int y2;
-	
+
 	private Point draggedExPoint;
 	// 현재 pptPanel 부분
-	PPTPanel pptPanel;
-//	String filename;
+	private static PPTPanel pptPanel;
+	// String filename;
 	StateManager sm;
-	
+
 	DrawablePanel dp;
-	
+
 	NoteManager nm;
 
-	
-	public PPTPanel(MindNode node) {
+	MindNode node;
+
+	public String getNodeID() {
+		return node.getNodeID();
+	}
+
+	public void saveNote() {
+		getNoteManager().saveStoredNote(node.getNodeID());
+	}
+
+	public PPTPanel(MindNode node, MainFrameManager mfm) {
 		// TODO Auto-generated constructor stub
 		super();
 
 		pptPanel = this;
+		this.node = node;
 		// 처음 초기화
-		dp = new DrawablePanel(this, (TreezeStaticData.PPT_IMG_PATH + "/"+node.getImgPath()+".jpg"));
+		dp = new DrawablePanel(this, (TreezeStaticData.PPT_IMG_PATH + "/"
+				+ node.getImgPath() + ".jpg"));
 		nm = dp.getNoteManager();
 		setLayout(null);
 
@@ -60,6 +72,7 @@ public class PPTPanel extends JPanel {
 		// 직선 곡선 모드 설정
 		sm.setCurLineMode(StateManager.LINE_MODE_CURVE);
 
+		nm.loadNote(node.getNodeID());
 
 		this.addMouseListener(new MouseListener() {
 
@@ -70,24 +83,25 @@ public class PPTPanel extends JPanel {
 				// 현재 까지 그린부분까지 저장(펜이라면 그린곡선을, figure라면 figure를)
 				sm.setExMouseMode(sm.getCurMouseMode());
 				sm.setCurMouseMode(StateManager.MOUSE_STATE_RELEASED);
-				
-//				System.out.println("" + sm.isChangeSizeFlag() + sm.isMoveFlag() + sm.getExMouseMode() + sm.getCurNoteMode());
+
+				// System.out.println("" + sm.isChangeSizeFlag() +
+				// sm.isMoveFlag() + sm.getExMouseMode() + sm.getCurNoteMode());
 
 				if (sm.getExMouseMode() == StateManager.MOUSE_STATE_DRAGGED) {
-					if(nm.isMoveFlag()) {
+					if (nm.isMoveFlag()) {
 						nm.initMoveFlag();
-//						System.out.println("initMoveFlag");
-					}else {
+						// System.out.println("initMoveFlag");
+					} else {
 						if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
-							
+
 							nm.makePathComplete();
-	
+
 						} else if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
 							if (sm.getCurFigureMode() == StateManager.FIGURE_TYPE_CIRCLE
 									|| sm.getCurFigureMode() == StateManager.FIGURE_TYPE_REC) {
-	
+
 								nm.makeFigureComplete();
-	
+
 							}
 						}
 					}
@@ -98,7 +112,6 @@ public class PPTPanel extends JPanel {
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
 
-				// curMouseMode = MOUSE_STATE_PRESSED;
 				sm.setCurMouseMode(StateManager.MOUSE_STATE_PRESSED);
 
 				pptPanel.grabFocus();
@@ -109,17 +122,17 @@ public class PPTPanel extends JPanel {
 				int clickCount = e.getClickCount();
 
 				if (clickCount == 1) {
-					if(nm.isClickableItem(pressX, pressY)) {
-//						sm.setMoveFlag(true);
+					if (nm.isClickableItem(pressX, pressY)) {
+
 						nm.setMoveFlag(pressX, pressY);
 						draggedExPoint = new Point(pressX, pressY);
 					} else {
-						
+
 						if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
 							nm.initPath();
 						}
 					}
-					
+
 				}
 
 			}
@@ -140,45 +153,45 @@ public class PPTPanel extends JPanel {
 				int clickButton = e.getButton();
 
 				if (clickButton == StateManager.CLICK_BUTTON_LEFT) {
-					
+
 					if (clickCount == 1) {
-						
-						if(nm.isClickableItem(pressX, pressY)) {
+
+						if (nm.isClickableItem(pressX, pressY)) {
 							nm.setClick(pressX, pressY);
 						} else {
 							nm.setUnClicked();
 							if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
 								if (sm.getCurFigureMode() == StateManager.FIGURE_TYPE_STAR) {
-									nm.drawImage(pressX, pressY, (pptPanel.getWidth()*0.05), (pptPanel.getHeight()*0.05), NoteManager.IMG_TYPE_STAR);
+									nm.drawImage(pressX, pressY,
+											(pptPanel.getWidth() * 0.05),
+											(pptPanel.getHeight() * 0.05),
+											NoteManager.IMG_TYPE_STAR);
 								}
 
-							}else if(sm.getCurNoteMode() == StateManager.NOTE_MODE_ERASER) {
-								
+							} else if (sm.getCurNoteMode() == StateManager.NOTE_MODE_ERASER) {
+
 								nm.setClick(pressX, pressY);
-								
+
 							}
 						}
-
-
 
 					} else if (clickCount == 2) {
 						// 첫번째 클릭했던 내용을 지워버리면된다.
 						if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
-							if(sm.getCurFigureMode() == StateManager.FIGURE_TYPE_STAR) {
+							if (sm.getCurFigureMode() == StateManager.FIGURE_TYPE_STAR) {
 								nm.removeLastDrawableObj();
 							}
 						}
 						// 그다음 두번째에는 textarea를 넣어버리면됨
-						if(sm.getCurNoteMode() != StateManager.NOTE_MODE_ERASER)
+						if (sm.getCurNoteMode() != StateManager.NOTE_MODE_ERASER)
 							nm.addMemo(pressX, pressY, 100, 100);
 
 					}
 
 				} else if (clickButton == StateManager.CLICK_BUTTON_RIGHT) {
 
-//					nm.addPostIt(pressX, pressY, 100, 100);
-					nm.saveStoredNote();
-					
+					// nm.saveStoredNote();
+
 				}
 
 			}
@@ -191,13 +204,13 @@ public class PPTPanel extends JPanel {
 
 					@Override
 					public void mouseMoved(MouseEvent e) {
-						
+
 						int x = e.getX();
-						int y = e.getY();						
-						
-						if(nm.isClickableItem(x, y)) {
+						int y = e.getY();
+
+						if (nm.isClickableItem(x, y)) {
 							setCursor(StateManager.moveCursor);
-						}else {
+						} else {
 							setCursor(sm.getCurStateCursor());
 						}
 					}
@@ -208,27 +221,33 @@ public class PPTPanel extends JPanel {
 						// pen 모드중은 두개로 구분된다.
 						// curMouseMode = MOUSE_STATE_DRAGGED;
 						sm.setCurMouseMode(StateManager.MOUSE_STATE_DRAGGED);
-						
+
 						setCursor(sm.getCurStateCursor());
-						if(nm.isMoveFlag()) {
-							nm.move(draggedExPoint.x, draggedExPoint.y, e.getX(), e.getY());
+						if (nm.isMoveFlag()) {
+							nm.move(draggedExPoint.x, draggedExPoint.y,
+									e.getX(), e.getY());
 							draggedExPoint = new Point(e.getX(), e.getY());
 						} else {
 							if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
 								// shift를 누르고 있으므로 직선을 그린다.
 								if (sm.getCurLineMode() == StateManager.LINE_MODE_STRAIGHT) {
 
-									nm.makePath(new LinePoint(e.getX(), pressY), sm.getColor(), sm.getBs());
+									nm.makePath(
+											new LinePoint(e.getX(), pressY),
+											sm.getColor(), sm.getBs());
 
 								} else {
 
-									nm.makePath(new LinePoint(e.getX(), e.getY()), sm.getColor(), sm.getBs());
+									nm.makePath(
+											new LinePoint(e.getX(), e.getY()),
+											sm.getColor(), sm.getBs());
 
 								}
 
 							} else if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
 
-								nm.makeFigure(pressX, pressY, e.getX() - pressX, e.getY() - pressY,
+								nm.makeFigure(pressX, pressY,
+										e.getX() - pressX, e.getY() - pressY,
 										sm.getCurFigureMode());
 							}
 						}
@@ -242,6 +261,7 @@ public class PPTPanel extends JPanel {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
+				System.out.println("sadfasdfdsafdasfdasfdsafdasfadsf");
 			}
 
 			@Override
@@ -260,27 +280,28 @@ public class PPTPanel extends JPanel {
 				// TODO Auto-generated metdehod stub
 
 				int keyCode = e.getKeyCode();
-				
+				System.out.println("asdfadsfdasfadsfdasfdsafdasfdsafadsfadsfdasf");
+
 				System.out.println("cur keycode : " + keyCode);
-				
+
 				if (keyCode == StateManager.KEY_CODE_DEL) {
 					nm.removeSelectedItem();
-				}					
-
-				if (keyCode == 192) {
-					nm.saveStoredNote();
-					if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
-
-						setCursor(StateManager.blackPenCursor);
-						sm.setCurNoteMode(StateManager.NOTE_MODE_PEN);
-
-					} else {
-
-						setCursor(StateManager.figureCursor);
-						sm.setCurNoteMode(StateManager.NOTE_MODE_FIGURE);
-
-					}
 				}
+				// mode change
+				// if (keyCode == 192) {
+				//
+				// if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
+				//
+				// setCursor(StateManager.blackPenCursor);
+				// sm.setCurNoteMode(StateManager.NOTE_MODE_PEN);
+				//
+				// } else {
+				//
+				// setCursor(StateManager.figureCursor);
+				// sm.setCurNoteMode(StateManager.NOTE_MODE_FIGURE);
+				//
+				// }
+				// }
 
 				if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
 
@@ -291,24 +312,15 @@ public class PPTPanel extends JPanel {
 
 					if (keyCode == StateManager.KEY_CODE_ONE) {
 
-						setCursor(StateManager.blackPenCursor);
-						sm.setColor(Color.BLACK);
-						sm.setBs(new BasicStroke(1));
-						sm.setCurPenMode(StateManager.PEN_MODE_BLACK);
+						setBlackPen();
 
 					} else if (keyCode == StateManager.KEY_CODE_TWO) {
 
-						setCursor(StateManager.redPenCursor);
-						sm.setColor(Color.red);
-						sm.setBs(new BasicStroke(3));
-						sm.setCurPenMode(StateManager.PEN_MODE_RED);
+						setRedPen();
 
 					} else if (keyCode == StateManager.KEY_CODE_THREE) {
 
-						setCursor(StateManager.highliterCursor);
-						sm.setColor(new Color(1f, 1f, 0.2f, 0.1f));
-						sm.setBs(new BasicStroke(10));
-						sm.setCurPenMode(StateManager.PEN_MODE_HIGHLIGHTER);
+						setHighliter();
 					}
 				} else if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
 
@@ -349,17 +361,43 @@ public class PPTPanel extends JPanel {
 		});
 
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		dp.paintComponent(g);
-		
+
 	}
-	
+
 	public NoteManager getNoteManager() {
 		return nm;
 	}
-	
+
+	public void setBlackPen() {
+
+		setCursor(StateManager.blackPenCursor);
+		sm.setColor(Color.BLACK);
+		sm.setBs(new BasicStroke(1));
+		sm.setCurPenMode(StateManager.PEN_MODE_BLACK);
+
+	}
+
+	public void setRedPen() {
+
+		setCursor(StateManager.redPenCursor);
+		sm.setColor(Color.red);
+		sm.setBs(new BasicStroke(3));
+		sm.setCurPenMode(StateManager.PEN_MODE_RED);
+
+	}
+
+	public void setHighliter() {
+
+		setCursor(StateManager.highliterCursor);
+		sm.setColor(new Color(1f, 1f, 0.2f, 0.1f));
+		sm.setBs(new BasicStroke(10));
+		sm.setCurPenMode(StateManager.PEN_MODE_HIGHLIGHTER);
+
+	}
 
 }

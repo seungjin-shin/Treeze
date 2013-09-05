@@ -29,12 +29,16 @@ public class LineObject extends DrawableObject {
 
 		Graphics2D g2 = (Graphics2D) g;
 
-		for (int i = 0; i < path.points.size() - 1; i++) {
+		for (int i = 0; i < path.points.size() - 1; i++) {			
 
-			g2.setColor(path.color);
-			g2.setStroke(path.bs);
-			g2.drawLine(path.points.get(i).x, path.points.get(i).y,
-					path.points.get(i + 1).x, path.points.get(i + 1).y);
+			if(g2 != null) {
+				g2.setColor(path.color);
+				g2.setStroke(path.bs);
+				g2.drawLine(path.points.get(i).x, path.points.get(i).y,
+						path.points.get(i + 1).x, path.points.get(i + 1).y);				
+			}
+
+
 		}
 	}
 
