@@ -314,13 +314,13 @@ public class LoginFrame extends JFrame{
 	public void pushLoginBtn(){
 		boolean loginChk = false;
 		fManager.getUploadToServer().setCurFrame(this);
-		loginChk = fManager.getUploadToServer().signIn(emailTf.getText(), pwTf.getText());
+//		loginChk = fManager.getUploadToServer().signIn(emailTf.getText(), pwTf.getText());
 		System.out.println("loginChk" + loginChk);
-		if (loginChk) {
+//		if (loginChk) {
 			setVisible(false);
 			JFrame pFrame = new ProfileFrame(mc);
 			FreemindManager.getInstance().setProfileFrame(pFrame);
-		}
+//		}
 	}
 	
 	class LogoPanel extends JPanel{

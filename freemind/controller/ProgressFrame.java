@@ -38,7 +38,8 @@ public class ProgressFrame extends JFrame{
 		addGrid.addGrid(addGrid.gbl, addGrid.gbc, bar, 0, 0, 1, 1, 1, 1, this);
 		
 		setAlwaysOnTop(true);
-		setVisible(true);
+		System.out.println("[prrogress]");
+		setVisible(false);
 	}
 //	@Override
 //	public void paint(Graphics g) {

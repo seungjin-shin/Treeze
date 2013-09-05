@@ -672,7 +672,7 @@ public abstract class ControllerAdapter implements ModeController {
 	
 	//dewlit
     public void open() {
-    	
+    	progFrame = new ProgressFrame();
         JFileChooser chooser = getFileChooser();
         // fc, 24.4.2008: multi selection has problems as setTitle in Controller doesn't works
 //        chooser.setMultiSelectionEnabled(true);
@@ -703,6 +703,7 @@ public abstract class ControllerAdapter implements ModeController {
 						fManager.setFilePath(foldName.substring(0, foldName.length() - 4));
 						
 						firstWordArr.clear();
+						progFrame.setVisible(true);
 //						new ProgressFrame2();
 //						startProgThread();
 //						try {
@@ -750,10 +751,10 @@ public abstract class ControllerAdapter implements ModeController {
         getController().setTitle();
     }
     
-    public void startProgThread(){
-    	ProgressThread progThread = new ProgressThread();
-		progThread.start();
-    }
+//    public void startProgThread(){
+//    	ProgressThread progThread = new ProgressThread();
+//		progThread.start();
+//    }
     
     public class OpenAction extends AbstractAction {
         ControllerAdapter mc;
@@ -804,7 +805,8 @@ public abstract class ControllerAdapter implements ModeController {
 				
 			System.out.flush();
 			
-//			progFrame.getBar().setValue((int)(i / page));
+			progFrame.getBar().setValue((int)(i / page));
+			System.out.println(progFrame.getBar().getValue() + "pdf2img");
 			
 			// draw the first page to an image
 			PDFPage pdfPage = pdffile.getPage(i);
@@ -850,8 +852,8 @@ public abstract class ControllerAdapter implements ModeController {
 			}
 		}
 		reader.close();
-//		progFrame.getBar().setValue(100);
-//		progFrame.setVisible(false);
+		progFrame.getBar().setValue(100);
+		progFrame.setVisible(false);
     }
     
     public void newpdf2mm(String filePath, String fileName) throws IOException{

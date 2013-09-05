@@ -5,15 +5,10 @@ public class ProgressThread extends Thread{
 public void run() {
 	ProgressFrame progFrame = new ProgressFrame();
 	int i = 0;
-	while(i != 100){
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	while(progFrame.getBar().getValue() != 100){
+		System.out.println("whlie");
 		progFrame.getBar().setValue(i);
-		progFrame.repaint();
+//		progFrame.repaint();
 		i++;
 	}
 	progFrame.setVisible(false);

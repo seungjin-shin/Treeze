@@ -489,7 +489,6 @@ public class UploadToServer {
 					while((tmp = in.readLine()) != null )
 						str += tmp;
 					
-					System.out.println("checkEmpty : " + str);
 				EntityUtils.consume(resEntity);
 				if(str.equals("true")){
 					return true;
