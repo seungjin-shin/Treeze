@@ -27,9 +27,16 @@ public class NoteServiceImpl implements NoteService{
 	}
 
 	@Override
-	public Object getNote(Long classId, String userEmail, String nodeId) {
+	public Note getNote(Long classId, String userEmail, String nodeId) {
 		// TODO Auto-generated method stub
 		return noteRepository.findOne(Specifications.where(NoteSpecifications.isMyNote(classId, userEmail, nodeId)));
 	}
 
+	@Override
+	public void deleteNote(Note note) {
+		// TODO Auto-generated method stub
+	
+		noteRepository.delete(getNote(note.getClassId(), note.getUserEmail(), note.getNodeId()));
+		
+	}
 }

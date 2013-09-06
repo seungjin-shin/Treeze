@@ -17,17 +17,10 @@ public class User extends AbstractPersistable<Long>  {
 	public static final String PROFESSOR = "professor";
 	
 	private int userImgId;  
-	
 	private String userType;
-	
-	
 	private int identificationNumber;
-	
 	private String userName;
-	 
 	private String userEmail;
-	
-	 
 	private String password;
 	
 	

@@ -37,8 +37,16 @@ public class NoteController {
 	@Autowired private NoteService noteService;
 	
 	@RequestMapping(value="/createNote", method=RequestMethod.POST)
-	public String add(Note model, ModelMap map) {
+	public String createNote(Note model, ModelMap map) {
 		noteService.saveNote(model);
+		map.put("result", "success");
+
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/deleteNote", method=RequestMethod.POST)
+	public String deleteNote(Note model, ModelMap map) {
+		noteService.deleteNote(model);
 		map.put("result", "success");
 
 		return "jsonView";
@@ -52,7 +60,7 @@ public class NoteController {
 	}
 	
 	@RequestMapping(value="/getNote", method=RequestMethod.GET)
-	public String getNotes(@RequestParam("classId") Long classId, @RequestParam("userEmail") String userEmail, @RequestParam("nodeId") String nodeId, ModelMap map) {
+	public String getNote(@RequestParam("classId") Long classId, @RequestParam("userEmail") String userEmail, @RequestParam("nodeId") String nodeId, ModelMap map) {
 
 		map.put("Note", noteService.getNote(classId, userEmail,nodeId));
 		return "jsonView";	

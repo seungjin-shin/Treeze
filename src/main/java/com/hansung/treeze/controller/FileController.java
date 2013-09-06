@@ -29,17 +29,17 @@ public class FileController {
 
 
 	@RequestMapping(value="/upload/file")
-	public String uploadFile(@RequestParam("versionId") Long versionId,@RequestParam("upload") MultipartFile multipartFile, ModelMap map) {
-		logger.info("uploadFile" + versionId +"::::"+ multipartFile.getOriginalFilename());
+	public String uploadFile(@RequestParam("version") String version,@RequestParam("userType") String userType,@RequestParam("upload") MultipartFile multipartFile, ModelMap map) {
+		logger.info("uploadFile" + version +"::::"+ multipartFile.getOriginalFilename());
 
-		map.put("file", fileService.uploadFile(multipartFile, versionId));
+		map.put("file", fileService.uploadFile(multipartFile, version,userType));
 		
 		return "uploadFile";
 	}
 	
 	@RequestMapping(value = "/file", method = RequestMethod.GET)
-	public String getFileInfoes(@RequestParam("versionId") Long versionId, ModelMap map) {
-		Object files = fileService.findByVersionId(versionId);
+	public String getFileInfoes(@RequestParam("version") String version,@RequestParam("userType") String userType, ModelMap map) {
+		Object files = fileService.findByversion(version,userType);
 		map.put("files", files);
 		return "jsonView";
  

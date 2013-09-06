@@ -21,12 +21,18 @@ public class CourseController {
 
 	@RequestMapping(value = "/createCourse", method = RequestMethod.POST)
 	public String createCourse(Course model, ModelMap map) {
-		Course course = courseService.saveCourse(model);
-		map.put("New Course", course);
+		Course course = null;
+		course = courseService.findMyCouse(model);
+		
+		if (course == null) {
+			course = courseService.saveCourse(model);
+			map.put("New Course", course);
+			return "jsonView";
+		}
 
-		return "jsonView";
+		return "false";
 	}
-	
+
 	@RequestMapping(value = "/deleteCourse", method = RequestMethod.POST)
 	public String deleteCourse(Course model, ModelMap map) {
 

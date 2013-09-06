@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FileService {
 
-	Object uploadFile(MultipartFile multipartFile, Long versionId);
+	Object uploadFile(MultipartFile multipartFile, String version,String userType);
 	Object getUploadedFile(Long id);
-	Object findByVersionId(Long versionId);
+	Object findByversion(String version,String userType);
 }

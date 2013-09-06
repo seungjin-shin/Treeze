@@ -7,6 +7,7 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import com.hansung.treeze.model.Course_;
 import com.hansung.treeze.model.UploadedFile;
 import com.hansung.treeze.model.UploadedFile_;
 
@@ -22,11 +23,13 @@ public class FileSpecifications {
 		};
 	}
 
-	public static Specification<UploadedFile> isVersionId(final Long versionId){
+	public static Specification<UploadedFile> isVersion(final String version, final String userType){
 		return new Specification<UploadedFile>(){
 			@Override
 			public Predicate toPredicate(Root<UploadedFile> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.equal(root.<Long>get(UploadedFile_.versionId), versionId);
+				
+				return cb.and(cb.equal(root.<String>get(UploadedFile_.version), version),
+					      cb.equal(root.<String>get(UploadedFile_.userType), userType));
 			}
 		};
 	}

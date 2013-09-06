@@ -29,9 +29,9 @@ public class FileServiceImpl implements FileService {
 	@Autowired private FileRepository fileRepository;
 	
 	@Override
-	public Map<String, String> uploadFile(MultipartFile multipartFile, Long classId) {
+	public Map<String, String> uploadFile(MultipartFile multipartFile, String version,String userType) {
 		String uploadPath = defaultProperties.getProperty("file.upload.path");
-		Map<String, String> fileInfo = upload(multipartFile, uploadPath, classId);	
+		Map<String, String> fileInfo = upload(multipartFile, uploadPath, version,userType);	
 
 		String uploadedFileFullPath = fileInfo.remove("path");
 		int dotIndex = uploadedFileFullPath.lastIndexOf(".");
@@ -46,7 +46,7 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
-	private Map<String, String> upload(MultipartFile multipartFile, String uploadPath, Long versionId) {
+	private Map<String, String> upload(MultipartFile multipartFile, String uploadPath, String version,String userType) {
 		String fileUniqueName = String.valueOf(System.nanoTime());
 
 		String originFileName = multipartFile.getOriginalFilename();		
@@ -66,7 +66,8 @@ public class FileServiceImpl implements FileService {
 		}
 	    
 	    UploadedFile uploadedFileBean = new UploadedFile();
-	    uploadedFileBean.setVersionId(versionId);
+	    uploadedFileBean.setVersion(version);
+	    uploadedFileBean.setUserType(userType);
 	    uploadedFileBean.setFileName(originFileName);
 	    uploadedFileBean.setFilePath(uploadedFileFullPath);
 	    uploadedFileBean.setFileSize(String.valueOf(multipartFile.getSize()));
@@ -83,9 +84,9 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public Object findByVersionId(Long versionId){
+	public Object findByversion(String version,String userType){
 		// TODO Auto-generated method stub
 	
-		return fileRepository.findAll(Specifications.where(FileSpecifications.isVersionId(versionId)));
+		return fileRepository.findAll(Specifications.where(FileSpecifications.isVersion(version,userType)));
 	}
 }
