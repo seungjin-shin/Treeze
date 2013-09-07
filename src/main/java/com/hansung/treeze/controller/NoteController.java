@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hansung.treeze.model.Note;
+import com.hansung.treeze.model.Version;
 import com.hansung.treeze.service.NoteService;
 
 /*
@@ -38,7 +39,20 @@ public class NoteController {
 	
 	@RequestMapping(value="/createNote", method=RequestMethod.POST)
 	public String createNote(Note model, ModelMap map) {
-		noteService.saveNote(model);
+		
+		Note note = noteService.getNote(model.getClassId(), model.getUserEmail(),model.getNodeId());
+
+		if (note == null)
+			note = noteService.saveNote(model);
+		else{
+			note.setClassId(model.getClassId());
+			note.setUserEmail(model.getUserEmail());
+			note.setNodeId(model.getNodeId());
+			note.setContents(model.getContents());
+			note = noteService.saveNote(note);
+		}
+
+
 		map.put("result", "success");
 
 		return "jsonView";
