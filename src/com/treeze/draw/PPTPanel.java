@@ -38,6 +38,14 @@ public class PPTPanel extends JPanel {
 	NoteManager nm;
 
 	MindNode node;
+	
+	public String getStoreNoteContents() {
+		return nm.getStoredNote(node.getNodeID());
+	}
+	
+	public MindNode getMindNode() {
+		return node;
+	}
 
 	public String getNodeID() {
 		return node.getNodeID();
@@ -73,6 +81,7 @@ public class PPTPanel extends JPanel {
 		sm.setCurLineMode(StateManager.LINE_MODE_CURVE);
 
 		nm.loadNote(node.getNodeID());
+		
 
 		this.addMouseListener(new MouseListener() {
 
@@ -224,6 +233,7 @@ public class PPTPanel extends JPanel {
 
 						setCursor(sm.getCurStateCursor());
 						if (nm.isMoveFlag()) {
+							setCursor(StateManager.moveCursor);
 							nm.move(draggedExPoint.x, draggedExPoint.y,
 									e.getX(), e.getY());
 							draggedExPoint = new Point(e.getX(), e.getY());

@@ -14,42 +14,38 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+import org.apache.http.client.ClientProtocolException;
 
-import JDIalog.TextDialogue;
-
-import com.google.gson.Gson;
 import com.treeze.Abstract.ImgBtn;
-import com.treeze.data.ArrayUser;
 import com.treeze.data.TreezeStaticData;
 import com.treeze.data.User;
 
@@ -273,74 +269,12 @@ public class LoginPageFrame extends JFrame{
 //			JFrame pFrame = new ProfileFrame(mc);
 //			FreemindManager.getInstance().setProfileFrame(pFrame);
 //		}
-	
-		if(signIn("lovesigma@naver.com", "0415"))
+		User user = User.getInstance();
+		user.setUserName("신건영");
+		user.setUserEmail("lovesigma@naver.com");
 		new ProfileFrame();
-		
 	}
-	public boolean signIn(String email, String pw){
-//  	  113.198.84.80:8080/treeze/createUser
-//  	  113.198.84.80:8080/treeze/login?userEmail="minsuk@hansung.ac.kr"&password="1234"
-//  	  "emailFalse"
-//  	  "passwordFalse"
-			HttpClient httpClient = new DefaultHttpClient();
-	       HttpGet get = new HttpGet("http://" + TreezeStaticData.IP + ":8080/treeze/login?userEmail=" + email + "&password=" + pw); 
-
-	       MultipartEntity multipart = new MultipartEntity(
-					HttpMultipartMode.BROWSER_COMPATIBLE, null,
-					Charset.forName("UTF-8"));  // xml, classId, LectureName 			
-	       StringBody typeBoby;
-		try {
-
-			HttpResponse response = httpClient.execute(get);
-
-			HttpEntity resEntity = response.getEntity();
-
-			InputStream inputStream = resEntity.getContent();
-	    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-
-	    	  String str = "";
-	    	  String tmp;
-
-				while((tmp = in.readLine()) != null )
-					str += tmp;
-
-			System.out.println("response : " + str);
-
-			EntityUtils.consume(resEntity);
-
-			if(str.equals("emailFalse")){
-				new TextDialogue(this, "Email is not exist.", true);
-				return false;
-			}
-			else if(str.equals("passwordFalse")){
-				new TextDialogue(this, "Incorrect password.", true);
-				return false;
-			}
-			else{
-				Gson gson = new Gson();
-				
-				ArrayUser arrayUser = gson.fromJson(str, ArrayUser.class);
-				User user = User.getInstance();
-				
-				user.setUserName(arrayUser.getUser().getUserName());
-				user.setUserType(arrayUser.getUser().getUserType());
-				user.setUserEmail(arrayUser.getUser().getUserEmail());
-				user.setUserImgId(arrayUser.getUser().getUserImgId());
-			
-				System.out.println("[user] = "+User.getInstance().getUserName());
-				System.out.println("[user] = "+arrayUser.getUser().getUserName());
-				return true;
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			new TextDialogue(this, "Server down, Program end", true);
-			e.printStackTrace();
-			System.exit(0);
-		}
-		return false;
-	  }
-
+	
 	class LogoPanel extends JPanel{
 		ImageIcon icon;
 		public LogoPanel(Image img) {

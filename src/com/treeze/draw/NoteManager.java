@@ -8,20 +8,32 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
 import com.google.gson.Gson;
+import com.treeze.data.ClassInfo;
+import com.treeze.data.JsonTicket;
+import com.treeze.data.MindNode;
+import com.treeze.data.Ticket;
+import com.treeze.data.TreezeStaticData;
+import com.treeze.data.User;
+import com.treeze.downloadthread.DownLoadAllTicket;
+import com.treeze.downloadthread.DownLoadNote;
 
 /*
  * NoteManager객체 필기에 해당되는 부분은 NoteManager에서 관장한다.
  */
 public class NoteManager {
 
-	protected ArrayList<DrawableObject> drawobjList;
-	protected ArrayList<ComponentJPanel> componentList;
+	private ArrayList<DrawableObject> drawobjList;
+	private ArrayList<ComponentJPanel> componentList;
 
 	protected Path path;
 	private JPanel jpanel;
@@ -38,6 +50,20 @@ public class NoteManager {
 	public static Image STAR_IMG;
 
 	private NoteManager nm;
+	
+	public synchronized void addComponentJPanel(ComponentJPanel componentJPanel) {
+		if(componentList == null) {
+			componentList = new ArrayList<ComponentJPanel>();
+		}
+		componentList.add(componentJPanel);
+	}
+	
+	public synchronized void addDrawableObject(DrawableObject drawableObject) {
+		if(drawobjList == null) {
+			drawobjList = new ArrayList<DrawableObject>();
+		}
+		drawobjList.add(drawableObject);
+	}
 
 	protected NoteManager(JPanel jpanel) {
 		// TODO Auto-generated constructor stub
@@ -98,7 +124,9 @@ public class NoteManager {
 	}
 
 	protected void makePathComplete() {
-		drawobjList.add(new LineObject(this.path, jpanel.getWidth(), jpanel
+//		drawobjList.add(new LineObject(this.path, jpanel.getWidth(), jpanel
+//				.getHeight()));
+		addDrawableObject(new LineObject(this.path, jpanel.getWidth(), jpanel
 				.getHeight()));
 		this.path = null;
 		// System.out.println("drawobj size : " + drawobjList.size());
@@ -112,12 +140,13 @@ public class NoteManager {
 	}
 
 	protected void makeFigureComplete() {
-		drawobjList.add(this.figureObj);
+
+		addDrawableObject(this.figureObj);
 		this.figureObj = null;
 		// System.out.println("drawobj size : " + drawobjList.size());
 	}
 
-	protected void setFeatureByRate() {
+	public synchronized void setFeatureByRate() {
 		for (int i = 0; i < drawobjList.size(); i++) {
 			drawobjList.get(i).setFeatureByRate(jpanel.getWidth(),
 					jpanel.getHeight());
@@ -128,7 +157,7 @@ public class NoteManager {
 		}
 	}
 
-	protected void restore() {
+	public void restore() {
 		drawAll(jpanel.getGraphics());
 		addAllToPanel();
 	}
@@ -180,23 +209,19 @@ public class NoteManager {
 
 	}
 
-	protected void drawFigure(int x, int y, int width, int height, int type) {
-		drawobjList.add(new FigureObject(x, y, width, height,
-				jpanel.getWidth(), jpanel.getHeight(), type));
-		repaint();
-	}
 
 	protected void drawImage(int x, int y, double width, double height, int type) {
 		// if(IMG_SIZE_WIDTH != IMG_SIZE_NO_DECIDED) {
 		// width = IMG_SIZE_WIDTH;
 		// height = IMG_SIZE_HEIGHT;
 		// }
-		drawobjList.add(new ImageObject(x, y, (int) width, (int) height, jpanel
+		
+		addDrawableObject(new ImageObject(x, y, (int) width, (int) height, jpanel
 				.getWidth(), jpanel.getHeight(), type));
 		repaint();
 	}
 
-	protected void repaint() {
+	public synchronized void repaint() {
 
 		jpanel.repaint();
 
@@ -210,7 +235,8 @@ public class NoteManager {
 		jpanel.add(postItPanel);
 		jpanel.validate();
 
-		componentList.add(postItPanel);
+//		componentList.add(postItPanel);
+		addComponentJPanel(postItPanel);
 		repaint();
 
 	}
@@ -220,7 +246,8 @@ public class NoteManager {
 		MemoPanel memo = new MemoPanel(x, y, width, height, jpanel.getWidth(),
 				jpanel.getHeight());
 		memo.addToPanelByClick(jpanel, this);
-		componentList.add(memo);
+//		componentList.add(memo);
+		addComponentJPanel(memo);
 		repaint();
 
 	}
@@ -232,35 +259,35 @@ public class NoteManager {
 	}
 
 	protected void loadNote(String nodeId) {
+		
+		StoredNoteObject sno = null;
 		 
 		try {
-			System.out.println("hererererererer");
-			StoredNoteObject sno = loadStoredNote(nodeId);
-
+			sno = loadStoredNote(nodeId);
 			componentList = sno.getCOList();
 			drawobjList = sno.getDOList();
-
 			setFeatureByRate();
 			// 패널과 그림을 다시 만들고
 			restore();
-			// repaint 시킴
-
-			
 			repaint();
-			
-			jpanel.setVisible(false);
-			jpanel.setVisible(true);
+
 
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
-			System.out.println("저장된 필기가없습니다.");
+			System.out.println("저장된 필기가없습니다. 네트워크에서 가져옵니다.");
+			User user= User.getInstance();	
+			ClassInfo ci = ClassInfo.getInstance();
+			new DownLoadNote(ci.getClassId() + "", user.getUserEmail(), nodeId, this).start();
+		
 		}
 		
-		repaint();
+		
 
 	}
+	
+	
 
 	protected StoredNoteObject loadStoredNote(String nodeId) throws IOException {
 
@@ -270,6 +297,13 @@ public class NoteManager {
 
 		return gson.fromJson(noteData, StoredNoteObject.class);
 
+	}
+	protected String getStoredNote(String nodeId) {
+		
+		StoredNoteObject sno = new StoredNoteObject(drawobjList, componentList);
+		String noteContent = gson.toJson(sno);
+		return noteContent;
+		
 	}
 
 	protected void saveStoredNote(String nodeId) {
@@ -416,3 +450,4 @@ public class NoteManager {
 	}
 
 }
+

@@ -67,8 +67,6 @@ public class MemoPanel extends ComponentJPanel {
 			public void focusLost(FocusEvent arg0) {
 				// TODO Auto-generated method stub
 				ptPanel.repaint();
-//				textArea.setBackground(Color.white);
-//				memoPanel.setBackground(Color.gray);
 				textArea.setBackground(new Color(0, 0, 0, 0));
 				memoPanel.setBackground(new Color(0, 0, 0, 0));
 
@@ -92,11 +90,13 @@ public class MemoPanel extends ComponentJPanel {
 				// TODO Auto-generated method stub
 				System.out.println("type");
 				
-//				if(textAreaDimention.width )
+				if(getClickPanel().isVisible()) {
+					getClickPanel().removeClicked();
+				}
+				
 				Dimension textAreaDimention = textArea.getPreferredSize();
 				getClickPanel().setVisible(false);
 				if(textAreaDimention.width < 10) {
-					System.out.println("textAreaDimention.width < 10");
 					csc.setSize(60, 60);
 					return;
 				}
@@ -143,7 +143,7 @@ public class MemoPanel extends ComponentJPanel {
 
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				System.out.println("pressss");
+				
 			}
 		});
 
@@ -165,6 +165,7 @@ public class MemoPanel extends ComponentJPanel {
 				// memoPanel.setBackground(Color.gray);
 
 				if (csc.isChangeSize(e, margin) || csc.isDrag(e, margin)) {
+					System.out.println("asdfasdfdsafsadfasfdsafdasfasdfadsf");
 					
 					getClickPanel().setFocusable(true);
 					memoPanel.setFocusable(false);
@@ -184,7 +185,8 @@ public class MemoPanel extends ComponentJPanel {
 				
 
 				if (csc.isChangeSize(e, margin) || csc.isDrag(e, margin)) {
-
+					
+					getClickPanel().setFocusable(true);
 					setCursor(StateManager.moveCursor);
 
 				}
@@ -237,21 +239,40 @@ public class MemoPanel extends ComponentJPanel {
 	@Override
 	public void addToPanel(JPanel jpanel, NoteManager nm) {
 		// TODO Auto-generated method stub
+//		ptPanel = (PPTPanel) jpanel;
+//		this.nm = nm;
+//		
+//		setClickPanel(new ClickMemoPanel(this.getX(), this.getY(),
+//				this.getWidth(), this.getHeight(), memoPanel, nm));		
+//		
+//
+//		
+//		getClickPanel().setVisible(false);
+//		this.setAllFocusable(true);
+////		this.setAllBackground(new Color(0,0,0,0));
+//		this.setBackground(Color.gray);
+//		this.setBackground(Color.white);
+//		
+//		jpanel.add(this);
+//		jpanel.setVisible(false);
+//		jpanel.setVisible(true);
+//
+//		jpanel.repaint();
+		System.out.println("addToPanel");
 		ptPanel = (PPTPanel) jpanel;
 		this.nm = nm;
 		
 		setClickPanel(new ClickMemoPanel(this.getX(), this.getY(),
-				this.getWidth(), this.getHeight(), memoPanel, nm));		
+				this.getWidth(), this.getHeight(), memoPanel, nm));
+		this.setAllBackground(new Color(0,0,0,0));
+		this.setAllFocusable(true);
 		
 		jpanel.add(this);
 		jpanel.setVisible(false);
 		jpanel.setVisible(true);
 		
 		getClickPanel().setVisible(false);
-		this.setAllFocusable(true);
-		this.setAllBackground(new Color(0,0,0,0));
-
-		jpanel.repaint();
+		
 
 	}
 	
@@ -294,11 +315,7 @@ class ClickMemoPanel extends ClickComponentPanel {
 			@Override
 			public void focusGained(FocusEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println("ClickMemoPanel focus gain");
-				
 				compJpanel.setFocusable(false);
-//				JPanel pptPanel = (JPanel)compJpanel.getParent();
-//				pptPanel.repaint();
 				
 			}
 		});

@@ -63,7 +63,6 @@ import com.treeze.data.User;
 import com.treeze.downloadthread.*;
 import com.treeze.frame.TicketWriteFrame.WriteBtn;
 import com.treeze.uploadthread.CreateLecture;
-import com.treeze.uploadthread.DeleteCourse;
 
 public class ProfileFrame extends JFrame {
 
@@ -74,8 +73,8 @@ public class ProfileFrame extends JFrame {
 	ImageIcon imgIcon;
 	User user;
 	ArrayList<ClassInfo> classList = new ArrayList<ClassInfo>();
-	NameLabel nameLabel ;
-	PersonalInfo personalInfo ;
+	NameLabel nameLabel = new NameLabel("신승");
+	PersonalInfo personalInfo = new PersonalInfo("한성대학교 컴공", "학생", "경기도 평택");
 	ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
 	ListPanel listPanel;
 	PicturePanel picturePanel = new PicturePanel(
@@ -86,19 +85,18 @@ public class ProfileFrame extends JFrame {
 	LectureHead lectureHead;
 
 	MyLectureListBtn myLectureListBtn = new MyLectureListBtn(
-			TreezeStaticData.MYCOURSE_IMG, TreezeStaticData.MYCOURSE_PRESS_IMG,
-			TreezeStaticData.MYCOURSE_ENTER_IMG);
+			TreezeStaticData.LECTURELIST_IMG, TreezeStaticData.LECTURELIST_PRESS_IMG,
+			TreezeStaticData.lECTURELIST_ENTER_IMG);
 	AllLectureListBtn allLectureListBtn = new AllLectureListBtn(
-			TreezeStaticData.ALLCOURSE_IMG, TreezeStaticData.ALLCOURSE_PRESS_IMG,
-			TreezeStaticData.ALLCOURSE_ENTER_IMG);
+			TreezeStaticData.ALLLECTURE_IMG, TreezeStaticData.ALLLECTURE_PRESS_IMG,
+			TreezeStaticData.ALLLECTURE_IMG);
 	AddLectureListBtn addLectureBtn = new AddLectureListBtn(
-			TreezeStaticData.ADD_COURSE_IMG,
-			TreezeStaticData.ADD_COURSE_PRESS_IMG,
-			TreezeStaticData.ADD_COURSE_ENTER_IMG);
+			TreezeStaticData.ADD_LECTURE_IMG,
+			TreezeStaticData.ADD_LECTURE_PRESS_IMG,
+			TreezeStaticData.ADD_LECTURE_ENTER_IMG);
 	AllLectureListBtn logoutBtn = new AllLectureListBtn(
 			TreezeStaticData.PROFILE_IMG, TreezeStaticData.PROFILE_PRESS_IMG,
 			TreezeStaticData.PROFILE_ENTER_IMG);
-	DeleteCourseBtn deleteCourseBtn = new DeleteCourseBtn(TreezeStaticData.DELETE_COURSE_IMG, TreezeStaticData.DELETE_COURSE_PRESS_IMG, TreezeStaticData.DELETE_COURSE_ENTER_IMG);
 
 	static JPanel grid = new JPanel();
 	JPanel fullPanel = new JPanel();
@@ -132,8 +130,6 @@ public class ProfileFrame extends JFrame {
 		gbc.fill = GridBagConstraints.BOTH;
 		user = User.getInstance();
 		// C:\Users\占식곤옙\Desktop
-		nameLabel = new NameLabel(user.getUserName());
-		personalInfo = new PersonalInfo(user.getUserType(), user.getUserEmail(),"");
 		setLayout(new BorderLayout());
 		this.add(fullPanel);
 		logoPanel = new LogoPanel();
@@ -175,7 +171,7 @@ public class ProfileFrame extends JFrame {
 		JLabel subjectPanel = new JLabel("교 수 명", JLabel.CENTER);
 		JLabel whritePane = new JLabel("상  태", JLabel.CENTER);
 		lectureHead.setLayout(gbl);
-		addGrid(gbl, gbc, noPanel, 0, 0, 1, 1, 15, 1, lectureHead);
+		addGrid(gbl, gbc, noPanel, 0, 0, 1, 1, 12, 1, lectureHead);
 		addGrid(gbl, gbc, subjectPanel, 1, 0, 1, 1, 1, 1, lectureHead);
 		addGrid(gbl, gbc, whritePane, 2, 0, 1, 1, 1, 1, lectureHead);
 		lectureListPanel.setLayout(gbl);
@@ -186,6 +182,8 @@ public class ProfileFrame extends JFrame {
 
 		grid.setBackground(new Color(0, 0, 0, 0));
 		grid.setLayout(new GridLayout(100, 1, 0, 5));
+		// grid.setLayout(new GridLayout(100, 1));
+		// grid.add(item1);
 
 		JPanel dumy = new JPanel();
 		dumy.setBackground(new Color(0, 0, 0, 0));
@@ -392,14 +390,13 @@ public class ProfileFrame extends JFrame {
 		ImgPanel stateOfLecture;
 		Lecture lecture;
 		JScrollPane jsp;
-		JCheckBox deleteChkBox = new JCheckBox();
+
 		public LectureListItem(final Lecture lecture) {
 			// TODO Auto-generated constructor stub
 			this.lecture = lecture;
 			this.setBorder(new EmptyBorder(5, 0, 5, 0));
 			lectureNm = new JLabel(lecture.getLectureName(), JLabel.CENTER);
 			professorNm = new JLabel(lecture.getProfessorName(), JLabel.CENTER);
-			chkBoxList.add(deleteChkBox);
 			// lectureNm.setFont(new Font("Serif", Font.ITALIC, 18));
 			// professorNm.setFont(new Font("Serif", Font.ITALIC, 18));
 			if (lecture.getStateOfLecture()) {
@@ -417,10 +414,10 @@ public class ProfileFrame extends JFrame {
 			insets.top = 5;
 			jsp = new JScrollPane(lectureNm);
 			jsp.setBorder(null);
-			addGrid(gbl, gbc, deleteChkBox, 0, 0, 1, 1, 0, 1, this);
-			addGrid(gbl, gbc, jsp, 1, 0, 1, 1, 7, 1, this);
-			addGrid(gbl, gbc, professorNm, 2, 0, 1, 1, 1, 1, this);
-			addGrid(gbl, gbc, stateOfLecture, 3, 0, 1, 1, 1, 1, this);
+
+			addGrid(gbl, gbc, jsp, 0, 0, 1, 1, 7, 1, this);
+			addGrid(gbl, gbc, professorNm, 1, 0, 1, 1, 1, 1, this);
+			addGrid(gbl, gbc, stateOfLecture, 2, 0, 1, 1, 1, 1, this);
 			lectureNm.setPreferredSize(new Dimension(lectureNm.getWidth(),
 					lectureNm.getHeight()));
 			jsp.getViewport().setBackground(Color.WHITE);
@@ -536,9 +533,6 @@ public class ProfileFrame extends JFrame {
 					setBackground(new Color(10, 10, 100, 100));
 					classId = classInstance.getClassId();
 					classInfo = classInstance;
-					ClassInfo.getInstance().setClassId(classInfo.getClassId());
-					ClassInfo.getInstance().setLectureId(classInfo.getLectureId());
-					classInfo.getInstance().setClassName(classInfo.getClassName());
 					DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(
 							classId);
 					downLoadNetworkThread.start();
@@ -707,7 +701,7 @@ public class ProfileFrame extends JFrame {
 
 	void updateGetMyLectureList() {
 		// TODO Auto-generated method stub
-		btnPanel.setBtn(myLectureListBtn, allLectureListBtn, deleteCourseBtn,
+		btnPanel.setBtn(myLectureListBtn, allLectureListBtn, new JLabel(),
 				logoutBtn);
 		java.lang.reflect.Type type = new TypeToken<ArrayLecture>() {
 		}.getType();
@@ -717,14 +711,12 @@ public class ProfileFrame extends JFrame {
 		lectureList = jonResultlecturelist.getLectures();
 		grid.removeAll();
 		insets.set(5, 0, 5, 0);
-		chkBoxList.clear();
 		for (int i = 0; i < lectureList.size(); i++) {
 			LectureListItem lectureListItem = new LectureListItem(
 					lectureList.get(i));
 			grid.add(lectureListItem);
 
 		}
-		
 		lectureHead.setVisible(true);
 		fullPanel.setVisible(false);
 		fullPanel.setVisible(true);
@@ -910,45 +902,9 @@ public class ProfileFrame extends JFrame {
 			repaint();
 		}
 	}
-	class DeleteCourseBtn extends ImgBtn{
 
-		public DeleteCourseBtn(Image defaultImg, Image pressImg, Image enterImg) {
-			super(defaultImg, pressImg, enterImg);
-			// TODO Auto-generated constructor stub
-		}
-
-		@Override
-		protected void Action() {
-			// TODO Auto-generated method stub
-
-			int chkCnt = 0;
+	class AddLectureListBtn extends ImgBtn {
 		
-			for (int i = 0; i < chkBoxList.size(); i++) {
-				JCheckBox tmp = chkBoxList.get(i);
-				if (tmp.isSelected()) {
-					chkCnt++;
-					Lecture lecture = lectureList.get(i);
-					System.out.println(lecture.getLectureId());
-					DeleteCourse deleteCourseBtn = new DeleteCourse(
-							lecture.getLectureId() + "",
-							lecture.getLectureName(), user.getUserEmail());
-					deleteCourseBtn.start();
-					
-				}
-			}
-			repaint();
-			if(chkCnt>0){
-			TextDialogue textDialogue = new TextDialogue(ProfileFrame.this, "수강신청 취소 되었습니다..", true);
-			}
-			
-		
-			
-		}
-		
-	}
-	public class AddLectureListBtn extends ImgBtn {
-		TextDialogue completeLectureAdd ;
-		TextDialogue textDialogue;
 		public AddLectureListBtn(final Image defaultImg, final Image pressImg,
 				final Image enterImg) {
 			// TODO Auto-generated constructor stub
@@ -970,33 +926,21 @@ public class ProfileFrame extends JFrame {
 		}
 
 		@Override
-		public void Action() {
-			int chkCnt = 0;
-			
+		protected void Action() {
+			System.out.println(lectureList.size());
 			for (int i = 0; i < chkBoxList.size(); i++) {
 				JCheckBox tmp = chkBoxList.get(i);
 				if (tmp.isSelected()) {
-					chkCnt++;
 					Lecture lecture = lectureList.get(i);
 					CreateLecture createLecture = new CreateLecture(
 							lecture.getLectureId() + "",
-							lecture.getLectureName(), user.getUserEmail(),AddLectureListBtn.this);
+							lecture.getLectureName(), user.getUserEmail());
 					createLecture.start();
 					
 				}
 			}
 			repaint();
-			if(chkCnt>0){
-				completeLectureAdd=  new TextDialogue(ProfileFrame.this, "수강신청이 완료 되었습니다.", true);
-		     }
-			
-		}
-		public void resultAddLecture(String result) {
-			if(textDialogue==null)
-			textDialogue = new TextDialogue(ProfileFrame.this, result, true);
-			textDialogue.setVisible(true);
-			if(completeLectureAdd!=null)
-				completeLectureAdd.setVisible(false);
+			TextDialogue textDialogue = new TextDialogue(ProfileFrame.this, "수강신청 되셨습니다.", true);
 			
 		}
 		

@@ -18,6 +18,7 @@ public class ClassInfo{
 		}
 		return classInfo;
 	}
+	
 	public String getProfessorEmail() {
 		return professorEmail;
 	}
