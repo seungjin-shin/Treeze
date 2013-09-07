@@ -8,7 +8,16 @@ public class ClassInfo{
 	private int port;
 	private Long lectureId;
 	private String professorEmail;
-	
+	private static ClassInfo classInfo;
+	private ClassInfo() {
+		// TODO Auto-generated constructor stub
+	}
+	public static ClassInfo getInstance() {
+		if(classInfo ==null){
+			classInfo =new ClassInfo();
+		}
+		return classInfo;
+	}
 	public String getProfessorEmail() {
 		return professorEmail;
 	}
