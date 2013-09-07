@@ -262,26 +262,33 @@ public class NoteManager {
 		
 		StoredNoteObject sno = null;
 		 
-		try {
-			sno = loadStoredNote(nodeId);
-			componentList = sno.getCOList();
-			drawobjList = sno.getDOList();
-			setFeatureByRate();
-			// 패널과 그림을 다시 만들고
-			restore();
-			repaint();
-
-
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
-			System.out.println("저장된 필기가없습니다. 네트워크에서 가져옵니다.");
-			User user= User.getInstance();	
-			ClassInfo ci = ClassInfo.getInstance();
-			new DownLoadNote(ci.getClassId() + "", user.getUserEmail(), nodeId, this).start();
+//		try {
+//			sno = loadStoredNote(nodeId);
+//			componentList = sno.getCOList();
+//			drawobjList = sno.getDOList();
+//			setFeatureByRate();
+//			// 패널과 그림을 다시 만들고
+//			restore();
+//			repaint();
+//			System.out.println("저장된 필기를 로컬에서 가져옵니다.");
+//
+//
+//
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+////			e.printStackTrace();
+//			System.out.println("저장된 필기가없습니다. 네트워크에서 가져옵니다.");
+//			User user= User.getInstance();	
+//			ClassInfo ci = ClassInfo.getInstance();
+//			new DownLoadNote("1", user.getUserEmail(), nodeId, this).start();
+//		
+//		}
 		
-		}
+		User user= User.getInstance();	
+		ClassInfo ci = ClassInfo.getInstance();
+		new DownLoadNote("1", user.getUserEmail(), nodeId, this).start();
+		
+
 		
 		
 

@@ -1,5 +1,7 @@
 package com.treeze.data;
 
+
+
 public class Note  {
 
 	private Long classId;
@@ -34,3 +36,4 @@ public class Note  {
 	}
 	
 }
+

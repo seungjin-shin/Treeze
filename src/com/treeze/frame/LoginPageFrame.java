@@ -270,7 +270,7 @@ public class LoginPageFrame extends JFrame{
 //			FreemindManager.getInstance().setProfileFrame(pFrame);
 //		}
 		User user = User.getInstance();
-		user.setUserName("신건영");
+		user.setUserName("�ǿ�");
 		user.setUserEmail("lovesigma@naver.com");
 		new ProfileFrame();
 	}

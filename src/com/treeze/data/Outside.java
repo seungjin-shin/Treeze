@@ -1,0 +1,1 @@
+package com.treeze.data;public class Outside {		public Note Note;}

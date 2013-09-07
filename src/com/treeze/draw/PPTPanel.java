@@ -2,6 +2,7 @@ package com.treeze.draw;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -131,17 +132,18 @@ public class PPTPanel extends JPanel {
 				int clickCount = e.getClickCount();
 
 				if (clickCount == 1) {
-					if (nm.isClickableItem(pressX, pressY)) {
+					
+						if (nm.isClickableItem(pressX, pressY) && sm.getCurNoteMode() == StateManager.NOTE_MODE_GRAB) {
 
-						nm.setMoveFlag(pressX, pressY);
-						draggedExPoint = new Point(pressX, pressY);
-					} else {
+							nm.setMoveFlag(pressX, pressY);
+							draggedExPoint = new Point(pressX, pressY);
+						} else {
 
-						if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
-							nm.initPath();
-						}
+							if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
+								nm.initPath();
+							}
+						
 					}
-
 				}
 
 			}
@@ -165,7 +167,7 @@ public class PPTPanel extends JPanel {
 
 					if (clickCount == 1) {
 
-						if (nm.isClickableItem(pressX, pressY)) {
+						if (nm.isClickableItem(pressX, pressY) && sm.getCurNoteMode() == StateManager.NOTE_MODE_GRAB) {
 							nm.setClick(pressX, pressY);
 						} else {
 							nm.setUnClicked();
@@ -176,10 +178,6 @@ public class PPTPanel extends JPanel {
 											(pptPanel.getHeight() * 0.05),
 											NoteManager.IMG_TYPE_STAR);
 								}
-
-							} else if (sm.getCurNoteMode() == StateManager.NOTE_MODE_ERASER) {
-
-								nm.setClick(pressX, pressY);
 
 							}
 						}
@@ -216,12 +214,16 @@ public class PPTPanel extends JPanel {
 
 						int x = e.getX();
 						int y = e.getY();
-
-						if (nm.isClickableItem(x, y)) {
-							setCursor(StateManager.moveCursor);
-						} else {
-							setCursor(sm.getCurStateCursor());
+						
+						if(sm.getCurNoteMode() == StateManager.NOTE_MODE_GRAB) {
+							if (nm.isClickableItem(x, y)) {
+								setCursor(StateManager.moveCursor);
+							} else {
+								setCursor(sm.getCurStateCursor());
+							}
 						}
+
+
 					}
 
 					@Override
@@ -271,7 +273,7 @@ public class PPTPanel extends JPanel {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				System.out.println("sadfasdfdsafdasfdasfdsafdasfadsf");
+				
 			}
 
 			@Override
@@ -290,9 +292,18 @@ public class PPTPanel extends JPanel {
 				// TODO Auto-generated metdehod stub
 
 				int keyCode = e.getKeyCode();
-				System.out.println("asdfadsfdasfadsfdasfdsafdasfdsafadsfadsfdasf");
+				System.out.println("keycode : " + keyCode);
+				
+				if(keyCode == StateManager.KEY_CODE_MODE) {
+					if(sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
+						sm.setCurNoteMode(StateManager.NOTE_MODE_GRAB);
+						setCursor(Cursor.getDefaultCursor());
+					}else {
+						sm.setCurNoteMode(StateManager.NOTE_MODE_PEN);
+						setCursor(StateManager.blackPenCursor);
+					}
+				}
 
-				System.out.println("cur keycode : " + keyCode);
 
 				if (keyCode == StateManager.KEY_CODE_DEL) {
 					nm.removeSelectedItem();
