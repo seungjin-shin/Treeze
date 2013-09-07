@@ -29,7 +29,8 @@ public class FoldButton extends JButton {
 		this.psc = postItPanel.getPsc();		
 		foldButton = this;		
 
-		//essential
+		//essential\
+		//asfasdfadsfasdfsdf
 		
 		this.setBackground(new Color(0,0,0,0));
 		this.setIcon(Util.makeResizedImageIcon(width, height, Util.IMG_ADDR + "fold.png", this));
