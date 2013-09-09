@@ -337,7 +337,7 @@ public class MindMapMain extends JPanel {
 
 		InputStream inputStream;
 
-		Socket serverSocket;
+		
 		ClassInfo classInfo;
 
 		public SocketThread(ClassInfo classInfo) {

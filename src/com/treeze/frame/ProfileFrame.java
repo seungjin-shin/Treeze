@@ -128,7 +128,7 @@ public class ProfileFrame extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		listPanel = new ListPanel();
-
+		setIconImage(TreezeStaticData.TREEZE_ICON_IMG);
 		gbc.fill = GridBagConstraints.BOTH;
 		user = User.getInstance();
 		// C:\Users\ÔøΩƒ∞ÔøΩ\Desktop
@@ -300,12 +300,13 @@ public class ProfileFrame extends JFrame {
 		JLabel job;
 		JLabel address;
 
-		public PersonalInfo(String school, String job, String address) {
+		public PersonalInfo(String userType, String userEmail, String address) {
 			// TODO Auto-generated constructor stub
-			sc = new JLabel(school);
-			this.setLayout(new GridLayout(3, 1, 3, 3));
+			sc = new JLabel(userType);
+		
+			this.setLayout(new GridLayout(2, 1, 3, 3));
 			this.setSize(this.getWidth(), this.getHeight());
-			this.job = new JLabel(job);
+			this.job = new JLabel(userEmail);
 			this.address = new JLabel(address);
 			this.setBackground(new Color(0, 0, 0, 0));
 			this.setBorder(new EmptyBorder(10, 0, 10, 0));
@@ -315,12 +316,12 @@ public class ProfileFrame extends JFrame {
 			// this.add(this.address);
 			this.labelset(this.sc);
 			this.labelset(this.job);
-			this.labelset(this.address);
+			//this.labelset(this.address);
 
 		}
 
 		void labelset(JLabel label) {
-			label.setFont(new Font("Serif", Font.BOLD, 12));
+			label.setFont(new Font("Serif", Font.BOLD, 17));
 			label.setHorizontalAlignment(SwingConstants.CENTER);
 			label.setVerticalAlignment(SwingConstants.CENTER);
 			this.add(label);
@@ -939,7 +940,10 @@ public class ProfileFrame extends JFrame {
 			}
 			repaint();
 			if(chkCnt>0){
-			TextDialogue textDialogue = new TextDialogue(ProfileFrame.this, "수강신청이 취 되었습니다.", true);
+			TextDialogue textDialogue = new TextDialogue(ProfileFrame.this, "Course registration has been canceled", true);
+			NetworkThread networkThread = new NetworkThread();
+			networkFlag = NETWORK_FLAG_GET_MY_LECTURE_LIST;
+			networkThread.start();
 			}
 			
 		
@@ -988,7 +992,10 @@ public class ProfileFrame extends JFrame {
 			}
 			repaint();
 			if(chkCnt>0){
-				completeLectureAdd=  new TextDialogue(ProfileFrame.this, "수강신청이 완료 되었습니.", true);
+				completeLectureAdd=  new TextDialogue(ProfileFrame.this, "Course registration has been completed", true);
+				NetworkThread networkThread = new NetworkThread();
+				networkFlag = NETWORK_FLAG_GET_MY_LECTURE_LIST;
+				networkThread.start(); 
 		     }
 			
 		}

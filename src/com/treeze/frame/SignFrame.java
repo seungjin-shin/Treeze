@@ -1,10 +1,7 @@
 package com.treeze.frame;
 
-import javax.swing.JFrame;
-
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -18,25 +15,19 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -44,12 +35,16 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
-import org.apache.http.client.ClientProtocolException;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
-import JDIalog.JDialogSurvey;
-import JDIalog.StringDialog;
 import JDIalog.TextDialogue;
 
 import com.treeze.data.TreezeStaticData;
@@ -87,10 +82,10 @@ public class SignFrame extends JFrame {
 	HintTextField userTf= new HintTextField("User Name");
 	final HintTextFieldPassword pwTf = new HintTextFieldPassword("Password");
 	HintTextFieldPassword confPwTf= new HintTextFieldPassword("Confirm Password");
-	
+	boolean chk = true;
 	JLabel studErrLb = new JLabel();
 	JLabel userErrLb = new JLabel();
-	JLabel emailErrLb = new JLabel();
+	JLabel emailErrLb = new JLabel("  Email duplicated.");
 	JLabel pwErrLb = new JLabel();
 	JLabel confPwErrLb = new JLabel();
 	
@@ -102,7 +97,7 @@ public class SignFrame extends JFrame {
 		this.setLayout(gbl);
 		this.setLocation(400, 100);
 		signPanel = new SignPanel();
-
+		emailErrLb.setForeground(treezeColor);
 		// setResizable(false);
 		gbc.fill = GridBagConstraints.BOTH;
 		setInsets(30, 20, 30, 60);
@@ -207,23 +202,48 @@ public class SignFrame extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					//��옙占�筌ｋ�占�
+					
 					if(signBtn.isEnabled())
 						pushLoginBtn();
 				}
 			}
 		});
 		
+		emailTf.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent arg0) {
+
+				 chk = checkDuplEmail(emailTf.getText());
+				if(chk){
+					signBtn.setEnabled(false);
+					emailErrLb.setForeground(Color.red);
+				}
+				else{
+					signBtn.setEnabled(true);
+					emailErrLb.setForeground(treezeColor);
+				}
+			}
+
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
 		// setInsets(t, b, l, r)
 		setInsets(10, 0, 10, 10);
 		addGrid(gbl, gbc, typePanel,   0, 1, 1, 1, 7, 1, signPanel);
-		setInsets(5, 0, 10, 10);
+		setInsets(7, 0, 10, 10);
 		addGrid(gbl, gbc, studIDTf,    0, 2, 1, 1, 7, 1, signPanel);
 		addGrid(gbl, gbc, studErrLb,   0, 3, 1, 1, 7, 1, signPanel);
 		addGrid(gbl, gbc, userTf,      0, 4, 1, 1, 7, 1, signPanel);
 		addGrid(gbl, gbc, userErrLb,   0, 5, 1, 1, 7, 1, signPanel);
 		addGrid(gbl, gbc, emailTf,     0, 6, 1, 1, 7, 1, signPanel);
+		setInsets(0, 0, 10, 10);
 		addGrid(gbl, gbc, emailErrLb,  0, 7, 1, 1, 7, 1, signPanel);
+		setInsets(7, 0, 10, 10);
 		addGrid(gbl, gbc, pwTf,        0, 8, 1, 1, 7, 1, signPanel);
 		addGrid(gbl, gbc, pwErrLb,     0, 9, 1, 1, 7, 1, signPanel);
 		addGrid(gbl, gbc, confPwTf,    0,10, 1, 1, 7, 1, signPanel);
@@ -231,10 +251,56 @@ public class SignFrame extends JFrame {
 //		
 //		setInsets(20, 0, 50, 50);
 //		addGrid(gbl, gbc, signBtn,     0,11, 1, 1, 7, 4, signPanel);
+
+
+//		setInsets(20, 0, 50, 50);
+//		addGrid(gbl, gbc, signBtn,     0,11, 1, 1, 7, 4, signPanel);
 		
 		
 	}
+	public boolean checkDuplEmail(String email){
 
+		  HttpClient httpClient = new DefaultHttpClient();
+	       HttpGet get = new HttpGet("http://" + TreezeStaticData.IP + ":8080/treeze/existsEmail?userEmail=" + email);
+	       String str = "";
+	       MultipartEntity multipart = new MultipartEntity(
+					HttpMultipartMode.BROWSER_COMPATIBLE, null,
+					Charset.forName("UTF-8"));  // xml, classId, LectureName 				
+		try {
+			HttpResponse response = httpClient.execute(get);
+
+			HttpEntity resEntity = response.getEntity();
+
+			InputStream inputStream = resEntity.getContent();
+	    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+
+	    	  String tmp;
+
+				while((tmp = in.readLine()) != null )
+					str += tmp;
+
+				System.out.println("checkEmail : " + str);
+
+				EntityUtils.consume(resEntity);
+
+				if(str.equals("true")){
+					emailErrLb.setForeground(Color.RED);
+					return true;
+				}
+				else{
+					emailErrLb.setForeground(treezeColor);
+					return false;
+				}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			new TextDialogue(SignFrame.this, "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
+		}
+		return false;
+	  }
 	
 
 	public void setInsets(int t, int b, int l, int r) {
@@ -284,6 +350,8 @@ public class SignFrame extends JFrame {
 
 		@Override
 		protected void Action() {
+			boolean chk = checkDuplEmail(emailTf.getText());
+			if(chk==false)
 			pushLoginBtn();
 		}
 
@@ -299,16 +367,15 @@ public class SignFrame extends JFrame {
 	public void pushLoginBtn() {
 		
 		if(pwTf.getText().equals(confPwTf.getText())){
-			System.out.println("같음");
+			System.out.println("媛��");
 			SignUpThread signUpThread = new SignUpThread(Integer.parseInt(studIDTf.getText()),pwTf.getText(),emailTf.getText(),userTf.getText(),typeBtnGp.getSelection().getActionCommand());
 			signUpThread.start();
-			TextDialogue textDialogue = new TextDialogue(this, "회원가입 되셨습니다.", true);
+			TextDialogue textDialogue = new TextDialogue(this, "Register has been completed!!", true);
+			this.setVisible(false);
 		}
 		else{
-			StringDialog stringDialog  = new StringDialog("두개의 비밀번호가 일치하지 않습니다.");
-			stringDialog.setLocationRelativeTo(SignFrame.this);
+			TextDialogue stringDialog  = new TextDialogue(this,"Password incorrect",true);
 			
-			stringDialog.setVisible(true);
 		
 		}
 		
@@ -385,14 +452,7 @@ public class SignFrame extends JFrame {
 				shadowGap = 1;
 			}
 
-			// Draws the rounded opaque panel with borders.
-			// graphics.setColor(treezeColor); // panel color
-			// graphics.fillRoundRect(0, 0, width - shadowGap,
-			// height - shadowGap, arcs.width, arcs.height);
-			// graphics.setColor(Color.white); // round color
-			// graphics.setStroke(new BasicStroke(strokeSize));
-			// graphics.drawRoundRect(0, 0, width - shadowGap,
-			// height - shadowGap, arcs.width, arcs.height);
+		
 
 			graphics.setColor(Color.white);
 			graphics.fillRoundRect(0, 0, width, height, arcs.width, arcs.height);
@@ -423,13 +483,7 @@ public class SignFrame extends JFrame {
 			setColumns(18);
 
 			setBackground(new Color(0, 0, 0, 0));
-			// setFocusable(false);.
-
-			// this.setBorder(new LineBorder(new Color(234, 234, 234), 1,
-			// true));
-			// this.setBorder(new LineBorder(Color.black, 1, true));
-			// this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(),
-			// BorderFactory.createEmptyBorder(2, 0, 2, 5)));
+		
 			this.setBorder(new EmptyBorder(5, 10, 5, 10));
 
 		}

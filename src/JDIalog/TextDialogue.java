@@ -31,7 +31,7 @@ public class TextDialogue extends JDialog{
 		JLabel msgLb = new JLabel(text, JLabel.CENTER);
 		Font f = new Font("text", Font.PLAIN, 25);
 		msgLb.setFont(f);
-		
+		this.setSize(text.length()*20, 200);
 		CloseBtn closeBtn = new CloseBtn(TreezeStaticData.CLOSE_IMG,TreezeStaticData.CLOSE_PRESS_IMG, TreezeStaticData.CLOSE_ENTER_IMG);
 		closeBtn.setBackground(new Color(0, 0, 0, 0));
 		closeBtn.setBorderPainted(false);
@@ -46,7 +46,7 @@ public class TextDialogue extends JDialog{
 		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), new JLabel(), 0, 1, 1, 1, 1, 1, this);
 		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), closeBtn,     1, 1, 1, 1, 1, 1, this);
 		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), new JLabel(), 2, 1, 1, 1, 1, 1, this);
-		this.setSize(400, 200);
+		
 		this.setLocationRelativeTo(parentFrame);
 		
 		

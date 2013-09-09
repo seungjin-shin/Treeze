@@ -86,6 +86,7 @@ public class LoginPageFrame extends JFrame{
 		this.setSize(647, 394);
 		this.setLayout(gbl);
 		this.setLocation(400, 100);
+		setIconImage(TreezeStaticData.TREEZE_ICON_IMG);
 		loPanel = new LoginPanel();
 		
 		//setResizable(false);
@@ -322,8 +323,10 @@ public class LoginPageFrame extends JFrame{
 //			FreemindManager.getInstance().setProfileFrame(pFrame);
 //		}
 	
-		if(signIn(emailTf.getText(), pwTf.getText()))
+		if(signIn(emailTf.getText(), pwTf.getText())){
 		new ProfileFrame();
+		setVisible(false);
+		}
 		
 	}
 	public boolean signIn(String email, String pw){
@@ -378,6 +381,7 @@ public class LoginPageFrame extends JFrame{
 			
 				System.out.println("[user] = "+User.getInstance().getUserName());
 				System.out.println("[user] = "+arrayUser.getUser().getUserName());
+				
 				return true;
 			}
 		} catch (IOException e) {
