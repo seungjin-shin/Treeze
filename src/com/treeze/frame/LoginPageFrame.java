@@ -50,8 +50,11 @@ import JDIalog.TextDialogue;
 import com.google.gson.Gson;
 import com.treeze.Abstract.ImgBtn;
 import com.treeze.data.ArrayUser;
+import com.treeze.data.ArrayVersion;
 import com.treeze.data.TreezeStaticData;
 import com.treeze.data.User;
+import com.treeze.data.Version;
+import com.treeze.uploadthread.UpdateThread;
 
 
 
@@ -102,9 +105,54 @@ public class LoginPageFrame extends JFrame{
 		
 		setInsets(10, 10, 10, 10);
 		addGrid(gbl, gbc, mPanel, 0, 0, 1, 1, 1, 1, this);
-
+		if(!checkVersion().equals(TreezeStaticData.VERSION))
+		{
+			UpdateThread updateThread = new UpdateThread();
+			updateThread.start();
+			System.exit(0);
+		}
+		else{
 		setVisible(true);
+		}
 	}
+	
+	public String checkVersion(){
+		  HttpClient httpClient = new DefaultHttpClient();
+	       HttpGet get = new HttpGet("http://" + TreezeStaticData.IP + ":8080/treeze/getLastVersion?userType=" + Version.STUDENT);
+	       String str = "";
+	       MultipartEntity multipart = new MultipartEntity(
+					HttpMultipartMode.BROWSER_COMPATIBLE, null,
+					Charset.forName("UTF-8"));  // xml, classId, LectureName 				
+		try {
+			HttpResponse response = httpClient.execute(get);
+
+			HttpEntity resEntity = response.getEntity();
+
+			InputStream inputStream = resEntity.getContent();
+	    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+
+	    	  String tmp;
+
+				while((tmp = in.readLine()) != null )
+					str += tmp;
+
+				System.out.println("checkVersion : " + str);
+				Gson gson = new Gson();
+				ArrayVersion arrayVersion = gson.fromJson(str, ArrayVersion.class);
+				Version version = arrayVersion.getVersion();
+
+			EntityUtils.consume(resEntity);
+			return version.getVersion();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			new TextDialogue(LoginPageFrame.this, "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
+		}
+		return null;
+	  }
 	
 	public void setLoginPanel(){
 		LoginBtn loginBtn;
