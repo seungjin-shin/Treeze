@@ -22,12 +22,7 @@ package freemind.modes;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dialog;
-import java.awt.EventQueue;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.KeyboardFocusManager;
-import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -40,11 +35,9 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
@@ -67,14 +60,11 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.logging.Level;
 
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -87,15 +77,15 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.filechooser.FileFilter;
 
-import org.apache.batik.dom.util.HashTable;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.util.ImageIOUtil;
+import org.apache.pdfbox.util.PDFImageWriter;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.sun.pdfview.PDFFile;
-import com.sun.pdfview.PDFPage;
 
-import freemind.controller.AddAllTicketThread;
-import freemind.controller.AddQuestionNode;
 import freemind.controller.Controller;
 import freemind.controller.FreemindManager;
 import freemind.controller.MapModuleManager;
@@ -106,7 +96,6 @@ import freemind.controller.SlideData;
 import freemind.controller.StructuredMenuHolder;
 import freemind.controller.TableData;
 import freemind.extensions.PermanentNodeHook;
-import freemind.json.FreemindGson;
 import freemind.main.FreeMindMain;
 import freemind.main.Resources;
 import freemind.main.Tools;
@@ -672,7 +661,6 @@ public abstract class ControllerAdapter implements ModeController {
 	
 	//dewlit
     public void open() {
-    	progFrame = new ProgressFrame();
         JFileChooser chooser = getFileChooser();
         // fc, 24.4.2008: multi selection has problems as setTitle in Controller doesn't works
 //        chooser.setMultiSelectionEnabled(true);
@@ -691,6 +679,7 @@ public abstract class ControllerAdapter implements ModeController {
 				File theFile = selectedFiles[i];
 				String fileName;
 				fileName = theFile.getName();
+				
 				String foldName;
 				
 				try {
@@ -703,15 +692,9 @@ public abstract class ControllerAdapter implements ModeController {
 						fManager.setFilePath(foldName.substring(0, foldName.length() - 4));
 						
 						firstWordArr.clear();
-						progFrame.setVisible(true);
-//						new ProgressFrame2();
-//						startProgThread();
-//						try {
-//							Thread.sleep(2000);
-//						} catch (InterruptedException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
+						fManager.setLodingValue(0);
+						fManager.startProgThread("PDF to images...");
+						setFirstWordArray(filePath);
 						pdf2img(filePath, theFile.getName());
 						newpdf2mm(filePath, fileName);
 						theFile = new File(foldName.substring(0, foldName.length() - 4) + ".mm");
@@ -751,11 +734,6 @@ public abstract class ControllerAdapter implements ModeController {
         getController().setTitle();
     }
     
-//    public void startProgThread(){
-//    	ProgressThread progThread = new ProgressThread();
-//		progThread.start();
-//    }
-    
     public class OpenAction extends AbstractAction {
         ControllerAdapter mc;
         public OpenAction(ControllerAdapter modeController) {
@@ -768,23 +746,102 @@ public abstract class ControllerAdapter implements ModeController {
         }
     }
     
+    //dewlit
+    public void pdf2img(String filePath, String fileName){
+//    	 public static boolean extractPagesAsImage(String sourceFile, int resolution, String password) {
+             
+             boolean result = false;
+            String mkDirPath;
+            mkDirPath = filePath.substring(0, filePath.indexOf(fileName.toString()));
+     		mkDirPath = mkDirPath + fileName.substring(0, fileName.indexOf(".pdf"));
+     		File mkDirFile = new File(mkDirPath);
+     		 
+     		if(!mkDirFile.exists())
+     			mkDirFile.mkdir();
+             
+             String imageFormat = "jpg";
+             int endOfPages = 0;
+            
+             PDDocument pDDocument = null;
+             try {
+                    
+                     pDDocument = PDDocument.load(filePath);
+                    
+                     endOfPages = pDDocument.getNumberOfPages();
+                    
+             } catch (IOException ioe) {
+                    
+                     System.out.println("PDFToImage-extractPagesAsImage ERROR : " + ioe.getMessage());
+             }
+            
+             String destFilePrefix = destFilePrefix(filePath);
+            
+//             PDFImageWriter imageWriter = new PDFImageWriter();
+            
+             try {
+                    
+//                     result = imageWriter.writeImage(pDDocument, imageFormat, "", 1, endOfPages, destFilePrefix, BufferedImage.TYPE_INT_RGB, 190);
+                     result = writeImage(pDDocument, imageFormat, "", 1, endOfPages, destFilePrefix, BufferedImage.TYPE_INT_RGB, 190);
+                     pDDocument.close();       
+             } catch (IOException ioe) {
+                    
+                     System.out.println("PDFToImage-extractPagesAsImage ERROR : " + ioe.getMessage());
+             }
+             
+      }
+     public boolean writeImage(PDDocument document, String imageFormat, String password, int startPage, int endPage,
+             String outputPrefix, int imageType, int resolution) throws IOException
+     {
+         boolean bSuccess = true;
+         List<PDPage> pages = document.getDocumentCatalog().getAllPages();
+         int pagesSize = pages.size();
+         String fileName;
+         for (int i = startPage - 1; i < endPage && i < pagesSize; i++)
+         {
+             PDPage page = pages.get(i);
+             BufferedImage image = page.convertToImage(imageType, resolution);
+             fileName = outputPrefix + System.getProperty("file.separator") + fManager.getClassId() + "_" + (i + 1);
+//             LOG.info("Writing: " + fileName + "." + imageFormat);
+             bSuccess &= ImageIOUtil.writeImage(image, imageFormat, fileName, imageType, resolution);
+             fManager.setLodingValue((int)(((double)i / (double)endPage) * 100));
+         }
+         fManager.setLodingValue(100);
+         return bSuccess;
+     }
+      
+
+	public static String destFilePrefix(String sourceFile) {
+
+		String result = "";
+		int lastSeparatorIndex = sourceFile.lastIndexOf("/") + 1;
+		int lastCommaIndex = sourceFile.lastIndexOf(".");
+
+		result = sourceFile.substring(0, lastSeparatorIndex);
+		result = result
+				+ (sourceFile.substring(lastSeparatorIndex, lastCommaIndex));
+
+		return result;
+
+	}
+   
     // dewlit
-    public void pdf2img(String filePath, String fileName) throws IOException{
+    public void setFirstWordArray(String filePath) throws IOException{
+    	
     	PdfReader reader = new PdfReader(filePath);
 		int page = reader.getNumberOfPages();
 		
 		fManager.setPdfPage(page);
 		
-		String mkDirPath;
+//		String mkDirPath;
 		
 		String[] forFirstWordArray;
 				
-		mkDirPath = filePath.substring(0, filePath.indexOf(fileName.toString()));
-		mkDirPath = mkDirPath + fileName.substring(0, fileName.indexOf(".pdf"));
-		File mkDirFile = new File(mkDirPath);
-		 
-		if(!mkDirFile.exists())
-			mkDirFile.mkdir();
+//		mkDirPath = filePath.substring(0, filePath.indexOf(fileName.toString()));
+//		mkDirPath = mkDirPath + fileName.substring(0, fileName.indexOf(".pdf"));
+//		File mkDirFile = new File(mkDirPath);
+//		 
+//		if(!mkDirFile.exists())
+//			mkDirFile.mkdir();
 		
 		File file = new File(filePath);
 		
@@ -805,55 +862,55 @@ public abstract class ControllerAdapter implements ModeController {
 				
 			System.out.flush();
 			
-			progFrame.getBar().setValue((int)(i / page));
-			System.out.println(progFrame.getBar().getValue() + "pdf2img");
-			
-			// draw the first page to an image
-			PDFPage pdfPage = pdffile.getPage(i);
-
-			// get the width and height for the doc at the default zoom
-			Rectangle rect = new Rectangle(0, 0, (int) pdfPage.getBBox()
-					.getWidth(), (int) pdfPage.getBBox().getHeight());
-
-			// generate the image
-
-//			Image image = pdfPage.getImage(rect.width, rect.height, // width
-//																	// &
-//																	// height
+//			System.out.println(fManager.getLodingValue() + "pdf2img");
+////			progFrame.getBar().paintImmediately(50, 200, 300, 100);
+//			
+//			
+//			// draw the first page to an image
+//			PDFPage pdfPage = pdffile.getPage(i);
+//
+//			// get the width and height for the doc at the default zoom
+//			Rectangle rect = new Rectangle(0, 0, (int) pdfPage.getBBox()
+//					.getWidth(), (int) pdfPage.getBBox().getHeight());
+//
+//			// generate the image
+//
+////			Image image = pdfPage.getImage(rect.width, rect.height, // width
+////																	// &
+////																	// height
+////					rect, // clip rect
+////					null, // null for the ImageObserver
+////					true, // fill background with white
+////					true // block until drawing is done
+////					);
+//			Image image = pdfPage.getImage(1920, 1080, // width
+//					// &
+//					// height
 //					rect, // clip rect
 //					null, // null for the ImageObserver
 //					true, // fill background with white
 //					true // block until drawing is done
 //					);
-			Image image = pdfPage.getImage(1920, 1080, // width
-					// &
-					// height
-					rect, // clip rect
-					null, // null for the ImageObserver
-					true, // fill background with white
-					true // block until drawing is done
-					);
-
-//			int w = image.getWidth(null);
-//			int h = image.getHeight(null);
-			int w = 1920;
-			int h = 1080;
-			BufferedImage bi = new BufferedImage(w, h,
-					BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2 = bi.createGraphics();
-			g2.drawImage(image, 0, 0, null);
-			g2.dispose();
-			try {
-						ImageIO.write(bi, "jpg",
-								new File(mkDirPath, fManager.getClassId() + "_" + i + ".jpg"));
-					
-			} catch (IOException ioe) {
-				System.out.println("write: " + ioe.getMessage());
-			}
+//
+////			int w = image.getWidth(null);
+////			int h = image.getHeight(null);
+//			int w = 1920;
+//			int h = 1080;
+//			BufferedImage bi = new BufferedImage(w, h,
+//					BufferedImage.TYPE_INT_RGB);
+//			Graphics2D g2 = bi.createGraphics();
+//			g2.drawImage(image, 0, 0, null);
+//			g2.dispose();
+//			try {
+//						ImageIO.write(bi, "jpg",
+//								new File(mkDirPath, fManager.getClassId() + "_" + i + ".jpg"));
+//					
+//			} catch (IOException ioe) {
+//				System.out.println("write: " + ioe.getMessage());
+//			}
 		}
 		reader.close();
-		progFrame.getBar().setValue(100);
-		progFrame.setVisible(false);
+//		progFrame.setVisible(false);
     }
     
     public void newpdf2mm(String filePath, String fileName) throws IOException{
@@ -880,7 +937,7 @@ public abstract class ControllerAdapter implements ModeController {
 				if(i > page / 2)
 					direction = "right";
 				out.write("<node POSITION=\"" + direction + "\">\n");
-				out.write("<richcontent TYPE=\"NODE\"><html><head></head><body><p>" + firstWordArr.get(i - 1) + "</p><p><img src=\"" + foldPath + System.getProperty("file.separator") + fManager.getClassId() + "_" + i + ".jpg\" width=\"100\" height=\"100\"/></p></body></html></richcontent>\n");
+				out.write("<richcontent TYPE=\"NODE\"><html>\n<head></head><body><p>" + firstWordArr.get(i - 1) + "</p><p>\n<img src=\"" + foldPath + System.getProperty("file.separator") + fManager.getClassId() + "_" + i + ".jpg\" width=\"100\" height=\"100\"/>\n</p></body></html>\n</richcontent>\n");
 				out.write("</node>\n");
 			}
 			

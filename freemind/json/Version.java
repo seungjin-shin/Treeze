@@ -4,19 +4,19 @@ public class Version {
 	public static final String STUDENT = "student";
 	public static final String PROFESSOR = "professor";
 	String userType;
-	String versionId;
+	String version;
 	
+	public String getVersion() {
+		return version;
+	}
+	public void setVersion(String version) {
+		this.version = version;
+	}
 	public String getUserType() {
 		return userType;
 	}
 	public void setUserType(String userType) {
 		this.userType = userType;
-	}
-	public String getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(String versionId) {
-		this.versionId = versionId;
 	}
 	public static String getStudent() {
 		return STUDENT;

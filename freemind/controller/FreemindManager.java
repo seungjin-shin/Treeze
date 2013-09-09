@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -12,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import freemind.Frame.ProfileFrame;
+import freemind.json.ClassInfo;
 import freemind.json.Lecture;
 import freemind.json.Ticket;
 import freemind.json.User;
@@ -113,10 +115,8 @@ public class FreemindManager {
 
 	private String filePath;// = "/Users/dewlit/Desktop/test/Linux/";
 	private String downPath = System.getProperty("user.home") + System.getProperty("file.separator") + "Treeze";
-	private String nodeText = "";
+	private String fileName;
 	
-
-
 	private int classId = 1;
 	private int pdfPage;
 	private MindMapMapModel mModel;
@@ -125,9 +125,7 @@ public class FreemindManager {
 	private Ticket ticket;
 	private Lecture lecture;
 	
-
 	UploadToServer uploadToServer;
-
 
 	SlideShow slideShow;
 	
@@ -138,6 +136,47 @@ public class FreemindManager {
 	
 	private User user;
 	
+	private File mmFile;
+	private ClassInfo cInfo;
+	
+	private int lodingValue = 0;
+	
+	public void startProgThread(String title){
+    	ProgressThread progThread = new ProgressThread(title);
+		progThread.start();
+    }
+	
+	public String getFileName() {
+		return fileName;
+	}
+	
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public int getLodingValue() {
+		return lodingValue;
+	}
+
+	public void setLodingValue(int lodingValue) {
+		this.lodingValue = lodingValue;
+	}
+
+	public File getMmFile() {
+		return mmFile;
+	}
+
+	public void setMmFile(File mmFile) {
+		this.mmFile = mmFile;
+	}
+
+	public ClassInfo getcInfo() {
+		return cInfo;
+	}
+
+	public void setcInfo(ClassInfo cInfo) {
+		this.cInfo = cInfo;
+	}
+
 	public UploadToServer getUploadToServer() {
 		return uploadToServer;
 	}
@@ -182,13 +221,6 @@ public class FreemindManager {
 		this.receiveQNode = receiveQNode;
 	}
 
-	public String getNodeText() {
-		return nodeText;
-	}
-	
-	public void setNodeText(String nodeText) {
-		this.nodeText = nodeText;
-	}
 	public void setEnableMenuBar(){
 		if(getMode().equals(REGMODE)){
 			menuBar.setRegModeMenu();
@@ -214,6 +246,7 @@ public class FreemindManager {
 	}
 	public void init(){
 		isSlideShowInfo = false;
+		slideShow.resizeImgHashMap.clear();
 		
 		try {
 			if(in != null)

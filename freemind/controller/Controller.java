@@ -105,6 +105,10 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.itextpdf.text.pdf.PdfReader;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 import freemind.Frame.SurveyFrame;
 import freemind.Frame.TextDialogue;
@@ -407,6 +411,45 @@ public class Controller  implements MapModuleChangeObserver {
 		return false;
     }
     
+    @XStreamAlias("richcontent")
+    class RichContent{
+    		
+    	@XStreamImplicit(itemFieldName="html")
+    	ArrayList<HtmlClass> html;
+    	
+    }
+    
+    @XStreamAlias("html")
+    class HtmlClass{
+    		
+    	@XStreamImplicit(itemFieldName="head")
+    	ArrayList<HeadClass> head;
+    	@XStreamImplicit(itemFieldName="body")
+    	ArrayList<BodyClass> body;
+    	
+    }
+
+    @XStreamAlias("body")
+    class BodyClass implements Cloneable{
+    	@XStreamImplicit(itemFieldName="p")
+    	ArrayList<String> p;
+    	
+//    	@XStreamImplicit(itemFieldName="p")
+//    	ArrayList<pClass> pArray;
+    }
+
+    @XStreamAlias("img")
+    class ImgClass implements Cloneable{
+    	
+    	@XStreamAsAttribute
+    	String src;
+    }
+
+    @XStreamAlias("head")
+    class HeadClass implements Cloneable{
+    	
+    }
+    
     public void makeUploadXml(){
     	File downFold = new File(fManager.getDownPath());
     	if(!downFold.exists())
@@ -423,6 +466,16 @@ public class Controller  implements MapModuleChangeObserver {
 		int start, end;
 		String filePath = fManager.getFilePath();
 		
+		XStream pXstream = new XStream();
+		pXstream.processAnnotations(RichContent.class);
+		pXstream.alias("html", HtmlClass.class);
+		pXstream.alias("head", HeadClass.class);
+		pXstream.alias("body", BodyClass.class);
+		pXstream.alias("img", ImgClass.class);
+		
+		XStream imgXstream = new XStream();
+		imgXstream.processAnnotations(ImgClass.class);
+		
 		if(System.getProperty("file.separator").equals("\\"))
 			filePath = filePath.substring(2, filePath.length());
 		//in freemind, can't read word such as "C:" windows file separator
@@ -434,7 +487,7 @@ public class Controller  implements MapModuleChangeObserver {
 			fManager.getmModel().getXml(out, true, fManager.getMc().getRootNode());
 			
 			out.close();
-			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(mmFile),"UTF-8"));
+			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(mmFile), "UTF-8"));
 			
 			for(int i = 0; i < 2; i++){
 				preStr = in.readLine(); // 둘째 줄까지 읽어
@@ -447,19 +500,34 @@ public class Controller  implements MapModuleChangeObserver {
 			forUploadXmlOw.write(preStr + "\n"); 
 			
 			while((rdStr = in.readLine()) != null){
-				
+				System.out.println(rdStr);
 				if(rdStr.indexOf("richcontent") >= 0){
-					start = rdStr.indexOf("<p>");
-					end = rdStr.indexOf("</p>");
-					nodeText = rdStr.substring(start + 3, end); // <p> 길이 더하
+					String tmpXml = rdStr;
+					String tmpStr;
+					String imgXml = null;
+					while(true){
+						tmpStr = in.readLine();
+						tmpXml += tmpStr;
+
+						if(tmpStr.indexOf("</richcontent>") >= 0)
+							break;
+						
+						if(tmpStr.indexOf("<img") > -1)
+							imgXml = tmpStr;
+					}
 					
-					start = rdStr.indexOf(filePath);
-					end = rdStr.indexOf(".jpg\"");
-					nodeImg = rdStr.substring(start + filePath.length() + 1, end); // 마지막 폴더 구분자 / or \ 때문에 + 1
+					RichContent richContent = (RichContent)pXstream.fromXML(tmpXml);
+					ImgClass imgClass = (ImgClass)imgXstream.fromXML(imgXml);
+					
+					nodeText = richContent.html.get(0).body.get(0).p.get(0).toString();
+					nodeImg = imgClass.src.toString();
+					
+					start = nodeImg.indexOf(filePath);
+					end = nodeImg.indexOf(".jpg");
+					nodeImg = nodeImg.substring(filePath.length() + 1, end); // 마지막 폴더 구분자 / or \ 때문에 + 1
 					
 					preStr = preStr.substring(0, preStr.length() - 1); // 끝에 > 없애기 
-					
-					preStr += " NODETYPESTR=\"Slide\" TEXT=\"" + nodeText + "\" IMGPATH=\"" + nodeImg + "\">";
+					preStr += " NODETYPESTR=\"Slide\" TEXT=\"" + nodeText.trim() + "\" IMGPATH=\"" + nodeImg + "\">";
 					
 					forUploadXmlOw.write(preStr + "\n");
 				}
@@ -580,6 +648,10 @@ public class Controller  implements MapModuleChangeObserver {
 			
 		//upload XML
 		setCurFrame();
+		
+		fManager.setLodingValue(0);
+		fManager.startProgThread("Uploading images to server...");
+		
 		fManager.getUploadToServer().doFileUpload();
 		fManager.getUploadToServer().doXmlUpload();
 		
@@ -707,6 +779,7 @@ public class Controller  implements MapModuleChangeObserver {
            }}
     
     public void closeLecture(){
+    	controllerClose();
     	fManager.init();
     	fManager.getProfileFrame().startNetwortThread();
   	  fManager.getProfileFrame().setVisible(true);
@@ -1589,6 +1662,10 @@ public class Controller  implements MapModuleChangeObserver {
         public void actionPerformed(ActionEvent e) {
             controller.close(false);
         }
+    }
+    
+    public void controllerClose(){
+    	this.close(false);
     }
 
     private class PrintAction extends AbstractAction {

@@ -27,6 +27,7 @@ public class SetResizeImgThread extends Thread{
 				ImageIcon imgIcon = new ImageIcon(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId() + System.getProperty("file.separator") + tmp.getImgPath() + ".jpg");
 				Image img = fManager.makeResizedImageIcon((int)xsize, (int)ysize, imgIcon.getImage()).getImage();
 				resizeImgHashMap.put(tmp.getImgPath(), img);
+				
 			}
 			tmp = tmp.getNext();
 		}

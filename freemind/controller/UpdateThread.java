@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class UpdateThread extends Thread{
+	
 	@Override
 	public void run() {
 		
@@ -17,7 +18,7 @@ public class UpdateThread extends Thread{
 
 		    // 자바 1.5 이상에서는 이렇게 1줄로
 //		    Process oProcess = new ProcessBuilder(System.getProperty("user.dir") + System.getProperty("file.separator") + "treezeUpdater.exe").start();
-			Process oProcess = new ProcessBuilder(System.getProperty("user.dir") + System.getProperty("file.separator") + "Student.exe").start();
+			Process oProcess = new ProcessBuilder(System.getProperty("user.dir") + System.getProperty("file.separator") + "treezeUp.exe").start();
 			
 		    // 외부 프로그램 출력 읽기
 		    BufferedReader stdOut   = new BufferedReader(new InputStreamReader(oProcess.getInputStream(), "UTF-8"));

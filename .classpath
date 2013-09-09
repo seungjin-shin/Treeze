@@ -41,5 +41,11 @@
 	<classpathentry exported="true" kind="lib" path="lib/httpmime-4.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/gson-2.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/bindings.jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-app-1.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/xmlpull-1.1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/xpp3_min-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-benchmark-1.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-hibernate-1.4.4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

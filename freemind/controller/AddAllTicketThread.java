@@ -91,8 +91,10 @@ public class AddAllTicketThread extends Thread{
 		}
 		
 			catch (Exception e) {
-				System.out.println("Add all tickets Err");
-				
+				System.out.println("Add all tickets Error.");
+				new TextDialogue(fManager.getFreemindMainFrame(), "Loading tickets error.", "Re loading...", true);
+				fManager.getProfileFrame().freemindOpen(fManager.getMmFile(), fManager.getcInfo());
+				return;
 			}
 			
 			System.out.println("Add All tickets");

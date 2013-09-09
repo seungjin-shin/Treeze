@@ -25,6 +25,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -1141,44 +1142,58 @@ public class ProfileFrame extends JFrame {
 
 				fileOutput.close();
 				inputStream.close();
+				fManager.setMmFile(file);
+				fManager.setcInfo(cInfo);
 				
-				mc.load(file);
-				
-				fManager.getC().checkNodeType();
-				Thread addAllTicketThread = new AddAllTicketThread();
-				addAllTicketThread.start();
-				
-				fManager.setMode(FreemindManager.LECMODE);
-				fManager.setEnableMenuBar();
-				
-				fManager.getC().setSlideShowInfo();
-				
-				Thread setResizeImgThread = new SetResizeImgThread();
-				setResizeImgThread.start();
-				
-				Gson gson = new Gson();
-				User user = new User();
-//				ClassInfo classInfo = new ClassInfo();
-				TreezeData treezeData = new TreezeData();
-				
-				user.setUserType(User.PROFESSOR);
-				user.setUserEmail("minsuk@hansung.ac.kr");
-
-				// classInfo d
-				
-
-				// treezeData d
-				treezeData.setDataType(TreezeData.CONNECTIONINFO);
-				treezeData.getArgList().add(gson.toJson(user));
-				treezeData.getArgList().add(gson.toJson(cInfo));
-				
-				connectSocket(treezeData);
+				freemindOpen(file, cInfo);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void freemindOpen(File file, ClassInfo cInfo){
+		try {
+			mc.load(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		fManager.getC().checkNodeType();
+		Thread addAllTicketThread = new AddAllTicketThread();
+		addAllTicketThread.start();
+		
+		fManager.setMode(FreemindManager.LECMODE);
+		fManager.setEnableMenuBar();
+		
+		fManager.getC().setSlideShowInfo();
+		
+		Thread setResizeImgThread = new SetResizeImgThread();
+		setResizeImgThread.start();
+		
+		Gson gson = new Gson();
+		User user = new User();
+//		ClassInfo classInfo = new ClassInfo();
+		TreezeData treezeData = new TreezeData();
+		
+		user.setUserType(User.PROFESSOR);
+		user.setUserEmail(fManager.getUser().getUserEmail());
+
+		// classInfo d
+		
+
+		// treezeData d
+		treezeData.setDataType(TreezeData.CONNECTIONINFO);
+		treezeData.getArgList().add(gson.toJson(user));
+		treezeData.getArgList().add(gson.toJson(cInfo));
+		
+		connectSocket(treezeData);
 	}
 	
 	void connectSocket(TreezeData t){

@@ -193,15 +193,15 @@ public class LoginFrame extends JFrame{
 		
 		fManager.getUploadToServer().setSERVERIP(ip);
 		
-//		UploadToServer uploadToServer = new UploadToServer("tmp");
-//		String curVersion = uploadToServer.checkVersion();
+		UploadToServer uploadToServer = fManager.getUploadToServer();
+		String curVersion = uploadToServer.checkVersion();
 		
-//		if(!version.equals(curVersion)){
-//			executeUpdateProgram();
-//		Thread updateThread = new UpdateThread();
-//		updateThread.start();
-//			System.exit(0);
-//		}
+		if(!version.equals(curVersion)){
+			
+		Thread updateThread = new UpdateThread();
+		updateThread.start();
+			System.exit(0);
+		}
 			
 	}
 	
@@ -315,12 +315,13 @@ public class LoginFrame extends JFrame{
 		boolean loginChk = false;
 		fManager.getUploadToServer().setCurFrame(this);
 //		loginChk = fManager.getUploadToServer().signIn(emailTf.getText(), pwTf.getText());
-		System.out.println("loginChk" + loginChk);
 //		if (loginChk) {
 			setVisible(false);
 			JFrame pFrame = new ProfileFrame(mc);
 			FreemindManager.getInstance().setProfileFrame(pFrame);
 //		}
+			
+		System.out.println("loginChk" + loginChk);
 	}
 	
 	class LogoPanel extends JPanel{
