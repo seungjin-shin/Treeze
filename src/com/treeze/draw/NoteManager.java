@@ -286,11 +286,9 @@ public class NoteManager {
 		
 		User user= User.getInstance();	
 		ClassInfo ci = ClassInfo.getInstance();
-		new DownLoadNote("1", user.getUserEmail(), nodeId, this).start();
-		
+		System.out.println("[Download Node classInfo] = "+ci.getClassId());
+		new DownLoadNote(ci.getClassId()+"", user.getUserEmail(), nodeId, this).start();
 
-		
-		
 
 	}
 	

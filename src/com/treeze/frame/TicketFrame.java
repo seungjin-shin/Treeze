@@ -109,8 +109,7 @@ public class TicketFrame extends JPanel {
 
 		JLabel subjectPanel = new JLabel("Contents", JLabel.CENTER);
 		JLabel whritePane = new JLabel("Writer", JLabel.CENTER);
-		JLabel dumy = new JLabel(); // 甕곤옙占�筌��占쏙옙占쏙옙占쏙옙 占쏙옙由곤옙占쏙옙
-									// 占쏙옙占�?占쎈�占쏙옙占�
+		JLabel dumy = new JLabel(); // ��낀���占썹�占쏙옙��������������������怨ㅼ������									// ������占����占썲������옙
 		WriteBtn writeBtn = new WriteBtn(TreezeStaticData.WRITE_BTN,
 				TreezeStaticData.WRITE_PRESS_BTN,
 				TreezeStaticData.WRITE_ENTER_BTN);

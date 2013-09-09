@@ -166,7 +166,8 @@ public class MindMapMain extends JPanel {
 				// else{
 				// node.getNodeBtn().setIcon(nodeImgIcon);
 				// }
-				
+				ImageIcon ticketNewIcon  = TreezeStaticData.makeResizedImageIcon(20, 20, TreezeStaticData.TICKET_NEW_IMG);
+				node.getTicketBtn().setIcon(ticketNewIcon);
 				node.getNodeBtn().setBounds(node.getLocateX(),
 						node.getLocateY(), NODE_WIDTH, NODE_HEIGHT);
 				node.getPptBtn().setBounds(node.getLocateX(),
@@ -181,6 +182,13 @@ public class MindMapMain extends JPanel {
 						SwingConstants.CENTER);
 				
 				node.getNodeBtn().setBackground(new Color(0, 0, 0, 0));
+				
+				node.getTicketBtn().setBorderPainted(false);
+				node.getTicketBtn().setBorder(null);
+				node.getTicketBtn().setContentAreaFilled(false);
+				node.getTicketBtn().setFocusPainted(false); 
+				node.getTicketBtn().setOpaque(false);
+				
 				node.getNodeBtn().setBorderPainted(false);
 				node.getNodeBtn().setBorder(null);
 				node.getNodeBtn().setContentAreaFilled(false);
@@ -195,6 +203,7 @@ public class MindMapMain extends JPanel {
 				//this.setComponentZOrder(this.getGraphics(), 0);
 //				this.setComponentZOrder(node.getNodeBtn(), 1);
 //				this.setComponentZOrder(node.j, 0);
+
 
 			}
 			this.setPreferredSize(new Dimension(SCROLLFRAME_WIDTH,

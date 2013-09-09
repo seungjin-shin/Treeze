@@ -133,7 +133,7 @@ public class MindNode {
 	}
 
 	public MindNode(String nodeID, String str, int x, int y,
-			MindMapMain mindMapMain) { // 占쏙옙트占쏙옙占쏙옙
+			MindMapMain mindMapMain) { // ���������������
 		this.nodeStr = str;
 		this.mindMapMain = mindMapMain;
 		this.locateX = x;
@@ -233,9 +233,7 @@ public class MindNode {
 	}
 
 	public MindNode(MindNode parentNode, String nodeID, String str,
-			String directionstr, String imgPath) { // 占쏙옙占쏙옙占쏙옙
-		// 占쏙옙占쏙옙占쏙옙
-		// TODO Auto-generated constructor stub
+			String directionstr, String imgPath) { // ��������������		// ��������������		// TODO Auto-generated constructor stub
 		nodeStr = str;
 		now.setNext(this);
 		this.setPrev(now);
@@ -301,50 +299,50 @@ public class MindNode {
 				// new PPTFrame(getnode());
 			}
 		});
-		ticketBtn.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				h.getContainer().remove(getnode().getPptBtn());
-				h.getContainer().remove(getnode().getTicketBtn());
-				h.getContainer().repaint();
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				if (h.getNode() == getnode()) {
-					h.stop();
-				}
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				System.out.println(classinfo.getClassName());
-				// new TicketFrame(getnode(),classinfo);
-				if (TreezeStaticData.TICKETFRAME != null) {
-					TreezeStaticData.TICKETFRAME.setVisible(false);
-					TreezeStaticData.TICKETFRAME.disable();
-				}
-				TreezeStaticData.TICKETFRAME = new TicketFrame(getnode(),
-						classinfo);
-
-			}
-		});
+//		ticketBtn.addMouseListener(new MouseListener() {
+//
+//			@Override
+//			public void mouseReleased(MouseEvent arg0) {
+//				// TODO Auto-generated method stub
+//
+//			}
+//
+//			@Override
+//			public void mousePressed(MouseEvent arg0) {
+//				// TODO Auto-generated method stub
+//
+//			}
+//
+//			@Override
+//			public void mouseExited(MouseEvent arg0) {
+//				// TODO Auto-generated method stub
+//				h.getContainer().remove(getnode().getPptBtn());
+//				h.getContainer().remove(getnode().getTicketBtn());
+//				h.getContainer().repaint();
+//			}
+//
+//			@Override
+//			public void mouseEntered(MouseEvent arg0) {
+//				// TODO Auto-generated method stub
+//				if (h.getNode() == getnode()) {
+//					h.stop();
+//				}
+//			}
+//
+//			@Override
+//			public void mouseClicked(MouseEvent arg0) {
+//				// TODO Auto-generated method stub
+//				System.out.println(classinfo.getClassName());
+//				// new TicketFrame(getnode(),classinfo);
+//				if (TreezeStaticData.TICKETFRAME != null) {
+//					TreezeStaticData.TICKETFRAME.setVisible(false);
+//					TreezeStaticData.TICKETFRAME.disable();
+//				}
+//				TreezeStaticData.TICKETFRAME = new TicketFrame(getnode(),
+//						classinfo);
+//
+//			}
+//		});
 	}
 
 	// public static void setNav(CurrentPositionOfNav naviInfo) {
@@ -478,9 +476,7 @@ public class MindNode {
 			// left
 			this.locateX = parentNode.locateX - DISTANT - NODE_WIDTH;
 
-		if (this.parentNodeChildCount() == 0) { // 占싸몌옙 占쌘쏙옙占쏙옙
-												// 占쏙옙占쏙옙占�占쏙옙占�占쏙옙占쏙옙占쏙옙 占쏙옙
-												// 占쏙옙치占싹곤옙占쏙옙.
+		if (this.parentNodeChildCount() == 0) { // ���紐�� �����������												// �����������옙������占썲������������� �����												// ���������怨ㅼ������
 			this.locateY = parentNode.locateY;
 		} else {
 
@@ -779,7 +775,7 @@ public class MindNode {
 			// TODO Auto-generated method stub
 			// nodeBtn.setLayout(null);
 			//
-			// System.out.println("�몃� �����" + getNodeID());
+			// System.out.println("占쎈�占�占쏙옙占쏙옙占� + getNodeID());
 			// getnode().getNodeBtn().getParent().add(getnode().pptBtn);
 			// getnode().getNodeBtn().getParent().add(getnode().ticketBtn);
 			// getnode().getNodeBtn().getParent()
