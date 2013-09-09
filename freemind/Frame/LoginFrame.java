@@ -186,6 +186,8 @@ public class LoginFrame extends JFrame{
 		}
 		if (ip == null || port == -1){
 			System.out.println("treeze.cnf Err");
+			new TextDialogue(this, "Fail to read treeze.cnf file.", true);
+			System.exit(0);
 			return;
 		}
 		fManager.setSERVERIP(ip);
@@ -499,7 +501,7 @@ public class LoginFrame extends JFrame{
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ 
+		public void focusLost(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 
 			if (this.getText().isEmpty()) {
 				hintLabel.setVisible(true);
 			} else {

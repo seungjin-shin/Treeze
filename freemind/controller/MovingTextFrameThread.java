@@ -20,7 +20,7 @@ public class MovingTextFrameThread extends Thread{
 		boolean overHalf = false;
 		while(true){
 			try {
-				Thread.sleep(3);
+				Thread.sleep(5);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -29,8 +29,15 @@ public class MovingTextFrameThread extends Thread{
 			if(frameHeight < changeHeight)
 				overHalf = true;
 			
-			if(overHalf)
+			if(overHalf){
 				changeHeight -= 1;
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			else
 				changeHeight += 1;
 			

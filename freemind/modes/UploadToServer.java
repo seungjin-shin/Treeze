@@ -816,4 +816,48 @@ public class UploadToServer {
 		}
 		return null;
 	  }
+	  
+	  public boolean checkDuplEmail(String email){
+		  
+		  HttpClient httpClient = new DefaultHttpClient();
+	       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/getLastVersion?userType=" + Version.PROFESSOR);
+	       String str = "";
+	       MultipartEntity multipart = new MultipartEntity(
+					HttpMultipartMode.BROWSER_COMPATIBLE, null,
+					Charset.forName("UTF-8"));  // xml, classId, LectureName 				
+		try {
+			HttpResponse response = httpClient.execute(get);
+			
+			HttpEntity resEntity = response.getEntity();
+			
+			InputStream inputStream = resEntity.getContent();
+	    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+	    	  
+	    	  String tmp;
+	    	  
+				while((tmp = in.readLine()) != null )
+					str += tmp;
+				
+				System.out.println("checkVersion : " + str);
+				Gson gson = new Gson();
+				ArrayVersion arrayVersion = gson.fromJson(str, ArrayVersion.class);
+				Version version = arrayVersion.getVersion();
+				
+				EntityUtils.consume(resEntity);
+			
+				if(str.equals("true"))
+					return true;
+				else
+					return false;
+				
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			new TextDialogue(getCurFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
+		}
+		return false;
+	  }
+	  
 }

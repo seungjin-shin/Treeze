@@ -42,7 +42,7 @@ public class TextDialogue extends JDialog{
 		Point parentPrameLoc = parentFrame.getLocation();
 		int parentWidth = parentFrame.getWidth();
 		int parentHeight = parentFrame.getHeight();
-		this.setSize(parentWidth / 3, parentHeight / 4);
+		this.setSize(text.length() * 20, 300);
 		this.setLocationRelativeTo(parentFrame);
 //		this.setResizable(false);
 		this.setVisible(true);
@@ -73,7 +73,7 @@ public class TextDialogue extends JDialog{
 		int parentWidth = parentFrame.getWidth();
 		int parentHeight = parentFrame.getHeight();
 		
-		this.setSize(parentWidth / 3, parentHeight / 4);
+		this.setSize(text.length() * 20, 300);
 		this.setLocationRelativeTo(parentFrame);
 //		this.setResizable(false);
 		this.setVisible(true);

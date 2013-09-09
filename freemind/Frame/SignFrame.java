@@ -147,6 +147,7 @@ public class SignFrame extends JFrame {
 		signBtn.setContentAreaFilled(false);
 		
 		signBtn.setFocusable(false);
+		signBtn.setEnabled(false);
 		// loginBtn.setBorder(null);
 		
 		signBtn.setBorder(BorderFactory.createCompoundBorder(
@@ -206,10 +207,33 @@ public class SignFrame extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					//비번 체크 
+					//鍮�� 泥댄� 
 					if(signBtn.isEnabled())
 						pushLoginBtn();
 				}
+			}
+		});
+		
+		emailTf.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				
+//				boolean chk = fManager.getUploadToServer().checkDuplEmail(emailTf.getText());
+//				if(chk){
+//					signBtn.setEnabled(true);
+//					emailErrLb.setText("");
+//				}
+//				else{
+//					signBtn.setEnabled(false);
+//					emailErrLb.setText("Email duplicated.");
+//				}
+			}
+			
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 		
@@ -427,8 +451,8 @@ public class SignFrame extends JFrame {
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾ú¸¸é ½áÁø ±Û¾¾°¡
-												// ¾ø¸¸é ÈùÆ® ±Û¾¾¸¦ Áö
+		public void focusGained(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 쩐챵쩐첬쨍쨍챕 쩍찼�첩 짹�쩐쩐째징
+												// 쩐첩쨍쨍챕 �첫�짰 짹�쩐쩐쨍짝 �철
 			if (this.getText().isEmpty()) {
 				super.setText("");
 			}
@@ -438,8 +462,8 @@ public class SignFrame extends JFrame {
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ Ò¸¸é ½áÁø ±Û¾¾°¡
-												// ¾ø¸¸é ÈùÆ®¸¦ û½
+		public void focusLost(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 �쨍쨍챕 쩍찼�첩 짹�쩐쩐째징
+												// 쩐첩쨍쨍챕 �첫�짰쨍짝 청쩍
 			if (this.getText().isEmpty()) {
 				setForeground(Color.GRAY);
 				super.setText(hint);
@@ -491,13 +515,13 @@ public class SignFrame extends JFrame {
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾ú¸¸é ½áÁø ±Û¾¾°¡ ¾ø¸¸é ÈùÆ® ±Û¾¾¸¦ Áö
+		public void focusGained(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 쩐챵쩐첬쨍쨍챕 쩍찼�첩 짹�쩐쩐째징 쩐첩쨍쨍챕 �첫�짰 짹�쩐쩐쨍짝 �철
 			hintLabel.setVisible(false);
 
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // Æ÷Ä¿½
+		public void focusLost(FocusEvent e) { // �첨�쩔쩍
 			if (this.getText().isEmpty()) {
 				hintLabel.setVisible(true);
 			} else {
