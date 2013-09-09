@@ -54,6 +54,8 @@ public class WriteTicketFrame extends JFrame{
 		
 		fManager = FreemindManager.getInstance();
 		logoimg = fManager.treezeLogo;
+		setIconImage(fManager.topIcon);
+		setTitle("Ticket Write");
 		//fullPanel.setBackground(Color.BLUE);
 		addGrid(gbl, gbc, new RoundPanel(), 0, 1, 1, 1, 1, 1, this);
 		//fullPanel.setLayout(gbl);

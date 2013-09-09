@@ -26,17 +26,19 @@ public class MovingTextFrameThread extends Thread{
 				e.printStackTrace();
 			}
 			textFrame.setLocation((int)xsize - textFrame.getWidth(),(int) ysize - changeHeight);
-			if(frameHeight < changeHeight)
+			if(frameHeight < changeHeight){
 				overHalf = true;
-			
-			if(overHalf){
-				changeHeight -= 1;
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}
+			
+			if(overHalf){
+				changeHeight -= 1;
+				
 			}
 			else
 				changeHeight += 1;

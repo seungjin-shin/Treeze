@@ -79,6 +79,8 @@ public class LoginFrame extends JFrame{
 		this.setSize(600, 394);
 		this.setLayout(gbl);
 		this.setLocation(400, 100);
+		this.setTitle("Treeze login");
+		setIconImage(fManager.topIcon);
 		loPanel = new LoginPanel();
 		sPanel = new SignPanel();
 		//setResizable(false);

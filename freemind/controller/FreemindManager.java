@@ -95,6 +95,7 @@ public class FreemindManager {
 	public Image startOver = new ImageIcon(getClass().getClassLoader().getResource("images/startlecture3.png")).getImage();
 	public Image startPress = new ImageIcon(getClass().getClassLoader().getResource("images/startlecture4.png")).getImage();
 	
+	public Image topIcon = new ImageIcon(getClass().getClassLoader().getResource("images/treezeicon2.png")).getImage();
 	
 	MindMapController mc;
 	Controller c;

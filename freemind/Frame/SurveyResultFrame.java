@@ -29,7 +29,7 @@ public class SurveyResultFrame extends JFrame implements ActionListener{
 		noCnt = n;
 		yesPer = (int)(((double)y/(double)(y + n)) * 100);
 		noPer = (int)(((double)n/(double)(y + n)) * 100);
-		
+		setIconImage(FreemindManager.getInstance().topIcon);
 		setSize(500, 400);
 		setLayout(null);
 		setTitle("Survey result");

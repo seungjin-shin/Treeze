@@ -89,6 +89,8 @@ public class TicketFrame extends JFrame{
 	public TicketFrame(NodeAdapter node, Controller cr) {
 		qNode = node;
 		this.c = cr;
+		setIconImage(fManager.topIcon);
+		setTitle("Ticket board");
 		nodeTitle = qNode.getParentNode().getText();
 		// TODO Auto-generated constructor stub
 		this.setSize(800, 600);

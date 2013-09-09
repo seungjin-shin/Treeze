@@ -36,13 +36,13 @@ public class TextDialogue extends JDialog{
 		this.setLayout(addGrid.getGbl());
 		
 		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), msgLb,    0, 0, 1, 1, 1, 1, this);
-		addGrid.getInsets().set(0, 70, 30, 70);
+		addGrid.getInsets().set(0, 100, 30, 100);
 		addGrid.addGrid(addGrid.getGbl(), addGrid.getGbc(), closeBtn, 0, 1, 1, 1, 1, 1, this);
 		
 		Point parentPrameLoc = parentFrame.getLocation();
 		int parentWidth = parentFrame.getWidth();
 		int parentHeight = parentFrame.getHeight();
-		this.setSize(text.length() * 20, 300);
+		this.setSize(text.length() * 20, 200);
 		this.setLocationRelativeTo(parentFrame);
 //		this.setResizable(false);
 		this.setVisible(true);

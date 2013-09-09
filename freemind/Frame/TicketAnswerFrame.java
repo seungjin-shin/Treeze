@@ -45,6 +45,8 @@ public class TicketAnswerFrame extends JFrame{
 		selNode = node;
 		
 		fManager = FreemindManager.getInstance();
+		setIconImage(fManager.topIcon);
+		setTitle("Ticket Answer");
 		answerTa = new WriteTextArea();
 		// TODO Auto-generated constructor stub
 		this.setBackground(fManager.treezeColor);

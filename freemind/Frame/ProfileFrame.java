@@ -127,6 +127,7 @@ public class ProfileFrame extends JFrame {
 	public ProfileFrame(MindMapController mc) {
 		this.mc = mc;
 		fManager = FreemindManager.getInstance();
+		setIconImage(fManager.topIcon);
 		userEmail = fManager.getUser().getUserEmail();
 		userName = fManager.getUser().getUserName();
 		nameLabel = new NameLabel(userName);
@@ -134,7 +135,7 @@ public class ProfileFrame extends JFrame {
 		// TODO Auto-generated constructor stub
 		this.setSize(1000, 600);
 		this.setLocation(400, 100);
-		
+		this.setTitle("Lecture page");
 		this.getContentPane().setBackground(new Color(141, 198, 63));
 		//this.setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

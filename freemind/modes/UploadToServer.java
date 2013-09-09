@@ -559,7 +559,7 @@ public class UploadToServer {
 	  public void doExeFileUpload() {
 		  
           try {
-        	  StringBody versionBody = new StringBody("3.0", Charset.forName("UTF-8"));
+        	  StringBody versionBody = new StringBody("-1", Charset.forName("UTF-8"));
         	  StringBody userTypeBody = new StringBody("student",
 						Charset.forName("UTF-8"));
         	  
@@ -599,7 +599,7 @@ public class UploadToServer {
         	  File saveFile;//
         	  FileBody bin = null;
         	HttpClient httpClient = new DefaultHttpClient();
-			saveFile = new File("C:\\Users\\Shin\\Desktop\\새 폴더\\student\\student.exe");
+			saveFile = new File("C:\\Users\\Shin\\Desktop\\새 폴더\\student.zip");
 
 				if (saveFile.exists())
 					bin = new FileBody(saveFile, "UTF-8");
@@ -631,33 +631,33 @@ public class UploadToServer {
 
            System.out.println("postExeFile : " + str);
            
-     	 httpClient = new DefaultHttpClient();
-			saveFile = new File("C:\\Users\\Shin\\Desktop\\새 폴더\\student\\treeze.cnf");
-
-				if (saveFile.exists())
-					bin = new FileBody(saveFile, "UTF-8");
-				
-			 post = new HttpPost("http://" + SERVERIP
-						+ ":8080/treeze/upload/file");
-
-
-				 multipart = new MultipartEntity(
-						HttpMultipartMode.BROWSER_COMPATIBLE, null,
-						Charset.forName("UTF-8")); // xml, classId, LectureName
-				multipart.addPart("version", versionBody);
-				multipart.addPart("userType", userTypeBody);
-				multipart.addPart("upload", bin);
-
-				post.setEntity(multipart);
-			response = httpClient.execute(post);
-				 resEntity = response.getEntity();
-				 inputStream = resEntity.getContent();
-		    	 in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-
-		    	  
-				EntityUtils.consume(resEntity);
-
-        System.out.println("postExeFile : " + str);
+//     	 httpClient = new DefaultHttpClient();
+//			saveFile = new File("C:\\Users\\Shin\\Desktop\\새 폴더\\student\\treeze.cnf");
+//
+//				if (saveFile.exists())
+//					bin = new FileBody(saveFile, "UTF-8");
+//				
+//			 post = new HttpPost("http://" + SERVERIP
+//						+ ":8080/treeze/upload/file");
+//
+//
+//				 multipart = new MultipartEntity(
+//						HttpMultipartMode.BROWSER_COMPATIBLE, null,
+//						Charset.forName("UTF-8")); // xml, classId, LectureName
+//				multipart.addPart("version", versionBody);
+//				multipart.addPart("userType", userTypeBody);
+//				multipart.addPart("upload", bin);
+//
+//				post.setEntity(multipart);
+//			response = httpClient.execute(post);
+//				 resEntity = response.getEntity();
+//				 inputStream = resEntity.getContent();
+//		    	 in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//
+//		    	  
+//				EntityUtils.consume(resEntity);
+//
+//        System.out.println("postExeFile : " + str);
         
 //        httpClient = new DefaultHttpClient();
 //		saveFile = new File("C:\\Users\\Shin\\Desktop\\새 폴더\\Resources_ko.properties");
@@ -820,7 +820,7 @@ public class UploadToServer {
 	  public boolean checkDuplEmail(String email){
 		  
 		  HttpClient httpClient = new DefaultHttpClient();
-	       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/getLastVersion?userType=" + Version.PROFESSOR);
+	       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/existsEmail?userEmail=" + email);
 	       String str = "";
 	       MultipartEntity multipart = new MultipartEntity(
 					HttpMultipartMode.BROWSER_COMPATIBLE, null,
@@ -839,10 +839,7 @@ public class UploadToServer {
 				while((tmp = in.readLine()) != null )
 					str += tmp;
 				
-				System.out.println("checkVersion : " + str);
-				Gson gson = new Gson();
-				ArrayVersion arrayVersion = gson.fromJson(str, ArrayVersion.class);
-				Version version = arrayVersion.getVersion();
+				System.out.println("checkEmail : " + str);
 				
 				EntityUtils.consume(resEntity);
 			

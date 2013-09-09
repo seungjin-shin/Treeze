@@ -72,8 +72,9 @@ public class SurveyFrame extends JFrame{
 		this.setLocation(400, 100);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.setLayout(gbl);
+		setIconImage(fManager.topIcon);
 		logoimg =  fManager.treezeLogo;
-		
+		setTitle("Survey");
 		//fullPanel.setBackground(Color.BLUE);
 		addGrid(gbl, gbc, new RoundPanel(), 0, 1, 1, 1, 1, 1, this);
 		//fullPanel.setLayout(gbl);

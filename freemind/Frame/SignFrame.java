@@ -86,7 +86,7 @@ public class SignFrame extends JFrame {
 	
 	JLabel studErrLb = new JLabel();
 	JLabel userErrLb = new JLabel();
-	JLabel emailErrLb = new JLabel();
+	JLabel emailErrLb = new JLabel("  Email duplicated.");
 	JLabel pwErrLb = new JLabel();
 	JLabel confPwErrLb = new JLabel();
 	
@@ -97,6 +97,8 @@ public class SignFrame extends JFrame {
 		this.setSize(400, 600);
 		this.setLayout(gbl);
 		this.setLocation(400, 100);
+		this.setTitle("Sign up");
+		setIconImage(fManager.topIcon);
 		signPanel = new SignPanel();
 
 		// setResizable(false);
@@ -121,6 +123,8 @@ public class SignFrame extends JFrame {
 		profTypeBtn.setActionCommand(User.PROFESSOR);
 		profTypeBtn.setBackground(fManager.treezeColor);
 		
+		emailErrLb.setForeground(fManager.treezeColor);
+	
 		
 		typeBtnGp.add(profTypeBtn);
 		typeBtnGp.add(stuTypeBtn);
@@ -142,7 +146,7 @@ public class SignFrame extends JFrame {
 		signBtnPanel.setBackground(noColor);
 		signBtn = new SignBtn(fManager.signDefault, fManager.signPress,
 				fManager.signOver);
-		signBtn.setBackground(new Color(0, 0, 0, 0));
+		signBtn.setBackground(noColor);
 		signBtn.setBorderPainted(false);
 		signBtn.setContentAreaFilled(false);
 		
@@ -165,7 +169,7 @@ public class SignFrame extends JFrame {
 		
 		addGrid(gbl, gbc, dumy,         0, 0, 1, 1, 1, 1, signBtnPanel);
 		addGrid(gbl, gbc, dumy2,         1, 0, 1, 1, 1, 1, signBtnPanel);
-		setInsets(20, 20, 50, 50);
+		setInsets(0, 0, 50, 50);
 		addGrid(gbl, gbc, signBtn,      2, 0, 1, 1, 1, 1, signBtnPanel);
 		setInsets(0, 0, 0, 0);
 		addGrid(gbl, gbc, dumy3,         3, 0, 1, 1, 1, 1, signBtnPanel);
@@ -175,7 +179,7 @@ public class SignFrame extends JFrame {
 //		signBtnPanel.add(new JButton("dd"));
 //		signBtnPanel.add(new JLabel());
 		
-		setInsets(0, 0, 0, 0);
+		setInsets(10, 10, 0, 0);
 		addGrid(gbl, gbc, signBtnPanel, 0, 3, 1, 1, 1, 35, mPanel);
 		
 		setInsets(20, 0, 60, 60);
@@ -207,7 +211,7 @@ public class SignFrame extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					//鍮�� 泥댄� 
+					//��옙占�筌ｋ똾占�
 					if(signBtn.isEnabled())
 						pushLoginBtn();
 				}
@@ -219,15 +223,15 @@ public class SignFrame extends JFrame {
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				
-//				boolean chk = fManager.getUploadToServer().checkDuplEmail(emailTf.getText());
-//				if(chk){
-//					signBtn.setEnabled(true);
-//					emailErrLb.setText("");
-//				}
-//				else{
-//					signBtn.setEnabled(false);
-//					emailErrLb.setText("Email duplicated.");
-//				}
+				boolean chk = fManager.getUploadToServer().checkDuplEmail(emailTf.getText());
+				if(chk){
+					signBtn.setEnabled(false);
+					emailErrLb.setForeground(Color.red);
+				}
+				else{
+					signBtn.setEnabled(true);
+					emailErrLb.setForeground(treezeColor);
+				}
 			}
 			
 			@Override
@@ -240,13 +244,15 @@ public class SignFrame extends JFrame {
 		// setInsets(t, b, l, r)
 		setInsets(10, 0, 10, 10);
 		addGrid(gbl, gbc, typePanel,   0, 1, 1, 1, 7, 1, signPanel);
-		setInsets(5, 0, 10, 10);
+		setInsets(7, 0, 10, 10);
 		addGrid(gbl, gbc, studIDTf,    0, 2, 1, 1, 7, 1, signPanel);
 		addGrid(gbl, gbc, studErrLb,   0, 3, 1, 1, 7, 1, signPanel);
 		addGrid(gbl, gbc, userTf,      0, 4, 1, 1, 7, 1, signPanel);
 		addGrid(gbl, gbc, userErrLb,   0, 5, 1, 1, 7, 1, signPanel);
 		addGrid(gbl, gbc, emailTf,     0, 6, 1, 1, 7, 1, signPanel);
+		setInsets(0, 0, 10, 10);
 		addGrid(gbl, gbc, emailErrLb,  0, 7, 1, 1, 7, 1, signPanel);
+		setInsets(7, 0, 10, 10);
 		addGrid(gbl, gbc, pwTf,        0, 8, 1, 1, 7, 1, signPanel);
 		addGrid(gbl, gbc, pwErrLb,     0, 9, 1, 1, 7, 1, signPanel);
 		addGrid(gbl, gbc, confPwTf,    0,10, 1, 1, 7, 1, signPanel);
@@ -318,6 +324,16 @@ public class SignFrame extends JFrame {
 	}
 
 	public void pushLoginBtn() {
+		boolean chk = fManager.getUploadToServer().checkDuplEmail(emailTf.getText());
+		if(chk){
+			signBtn.setEnabled(false);
+			emailErrLb.setForeground(Color.red);
+		}
+		else{
+			signBtn.setEnabled(true);
+			emailErrLb.setForeground(treezeColor);
+		}
+		
 		User signUser = new User();
 		signUser.setIdentificationNumber(Integer.parseInt(studIDTf.getText()));
 		signUser.setPassword(pwTf.getText());
@@ -451,8 +467,8 @@ public class SignFrame extends JFrame {
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 쩐챵쩐첬쨍쨍챕 쩍찼�첩 짹�쩐쩐째징
-												// 쩐첩쨍쨍챕 �첫�짰 짹�쩐쩐쨍짝 �철
+		public void focusGained(FocusEvent e) { // 占쎌꺼占쎌찓姨띿쮼夷띿쭩 姨먯굘姨먯껄夷띿쮰梨�姨띿갸占쎌꺽 吏뱄옙姨먯찎吏몄쭠
+												// 姨먯꺽夷띿쮰梨�占쎌껀占쎌㎞ 吏뱄옙姨먯찎夷띿쭩 占쎌쿋
 			if (this.getText().isEmpty()) {
 				super.setText("");
 			}
@@ -462,8 +478,8 @@ public class SignFrame extends JFrame {
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 �쨍쨍챕 쩍찼�첩 짹�쩐쩐째징
-												// 쩐첩쨍쨍챕 �첫�짰쨍짝 청쩍
+		public void focusLost(FocusEvent e) { // 占쎌꺼占쎌찓姨띿쮼夷띿쭩 占쎌쮰夷띿콝 姨띿갸占쎌꺽 吏뱄옙姨먯찎吏몄쭠
+												// 姨먯꺽夷띿쮰梨�占쎌껀占쎌㎞夷띿쭩 泥�찉
 			if (this.getText().isEmpty()) {
 				setForeground(Color.GRAY);
 				super.setText(hint);
@@ -515,13 +531,13 @@ public class SignFrame extends JFrame {
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 쩐챵쩐첬쨍쨍챕 쩍찼�첩 짹�쩐쩐째징 쩐첩쨍쨍챕 �첫�짰 짹�쩐쩐쨍짝 �철
+		public void focusGained(FocusEvent e) { // 占쎌꺼占쎌찓姨띿쮼夷띿쭩 姨먯굘姨먯껄夷띿쮰梨�姨띿갸占쎌꺽 吏뱄옙姨먯찎吏몄쭠 姨먯꺽夷띿쮰梨�占쎌껀占쎌㎞ 吏뱄옙姨먯찎夷띿쭩 占쎌쿋
 			hintLabel.setVisible(false);
 
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // �첨�쩔쩍
+		public void focusLost(FocusEvent e) { // 占쎌꺼占쎌찓姨�			
 			if (this.getText().isEmpty()) {
 				hintLabel.setVisible(true);
 			} else {
