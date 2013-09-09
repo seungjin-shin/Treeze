@@ -210,18 +210,15 @@ public class SlideShow {
 				@Override
 				public void keyPressed(KeyEvent e) {
 					// TODO Auto-generated method stub
-					if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+					if (e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_PAGE_DOWN || e.getKeyCode() == KeyEvent.VK_RIGHT) {
 						nextShow();
 						sendPosition();
 						System.out.println("Sldie Space");
 						
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						showpause();
-					} else if(e.getKeyCode() == KeyEvent.VK_PAGE_DOWN){
-						nextShow();
-						sendPosition();
 					}
-					else if(e.getKeyCode() == KeyEvent.VK_PAGE_UP){
+					else if(e.getKeyCode() == KeyEvent.VK_PAGE_UP || e.getKeyCode() == KeyEvent.VK_LEFT){
 						prevShow();
 						sendPosition();
 					}

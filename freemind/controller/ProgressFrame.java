@@ -33,7 +33,6 @@ public class ProgressFrame extends JFrame{
 		
 		setLayout(addGrid.gbl);
 //		setLayout(null);
-		
 		ProgressBarPanel pPanel = new ProgressBarPanel();
 		pPanel.setLayout(addGrid.gbl);
 		
@@ -56,19 +55,19 @@ public class ProgressFrame extends JFrame{
 		setAlwaysOnTop(true);
 		System.out.println(profileFrameWidth + "," + profileFrameHeight + "[prrogress]");
 //		pack();
-//		setResizable(false);
+		setResizable(false);
 		setVisible(true);
 	}
-//	@Override
-//	public void paint(Graphics g) {
-//		super.paint(g);
-//		if(logo == null){
-//			logo = fManager.makeResizedImageIcon(this.getWidth(), this.getHeight(), fManager.treezeLogo);
-//			System.out.println("paint null");
-//		}
-//		g.drawImage(logo.getImage(), 0, 0, this);
-//		System.out.println("paint draw");
-//	}
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		if(logo == null){
+			logo = fManager.makeResizedImageIcon(this.getWidth(), this.getHeight(), fManager.treezeLogo);
+			System.out.println("paint null");
+		}
+		g.drawImage(logo.getImage(), 0, 0, this);
+		System.out.println("paint draw");
+	}
 
 //	public void paint(Graphics g) {
 //		// TODO Auto-generated method stub
