@@ -22,6 +22,7 @@ public class SlideType extends NodeType{
     	}
 		c.getSlideShow().setfocus(node);
 		c.getSlideShow().show();
+		c.getSlideShow().sendPosition();
 	}
 
 	@Override
