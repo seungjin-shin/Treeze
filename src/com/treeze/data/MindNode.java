@@ -155,7 +155,7 @@ public class MindNode {
 		this.locateX = x;
 		this.locateY = y;
 		this.nodeID = nodeID;
-		this.scaleX = str.length() * 18;
+		this.scaleX = str.length() * 15;
 		this.scaleY = NODE_HEIGHT;
 		setendX();
 		//
@@ -265,7 +265,7 @@ public class MindNode {
 		} else {
 			this.direction = 0;
 		}
-		this.scaleX = str.length() * 18;
+		this.scaleX = str.length() * 15;
 		if(scaleX<100){
 			this.scaleX = 100;
 		}

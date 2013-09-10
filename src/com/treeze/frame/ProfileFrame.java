@@ -52,6 +52,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.xstream.io.json.AbstractJsonWriter.Type;
 import com.treeze.Abstract.ImgBtn;
+import com.treeze.Module.ListPanelMouseWheelListener;
 import com.treeze.data.ArrayClass;
 import com.treeze.data.ArrayLecture;
 import com.treeze.data.ArrayMindMap;
@@ -196,25 +197,10 @@ public class ProfileFrame extends JFrame {
 		networkThread.start();
 		this.setSize(1100, 600);
 		this.setVisible(true);
-		grid.addMouseWheelListener(new MouseWheelListener() {
-
-			@Override
-			public void mouseWheelMoved(MouseWheelEvent arg0) {
-				// TODO Auto-generated method stub
-				// fullPanel.setVisible(false);
-				// fullPanel.setVisible(true);
-				// setVisible(true);
-
-				// wheelRotation
-				listPanel.getVerticalScrollBar().setValue(
-						listPanel.getVerticalScrollBar().getValue()
-								+ arg0.getWheelRotation());
-				// arg0.getWheelRotation();
-			}
-		});
+		grid.addMouseWheelListener(new ListPanelMouseWheelListener(listPanel));
 
 	}
-
+	
 	private void addGrid(GridBagLayout gbl, GridBagConstraints gbc,
 			Component c, int gridx, int gridy, int gridwidth, int gridheight,
 			int weightx, int weighty, Container container) {
@@ -429,6 +415,7 @@ public class ProfileFrame extends JFrame {
 			stateOfLecture.repaint();
 			this.addMouseListener(new ProfileMouseListener(this, jsp));
 			jsp.addMouseListener(new ProfileMouseListener(this, jsp));
+			jsp.addMouseWheelListener(new ListPanelMouseWheelListener(listPanel));
 
 		}
 
@@ -473,7 +460,7 @@ public class ProfileFrame extends JFrame {
 			lectureNm.setPreferredSize(new Dimension(lectureNm.getWidth(),
 					lectureNm.getHeight()));
 			jsp.getViewport().setBackground(Color.WHITE);
-
+			jsp.addMouseWheelListener(new ListPanelMouseWheelListener(listPanel));
 		}
 
 		@Override
@@ -499,7 +486,7 @@ public class ProfileFrame extends JFrame {
 			classNm.setFont(new Font("Serif", Font.BOLD, 20));
 			// this.setFont(new Font("Serif", Font.BOLD, 15));
 			this.add(classNm);
-
+			classNm.addMouseWheelListener(new ListPanelMouseWheelListener(listPanel));
 			this.addMouseListener(new MouseListener() {
 
 				@Override

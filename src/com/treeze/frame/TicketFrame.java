@@ -51,6 +51,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.treeze.Abstract.ImgBtn;
+import com.treeze.Module.ListPanelMouseWheelListener;
 import com.treeze.data.ClassInfo;
 import com.treeze.data.MindNode;
 import com.treeze.data.Ticket;
@@ -109,7 +110,8 @@ public class TicketFrame extends JPanel {
 
 		JLabel subjectPanel = new JLabel("Contents", JLabel.CENTER);
 		JLabel whritePane = new JLabel("Writer", JLabel.CENTER);
-		JLabel dumy = new JLabel(); // ��낀���占썹�占쏙옙��������������������怨ㅼ������									// ������占����占썲������옙
+		JLabel dumy = new JLabel(); // ��낀���占썹�占쏙옙��������������������怨ㅼ������
+									// // ������占����占썲������옙
 		WriteBtn writeBtn = new WriteBtn(TreezeStaticData.WRITE_BTN,
 				TreezeStaticData.WRITE_PRESS_BTN,
 				TreezeStaticData.WRITE_ENTER_BTN);
@@ -140,38 +142,8 @@ public class TicketFrame extends JPanel {
 				ticketNum++;
 			}
 		}
-		listPanel.addMouseWheelListener(new MouseWheelListener() {
-
-			@Override
-			public void mouseWheelMoved(MouseWheelEvent arg0) {
-				// TODO Auto-generated method stub
-				// fullPanel.setVisible(false);
-				// fullPanel.setVisible(true);
-				// setVisible(true);
-
-				// wheelRotation
-				listPanel.getVerticalScrollBar().setValue(
-						listPanel.getVerticalScrollBar().getValue()
-								+ arg0.getWheelRotation()*10);
-				// arg0.getWheelRotation();
-			}
-		});
-		grid.addMouseWheelListener(new MouseWheelListener() {
-
-			@Override
-			public void mouseWheelMoved(MouseWheelEvent arg0) {
-				// TODO Auto-generated method stub
-				// fullPanel.setVisible(false);
-				// fullPanel.setVisible(true);
-				// setVisible(true);
-
-				// wheelRotation
-				listPanel.getVerticalScrollBar().setValue(
-						listPanel.getVerticalScrollBar().getValue()
-								+ arg0.getWheelRotation()*10);
-				// arg0.getWheelRotation();
-			}
-		});
+		listPanel.addMouseWheelListener(new ListPanelMouseWheelListener(listPanel));
+		grid.addMouseWheelListener(new ListPanelMouseWheelListener(listPanel));
 		grid.setBackground(Color.WHITE);
 		addGrid(gbl, gbc, noPanel, 0, 0, 1, 1, 1, 1, ticketHead);
 		addGrid(gbl, gbc, subjectPanel, 1, 0, 1, 1, 13, 1, ticketHead);
@@ -180,7 +152,6 @@ public class TicketFrame extends JPanel {
 		listPanel.getViewport().add(grid, null);
 
 		this.setVisible(true);
-		
 
 	}
 
@@ -338,8 +309,8 @@ public class TicketFrame extends JPanel {
 			jsp.setBorder(null);
 			// contentsLabel.setPreferredSize(new Dimension(1000,
 			// contentsLabel.getHeight()));
-			if(ticket.getuserName().equals("교수"))
-			whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
+			if (ticket.getuserName().equals("교수"))
+				whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
 			else
 				whriterLabel = new JLabel("학생", JLabel.CENTER);
 			this.setBackground(Color.WHITE);
@@ -353,7 +324,8 @@ public class TicketFrame extends JPanel {
 
 			addGrid(gbl, gbc, jsp, 1, 0, 1, 1, 13, 1, this);
 			addGrid(gbl, gbc, whriterLabel, 2, 0, 1, 1, 1, 1, this);
-			noLabel.setPreferredSize(new Dimension(noLabel.getWidth(), noLabel.getHeight()));
+			noLabel.setPreferredSize(new Dimension(noLabel.getWidth(), noLabel
+					.getHeight()));
 			contentsLabel.setPreferredSize(new Dimension(contentsLabel
 					.getWidth(), contentsLabel.getHeight()));
 
@@ -361,6 +333,8 @@ public class TicketFrame extends JPanel {
 
 			this.addMouseListener(new TicketMouseEvent());
 			jsp.addMouseListener(new TicketMouseEvent());
+			jsp.addMouseWheelListener(new ListPanelMouseWheelListener(listPanel));
+			this.addMouseWheelListener(new ListPanelMouseWheelListener(listPanel));
 
 		}
 
@@ -373,10 +347,10 @@ public class TicketFrame extends JPanel {
 			jsp = new JScrollPane(contentsLabel);
 
 			jsp.setBorder(null);
-			if(ticket.getuserName().equals("교수"))
+			if (ticket.getuserName().equals("교수"))
 				whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
-				else
-					whriterLabel = new JLabel("학생", JLabel.CENTER);
+			else
+				whriterLabel = new JLabel("학생", JLabel.CENTER);
 
 			this.setBackground(Color.WHITE);
 			// this.add(noPanel);
@@ -397,6 +371,8 @@ public class TicketFrame extends JPanel {
 
 			this.addMouseListener(new TicketMouseEvent());
 			jsp.addMouseListener(new TicketMouseEvent());
+			jsp.addMouseWheelListener(new ListPanelMouseWheelListener(listPanel));
+			this.addMouseWheelListener(new ListPanelMouseWheelListener(listPanel));
 
 		}
 
@@ -461,16 +437,16 @@ public class TicketFrame extends JPanel {
 			this.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 			this.getHorizontalScrollBar().setUnitIncrement(
 					this.getHorizontalScrollBar().getBlockIncrement());
-			
+
 			getVerticalScrollBar().getModel().addChangeListener(
 					new ChangeListener() {
 
 						@Override
 						public void stateChanged(ChangeEvent e) {
 							// TODO Auto-generated method stub
-							
+
 							repaint();
-							
+
 						}
 					});
 
