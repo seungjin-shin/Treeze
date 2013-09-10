@@ -34,6 +34,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
 
 import JDIalog.JDialogSurvey;
+import JDIalog.TextDialogue;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -169,7 +170,7 @@ public class MindMapMain extends JPanel {
 				ImageIcon ticketNewIcon  = TreezeStaticData.makeResizedImageIcon(20, 20, TreezeStaticData.TICKET_NEW_IMG);
 				node.getTicketBtn().setIcon(ticketNewIcon);
 				node.getNodeBtn().setBounds(node.getLocateX(),
-						node.getLocateY(), NODE_WIDTH, NODE_HEIGHT);
+						node.getLocateY(), node.getScaleX(), NODE_HEIGHT);
 				node.getPptBtn().setBounds(node.getLocateX(),
 						node.getLocateY()-10, 20, 20);
 				node.getTicketBtn().setBounds(node.getEndX()-20,
@@ -351,13 +352,19 @@ public class MindMapMain extends JPanel {
 			int port = 2141;
 			Socket socket;
 			String str;
+			Gson gson = new Gson();
+			ServerSocket sv;
 			try {
+				if(ServerSocket.getInstance().getSocket()==null||ServerSocket.getInstance().getSocket().isClosed()){
 				socket = new Socket(ip, port);
-				Gson gson = new Gson();
-				
-				System.out.println("[Socket Start]");
-				ServerSocket sv = ServerSocket.getInstance();
+				sv = ServerSocket.getInstance();
 				sv.setSocket(socket);
+				}
+				else{
+				sv = ServerSocket.getInstance();
+				}
+				System.out.println("[Socket Start]");
+				
 				// ClassInfo classInfo = new ClassInfo();
 				TreezeData treezeData = new TreezeData();
 				User user = User.getInstance();
@@ -376,8 +383,8 @@ public class MindMapMain extends JPanel {
 				// IO Stream 쨘쨘?占썩�
 				InputStream is;
 				try {
-					is = socket.getInputStream();
-					java.io.OutputStream os = socket.getOutputStream();
+					is= sv.getSocket().getInputStream();
+					java.io.OutputStream os = sv.getSocket().getOutputStream();
 					
 					OutputStreamWriter osw = new OutputStreamWriter(os);
 					PrintWriter pw = new PrintWriter(osw);
@@ -396,13 +403,13 @@ public class MindMapMain extends JPanel {
 					// 쩔�廓?占승≤㎳￠�몌옙?
 					// Scanner scan = new Scanner(System.in);
 					// scan.next();
-					int a = 0;
+					
 					
 					while (true) {
 						 cnt = is.read(b);
-						 System.out.println(a++);
+						 System.out.println("[Socket Sent Data]");
 						if(cnt== -1){
-							System.out.println("Socket End");
+							TextDialogue t = new TextDialogue(getMainFrameManager(), "Socket End", true);
 							return;
 						}
 						str = null;

@@ -125,7 +125,8 @@ public class MindNode {
 	int ChildRCount = 0;
 
 	int index;
-
+	int scaleX;
+	
 	int scaleY;
 	int absoluteIndex;
 	int locateX;
@@ -139,6 +140,13 @@ public class MindNode {
 	public MindNode() {
 
 	}
+	public int getScaleX() {
+		return scaleX;
+	}
+
+	public void setScaleX(int scaleX) {
+		this.scaleX = scaleX;
+	}
 
 	public MindNode(String nodeID, String str, int x, int y,
 			MindMapMain mindMapMain) { // ���������������
@@ -147,11 +155,11 @@ public class MindNode {
 		this.locateX = x;
 		this.locateY = y;
 		this.nodeID = nodeID;
-		// this.scaleX = str.length() * 20;
+		this.scaleX = str.length() * 18;
 		this.scaleY = NODE_HEIGHT;
 		setendX();
 		//
-		// endX = locateX + scaleX;
+		 endX = locateX + scaleX;
 		middleY = locateY + NODE_HEIGHT / 2;
 		endY = locateY + NODE_HEIGHT;
 		root = this;
@@ -257,6 +265,10 @@ public class MindNode {
 		} else {
 			this.direction = 0;
 		}
+		this.scaleX = str.length() * 18;
+		if(scaleX<100){
+			this.scaleX = 100;
+		}
 	//	nodeBtn.addMouseListener(new NodeMouseListener());
 		this.setParentNode(parentNode);
 		setLocate(parentNode);
@@ -266,7 +278,7 @@ public class MindNode {
 		this.absoluteIndex = parentNode.ChildCount;
 		parentNode.ChildCount++;
 		this.paretNodeChildCntAdd();
-		this.endX = this.locateX + NODE_WIDTH;
+		this.endX = this.locateX + scaleX;
 		middleY = locateY +NODE_HEIGHT / 2;
 		endY = locateY + scaleY;
 		ImgIconSet();
@@ -482,7 +494,7 @@ public class MindNode {
 			this.locateX = parentNode.endX + DISTANT; // right
 		else
 			// left
-			this.locateX = parentNode.locateX - DISTANT - NODE_WIDTH;
+			this.locateX = parentNode.locateX - DISTANT - scaleX;
 
 		if (this.parentNodeChildCount() == 0) {
 			this.locateY = parentNode.locateY;

@@ -304,10 +304,10 @@ public class ProfileFrame extends JFrame {
 			// TODO Auto-generated constructor stub
 			sc = new JLabel(userType);
 		
-			this.setLayout(new GridLayout(2, 1, 3, 3));
+			this.setLayout(new GridLayout(3, 1, 3, 3));
 			this.setSize(this.getWidth(), this.getHeight());
 			this.job = new JLabel(userEmail);
-			this.address = new JLabel(address);
+			this.address = new JLabel(User.getInstance().getIdentificationNumber()+"");
 			this.setBackground(new Color(0, 0, 0, 0));
 			this.setBorder(new EmptyBorder(10, 0, 10, 0));
 
@@ -315,8 +315,9 @@ public class ProfileFrame extends JFrame {
 			// this.add(this.job);
 			// this.add(this.address);
 			this.labelset(this.sc);
+			this.labelset(this.address);
 			this.labelset(this.job);
-			//this.labelset(this.address);
+			
 
 		}
 
@@ -404,7 +405,7 @@ public class ProfileFrame extends JFrame {
 			// lectureNm.setFont(new Font("Serif", Font.ITALIC, 18));
 			// professorNm.setFont(new Font("Serif", Font.ITALIC, 18));
 			if (lecture.getStateOfLecture()) {
-				// JPanel j = new JPanel()
+
 				stateOfLecture = new ImgPanel(TreezeStaticData.ONLINE_IMG);
 
 			} else {
@@ -696,10 +697,6 @@ public class ProfileFrame extends JFrame {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 
-				//
-				e.printStackTrace();
-				NetworkThread networkThread = new NetworkThread();
-				networkThread.start();
 
 			}
 
@@ -792,6 +789,8 @@ public class ProfileFrame extends JFrame {
 				.getMindmap().getMindmapXML(), classInfo);
 		MainFrameManager mainFrameManager = new MainFrameManager(mindmapMain,
 				classInfo);
+		this.setVisible(false);
+		
 	}
 
 	class ProfileMouseListener implements MouseListener {
