@@ -186,7 +186,7 @@ public class LoginFrame extends JFrame{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (ip == null || port == -1){
+		if (ip == null || port == -1 || version == null){
 			System.out.println("treeze.cnf Err");
 			new TextDialogue(this, "Fail to read treeze.cnf file.", true);
 			System.exit(0);
@@ -196,7 +196,7 @@ public class LoginFrame extends JFrame{
 		fManager.setPORT(port);
 		
 		fManager.getUploadToServer().setSERVERIP(ip);
-		fManager.getUploadToServer().setCurFrame(this);
+		setCurFrame();
 		UploadToServer uploadToServer = fManager.getUploadToServer();
 		String curVersion = uploadToServer.checkVersion();
 		
@@ -208,7 +208,9 @@ public class LoginFrame extends JFrame{
 		}
 			
 	}
-	
+	public void setCurFrame(){
+    	fManager.getUploadToServer().setCurFrame(this);
+    }
 	
 	public void setInsets(int t, int b, int l, int r){
 		insets.top = t;
