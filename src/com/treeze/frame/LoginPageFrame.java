@@ -140,11 +140,24 @@ public class LoginPageFrame extends JFrame{
 
 				System.out.println("checkVersion : " + str);
 				Gson gson = new Gson();
+				try{
 				ArrayVersion arrayVersion = gson.fromJson(str, ArrayVersion.class);
 				Version version = arrayVersion.getVersion();
+				EntityUtils.consume(resEntity);
+				return version.getVersion();
+				}
+				catch (Exception e) {
+					// TODO: handle exception
+					new TextDialogue(LoginPageFrame.this, "Server down, Program end", true);
+					e.printStackTrace();
+					System.exit(0);
+				}
+				finally{
+					
+				}
+				
 
-			EntityUtils.consume(resEntity);
-			return version.getVersion();
+			
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -486,7 +486,7 @@ public class ProfileFrame extends JFrame {
 			classNm.setFont(new Font("Serif", Font.BOLD, 20));
 			// this.setFont(new Font("Serif", Font.BOLD, 15));
 			this.add(classNm);
-			classNm.addMouseWheelListener(new ListPanelMouseWheelListener(listPanel));
+			
 			this.addMouseListener(new MouseListener() {
 
 				@Override
@@ -517,10 +517,6 @@ public class ProfileFrame extends JFrame {
 				public void mouseClicked(MouseEvent arg0) {
 					// TODO Auto-generated method stub
 
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {
 					// TODO Auto-generated method stub
 					setBackground(new Color(10, 10, 100, 100));
 					classId = classInstance.getClassId();
@@ -542,9 +538,14 @@ public class ProfileFrame extends JFrame {
 					fullPanel.repaint();
 					btnPanel.setVisible(false);
 					btnPanel.setVisible(true);
-				}
-			});
+				
 
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {}
+			});
+			
 		}
 
 		@Override

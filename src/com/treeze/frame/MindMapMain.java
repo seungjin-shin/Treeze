@@ -393,7 +393,7 @@ public class MindMapMain extends JPanel {
 					// 쨘?占쏙옙?占시몌옙?쩔쨍쨘??
 					os.write((gson.toJson(treezeData).getBytes("UTF-8")));
 					os.flush();
-					byte[] b = new byte[1024];
+					byte[] b = new byte[2048];
 					// 쨘?占쏙옙?占승울옙?쩔쩔짜??
 					
 					int cnt  = is.read(b);
@@ -407,76 +407,12 @@ public class MindMapMain extends JPanel {
 					
 					while (true) {
 						 cnt = is.read(b);
-						 System.out.println("[Socket Sent Data]");
-						if(cnt== -1){
-							TextDialogue t = new TextDialogue(getMainFrameManager(), "Socket End", true);
-							return;
-						}
-						str = null;
-						try {
-							str = new String(b, 0, cnt, "UTF-8");
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						System.out.println(str);
-						java.lang.reflect.Type type = new TypeToken<TreezeData>() {
-						}.getType();
-						TreezeData jsonResultTreezeData = (TreezeData) gson
-								.fromJson(str, (java.lang.reflect.Type) type);
-						System.out.println(jsonResultTreezeData.getArgList()
-								.get(0));
-						if (jsonResultTreezeData.getDataType().equals(
-								TreezeData.NAVI)) {
-							
-							NaviInfo naviInfo = (NaviInfo) gson
-									.fromJson(jsonResultTreezeData
-											.getArgList().get(0), NaviInfo.class);
-							
-							MindNode naviNode =  MindNode.getNodeuseNodeID(MindNode.getRoot(),naviInfo.getNodeID());
-							
-								MindNode.setNav(naviNode);
-							
-							
-							
-							
-							repaint();
-							
-						} else if (jsonResultTreezeData.getDataType().equals(
-								TreezeData.SURVEY)) {
-							type = new TypeToken<Survey>() {
-							}.getType();
-							Survey survey = (Survey) gson
-									.fromJson(jsonResultTreezeData
-											.getArgList().get(0), Survey.class);
-							JDialogSurvey surveyDialog  = new JDialogSurvey(survey,os);
-							surveyDialog.setLocationRelativeTo(MindMapMain.this);
-							
-							
-							//System.out.println("Survey");
-						} else if(jsonResultTreezeData.getDataType().equals(TreezeData.TICKET)){
-							System.out.println("Ticket");
-						
-							
-							JsonTicket ticket = (JsonTicket) gson
-									.fromJson(jsonResultTreezeData
-											.getArgList().get(0), JsonTicket.class);
-							
-							MindNode parentNode =  MindNode.getNodeuseNodeID(MindNode.getRoot(),ticket.getticket().getParentNodeId());
-							
-							new Ticket(parentNode, ticket.getticket().getId()+"",ticket.getticket().getContents(), ticket.getticket().getUserName());
-							
-							MindNode node = parentNode;
-							while(node instanceof Ticket){
-								node = node.getParentNode();
+						 if(cnt== -1){
+								TextDialogue t = new TextDialogue(getMainFrameManager(), "Socket End", true);
+								return;
 							}
-							node.getTicketBtn().setVisible(true); // New Icon add
-							mainFrameManager.ticketRepaint(node);
-							
-							
-							
-						}
-					
+						 SocketDataHandlingThread socketDataHandlingThread = new SocketDataHandlingThread(b, cnt);
+						 socketDataHandlingThread.start();
 					}
 					
 				//	pw.close();
@@ -500,7 +436,97 @@ public class MindMapMain extends JPanel {
 			// naviInputStream = naviSocket.getInputStream();
 		}
 	}
-	
+	class SocketDataHandlingThread extends Thread{
+		byte[] b = new byte[2048];
+		String str;
+		Gson gson = new Gson();
+		int cnt;
+		public SocketDataHandlingThread(byte[] b,int cnt) {
+			// TODO Auto-generated constructor stub
+			this.b = b;
+			this.cnt = cnt;
+		}
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			super.run();
+
+			
+			str = null;
+			try {
+				str = new String(b, 0, cnt, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(str);
+			java.lang.reflect.Type type = new TypeToken<TreezeData>() {
+			}.getType();
+			TreezeData jsonResultTreezeData = (TreezeData) gson
+					.fromJson(str, (java.lang.reflect.Type) type);
+			System.out.println(jsonResultTreezeData.getArgList()
+					.get(0));
+			if (jsonResultTreezeData.getDataType().equals(
+					TreezeData.NAVI)) {
+				
+				NaviInfo naviInfo = (NaviInfo) gson
+						.fromJson(jsonResultTreezeData
+								.getArgList().get(0), NaviInfo.class);
+				
+				MindNode naviNode =  MindNode.getNodeuseNodeID(MindNode.getRoot(),naviInfo.getNodeID());
+				
+					MindNode.setNav(naviNode);
+				
+				
+				
+				
+				repaint();
+				
+			} else if (jsonResultTreezeData.getDataType().equals(
+					TreezeData.SURVEY)) {
+				type = new TypeToken<Survey>() {
+				}.getType();
+				Survey survey = (Survey) gson
+						.fromJson(jsonResultTreezeData
+								.getArgList().get(0), Survey.class);
+				JDialogSurvey surveyDialog;
+				try {
+					surveyDialog = new JDialogSurvey(survey,ServerSocket.getInstance().getSocket().getOutputStream());
+					surveyDialog.setLocationRelativeTo(MindMapMain.this);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				
+				//System.out.println("Survey");
+			} else if(jsonResultTreezeData.getDataType().equals(TreezeData.TICKET)){
+				System.out.println("Ticket");
+			
+				
+				JsonTicket ticket = (JsonTicket) gson
+						.fromJson(jsonResultTreezeData
+								.getArgList().get(0), JsonTicket.class);
+				
+				MindNode parentNode =  MindNode.getNodeuseNodeID(MindNode.getRoot(),ticket.getticket().getParentNodeId());
+				
+				new Ticket(parentNode, ticket.getticket().getId()+"",ticket.getticket().getContents(), ticket.getticket().getUserName());
+				
+				MindNode node = parentNode;
+				while(node instanceof Ticket){
+					node = node.getParentNode();
+				}
+				node.getTicketBtn().setVisible(true); // New Icon add
+				mainFrameManager.ticketRepaint(node);
+				
+				
+				
+			}
+		
+		
+		}
+	}
 }
 
 @XStreamAlias("map")

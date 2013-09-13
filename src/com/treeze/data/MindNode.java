@@ -149,7 +149,7 @@ public class MindNode {
 	}
 
 	public MindNode(String nodeID, String str, int x, int y,
-			MindMapMain mindMapMain) { // ���������������
+			MindMapMain mindMapMain) { 
 		this.nodeStr = str;
 		this.mindMapMain = mindMapMain;
 		this.locateX = x;
