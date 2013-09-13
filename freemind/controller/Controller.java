@@ -888,6 +888,8 @@ public class Controller  implements MapModuleChangeObserver {
         addQNode = new AddQuestionNode(this);
         chkNodeType = new CheckNodeType(this);
         
+        new BlockScreenSaverThread().start();
+        
 //        Thread t = new tmpSocketThread();
 //       	t.start();
         //dewlit
