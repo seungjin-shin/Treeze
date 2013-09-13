@@ -67,7 +67,7 @@ public class DownLoadNetworkThread extends Thread {
 						if(!SDCardRoot.exists())
 							SDCardRoot.mkdir();
 						
-						SDCardRoot = new File(DOWNPATH, fManager.getClassId() + "");
+						SDCardRoot = new File(DOWNPATH, classId + "");
 
 						// SDCardRoot.mkdir();
 						if(!SDCardRoot.exists())

@@ -144,7 +144,7 @@ public class ProfileFrame extends JFrame {
 //		lecture = new Lecture();
 		gbc.fill = GridBagConstraints.BOTH;
 
-		// C:\Users\ÄÄ°ø\Desktop
+		// C:\Users\��째첩\Desktop
 		setLayout(gbl);
 		
 		logoPanel = new LogoPanel();
@@ -187,7 +187,7 @@ public class ProfileFrame extends JFrame {
 		
 		lectureListPanel.setLayout(gbl);
 		
-		// lecture List ÆÐ³Î 
+		// lecture List ��쨀� 
 		addGrid(gbl, gbc, lectureHead, 1, 1, 1, 1, 1, 1, lectureListPanel);
 		addGrid(gbl, gbc, listPanel, 1, 2, 1, 1, 1, 20, lectureListPanel);
 		
@@ -1124,11 +1124,11 @@ public class ProfileFrame extends JFrame {
 				if(!dirPath.exists())
 					dirPath.mkdir();
 				
-				dirPath = new File(DOWNPATH + System.getProperty("file.separator") + fManager.getClassId());
+				dirPath = new File(DOWNPATH + System.getProperty("file.separator") + cInfo.getClassId());
 				if(!dirPath.exists())
 					dirPath.mkdir();
 				
-				File file = new File(DOWNPATH + System.getProperty("file.separator") + fManager.getClassId(), cInfo.getClassId() + ".mm");
+				File file = new File(DOWNPATH + System.getProperty("file.separator") + cInfo.getClassId(), cInfo.getClassId() + ".mm");
 				
 				OutputStreamWriter fileOutput;
 				fileOutput = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
