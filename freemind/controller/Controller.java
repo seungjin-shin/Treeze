@@ -460,8 +460,8 @@ public class Controller  implements MapModuleChangeObserver {
 		OutputStreamWriter out = null;
 		OutputStreamWriter forUploadXmlOw = null;
 		String rdStr;
-		String nodeText;
-		String nodeImg;
+		String nodeText = null;
+		String nodeImg = null;
 		String preStr = null;
 		int start, end;
 		String filePath = fManager.getFilePath();
@@ -515,11 +515,18 @@ public class Controller  implements MapModuleChangeObserver {
 						if(tmpStr.indexOf("<img") > -1)
 							imgXml = tmpStr;
 					}
-					
-					RichContent richContent = (RichContent)pXstream.fromXML(tmpXml);
+					try{
+						RichContent richContent = (RichContent)pXstream.fromXML(tmpXml);
+						nodeText = richContent.html.get(0).body.get(0).p.get(0).toString();
+					}
+					catch (Exception e) {
+						nodeText = "use special symbol";
+						
+					}	
+						
 					ImgClass imgClass = (ImgClass)imgXstream.fromXML(imgXml);
-					
-					nodeText = richContent.html.get(0).body.get(0).p.get(0).toString();
+						
+						
 					nodeImg = imgClass.src.toString();
 					
 					start = nodeImg.indexOf(filePath);

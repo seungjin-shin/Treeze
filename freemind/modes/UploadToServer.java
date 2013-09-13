@@ -802,10 +802,20 @@ public class UploadToServer {
 				
 				System.out.println("checkVersion : " + str);
 				Gson gson = new Gson();
-				ArrayVersion arrayVersion = gson.fromJson(str, ArrayVersion.class);
-				Version version = arrayVersion.getVersion();
+				Version version = null;
 				
-			EntityUtils.consume(resEntity);
+				try{
+					ArrayVersion arrayVersion = gson.fromJson(str,
+							ArrayVersion.class);
+					version = arrayVersion.getVersion();
+				}
+				catch (Exception e) {
+					new TextDialogue(getCurFrame(), "Server error, try again after 1 minute.", true);
+					e.printStackTrace();
+					System.exit(0);
+				}
+				
+				EntityUtils.consume(resEntity);
 			return version.getVersion();
 				
 		} catch (IOException e) {
