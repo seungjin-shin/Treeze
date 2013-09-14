@@ -10,10 +10,10 @@ public class BlockScreenSaverThread extends Thread{
 		try {
 			Robot robot = new Robot();
 			while (true) {
-				Thread.sleep(60 * 1000); // one minute
-				robot.keyPress(KeyEvent.VK_SHIFT);
+				Thread.sleep(55 * 1000); // one minute
+				robot.keyPress(KeyEvent.VK_F14);
 				Thread.sleep(50);
-				robot.keyRelease(KeyEvent.VK_SHIFT);
+				robot.keyRelease(KeyEvent.VK_F14);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

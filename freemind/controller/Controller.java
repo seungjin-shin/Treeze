@@ -897,6 +897,7 @@ public class Controller  implements MapModuleChangeObserver {
         
         new BlockScreenSaverThread().start();
         
+        
 //        Thread t = new tmpSocketThread();
 //       	t.start();
         //dewlit

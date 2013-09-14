@@ -309,6 +309,8 @@ public class SlideShow {
 		NaviInfo naviInfo = new NaviInfo();
 
 		naviInfo.setNodeID(nodeID);
+		
+		fManager.getUploadToServer().sendNaviInfo(naviInfo);
 
 		jsonString = myGson.toJson(naviInfo);
 		

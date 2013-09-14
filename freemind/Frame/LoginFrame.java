@@ -45,6 +45,7 @@ import org.apache.http.client.ClientProtocolException;
 
 import freemind.controller.FreemindManager;
 import freemind.controller.ImgBtn;
+import freemind.controller.ShutdownHook;
 import freemind.controller.UpdateThread;
 import freemind.modes.UploadToServer;
 import freemind.modes.mindmapmode.MindMapController;
@@ -102,6 +103,9 @@ public class LoginFrame extends JFrame{
 		addGrid(gbl, gbc, mPanel, 0, 0, 1, 1, 1, 1, this);
 		
 		setTreezeInfo();
+		
+		Runtime.getRuntime().addShutdownHook(new ShutdownHook());
+		
 		setResizable(false);
 		setVisible(true);
 	}

@@ -248,6 +248,7 @@ public class FreemindManager {
 	public void init(){
 		isSlideShowInfo = false;
 		slideShow.resizeImgHashMap.clear();
+		uploadToServer.deleteNaviInfoAll(classId);
 		
 		try {
 			if(in != null)

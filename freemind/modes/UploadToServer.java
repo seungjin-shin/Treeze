@@ -37,6 +37,7 @@ import freemind.json.ArrayUser;
 import freemind.json.ArrayVersion;
 import freemind.json.ClassInfo;
 import freemind.json.Lecture;
+import freemind.json.NaviInfo;
 import freemind.json.Ticket;
 import freemind.json.TreezeData;
 import freemind.json.User;
@@ -783,9 +784,6 @@ public class UploadToServer {
 		  HttpClient httpClient = new DefaultHttpClient();
 	       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/getLastVersion?userType=" + Version.PROFESSOR);
 	       String str = "";
-	       MultipartEntity multipart = new MultipartEntity(
-					HttpMultipartMode.BROWSER_COMPATIBLE, null,
-					Charset.forName("UTF-8"));  // xml, classId, LectureName 				
 		try {
 			HttpResponse response = httpClient.execute(get);
 			
@@ -832,9 +830,6 @@ public class UploadToServer {
 		  HttpClient httpClient = new DefaultHttpClient();
 	       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/existsEmail?userEmail=" + email);
 	       String str = "";
-	       MultipartEntity multipart = new MultipartEntity(
-					HttpMultipartMode.BROWSER_COMPATIBLE, null,
-					Charset.forName("UTF-8"));  // xml, classId, LectureName 				
 		try {
 			HttpResponse response = httpClient.execute(get);
 			
@@ -865,6 +860,78 @@ public class UploadToServer {
 			System.exit(0);
 		}
 		return false;
+	  }
+	  
+	  public void sendNaviInfo(NaviInfo naviInfo){
+
+		  
+			HttpClient httpClient = new DefaultHttpClient();
+	       HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createNaviInfo"); 
+	       
+	       MultipartEntity multipart = new MultipartEntity(
+					HttpMultipartMode.BROWSER_COMPATIBLE, null,
+					Charset.forName("UTF-8"));  // xml, classId, LectureName 			
+		try {
+			
+			StringBody naviBody = new StringBody(naviInfo.getNodeID(), Charset.forName("UTF-8"));
+			StringBody classIdBody = new StringBody(fManager.getClassId() + "", Charset.forName("UTF-8"));
+
+			multipart.addPart("nodeID", naviBody);
+			multipart.addPart("classId", classIdBody);
+			
+			post.setEntity(multipart);
+			HttpResponse response = httpClient.execute(post);
+			HttpEntity resEntity = response.getEntity();
+			
+			InputStream inputStream = resEntity.getContent();
+	    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+	    	  String str = "";
+	    	  String tmp;
+	    	  
+				while((tmp = in.readLine()) != null )
+					str += tmp;
+			
+				EntityUtils.consume(resEntity);
+				
+		} catch (IOException e) {
+			new TextDialogue(getCurFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
+		}
+		  
+	  }
+	  
+	  public void deleteNaviInfoAll(int classId){
+
+		  
+		  HttpClient httpClient = new DefaultHttpClient();
+	       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/deleteNaviInfoAll?classId=" + classId);
+	       String str = "";
+		try {
+			HttpResponse response = httpClient.execute(get);
+			
+			HttpEntity resEntity = response.getEntity();
+			
+			InputStream inputStream = resEntity.getContent();
+	    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+	    	  
+	    	  String tmp;
+	    	  
+				while((tmp = in.readLine()) != null )
+					str += tmp;
+				
+				System.out.println("checkEmail : " + str);
+				
+				EntityUtils.consume(resEntity);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			new TextDialogue(getCurFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
+		}
 	  }
 	  
 }
