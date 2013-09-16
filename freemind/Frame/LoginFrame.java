@@ -104,8 +104,6 @@ public class LoginFrame extends JFrame{
 		
 		setTreezeInfo();
 		
-		Runtime.getRuntime().addShutdownHook(new ShutdownHook());
-		
 		setResizable(false);
 		setVisible(true);
 	}

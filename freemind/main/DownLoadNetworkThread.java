@@ -38,7 +38,7 @@ public class DownLoadNetworkThread extends Thread {
 		}
 		public DownLoadNetworkThread(Long classId2, int flag, ArrayList<UploadedFile> uploadedFileList) {
 			// TODO Auto-generated constructor stub
-			this.classId = classId;
+			this.classId = classId2;
 			this.flag = flag;
 			this.uploadedFileList = uploadedFileList;
 		}

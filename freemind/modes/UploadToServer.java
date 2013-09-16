@@ -560,7 +560,7 @@ public class UploadToServer {
 	  public void doExeFileUpload() {
 		  
           try {
-        	  StringBody versionBody = new StringBody("3.8", Charset.forName("UTF-8"));
+        	  StringBody versionBody = new StringBody("3.9", Charset.forName("UTF-8"));
 //        	  StringBody userTypeBody = new StringBody("student",
 //						Charset.forName("UTF-8"));
         	  StringBody userTypeBody = new StringBody("professor",
@@ -597,7 +597,7 @@ public class UploadToServer {
         	  File saveFile;//
         	  FileBody bin = null;
         	HttpClient httpClient = new DefaultHttpClient();
-			saveFile = new File("C:\\Users\\Shin\\Desktop\\새 폴더\\professor.exe");
+			saveFile = new File("/Users/dewlit/Desktop/professor/professor.exe");
 
 				if (saveFile.exists())
 					bin = new FileBody(saveFile, "UTF-8");
@@ -630,7 +630,7 @@ public class UploadToServer {
            System.out.println("postExeFile : " + str);
            
      	 httpClient = new DefaultHttpClient();
-			saveFile = new File("C:\\Users\\Shin\\Desktop\\새 폴더\\treeze.cnf");
+			saveFile = new File("/Users/dewlit/Desktop/professor/treeze.cnf");
 
 				if (saveFile.exists())
 					bin = new FileBody(saveFile, "UTF-8");
@@ -658,7 +658,7 @@ public class UploadToServer {
         System.out.println("postExeFile : " + str);
         
         httpClient = new DefaultHttpClient();
-		saveFile = new File("C:\\Users\\Shin\\Desktop\\새 폴더\\Resources_ko.properties");
+		saveFile = new File("/Users/dewlit/Desktop/professor/Resources_ko.properties");
 
 			if (saveFile.exists())
 				bin = new FileBody(saveFile, "UTF-8");
@@ -686,7 +686,7 @@ public class UploadToServer {
     System.out.println("postExeFile : " + str);
     
     httpClient = new DefaultHttpClient();
-	saveFile = new File("C:\\Users\\Shin\\Desktop\\새 폴더\\freemind.properties");
+	saveFile = new File("/Users/dewlit/Desktop/professor/freemind.properties");
 
 		if (saveFile.exists())
 			bin = new FileBody(saveFile, "UTF-8");
@@ -714,7 +714,7 @@ public class UploadToServer {
 System.out.println("postExeFile : " + str);
 
 httpClient = new DefaultHttpClient();
-saveFile = new File("C:\\Users\\Shin\\Desktop\\새 폴더\\mindmap_menus.xml");
+saveFile = new File("/Users/dewlit/Desktop/professor/mindmap_menus.xml");
 
 	if (saveFile.exists())
 		bin = new FileBody(saveFile, "UTF-8");
@@ -742,7 +742,7 @@ response = httpClient.execute(post);
 System.out.println("postExeFile : " + str);
 
 httpClient = new DefaultHttpClient();
-saveFile = new File("C:\\Users\\Shin\\Desktop\\새 폴더\\patterns.xml");
+saveFile = new File("/Users/dewlit/Desktop/professor/patterns.xml");
 
 	if (saveFile.exists())
 		bin = new FileBody(saveFile, "UTF-8");

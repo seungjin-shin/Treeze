@@ -897,6 +897,8 @@ public class Controller  implements MapModuleChangeObserver {
         
         new BlockScreenSaverThread().start();
         
+        Runtime.getRuntime().addShutdownHook(new ShutdownHook());
+        
         
 //        Thread t = new tmpSocketThread();
 //       	t.start();

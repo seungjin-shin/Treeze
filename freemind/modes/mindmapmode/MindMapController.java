@@ -634,7 +634,6 @@ public class MindMapController extends ControllerAdapter implements MindMapActio
             reader = new InputStreamReader(getResource("patterns.xml")
                     .openStream());
         }
-        fManager.setReadyFreemind(true);
         return reader;
     }
 
