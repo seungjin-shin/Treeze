@@ -16,6 +16,7 @@ import com.thoughtworks.xstream.io.json.AbstractJsonWriter.Type;
 import com.treeze.data.ArrayUploadedFile;
 import com.treeze.data.TreezeStaticData;
 import com.treeze.data.UploadedFile;
+import com.treeze.frame.ProfileFrame;
 
 public class DownLoadNetworkThread extends Thread {
 
@@ -28,10 +29,12 @@ public class DownLoadNetworkThread extends Thread {
 		int flag = NETWORK_UPLOADED_FILEINFO;
 		Gson gson = new Gson();
 		ArrayList<UploadedFile> uploadedFileList = new ArrayList<UploadedFile>();
+		static ProfileFrame profileFrame;
 		//Message msg = new Message();
-		public DownLoadNetworkThread(long classId) {
+		public DownLoadNetworkThread(long classId,ProfileFrame profileFrame) {
 			// TODO Auto-generated constructor stub
 			this.classId = classId;
+		    this.profileFrame  = profileFrame;
 		}
 		public DownLoadNetworkThread(Long classId, int flag, ArrayList<UploadedFile> uploadedFileList) {
 			// TODO Auto-generated constructor stub
@@ -74,13 +77,14 @@ public class DownLoadNetworkThread extends Thread {
 						while ((bufferLength = inputStream.read(buffer)) > 0)
 
 						{
-
+							System.out.println("Downloading File");
 							fileOutput.write(buffer, 0, bufferLength);
 
 						}
 
 						fileOutput.close();
 					}
+					this.profileFrame.startMindMapFrame();
 					//networkHandler.sendMessage(msg);
 					return;
 				} 

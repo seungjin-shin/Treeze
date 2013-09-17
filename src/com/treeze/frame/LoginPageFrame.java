@@ -391,6 +391,7 @@ public class LoginPageFrame extends JFrame{
 				user.setUserType(arrayUser.getUser().getUserType());
 				user.setUserEmail(arrayUser.getUser().getUserEmail());
 				user.setUserImgId(arrayUser.getUser().getUserImgId());
+				user.setIdentificationNumber((arrayUser.getUser().getIdentificationNumber()));
 			
 				System.out.println("[user] = "+User.getInstance().getUserName());
 				System.out.println("[user] = "+arrayUser.getUser().getUserName());

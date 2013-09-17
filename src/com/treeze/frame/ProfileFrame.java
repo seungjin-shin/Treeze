@@ -525,8 +525,7 @@ public class ProfileFrame extends JFrame {
 					ClassInfo.getInstance().setLectureId(classInfo.getLectureId());
 					ClassInfo.getInstance().setClassName(classInfo.getClassName());
 					
-					DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(
-							classId);
+					DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(classId,ProfileFrame.this);
 					downLoadNetworkThread.start();
 					networkFlag = NETWORK_FLAG_GET_MINDMAP;
 					NetworkThread networkThread = new NetworkThread();
@@ -538,6 +537,7 @@ public class ProfileFrame extends JFrame {
 					fullPanel.repaint();
 					btnPanel.setVisible(false);
 					btnPanel.setVisible(true);
+					ProfileFrame.this.setVisible(false);
 				
 
 				}
@@ -670,7 +670,7 @@ public class ProfileFrame extends JFrame {
 					if (networkFlag == NETWORK_FLAG_GET_MINDMAP) {
 
 						// new MindMapMain(sbResult.toString());
-						startMindMapFrame();
+						
 						// System.out.println(sbResult.toString());
 					} else if (networkFlag == NETWORK_FLAG_GET_LECTURELIST)
 						updateGetallLectureList();
@@ -767,7 +767,7 @@ public class ProfileFrame extends JFrame {
 
 	}
 
-	void startMindMapFrame() {
+	public void startMindMapFrame() {
 		java.lang.reflect.Type type = new TypeToken<Mindmap>() {
 		}.getType();
 		System.out.println(sbResult.toString());
@@ -777,7 +777,7 @@ public class ProfileFrame extends JFrame {
 				.getMindmap().getMindmapXML(), classInfo);
 		MainFrameManager mainFrameManager = new MainFrameManager(mindmapMain,
 				classInfo);
-		this.setVisible(false);
+		
 		
 	}
 

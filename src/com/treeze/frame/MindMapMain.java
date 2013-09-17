@@ -54,6 +54,7 @@ import com.treeze.data.TreezeStaticData;
 import com.treeze.data.User;
 import com.treeze.data.Survey.Survey;
 import com.treeze.downloadthread.DownLoadAllTicket;
+import com.treeze.downloadthread.GetNaviInfoThread;
 
 public class MindMapMain extends JPanel {
 	static MindNode md;
@@ -126,7 +127,8 @@ public class MindMapMain extends JPanel {
 
 		SocketThread socketThread = new SocketThread(classinfo);
 		socketThread.start();
-		
+		GetNaviInfoThread getNaviInfoThread = new GetNaviInfoThread();
+		getNaviInfoThread.start();
 		setVisible(true);
 		init(); // 占썬�占썸에占쏙옙占쏙옙占쏙옙占�(?占썩�占썹�占썰빳占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙);
 
@@ -359,6 +361,7 @@ public class MindMapMain extends JPanel {
 				socket = new Socket(ip, port);
 				sv = ServerSocket.getInstance();
 				sv.setSocket(socket);
+				System.out.println("[New Socket 생성]");
 				}
 				else{
 				sv = ServerSocket.getInstance();
@@ -392,11 +395,13 @@ public class MindMapMain extends JPanel {
 
 					// 쨘?占쏙옙?占시몌옙?쩔쨍쨘??
 					os.write((gson.toJson(treezeData).getBytes("UTF-8")));
+					System.out.println("[소켓 보냄 ]" + gson.toJson(treezeData));
 					os.flush();
 					byte[] b = new byte[2048];
 					// 쨘?占쏙옙?占승울옙?쩔쩔짜??
 					
 					int cnt  = is.read(b);
+					
 					str = str = new String(b, 0, cnt, "UTF-8");
 					System.out.println("server send : " + str);
 
@@ -420,16 +425,29 @@ public class MindMapMain extends JPanel {
 				} catch (UnknownHostException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+					//TextDialogue t = new TextDialogue(getMainFrameManager(), "1 "+e1.getMessage(), true);
+//					SocketThread socketThread = new SocketThread(classInfo);
+//					 socketThread.start();
 			
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+//					socket = new Socket(ip, port);
+//					sv = ServerSocket.getInstance();
+//					sv.setSocket(socket);
+//					System.out.println("[Socket Reset]");
+					//TextDialogue t = new TextDialogue(getMainFrameManager(), "2 "+e1.getMessage(), true);
+//					SocketThread socketThread = new SocketThread(classInfo);
+//					 socketThread.start();
 			
 				}
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				//TextDialogue t = new TextDialogue(getMainFrameManager(), "3 "+e.getMessage(), true);
+//				 SocketThread socketThread = new SocketThread(classInfo);
+//				 socketThread.start();
 			
 			}
 
