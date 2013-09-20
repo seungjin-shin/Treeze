@@ -24,14 +24,14 @@ public class UserSpecifications {
 		};
 	}
 	
-	public static Specification<User> isIdentificationNumber(final Integer identificationNumber){
+	public static Specification<User> isIdentificationNumber(final String identificationNumber){
 		return new Specification<User>() {
 
 			@Override
 			public Predicate toPredicate(Root<User> root,
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
 				// TODO Auto-generated method stub
-				return cb.equal(root.<Integer>get(User_.identificationNumber), identificationNumber);
+				return cb.equal(root.<String>get(User_.identificationNumber), identificationNumber);
 			}
 		};
 	}

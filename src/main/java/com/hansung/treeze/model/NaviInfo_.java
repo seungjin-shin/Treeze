@@ -3,7 +3,7 @@ package com.hansung.treeze.model;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@StaticMetamodel(Note.class) 
+@StaticMetamodel(NaviInfo.class) 
 public class NaviInfo_ {
 	
 

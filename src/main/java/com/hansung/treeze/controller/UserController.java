@@ -76,7 +76,7 @@ public class UserController {
 	
 	@RequestMapping(value = "/existsIdentificationNumber", method = RequestMethod.GET)
 	public String existsIdentificationNumber(@RequestParam("identificationNumber") String identificationNumber, ModelMap map) {
-		boolean isRegistedIdentificationNumber = userService.existsIdentificationNumber(new Integer(identificationNumber));
+		boolean isRegistedIdentificationNumber = userService.existsIdentificationNumber(identificationNumber);
 		
 		if(isRegistedIdentificationNumber){
 			return "true";

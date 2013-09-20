@@ -18,7 +18,7 @@ public class User extends AbstractPersistable<Long>  {
 	
 	private int userImgId;  
 	private String userType;
-	private int identificationNumber;
+	private String identificationNumber;
 	private String userName;
 	private String userEmail;
 	private String password;
@@ -54,10 +54,10 @@ public class User extends AbstractPersistable<Long>  {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public int getIdentificationNumber() {
+	public String getIdentificationNumber() {
 		return identificationNumber;
 	}
-	public void setIdentificationNumber(int identificationNumber) {
+	public void setIdentificationNumber(String identificationNumber) {
 		this.identificationNumber = identificationNumber;
 	}
 }

@@ -8,6 +8,6 @@ public interface UserService {
 	User saveUser(User user);
 	User findByEmail(String email);
 	boolean existsUserEmail(String userEmail);
-	boolean existsIdentificationNumber(Integer identificationNumber);
+	boolean existsIdentificationNumber(String identificationNumber);
 
 }

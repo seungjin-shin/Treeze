@@ -42,4 +42,10 @@ public class TicketServiceImpl implements TicketService{
 		ticketRepository.delete(ticket);
 		
 	}
+
+	@Override
+	public Object getMyTickets(Long classId, String userEmail) {
+		// TODO Auto-generated method stub
+		return ticketRepository.findAll(TicketSpecifications.isTicketsOnParentNodeId(classId,userEmail));
+	}
 }

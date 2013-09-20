@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public boolean existsIdentificationNumber(Integer identificationNumber) {
+	public boolean existsIdentificationNumber(String identificationNumber) {
 		// TODO Auto-generated method stub
 		
 		User user = userRepository.findOne(Specifications.where(UserSpecifications.isIdentificationNumber(identificationNumber)));
