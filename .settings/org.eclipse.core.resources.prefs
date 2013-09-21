@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/com/treeze/data/MindNode.java=UTF-8
 encoding//src/com/treeze/frame/BugReportFrame.java=UTF-8
+encoding//src/com/treeze/frame/ImgDownloadProgreesBar.java=UTF-8
 encoding//src/com/treeze/frame/LoginPageFrame.java=UTF-8
 encoding//src/com/treeze/frame/MindMapMain.java=UTF-8
 encoding//src/com/treeze/frame/ProfileFrame.java=UTF-8

@@ -24,7 +24,7 @@ public class MemoPanel extends ComponentJPanel {
 	Point point = new Point();
 	JTextArea textArea;
 	int margin;
-	final static int TEXTAREA_MARGIN = 20;
+	final static int TEXTAREA_MARGIN =0;
 	// ComponentSizeController csc;
 	int foldSize;
 	MemoPanel memoPanel;

@@ -8,8 +8,8 @@ import java.awt.Insets;
 
 public class AddGrid {
 	Insets insets = new Insets(0, 0, 0, 0);
-	GridBagLayout gbl = new GridBagLayout();
-	GridBagConstraints gbc = new GridBagConstraints();
+	public GridBagLayout gbl = new GridBagLayout();
+	public GridBagConstraints gbc = new GridBagConstraints();
 	
 	public AddGrid() {
 		gbc.fill = GridBagConstraints.BOTH;

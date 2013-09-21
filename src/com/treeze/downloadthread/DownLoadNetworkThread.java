@@ -16,6 +16,7 @@ import com.thoughtworks.xstream.io.json.AbstractJsonWriter.Type;
 import com.treeze.data.ArrayUploadedFile;
 import com.treeze.data.TreezeStaticData;
 import com.treeze.data.UploadedFile;
+import com.treeze.frame.ImgDownloadProgreesBar;
 import com.treeze.frame.ProfileFrame;
 
 public class DownLoadNetworkThread extends Thread {
@@ -54,8 +55,10 @@ public class DownLoadNetworkThread extends Thread {
 							"http://"+ ip+":8080/treeze/img/?classId="
 									+ classId);
 				} else if (flag == NETWORK_UPLOADED_IMG) {
+					ImgDownloadProgreesBar imgDownloadProgreesBar = new ImgDownloadProgreesBar();
+					int imgProgressBarCompleteValue;
 					for (int i = 0; i < uploadedFileList.size(); i++) {
-
+						imgProgressBarCompleteValue = uploadedFileList.size();
 						// File file = new
 						// File("http://61.43.139.10:8080/treeze/img/"+uploadedFileList.get(i).getId());
 						url = new URL("http://"+ip+":8080/treeze/img/"
@@ -77,13 +80,14 @@ public class DownLoadNetworkThread extends Thread {
 						while ((bufferLength = inputStream.read(buffer)) > 0)
 
 						{
-							System.out.println("Downloading File");
+							
 							fileOutput.write(buffer, 0, bufferLength);
 
 						}
-
+						imgDownloadProgreesBar.changeProgressBar((int)((double)i/(double)imgProgressBarCompleteValue*100));
 						fileOutput.close();
 					}
+					imgDownloadProgreesBar.downloadEnd();
 					this.profileFrame.startMindMapFrame();
 					//networkHandler.sendMessage(msg);
 					return;

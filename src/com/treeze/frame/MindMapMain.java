@@ -68,7 +68,7 @@ public class MindMapMain extends JPanel {
 	Image scaledImage;
 	BufferedImage imageBuff;
 	ImageIcon resizeIcon;
-	Dimension dimension = new Dimension();
+	Dimension dimension ;
 	private ArrayList<MindNode> nodes = new ArrayList<MindNode>();
 	MindNode root;
 	MainFrameManager mainFrameManager;
@@ -118,8 +118,8 @@ public class MindMapMain extends JPanel {
 		DownLoadAllTicket downLoadAllTicket = new DownLoadAllTicket(classinfo);
 		downLoadAllTicket.start();
 		
-		nodeScrollPanel = new ScrollPanel(); // 占썬�占썸에?占쏙옙 占쏙옙占썩�占�占쏙옙
-		jsp = new JScrollPane(nodeScrollPanel); // 占썬�占썸에占쏙옙?占쏙옙占쏙옙?占쏙옙
+		nodeScrollPanel = new ScrollPanel(); 
+		jsp = new JScrollPane(nodeScrollPanel);
 		
 		this.add(jsp);
 
@@ -130,7 +130,7 @@ public class MindMapMain extends JPanel {
 		GetNaviInfoThread getNaviInfoThread = new GetNaviInfoThread();
 		getNaviInfoThread.start();
 		setVisible(true);
-		init(); // 占썬�占썸에占쏙옙占쏙옙占쏙옙占�(?占썩�占썹�占썰빳占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙);
+		
 
 	
 		
@@ -140,8 +140,11 @@ public class MindMapMain extends JPanel {
 	public void paint(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paint(g);
+		if(dimension ==null){
+		dimension = new Dimension();
 		dimension = getSize();
 		init();
+		}
 		System.out.println("[MindMapMain getWidth]  = "+dimension.getWidth());
 	}
 
@@ -393,7 +396,7 @@ public class MindMapMain extends JPanel {
 					PrintWriter pw = new PrintWriter(osw);
 					BufferedReader in = new BufferedReader(new InputStreamReader(is));
 
-					// 쨘?占쏙옙?占시몌옙?쩔쨍쨘??
+					
 					os.write((gson.toJson(treezeData).getBytes("UTF-8")));
 					System.out.println("[소켓 보냄 ]" + gson.toJson(treezeData));
 					os.flush();
@@ -432,14 +435,7 @@ public class MindMapMain extends JPanel {
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-//					socket = new Socket(ip, port);
-//					sv = ServerSocket.getInstance();
-//					sv.setSocket(socket);
-//					System.out.println("[Socket Reset]");
-					//TextDialogue t = new TextDialogue(getMainFrameManager(), "2 "+e1.getMessage(), true);
-//					SocketThread socketThread = new SocketThread(classInfo);
-//					 socketThread.start();
-			
+
 				}
 
 			} catch (IOException e) {

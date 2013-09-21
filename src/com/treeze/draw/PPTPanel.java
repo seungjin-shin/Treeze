@@ -243,9 +243,9 @@ public class PPTPanel extends JPanel {
 							if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
 								// shift를 누르고 있으므로 직선을 그린다.
 								if (sm.getCurLineMode() == StateManager.LINE_MODE_STRAIGHT) {
-
-									nm.makePath(
-											new LinePoint(e.getX(), pressY),
+										System.out.println("asd");
+									nm.makeLinePath(
+											new LinePoint(e.getX(), e.getY()),
 											sm.getColor(), sm.getBs());
 
 								} else {

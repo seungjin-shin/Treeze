@@ -54,7 +54,7 @@ class LinePoint {
 	int y;
 	double rateX;
 	double rateY;
-	
+	static LinePoint beforeLinePoint;
 	protected LinePoint(int x, int y) {
 		// TODO Auto-generated constructor stub
 		this.x = x;
