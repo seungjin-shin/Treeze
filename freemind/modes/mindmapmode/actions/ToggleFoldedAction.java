@@ -129,7 +129,7 @@ public class ToggleFoldedAction extends AbstractAction implements ActorXml {
 
 	public void act(XmlAction action) {
 		if (action instanceof FoldAction) {
-			System.out.println("ToggleFoldedAction " + modeController.getSelected().getText()); // Æú´õ Á¢Èû action remove
+//			System.out.println("ToggleFoldedAction " + modeController.getSelected().getText()); // Æú´õ Á¢Èû action remove
 			
 //			if (modeController.getSelected().isQuestion()) {
 				FoldAction foldAction = (FoldAction) action;

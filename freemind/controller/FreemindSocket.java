@@ -263,6 +263,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.logging.Logger;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -297,13 +299,15 @@ public class FreemindSocket extends Thread {
 		byte[] b = new byte[1024];
 		TreezeData treezeData;
 		Gson gson = new Gson();
-
+		Logger logger = fManager.getLogger();
+		logger.info("start socket");
 		while (true) {
 			try {
 				cnt = in.read(b);
 				
 				if (cnt == -1) {
 					// c.getNaviOs().remove(os); // remove Client at Err
+					logger.severe("read -1 cnt");
 					break;
 				} else {
 					String rcvStr = null;
@@ -314,6 +318,7 @@ public class FreemindSocket extends Thread {
 						e.printStackTrace();
 					}
 					System.out.println("FindMindSocket - rcvStr : " + rcvStr);
+					logger.info("rcvStr : " + rcvStr);
 					
 					treezeData = gson.fromJson(rcvStr, TreezeData.class);
 					
@@ -342,13 +347,13 @@ public class FreemindSocket extends Thread {
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				logger.severe("socket catch");
+				logger.severe(e.toString());
 				e.printStackTrace();
 				break;
 			} // 받는 부분
-			
 		}
+		logger.info("socket end");
 		System.out.println("socket end");
-
 	}
-
 }

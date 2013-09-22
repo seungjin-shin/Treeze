@@ -8,6 +8,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -142,6 +147,37 @@ public class FreemindManager {
 	
 	private int lodingValue = 0;
 	
+	private Logger logger = Logger.getLogger("treeze");
+
+
+	FileHandler fileHandler;
+	
+	ArrayList<String> logStrArr = new ArrayList<String>();
+	
+	public ArrayList<String> getLogStrArr() {
+		return logStrArr;
+	}
+
+	public void addFileHandler(Logger logger) {
+		
+	    Calendar oCalendar = Calendar.getInstance( );  // 현재 날짜/시간 등의 각종 정보 얻기
+		String curTime =  oCalendar.get(Calendar.YEAR) + "" + (oCalendar.get(Calendar.MONTH) + 1) + "" + oCalendar.get(Calendar.DAY_OF_MONTH) + "" + oCalendar.get(Calendar.HOUR_OF_DAY) + "" + oCalendar.get(Calendar.MINUTE) + "" + oCalendar.get(Calendar.SECOND); 
+        try {
+            // 파일저장
+            fileHandler = new FileHandler(downPath + File.separator + curTime + "treeze.log");
+            logStrArr.add(downPath + File.separator + curTime + "treeze.log");
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        logger.addHandler(fileHandler);
+    }
+	
+	public Logger getLogger() {
+		return logger;
+	}
+	
 	public void startProgThread(String title){
     	ProgressThread progThread = new ProgressThread(title);
 		progThread.start();
@@ -245,8 +281,11 @@ public class FreemindManager {
 	public void setMode(String mode) {
 		this.mode = mode;
 	}
+	
 	public void init(){
+		logger.removeHandler(fileHandler);
 		isSlideShowInfo = false;
+		logger.removeHandler(fileHandler);
 		slideShow.resizeImgHashMap.clear();
 		uploadToServer.deleteNaviInfoAll(classId);
 		

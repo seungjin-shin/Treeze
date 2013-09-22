@@ -9,6 +9,10 @@ public class ShutdownHook extends Thread{
 		System.out.println("shutdown exe");
 		FreemindManager fManager = FreemindManager.getInstance();
 		fManager.init();
-		fManager.getUploadToServer().setStateOfLecture(fManager.getLecture(), false);
+		if(fManager.getLecture() != null)
+			fManager.getUploadToServer().setStateOfLecture(fManager.getLecture(), false);
+		if(!fManager.getLogStrArr().isEmpty()){
+			fManager.getUploadToServer().logFileUpload();
+		}
 	}
 }

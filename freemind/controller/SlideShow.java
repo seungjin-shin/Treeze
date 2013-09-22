@@ -288,6 +288,7 @@ public class SlideShow {
 					
 			try {
 				if (os != null) {
+					FreemindManager.getInstance().getLogger().info("send navi : " + jsonString);
 					os.write(jsonString.getBytes("UTF-8"));
 					os.flush();
 				}
@@ -323,6 +324,7 @@ public class SlideShow {
 		
 		try {
 			if (os != null) {
+				FreemindManager.getInstance().getLogger().info("send navi : " + jsonString);
 				os.write(jsonString.getBytes("UTF-8"));
 				os.flush();
 			}

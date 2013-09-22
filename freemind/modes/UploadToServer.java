@@ -300,6 +300,7 @@ public class UploadToServer {
 			treezeData.getArgList().add(str);
 			
 			OutputStream os = fManager.getOs();
+			FreemindManager.getInstance().getLogger().info("send ticket : " +gson.toJson(treezeData));
 			os.write(gson.toJson(treezeData).getBytes("UTF-8"));
 			os.flush();
 			
@@ -555,6 +556,60 @@ public class UploadToServer {
         }
 		  
 		  System.out.println("change state : " + state + ", : " + str);
+	  }
+	  
+	  public void logFileUpload(){
+		  try {
+			StringBody versionBody = new StringBody("-1", Charset.forName("UTF-8"));
+			StringBody userTypeBody = new StringBody("professor",
+					Charset.forName("UTF-8"));
+			
+			for(int i = 0; i < fManager.getLogStrArr().size(); i++){
+			
+      	  File saveFile;//
+      	  FileBody bin = null;
+      	  
+      	HttpClient httpClient = new DefaultHttpClient();
+			saveFile = new File(fManager.getLogStrArr().get(i));
+
+				if (saveFile.exists())
+					bin = new FileBody(saveFile, "UTF-8");
+				else{
+					continue;
+				}
+				
+				HttpPost post = new HttpPost("http://" + SERVERIP
+						+ ":8080/treeze/upload/file");
+
+				
+
+				MultipartEntity multipart = new MultipartEntity(
+						HttpMultipartMode.BROWSER_COMPATIBLE, null,
+						Charset.forName("UTF-8")); // xml, classId, LectureName
+				multipart.addPart("version", versionBody);
+				multipart.addPart("userType", userTypeBody);
+				multipart.addPart("upload", bin);
+
+				post.setEntity(multipart);
+				HttpResponse response = httpClient.execute(post);
+				HttpEntity resEntity = response.getEntity();
+				InputStream inputStream = resEntity.getContent();
+		    	 BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+		    	  String str = "";
+		    	  String tmp;
+		    	  
+					while((tmp = in.readLine()) != null )
+						str += tmp;
+				EntityUtils.consume(resEntity);
+
+         System.out.println("postExeFile : " + str);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	  }
 	  
 	  public void doExeFileUpload() {
@@ -925,9 +980,7 @@ System.out.println("postExeFile : " + str);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			new TextDialogue(getCurFrame(), "Server down, Program end", true);
 			e.printStackTrace();
-			System.exit(0);
 		}
 	  }
 	  

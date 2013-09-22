@@ -138,7 +138,7 @@ public class SurveyFrame extends JFrame{
 
 		}
 
-		protected void paintComponent(Graphics g) { // ??θ??? ???? ???????
+		protected void paintComponent(Graphics g) { // ??罐??? ???? ???????
 			super.paintComponent(g);
 			int width = getWidth();
 			int height = getHeight();
@@ -290,7 +290,7 @@ public class SurveyFrame extends JFrame{
 			this.getViewport().add(textArea);
 		}
 
-		protected void paintComponent(Graphics g) { // ??θ??? ???? ???????
+		protected void paintComponent(Graphics g) { // ??罐??? ???? ???????
 			
 			int width = getWidth();
 			int height = getHeight();
@@ -393,7 +393,7 @@ public class SurveyFrame extends JFrame{
 		}
 
 		@Override
-		public void focusGained(FocusEvent e) { // Æ÷Ä¿½º¸¦ ¾ò¾ú
+		public void focusGained(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 쩐챵쩐첬
 			if (this.getText().isEmpty()) {
 				super.setText("");
 			}
@@ -402,7 +402,7 @@ public class SurveyFrame extends JFrame{
 		}
 
 		@Override
-		public void focusLost(FocusEvent e) { // Æ÷Ä¿½º¸¦ 
+		public void focusLost(FocusEvent e) { // �첨�쩔쩍쨘쨍짝 
 			if (this.getText().isEmpty()) {
 				Font f = new Font(hint, Font.ITALIC, 10);
 				setFont(f);
@@ -452,6 +452,7 @@ public class SurveyFrame extends JFrame{
 			treezeData.getArgList().add(gson.toJson(survey));
 			
 			try {
+				FreemindManager.getInstance().getLogger().info("send survey: " +gson.toJson(treezeData));
 				FreemindManager.getInstance().getOs().write(gson.toJson(treezeData).getBytes("UTF-8"));
 				FreemindManager.getInstance().getOs().flush();
 			} catch (UnsupportedEncodingException e) {
