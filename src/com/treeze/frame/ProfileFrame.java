@@ -75,8 +75,8 @@ public class ProfileFrame extends JFrame {
 	ImageIcon imgIcon;
 	User user;
 	ArrayList<ClassInfo> classList = new ArrayList<ClassInfo>();
-	NameLabel nameLabel ;
-	PersonalInfo personalInfo ;
+	NameLabel nameLabel;
+	PersonalInfo personalInfo;
 	ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
 	ListPanel listPanel;
 	PicturePanel picturePanel = new PicturePanel(
@@ -90,7 +90,8 @@ public class ProfileFrame extends JFrame {
 			TreezeStaticData.MYCOURSE_IMG, TreezeStaticData.MYCOURSE_PRESS_IMG,
 			TreezeStaticData.MYCOURSE_ENTER_IMG);
 	AllLectureListBtn allLectureListBtn = new AllLectureListBtn(
-			TreezeStaticData.ALLCOURSE_IMG, TreezeStaticData.ALLCOURSE_PRESS_IMG,
+			TreezeStaticData.ALLCOURSE_IMG,
+			TreezeStaticData.ALLCOURSE_PRESS_IMG,
 			TreezeStaticData.ALLCOURSE_ENTER_IMG);
 	AddLectureListBtn addLectureBtn = new AddLectureListBtn(
 			TreezeStaticData.ADD_COURSE_IMG,
@@ -99,7 +100,10 @@ public class ProfileFrame extends JFrame {
 	AllLectureListBtn logoutBtn = new AllLectureListBtn(
 			TreezeStaticData.PROFILE_IMG, TreezeStaticData.PROFILE_PRESS_IMG,
 			TreezeStaticData.PROFILE_ENTER_IMG);
-	DeleteCourseBtn deleteCourseBtn = new DeleteCourseBtn(TreezeStaticData.DELETE_COURSE_IMG, TreezeStaticData.DELETE_COURSE_PRESS_IMG, TreezeStaticData.DELETE_COURSE_ENTER_IMG);
+	DeleteCourseBtn deleteCourseBtn = new DeleteCourseBtn(
+			TreezeStaticData.DELETE_COURSE_IMG,
+			TreezeStaticData.DELETE_COURSE_PRESS_IMG,
+			TreezeStaticData.DELETE_COURSE_ENTER_IMG);
 
 	static JPanel grid = new JPanel();
 	JPanel fullPanel = new JPanel();
@@ -134,7 +138,8 @@ public class ProfileFrame extends JFrame {
 		user = User.getInstance();
 		// C:\Users\ÔøΩƒ∞ÔøΩ\Desktop
 		nameLabel = new NameLabel(user.getUserName());
-		personalInfo = new PersonalInfo(user.getUserType(), user.getUserEmail(),"");
+		personalInfo = new PersonalInfo(user.getUserType(),
+				user.getUserEmail(), "");
 		setLayout(new BorderLayout());
 		this.add(fullPanel);
 		logoPanel = new LogoPanel();
@@ -193,14 +198,14 @@ public class ProfileFrame extends JFrame {
 		addGrid(gbl, gbc, dumy, 0, 3, 1, 1, 1, 3, profilePanel);
 		listPanel.getViewport().add(grid, null);
 		NetworkThread networkThread = new NetworkThread();
-		networkFlag =NETWORK_FLAG_GET_MY_LECTURE_LIST;
+		networkFlag = NETWORK_FLAG_GET_MY_LECTURE_LIST;
 		networkThread.start();
 		this.setSize(1100, 600);
 		this.setVisible(true);
 		grid.addMouseWheelListener(new ListPanelMouseWheelListener(listPanel));
 
 	}
-	
+
 	private void addGrid(GridBagLayout gbl, GridBagConstraints gbc,
 			Component c, int gridx, int gridy, int gridwidth, int gridheight,
 			int weightx, int weighty, Container container) {
@@ -289,11 +294,12 @@ public class ProfileFrame extends JFrame {
 		public PersonalInfo(String userType, String userEmail, String address) {
 			// TODO Auto-generated constructor stub
 			sc = new JLabel(userType);
-		
+
 			this.setLayout(new GridLayout(3, 1, 3, 3));
 			this.setSize(this.getWidth(), this.getHeight());
 			this.job = new JLabel(userEmail);
-			this.address = new JLabel(User.getInstance().getIdentificationNumber()+"");
+			this.address = new JLabel(User.getInstance()
+					.getIdentificationNumber() + "");
 			this.setBackground(new Color(0, 0, 0, 0));
 			this.setBorder(new EmptyBorder(10, 0, 10, 0));
 
@@ -303,7 +309,6 @@ public class ProfileFrame extends JFrame {
 			this.labelset(this.sc);
 			this.labelset(this.address);
 			this.labelset(this.job);
-			
 
 		}
 
@@ -381,6 +386,7 @@ public class ProfileFrame extends JFrame {
 		Lecture lecture;
 		JScrollPane jsp;
 		JCheckBox deleteChkBox = new JCheckBox();
+
 		public LectureListItem(final Lecture lecture) {
 			// TODO Auto-generated constructor stub
 			this.lecture = lecture;
@@ -486,7 +492,7 @@ public class ProfileFrame extends JFrame {
 			classNm.setFont(new Font("Serif", Font.BOLD, 20));
 			// this.setFont(new Font("Serif", Font.BOLD, 15));
 			this.add(classNm);
-			
+
 			this.addMouseListener(new MouseListener() {
 
 				@Override
@@ -522,10 +528,13 @@ public class ProfileFrame extends JFrame {
 					classId = classInstance.getClassId();
 					classInfo = classInstance;
 					ClassInfo.getInstance().setClassId(classInfo.getClassId());
-					ClassInfo.getInstance().setLectureId(classInfo.getLectureId());
-					ClassInfo.getInstance().setClassName(classInfo.getClassName());
-					
-					DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(classId,ProfileFrame.this);
+					ClassInfo.getInstance().setLectureId(
+							classInfo.getLectureId());
+					ClassInfo.getInstance().setClassName(
+							classInfo.getClassName());
+
+					DownLoadNetworkThread downLoadNetworkThread = new DownLoadNetworkThread(
+							classId, ProfileFrame.this);
 					downLoadNetworkThread.start();
 					networkFlag = NETWORK_FLAG_GET_MINDMAP;
 					NetworkThread networkThread = new NetworkThread();
@@ -538,14 +547,14 @@ public class ProfileFrame extends JFrame {
 					btnPanel.setVisible(false);
 					btnPanel.setVisible(true);
 					ProfileFrame.this.setVisible(false);
-				
 
 				}
 
 				@Override
-				public void mousePressed(MouseEvent e) {}
+				public void mousePressed(MouseEvent e) {
+				}
 			});
-			
+
 		}
 
 		@Override
@@ -636,10 +645,9 @@ public class ProfileFrame extends JFrame {
 							+ ":8080/treeze/getAllLectures");
 
 				} else if (networkFlag == NETWORK_FLAG_GET_MY_LECTURE_LIST) {
-					url = new URL(
-							"http://"
-									+ ip
-									+ ":8080/treeze/getMyCourses?studentEmail="+user.getUserEmail());
+					url = new URL("http://" + ip
+							+ ":8080/treeze/getMyCourses?studentEmail="
+							+ user.getUserEmail());
 				} else {
 					url = new URL("http://" + ip
 							+ ":8080/treeze/getClasses?lectureId=" + lectureId);
@@ -670,7 +678,7 @@ public class ProfileFrame extends JFrame {
 					if (networkFlag == NETWORK_FLAG_GET_MINDMAP) {
 
 						// new MindMapMain(sbResult.toString());
-						
+
 						// System.out.println(sbResult.toString());
 					} else if (networkFlag == NETWORK_FLAG_GET_LECTURELIST)
 						updateGetallLectureList();
@@ -684,7 +692,6 @@ public class ProfileFrame extends JFrame {
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-
 
 			}
 
@@ -711,7 +718,7 @@ public class ProfileFrame extends JFrame {
 			grid.add(lectureListItem);
 
 		}
-		
+
 		lectureHead.setVisible(true);
 		fullPanel.setVisible(false);
 		fullPanel.setVisible(true);
@@ -777,8 +784,7 @@ public class ProfileFrame extends JFrame {
 				.getMindmap().getMindmapXML(), classInfo);
 		MainFrameManager mainFrameManager = new MainFrameManager(mindmapMain,
 				classInfo);
-		
-		
+
 	}
 
 	class ProfileMouseListener implements MouseListener {
@@ -899,7 +905,8 @@ public class ProfileFrame extends JFrame {
 			repaint();
 		}
 	}
-	class DeleteCourseBtn extends ImgBtn{
+
+	class DeleteCourseBtn extends ImgBtn {
 
 		public DeleteCourseBtn(Image defaultImg, Image pressImg, Image enterImg) {
 			super(defaultImg, pressImg, enterImg);
@@ -911,7 +918,7 @@ public class ProfileFrame extends JFrame {
 			// TODO Auto-generated method stub
 
 			int chkCnt = 0;
-		
+
 			for (int i = 0; i < chkBoxList.size(); i++) {
 				JCheckBox tmp = chkBoxList.get(i);
 				if (tmp.isSelected()) {
@@ -922,30 +929,30 @@ public class ProfileFrame extends JFrame {
 							lecture.getLectureId() + "",
 							lecture.getLectureName(), user.getUserEmail());
 					deleteCourseBtn.start();
-					
+
 				}
 			}
 			repaint();
-			if(chkCnt>0){
-			TextDialogue textDialogue = new TextDialogue(ProfileFrame.this, "Course registration has been canceled", true);
-			NetworkThread networkThread = new NetworkThread();
-			networkFlag = NETWORK_FLAG_GET_MY_LECTURE_LIST;
-			networkThread.start();
+			if (chkCnt > 0) {
+				TextDialogue textDialogue = new TextDialogue(ProfileFrame.this,
+						"Course registration has been canceled", true);
+				NetworkThread networkThread = new NetworkThread();
+				networkFlag = NETWORK_FLAG_GET_MY_LECTURE_LIST;
+				networkThread.start();
 			}
-			
-		
-			
+
 		}
-		
+
 	}
+
 	public class AddLectureListBtn extends ImgBtn {
-		TextDialogue completeLectureAdd ;
+		TextDialogue completeLectureAdd;
 		TextDialogue textDialogue;
+
 		public AddLectureListBtn(final Image defaultImg, final Image pressImg,
 				final Image enterImg) {
 			// TODO Auto-generated constructor stub
 			super(defaultImg, pressImg, enterImg);
-			
 
 		}
 
@@ -964,7 +971,7 @@ public class ProfileFrame extends JFrame {
 		@Override
 		public void Action() {
 			int chkCnt = 0;
-			
+
 			for (int i = 0; i < chkBoxList.size(); i++) {
 				JCheckBox tmp = chkBoxList.get(i);
 				if (tmp.isSelected()) {
@@ -972,29 +979,32 @@ public class ProfileFrame extends JFrame {
 					Lecture lecture = lectureList.get(i);
 					CreateLecture createLecture = new CreateLecture(
 							lecture.getLectureId() + "",
-							lecture.getLectureName(), user.getUserEmail(),AddLectureListBtn.this);
+							lecture.getLectureName(), user.getUserEmail(),
+							AddLectureListBtn.this);
 					createLecture.start();
-					
+
 				}
 			}
 			repaint();
-			if(chkCnt>0){
-				completeLectureAdd=  new TextDialogue(ProfileFrame.this, "Course registration has been completed", true);
+			if (chkCnt > 0) {
+				completeLectureAdd = new TextDialogue(ProfileFrame.this,
+						"Course registration has been completed", true);
 				NetworkThread networkThread = new NetworkThread();
 				networkFlag = NETWORK_FLAG_GET_MY_LECTURE_LIST;
-				networkThread.start(); 
-		     }
-			
+				networkThread.start();
+			}
+
 		}
+
 		public void resultAddLecture(String result) {
-			if(textDialogue==null)
-			textDialogue = new TextDialogue(ProfileFrame.this, result, true);
+			if (textDialogue == null)
+				textDialogue = new TextDialogue(ProfileFrame.this, result, true);
 			textDialogue.setVisible(true);
-			if(completeLectureAdd!=null)
+			if (completeLectureAdd != null)
 				completeLectureAdd.setVisible(false);
-			
+
 		}
-		
+
 	}
 
 }

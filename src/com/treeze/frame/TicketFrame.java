@@ -341,8 +341,11 @@ public class TicketFrame extends JPanel {
 			// TODO Auto-generated constructor stub
 			this.ticket = ticket;
 			noLabel = new JLabel("", JLabel.CENTER);
-
-			contentsLabel = new JLabel(ticket.getContents(), JLabel.LEFT);
+			String depthOfTicket = new String();
+			for(int i=0;i<ticket.DepthofTicket();i++){
+				depthOfTicket = depthOfTicket +"  ";
+			}
+			contentsLabel = new JLabel(depthOfTicket+ticket.getContents(), JLabel.LEFT);
 			jsp = new JScrollPane(contentsLabel);
 
 			jsp.setBorder(null);

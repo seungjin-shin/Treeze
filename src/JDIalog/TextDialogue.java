@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -51,6 +53,31 @@ public class TextDialogue extends JDialog{
 		
 		
 		this.setResizable(false);
+		closeBtn.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+			
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(arg0.getKeyCode());
+				if(arg0.getKeyCode()==10||arg0.getKeyCode()==27){
+					closeDialogue();
+				}
+				
+			}
+		});
 		setVisible(true);
 		
 	}

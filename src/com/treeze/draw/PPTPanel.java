@@ -231,6 +231,7 @@ public class PPTPanel extends JPanel {
 						// TODO Auto-generated method stub
 						// pen 모드중은 두개로 구분된다.
 						// curMouseMode = MOUSE_STATE_DRAGGED;
+						
 						sm.setCurMouseMode(StateManager.MOUSE_STATE_DRAGGED);
 
 						setCursor(sm.getCurStateCursor());
@@ -247,17 +248,12 @@ public class PPTPanel extends JPanel {
 									nm.makeLinePath(
 											new LinePoint(e.getX(), e.getY()),
 											sm.getColor(), sm.getBs());
-
 								} else {
-
 									nm.makePath(
 											new LinePoint(e.getX(), e.getY()),
 											sm.getColor(), sm.getBs());
-
 								}
-
 							} else if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
-
 								nm.makeFigure(pressX, pressY,
 										e.getX() - pressX, e.getY() - pressY,
 										sm.getCurFigureMode());

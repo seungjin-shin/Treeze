@@ -68,18 +68,17 @@ public class MindMapMain extends JPanel {
 	Image scaledImage;
 	BufferedImage imageBuff;
 	ImageIcon resizeIcon;
-	Dimension dimension ;
+	Dimension dimension;
 	private ArrayList<MindNode> nodes = new ArrayList<MindNode>();
 	MindNode root;
 	MainFrameManager mainFrameManager;
-	
 
 	JScrollPane jsp;
 	JButton j;
 	public ScrollPanel nodeScrollPanel = new ScrollPanel();
 	CubicCurve2D.Float graph = new CubicCurve2D.Float();
 	java.awt.Dimension screenSize;
-	
+
 	Graphics g;
 	ClassInfo classinfo;
 	User user;
@@ -90,72 +89,67 @@ public class MindMapMain extends JPanel {
 	public MindMapMain(String xml, ClassInfo classinfo) {
 		// TODO Auto-generated constructor stub
 		screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		//setTitle(classinfo.getClassName());
+		// setTitle(classinfo.getClassName());
 		this.classinfo = classinfo;
-	//	setDefaultCloseOperation(EXIT_ON_CLOSE);
+		// setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.user = user;
 		MindNode.setClassinfo(classinfo);
 
-	//	this.getContentPane().setBackground(Color.white);
-		
+		// this.getContentPane().setBackground(Color.white);
 
 		this.setLayout(new BorderLayout());
-
 
 		XStream xstream = new XStream();
 		xstream.processAnnotations(MindMap.class);
 		xstream.alias("icon", Icon.class);
-		
-		
+
 		MindMap map = (MindMap) xstream.fromXML(xml);
 
-		root = new MindNode(map.nodes.get(0).NODEID,map.nodes.get(0).getTEXT(),
-				(int) SCROLLFRAME_WIDTH/2, SCROLLFRAME_HEIGHT/2,this);
+		root = new MindNode(map.nodes.get(0).NODEID,
+				map.nodes.get(0).getTEXT(), (int) SCROLLFRAME_WIDTH / 2,
+				SCROLLFRAME_HEIGHT / 2, this);
 		nodes.add(root);
 		for (int i = 0; i < map.nodes.get(0).nodes.size(); i++) {
 			nodetoMindNode(root, map.nodes.get(0).nodes.get(i));
 		}
 		DownLoadAllTicket downLoadAllTicket = new DownLoadAllTicket(classinfo);
 		downLoadAllTicket.start();
-		
-		nodeScrollPanel = new ScrollPanel(); 
+
+		nodeScrollPanel = new ScrollPanel();
 		jsp = new JScrollPane(nodeScrollPanel);
-		
+
 		this.add(jsp);
 
-		//setSize(screenSize.width, screenSize.height);
+		// setSize(screenSize.width, screenSize.height);
 
 		SocketThread socketThread = new SocketThread(classinfo);
 		socketThread.start();
 		GetNaviInfoThread getNaviInfoThread = new GetNaviInfoThread();
 		getNaviInfoThread.start();
 		setVisible(true);
-		
-
-	
-		
 
 	}
+
 	@Override
 	public void paint(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paint(g);
-		if(dimension ==null){
-		dimension = new Dimension();
-		dimension = getSize();
-		init();
+		if (dimension == null) {
+			dimension = new Dimension();
+			dimension = getSize();
+			init();
 		}
-		System.out.println("[MindMapMain getWidth]  = "+dimension.getWidth());
+		
 	}
 
 	public void init() {
-		
+
 		jsp.getHorizontalScrollBar().setValue(2000);
-		jsp.getVerticalScrollBar().setValue((int) (root.getLocateY()-dimension.getHeight()/2));
-		jsp.getHorizontalScrollBar().setValue((int) (root.getLocateX()-dimension.getWidth()/2));
-
+		jsp.getVerticalScrollBar().setValue(
+				(int) (root.getLocateY() - dimension.getHeight() / 2));
+		jsp.getHorizontalScrollBar().setValue(
+				(int) (root.getLocateX() - dimension.getWidth() / 2));
 	}
-
 
 	class ScrollPanel extends JPanel {
 		private Point pp = new Point();
@@ -172,44 +166,44 @@ public class MindMapMain extends JPanel {
 				// else{
 				// node.getNodeBtn().setIcon(nodeImgIcon);
 				// }
-				ImageIcon ticketNewIcon  = TreezeStaticData.makeResizedImageIcon(20, 20, TreezeStaticData.TICKET_NEW_IMG);
+				ImageIcon ticketNewIcon = TreezeStaticData
+						.makeResizedImageIcon(20, 20,
+								TreezeStaticData.TICKET_NEW_IMG);
 				node.getTicketBtn().setIcon(ticketNewIcon);
 				node.getNodeBtn().setBounds(node.getLocateX(),
 						node.getLocateY(), node.getScaleX(), NODE_HEIGHT);
 				node.getPptBtn().setBounds(node.getLocateX(),
-						node.getLocateY()-10, 20, 20);
-				node.getTicketBtn().setBounds(node.getEndX()-20,
-						node.getLocateY()-20, 20, 20);
-				node.getNodeBtn().setFont(new Font("Serif",Font.BOLD,10));
+						node.getLocateY() - 10, 20, 20);
+				node.getTicketBtn().setBounds(node.getEndX() - 20,
+						node.getLocateY() - 20, 20, 20);
+				node.getNodeBtn().setFont(new Font("Serif", Font.BOLD, 10));
 				node.getNodeBtn().setText(node.getNodeStr());
 				node.getNodeBtn()
 						.setVerticalTextPosition(SwingConstants.CENTER);
 				node.getNodeBtn().setHorizontalTextPosition(
 						SwingConstants.CENTER);
-				
+
 				node.getNodeBtn().setBackground(new Color(0, 0, 0, 0));
-				
+
 				node.getTicketBtn().setBorderPainted(false);
 				node.getTicketBtn().setBorder(null);
 				node.getTicketBtn().setContentAreaFilled(false);
-				node.getTicketBtn().setFocusPainted(false); 
+				node.getTicketBtn().setFocusPainted(false);
 				node.getTicketBtn().setOpaque(false);
-				
+
 				node.getNodeBtn().setBorderPainted(false);
 				node.getNodeBtn().setBorder(null);
 				node.getNodeBtn().setContentAreaFilled(false);
-				node.getNodeBtn().setFocusPainted(false); 
+				node.getNodeBtn().setFocusPainted(false);
 				node.getNodeBtn().setOpaque(false);
-				//node.getNodeBtn().setMargin(new IØnsets(5, 5, 5, 5));
-				
-				
+				// node.getNodeBtn().setMargin(new IØnsets(5, 5, 5, 5));
+
 				this.add(node.getNodeBtn());
 				this.add(node.getTicketBtn());
 				node.getTicketBtn().setVisible(false);
-				//this.setComponentZOrder(this.getGraphics(), 0);
-//				this.setComponentZOrder(node.getNodeBtn(), 1);
-//				this.setComponentZOrder(node.j, 0);
-
+				// this.setComponentZOrder(this.getGraphics(), 0);
+				// this.setComponentZOrder(node.getNodeBtn(), 1);
+				// this.setComponentZOrder(node.j, 0);
 
 			}
 			this.setPreferredSize(new Dimension(SCROLLFRAME_WIDTH,
@@ -242,9 +236,9 @@ public class MindMapMain extends JPanel {
 					pp = e.getPoint();
 					System.out.println("MindMap Panel Mouse Click x = "
 							+ e.getX() + "y = " + e.getY());
-					
-					//asd.setLocationRelativeTo(MindMapMain.this);
-					
+
+					// asd.setLocationRelativeTo(MindMapMain.this);
+
 					// jsp.getHorizontalScrollBar().setValue(4000);
 				}
 
@@ -258,28 +252,25 @@ public class MindMapMain extends JPanel {
 
 		}
 
-	
-
-	
 		@Override
 		protected void paintComponent(Graphics g) {
 			// TODO Auto-generated method stub
 			super.paintComponent(g);
-			
-	//		System.out.println("MindMap PaintComponents");
+
+			// System.out.println("MindMap PaintComponents");
 			Graphics2D g2 = (Graphics2D) g;
 			// g2.drawLine(100, 100, 1001, 1010);
-		//	g2.scale(0.9, 0.9);
+			// g2.scale(0.9, 0.9);
 			g2.setStroke(new BasicStroke(2));
 			for (MindNode node : nodes) {
 				if (node.getParentNode() != null) {
 					if (node.getDirection() == 0) {
-						graph.setCurve((node.getParentNode().getEndX())-50, node
-								.getParentNode().getMiddleY(), (node
-								.getParentNode().getEndX()), node
-								.getParentNode().getMiddleY(), node
-								.getLocateX() - 80, node.getMiddleY(), node
-								.getLocateX(), node.getMiddleY());
+						graph.setCurve((node.getParentNode().getEndX()) - 50,
+								node.getParentNode().getMiddleY(), (node
+										.getParentNode().getEndX()), node
+										.getParentNode().getMiddleY(), node
+										.getLocateX() - 80, node.getMiddleY(),
+								node.getLocateX(), node.getMiddleY());
 					} else {
 
 						graph.setCurve(node.getEndX(), node.getMiddleY(),
@@ -288,7 +279,7 @@ public class MindMapMain extends JPanel {
 								.getParentNode().getLocateX(), node
 								.getParentNode().getMiddleY(),
 
-						node.getParentNode().getLocateX()+50,
+						node.getParentNode().getLocateX() + 50,
 
 						node.getParentNode().getMiddleY());
 
@@ -309,28 +300,31 @@ public class MindMapMain extends JPanel {
 			}
 
 		}
-		
+
 	}
+
 	public MainFrameManager getMainFrameManager() {
 		return mainFrameManager;
 	}
+
 	public void setMainFrameManager(MainFrameManager mainFrameManager) {
 		this.mainFrameManager = mainFrameManager;
 	}
- 
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+
 		TreezeStaticData t = new TreezeStaticData();
-		 LoginPageFrame l = new LoginPageFrame();
-		 l.setVisible(true);
+		LoginPageFrame l = new LoginPageFrame();
+		l.setVisible(true);
 
 	}
 
 	public void nodetoMindNode(MindNode parent, node child) {
-		if(child.getNODETYPESTR().equals("Question")) return;
-		MindNode temp = new MindNode(parent, child.NODEID,child.getTEXT(),
-				child.getPOSITION(),child.IMGPATH);
+		if (child.getNODETYPESTR().equals("Question"))
+			return;
+		MindNode temp = new MindNode(parent, child.NODEID, child.getTEXT(),
+				child.getPOSITION(), child.IMGPATH);
 		nodes.add(temp);
 		if (child.nodes != null)
 			for (int i = 0; i < child.nodes.size(); i++) {
@@ -343,7 +337,6 @@ public class MindMapMain extends JPanel {
 
 		InputStream inputStream;
 
-		
 		ClassInfo classInfo;
 
 		public SocketThread(ClassInfo classInfo) {
@@ -360,23 +353,22 @@ public class MindMapMain extends JPanel {
 			Gson gson = new Gson();
 			ServerSocket sv;
 			try {
-				if(ServerSocket.getInstance().getSocket()==null||ServerSocket.getInstance().getSocket().isClosed()){
-				socket = new Socket(ip, port);
-				sv = ServerSocket.getInstance();
-				sv.setSocket(socket);
-				System.out.println("[New Socket 생성]");
-				}
-				else{
-				sv = ServerSocket.getInstance();
+				if (ServerSocket.getInstance().getSocket() == null
+						|| ServerSocket.getInstance().getSocket().isClosed()) {
+					socket = new Socket(ip, port);
+					sv = ServerSocket.getInstance();
+					sv.setSocket(socket);
+					System.out.println("[New Socket 생성]");
+				} else {
+					sv = ServerSocket.getInstance();
 				}
 				System.out.println("[Socket Start]");
-				
+
 				// ClassInfo classInfo = new ClassInfo();
 				TreezeData treezeData = new TreezeData();
 				User user = User.getInstance();
 				// user 쨉?占승올��� 쨘쨘?占썩�
 				user.setUserType(User.STUDENT);
-				
 
 				// classInfo 쨉?占승올��� 쨘쨘?占썩�
 				classInfo.setClassName("������");
@@ -389,49 +381,51 @@ public class MindMapMain extends JPanel {
 				// IO Stream 쨘쨘?占썩�
 				InputStream is;
 				try {
-					is= sv.getSocket().getInputStream();
+					is = sv.getSocket().getInputStream();
 					java.io.OutputStream os = sv.getSocket().getOutputStream();
-					
+
 					OutputStreamWriter osw = new OutputStreamWriter(os);
 					PrintWriter pw = new PrintWriter(osw);
-					BufferedReader in = new BufferedReader(new InputStreamReader(is));
+					BufferedReader in = new BufferedReader(
+							new InputStreamReader(is));
 
-					
 					os.write((gson.toJson(treezeData).getBytes("UTF-8")));
 					System.out.println("[소켓 보냄 ]" + gson.toJson(treezeData));
 					os.flush();
 					byte[] b = new byte[2048];
 					// 쨘?占쏙옙?占승울옙?쩔쩔짜??
-					
-					int cnt  = is.read(b);
-					
+
+					int cnt = is.read(b);
+
 					str = str = new String(b, 0, cnt, "UTF-8");
 					System.out.println("server send : " + str);
 
 					// 쩔�廓?占승≤㎳￠�몌옙?
 					// Scanner scan = new Scanner(System.in);
 					// scan.next();
-					
-					
+
 					while (true) {
-						 cnt = is.read(b);
-						 if(cnt== -1){
-								TextDialogue t = new TextDialogue(getMainFrameManager(), "Socket End", true);
-								return;
-							}
-						 SocketDataHandlingThread socketDataHandlingThread = new SocketDataHandlingThread(b, cnt);
-						 socketDataHandlingThread.start();
+						cnt = is.read(b);
+						if (cnt == -1) {
+							TextDialogue t = new TextDialogue(
+									getMainFrameManager(), "Socket End", true);
+							return;
+						}
+						SocketDataHandlingThread socketDataHandlingThread = new SocketDataHandlingThread(
+								b, cnt);
+						socketDataHandlingThread.start();
 					}
-					
-				//	pw.close();
-					//socket.close();
+
+					// pw.close();
+					// socket.close();
 				} catch (UnknownHostException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-					//TextDialogue t = new TextDialogue(getMainFrameManager(), "1 "+e1.getMessage(), true);
-//					SocketThread socketThread = new SocketThread(classInfo);
-//					 socketThread.start();
-			
+					// TextDialogue t = new TextDialogue(getMainFrameManager(),
+					// "1 "+e1.getMessage(), true);
+					// SocketThread socketThread = new SocketThread(classInfo);
+					// socketThread.start();
+
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -441,31 +435,34 @@ public class MindMapMain extends JPanel {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				//TextDialogue t = new TextDialogue(getMainFrameManager(), "3 "+e.getMessage(), true);
-//				 SocketThread socketThread = new SocketThread(classInfo);
-//				 socketThread.start();
-			
+				// TextDialogue t = new TextDialogue(getMainFrameManager(),
+				// "3 "+e.getMessage(), true);
+				// SocketThread socketThread = new SocketThread(classInfo);
+				// socketThread.start();
+
 			}
 
 			// naviInputStream = naviSocket.getInputStream();
 		}
 	}
-	class SocketDataHandlingThread extends Thread{
+
+	class SocketDataHandlingThread extends Thread {
 		byte[] b = new byte[2048];
 		String str;
 		Gson gson = new Gson();
 		int cnt;
-		public SocketDataHandlingThread(byte[] b,int cnt) {
+
+		public SocketDataHandlingThread(byte[] b, int cnt) {
 			// TODO Auto-generated constructor stub
 			this.b = b;
 			this.cnt = cnt;
 		}
+
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			super.run();
 
-			
 			str = null;
 			try {
 				str = new String(b, 0, cnt, "UTF-8");
@@ -476,97 +473,91 @@ public class MindMapMain extends JPanel {
 			System.out.println(str);
 			java.lang.reflect.Type type = new TypeToken<TreezeData>() {
 			}.getType();
-			TreezeData jsonResultTreezeData = (TreezeData) gson
-					.fromJson(str, (java.lang.reflect.Type) type);
-			System.out.println(jsonResultTreezeData.getArgList()
-					.get(0));
-			if (jsonResultTreezeData.getDataType().equals(
-					TreezeData.NAVI)) {
-				
-				NaviInfo naviInfo = (NaviInfo) gson
-						.fromJson(jsonResultTreezeData
-								.getArgList().get(0), NaviInfo.class);
-				
-				MindNode naviNode =  MindNode.getNodeuseNodeID(MindNode.getRoot(),naviInfo.getNodeID());
-				
-					MindNode.setNav(naviNode);
-				
-				
-				
-				
+			TreezeData jsonResultTreezeData = (TreezeData) gson.fromJson(str,
+					(java.lang.reflect.Type) type);
+			System.out.println(jsonResultTreezeData.getArgList().get(0));
+			if (jsonResultTreezeData.getDataType().equals(TreezeData.NAVI)) {
+
+				NaviInfo naviInfo = (NaviInfo) gson.fromJson(
+						jsonResultTreezeData.getArgList().get(0),
+						NaviInfo.class);
+
+				MindNode naviNode = MindNode.getNodeuseNodeID(
+						MindNode.getRoot(), naviInfo.getNodeID());
+
+				MindNode.setNav(naviNode);
+
 				repaint();
-				
+
 			} else if (jsonResultTreezeData.getDataType().equals(
 					TreezeData.SURVEY)) {
 				type = new TypeToken<Survey>() {
 				}.getType();
-				Survey survey = (Survey) gson
-						.fromJson(jsonResultTreezeData
-								.getArgList().get(0), Survey.class);
+				Survey survey = (Survey) gson.fromJson(jsonResultTreezeData
+						.getArgList().get(0), Survey.class);
 				JDialogSurvey surveyDialog;
 				try {
-					surveyDialog = new JDialogSurvey(survey,ServerSocket.getInstance().getSocket().getOutputStream());
+					surveyDialog = new JDialogSurvey(survey, ServerSocket
+							.getInstance().getSocket().getOutputStream());
 					surveyDialog.setLocationRelativeTo(MindMapMain.this);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				
-				
-				//System.out.println("Survey");
-			} else if(jsonResultTreezeData.getDataType().equals(TreezeData.TICKET)){
+
+				// System.out.println("Survey");
+			} else if (jsonResultTreezeData.getDataType().equals(
+					TreezeData.TICKET)) {
 				System.out.println("Ticket");
-			
-				
-				JsonTicket ticket = (JsonTicket) gson
-						.fromJson(jsonResultTreezeData
-								.getArgList().get(0), JsonTicket.class);
-				
-				MindNode parentNode =  MindNode.getNodeuseNodeID(MindNode.getRoot(),ticket.getticket().getParentNodeId());
-				
-				new Ticket(parentNode, ticket.getticket().getId()+"",ticket.getticket().getContents(), ticket.getticket().getUserName());
-				
+
+				JsonTicket ticket = (JsonTicket) gson.fromJson(
+						jsonResultTreezeData.getArgList().get(0),
+						JsonTicket.class);
+
+				MindNode parentNode = MindNode.getNodeuseNodeID(MindNode
+						.getRoot(), ticket.getticket().getParentNodeId());
+
+				new Ticket(parentNode, ticket.getticket().getId() + "", ticket
+						.getticket().getContents(), ticket.getticket()
+						.getUserName());
+
 				MindNode node = parentNode;
-				while(node instanceof Ticket){
+				while (node instanceof Ticket) {
 					node = node.getParentNode();
 				}
 				node.getTicketBtn().setVisible(true); // New Icon add
 				mainFrameManager.ticketRepaint(node);
-				
-				
-				
+
 			}
-		
-		
+
 		}
 	}
 }
 
 @XStreamAlias("map")
-class MindMap{
+class MindMap {
 	@XStreamAsAttribute
 	String version;
-	
-	@XStreamImplicit(itemFieldName="node")
+
+	@XStreamImplicit(itemFieldName = "node")
 	ArrayList<node> nodes;
-	
+
 }
 
 @XStreamAlias("icon")
-class Icon implements Cloneable{
-	
+class Icon implements Cloneable {
+
 	@XStreamAsAttribute
 	String BUILTIN;
 }
+
 @XStreamAlias("node")
 class node implements Cloneable {
 
-
-	@XStreamImplicit(itemFieldName="node")
+	@XStreamImplicit(itemFieldName = "node")
 	ArrayList<node> nodes;
-	
-	@XStreamImplicit(itemFieldName="icon")
+
+	@XStreamImplicit(itemFieldName = "icon")
 	ArrayList<Icon> icons;
 
 	@XStreamAsAttribute
@@ -585,7 +576,7 @@ class node implements Cloneable {
 	String IMGPATH;
 	@XStreamAsAttribute
 	String NODETYPESTR;
-	
+
 	public ArrayList<Icon> getIcon() {
 		return icons;
 	}
@@ -593,7 +584,8 @@ class node implements Cloneable {
 	public void setIcon(ArrayList<Icon> icon) {
 		this.icons = icon;
 	}
-//icon
+
+	// icon
 	public String getNODETYPESTR() {
 		return NODETYPESTR;
 	}

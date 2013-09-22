@@ -760,7 +760,6 @@ public class MindNode {
 				.ChangeNodeImg(TreezeStaticData.NODE_BTN_IMG,
 						TreezeStaticData.NODE_PRESS_IMG,
 						TreezeStaticData.NODE_ENTER_IMG);
-
 		MindNode.setNow(now);
 	}
 
