@@ -191,8 +191,7 @@ public class MemoPanel extends ComponentJPanel {
 				// memoPanel.setBackground(Color.gray);
 				if (sm.getCurNoteMode() == StateManager.NOTE_MODE_GRAB) {
 					if (csc.isChangeSize(e, margin) || csc.isDrag(e, margin)) {
-						System.out
-								.println("asdfasdfdsafsadfasfdsafdasfasdfadsf");
+
 
 						getClickPanel().setFocusable(true);
 						memoPanel.setFocusable(false);
@@ -231,7 +230,10 @@ public class MemoPanel extends ComponentJPanel {
 
 		// TODO Auto-generated method stub
 		System.out.println("[textAreaChangeSize]");
-
+		if(getClickPanel()==null)
+		{
+			return;
+		}
 		if (getClickPanel().isVisible()) {
 			getClickPanel().removeClicked();
 		}
