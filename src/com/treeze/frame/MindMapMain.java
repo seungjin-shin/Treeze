@@ -126,6 +126,7 @@ public class MindMapMain extends JPanel {
 		socketThread.start();
 		GetNaviInfoThread getNaviInfoThread = new GetNaviInfoThread();
 		getNaviInfoThread.start();
+		TreezeStaticData.addFileHandler();
 		setVisible(true);
 
 	}
@@ -421,6 +422,7 @@ public class MindMapMain extends JPanel {
 				} catch (UnknownHostException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+					
 					// TextDialogue t = new TextDialogue(getMainFrameManager(),
 					// "1 "+e1.getMessage(), true);
 					// SocketThread socketThread = new SocketThread(classInfo);
@@ -428,13 +430,20 @@ public class MindMapMain extends JPanel {
 
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
+					TreezeStaticData.logger.info(("[Student Socket IOException] "+e1.getMessage()));
 					e1.printStackTrace();
+					
 
+				}
+				catch (Exception e) {
+					// TODO: handle exception
+					
 				}
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				TreezeStaticData.logger.info(("[Student Socket IOException] "+e.getMessage()));
 				// TextDialogue t = new TextDialogue(getMainFrameManager(),
 				// "3 "+e.getMessage(), true);
 				// SocketThread socketThread = new SocketThread(classInfo);

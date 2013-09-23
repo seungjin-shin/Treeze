@@ -79,8 +79,7 @@ public class ProfileFrame extends JFrame {
 	PersonalInfo personalInfo;
 	ArrayList<Lecture> lectureList = new ArrayList<Lecture>();
 	ListPanel listPanel;
-	PicturePanel picturePanel = new PicturePanel(
-			"/Users/Kunyoung/Desktop/seungjin.png");
+	PicturePanel picturePanel = new PicturePanel();
 	private static final Insets insets = new Insets(10, 10, 10, 10);
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
@@ -251,7 +250,7 @@ public class ProfileFrame extends JFrame {
 	class PicturePanel extends JPanel {
 		ImageIcon icon;
 
-		public PicturePanel(String imgPath) {
+		public PicturePanel() {
 			// TODO Auto-generated constructor stub
 			// imgIcon = new ImageIcon(imgPath);
 			this.setBorder(new EmptyBorder(20, 20, 20, 20));

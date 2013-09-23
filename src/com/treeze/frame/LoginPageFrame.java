@@ -148,7 +148,7 @@ public class LoginPageFrame extends JFrame{
 				}
 				catch (Exception e) {
 					// TODO: handle exception
-					new TextDialogue(LoginPageFrame.this, "Server down, Program end", true);
+					new TextDialogue(LoginPageFrame.this, "Server error, try again after 1 minute.", true);
 					e.printStackTrace();
 					System.exit(0);
 				}

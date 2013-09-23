@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.TextField;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -11,9 +12,12 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.MouseInputAdapter;
 
 /*
@@ -70,7 +74,7 @@ public class MemoPanel extends ComponentJPanel {
 				ptPanel.repaint();
 				textArea.setBackground(new Color(0, 0, 0, 0));
 				memoPanel.setBackground(new Color(0, 0, 0, 0));
-
+				System.out.println("[focusLost]");
 			}
 
 			@Override
@@ -78,74 +82,93 @@ public class MemoPanel extends ComponentJPanel {
 				// TODO Auto-generated method stub
 				textArea.setBackground(Color.white);
 				memoPanel.setBackground(Color.gray);
-
+				System.out.println("[focusGain]");
 			}
 		});
-
-		textArea.addKeyListener(new KeyListener() {
-
+		textArea.getDocument().addDocumentListener(new DocumentListener() {
+			
 			@Override
-			public void keyTyped(KeyEvent arg0) {
-
+			public void removeUpdate(DocumentEvent arg0) {
 				// TODO Auto-generated method stub
-				System.out.println("type");
-
-				if (getClickPanel().isVisible()) {
-					getClickPanel().removeClicked();
-				}
-
-				Dimension textAreaDimention = textArea.getPreferredSize();
-				getClickPanel().setVisible(false);
-				if (textAreaDimention.width < 10) {
-					csc.setSize(60, 60);
-					return;
-				}
-
-				if (arg0.getKeyCode() == 10) {// Enter key
-
-					textArea.setSize(textArea.getPreferredSize());
-					csc.setSize(textAreaDimention.width
-							+ textArea.getFont().getSize() + TEXTAREA_MARGIN,
-							textAreaDimention.height
-									+ textArea.getFont().getSize()
-									+ textArea.getFont().getSize()
-									+ TEXTAREA_MARGIN);
-					getClickPanel().setSize(
-							textAreaDimention.width
-									+ textArea.getFont().getSize()
-									+ TEXTAREA_MARGIN,
-							textAreaDimention.height
-									+ textArea.getFont().getSize()
-									+ textArea.getFont().getSize()
-									+ TEXTAREA_MARGIN);
-				} else {
-
-					textArea.setSize(textArea.getPreferredSize());
-					csc.setSize(textAreaDimention.width
-							+ textArea.getFont().getSize() + TEXTAREA_MARGIN,
-							textAreaDimention.height
-									+ textArea.getFont().getSize()
-									+ TEXTAREA_MARGIN);
-					getClickPanel().setSize(
-							textAreaDimention.width
-									+ textArea.getFont().getSize()
-									+ TEXTAREA_MARGIN,
-							textAreaDimention.height
-									+ textArea.getFont().getSize()
-									+ TEXTAREA_MARGIN);
-				}
-
+				textAreaChangeSize();
 			}
-
+			
 			@Override
-			public void keyReleased(KeyEvent arg0) {
+			public void insertUpdate(DocumentEvent arg0) {
+				// TODO Auto-generated method stub
+				textAreaChangeSize();			
 			}
-
+			
 			@Override
-			public void keyPressed(KeyEvent arg0) {
-
+			public void changedUpdate(DocumentEvent arg0) {
+				// TODO Auto-generated method stub
+			
 			}
 		});
+//		textArea.addKeyListener(new KeyListener() {   //한글입력시 한글 리스너가 이상하게 동작해서 DocumentListner를 사용//
+//
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//
+//				// TODO Auto-generated method stub
+//				System.out.println("type");
+//
+//				if (getClickPanel().isVisible()) {
+//					getClickPanel().removeClicked();
+//				}
+//
+//				Dimension textAreaDimention = textArea.getPreferredSize();
+//				getClickPanel().setVisible(false);
+//				if (textAreaDimention.width < 10) {
+//					csc.setSize(60, 60);
+//					return;
+//				}
+//
+//				// Enter key
+//
+//					textArea.setSize(textArea.getPreferredSize());
+//					csc.setSize(textAreaDimention.width
+//							+ textArea.getFont().getSize() + TEXTAREA_MARGIN,
+//							textAreaDimention.height
+//									+ textArea.getFont().getSize()
+//									
+//									);
+//					getClickPanel().setSize(
+//							textAreaDimention.width
+//									+ textArea.getFont().getSize()
+//									+ TEXTAREA_MARGIN,
+//							textAreaDimention.height
+//									+ textArea.getFont().getSize()
+//									);
+////				} else {
+////
+////					textArea.setSize(textArea.getPreferredSize());
+////					csc.setSize(textAreaDimention.width
+////							+ textArea.getFont().getSize() + TEXTAREA_MARGIN,
+////							textAreaDimention.height
+////									+ textArea.getFont().getSize()
+////									);
+////					getClickPanel().setSize(
+////							textAreaDimention.width
+////									+ textArea.getFont().getSize()
+////									+ TEXTAREA_MARGIN,
+////							textAreaDimention.height
+////									+ textArea.getFont().getSize()
+////									);
+////				}
+//
+//			}
+//
+//			@Override
+//			public void keyReleased(KeyEvent arg0) {
+//				System.out.println("key Released");
+//			}
+//
+//			@Override
+//			public void keyPressed(KeyEvent arg0) {
+//				System.out.println("key Press");
+//			}
+//		});
 
 		MouseInputAdapter mia = new MouseInputAdapter() {
 
@@ -202,6 +225,45 @@ public class MemoPanel extends ComponentJPanel {
 		textArea.addMouseMotionListener(mia);
 	}
 
+	protected void textAreaChangeSize() {
+		// TODO Auto-generated method stub
+
+
+		// TODO Auto-generated method stub
+		System.out.println("[textAreaChangeSize]");
+
+		if (getClickPanel().isVisible()) {
+			getClickPanel().removeClicked();
+		}
+
+		Dimension textAreaDimention = textArea.getPreferredSize();
+		getClickPanel().setVisible(false);
+		if (textAreaDimention.width < 10) {
+			csc.setSize(60, 60);
+			return;
+		}
+
+
+			textArea.setSize(textArea.getPreferredSize());
+			csc.setSize(textAreaDimention.width
+					+ textArea.getFont().getSize() + TEXTAREA_MARGIN,
+					textAreaDimention.height
+							+ textArea.getFont().getSize()
+							
+							);
+			getClickPanel().setSize(
+					textAreaDimention.width
+							+ textArea.getFont().getSize()
+							+ TEXTAREA_MARGIN,
+					textAreaDimention.height
+							+ textArea.getFont().getSize()
+							);
+		
+
+	
+		
+	}
+
 	public void setText(String text) {
 		textArea.setText(text);
 		Dimension textAreaDimention = textArea.getPreferredSize();
@@ -218,23 +280,7 @@ public class MemoPanel extends ComponentJPanel {
 		return textArea.getText();
 	}
 
-	// private void unfold() {
-	// psc.setCurFoldMode(ComponentSizeController.FOLD_MODE_UNFOLD);
-	// psc.setSize(psc.getOriginalWidth(), psc.getOriginalHeight());
-	// textArea.setSize(psc.getWidth() - margin, psc.getWidth() - margin);
-	// textArea.setVisible(true);
-	// }
-	//
-	// private void fold() {
-	// psc.setOriginalWidth(psc.getWidth());
-	// psc.setOriginalHeight(psc.getHeight());
-	// psc.setSize(foldSize, foldSize);
-	// textArea.setSize(psc.getWidth() - margin, psc.getWidth() - margin);
-	// textArea.setVisible(false);
-	// psc.setCurFoldMode(ComponentSizeController.FOLD_MODE_FOLD);
-	//
-	//
-	// }
+
 
 	@Override
 	public void addToPanel(JPanel jpanel, NoteManager nm) {
