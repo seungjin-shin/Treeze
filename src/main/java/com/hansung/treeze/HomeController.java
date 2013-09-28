@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +28,7 @@ public class HomeController {
 	
 		try {
 			logger.info("Socket start");
-			new SocketServer().init();
+			new SocketManager().init();
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,7 +54,7 @@ public class HomeController {
 		return "home";
 	}
 	
-	// ÇÇÇÇÆ¼ ÇöÀç¼ø¼­ÀÇ ³ëµåÀÇ À§Ä¡°ªÀ» ¾Ë·ÁÁÖ´Â°Å..
+	// ï¿½ï¿½ï¿½ï¿½Æ¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ë·ï¿½ï¿½Ö´Â°ï¿½..
 	@RequestMapping(value = "/mindmap", method = RequestMethod.GET)
 	@ResponseBody
 	public String flowOfLecture(@RequestParam("id") Long id,ModelMap map){
@@ -63,8 +62,8 @@ public class HomeController {
 		return "ok"+id;
 	}
 	
-	//XML ¹Þ¾Æ¼­ ÀúÀåÇÏ´Â ºÎºÐ 
-	// ÀÌ¹ÌÁö ¹Þ¾Æ¼­ ÀúÀåÇÏ´Â ºÎºÐ
+	//XML ï¿½Þ¾Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Îºï¿½ 
+	// ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Îºï¿½
 	// 
 	
 }

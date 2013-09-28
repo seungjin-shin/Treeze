@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-import com.hansung.treeze.StudentSocketManager;
 import com.hansung.treeze.TreezeData;
 
 @SuppressWarnings("serial")
@@ -24,7 +22,7 @@ public class SurveyManager extends HttpServlet implements Runnable {
 			.getLogger(SurveyManager.class);
 	private Thread surveyManager;
 	private Socket professorSocket = null;
-	private ArrayList<StudentSocketManager> studentSocketManagerList = new ArrayList<StudentSocketManager>();
+	//private ArrayList<StudentSocketManager> studentSocketManagerList = new ArrayList<StudentSocketManager>();
 
 	private Survey survey;
 	// private BufferedReader in;
@@ -72,13 +70,13 @@ public class SurveyManager extends HttpServlet implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if (studentSocketManagerList.size() == survey
+		/*	if (studentSocketManagerList.size() == survey
 					.getTotalNumberOfStudents()) {
 				logger.info("==========================");
 				logger.info("설문인원이 다 응답했으므로 끝");
 				logger.info("==========================");
 				break;
-			}
+			}*/
 		}
 	
 		logger.info("==========================");
@@ -132,7 +130,7 @@ public class SurveyManager extends HttpServlet implements Runnable {
 		}
 
 	}
-
+/*
 	public ArrayList<StudentSocketManager> getStudentSocketManagerList() {
 		return studentSocketManagerList;
 	}
@@ -145,7 +143,7 @@ public class SurveyManager extends HttpServlet implements Runnable {
 	public Socket getProfessorSocket() {
 		return professorSocket;
 	}
-
+*/
 	public void setProfessorSocket(Socket professorSocket) {
 		this.professorSocket = professorSocket;
 
