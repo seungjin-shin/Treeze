@@ -33,7 +33,7 @@ public class QuizServiceImpl implements QuizService{
 	public List<Quiz> getQuizes(Long classId, String nodeId) {
 		// TODO Auto-generated method stub
 		return quizRepository.findAll(Specifications
-				.where(QuizSpecifications.isQuizId(nodeId)));
+				.where(QuizSpecifications.isQuizNodeId(nodeId)));
 	}
 	
 	@Override

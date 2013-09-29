@@ -54,16 +54,4 @@ public class HomeController {
 		return "home";
 	}
 	
-	// ����Ƽ ������� ����� ��ġ���� �˷��ִ°�..
-	@RequestMapping(value = "/mindmap", method = RequestMethod.GET)
-	@ResponseBody
-	public String flowOfLecture(@RequestParam("id") Long id,ModelMap map){
-		//logger.info(""+Long.toString(id));
-		return "ok"+id;
-	}
-	
-	//XML �޾Ƽ� �����ϴ� �κ� 
-	// �̹��� �޾Ƽ� �����ϴ� �κ�
-	// 
-	
 }

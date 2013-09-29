@@ -14,7 +14,7 @@ import com.hansung.treeze.model.Quiz_;
 public class QuizSpecifications {
 	
 
-	public static Specification<Quiz> isQuizId(final String nodeId){
+	public static Specification<Quiz> isQuizNodeId(final String nodeId){
 		return new Specification<Quiz>() {
 			@Override
 			public Predicate toPredicate(Root<Quiz> root, CriteriaQuery<?> query, CriteriaBuilder cb){
