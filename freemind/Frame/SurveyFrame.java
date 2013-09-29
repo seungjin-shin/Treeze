@@ -448,7 +448,7 @@ public class SurveyFrame extends JFrame{
 			
 			Gson gson = new Gson();
 			TreezeData treezeData = new TreezeData();
-			treezeData.setDataType(TreezeData.SURVEY);
+			treezeData.setDataType(TreezeData.QUIZ);
 			treezeData.getArgList().add(gson.toJson(survey));
 			
 			try {

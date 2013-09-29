@@ -21,7 +21,8 @@ public class AddQuestionNode {
 		int cnt = forNodeForQuestion.getChildCount();
 		
 //		FreemindManager.getInstance().setNodeText("Q");
-		FreemindManager.getInstance().getMc().addNew(forNodeForQuestion, MindMapController.NEW_CHILD, null);
+		if(((NodeAdapter)forNodeForQuestion).getNodeID().equals(""))
+			FreemindManager.getInstance().getMc().addNew(forNodeForQuestion, MindMapController.NEW_CHILD, null);
 		
 		for (i = 0; i < cnt; i++) {
 //			try {
@@ -43,10 +44,13 @@ public class AddQuestionNode {
 		int cnt = modifyForQuestion.getChildCount();
 		if(cnt != 0){
 			forModifyNodeName = (NodeAdapter)modifyForQuestion.getChildAt(cnt - 1);
-			MindIcon icon = MindIcon.factory("help");
-			forModifyNodeName.addIcon(icon, -1);
-			forModifyNodeName.setNodeTypeStr("Question");
-			FreemindManager.getInstance().getMc().nodeChanged(forModifyNodeName);
+			if (forModifyNodeName.getNodeID().equals("")) {
+				MindIcon icon = MindIcon.factory("help");
+				forModifyNodeName.addIcon(icon, -1);
+				forModifyNodeName.setNodeTypeStr("Question");
+				FreemindManager.getInstance().getMc()
+						.nodeChanged(forModifyNodeName);
+			}
 		}
 		
 		for (i = 0; i < cnt; i++) {

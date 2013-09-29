@@ -85,6 +85,7 @@ public class MenuBar extends JMenuBar {
 	
     private JMenuItem setSlideSequneceIcon;
     private JMenuItem uploadLecture;
+    private JMenuItem makeQuiz;
 	
     public MenuBar(Controller controller) {
 		this.c = controller;
@@ -98,16 +99,18 @@ public class MenuBar extends JMenuBar {
     //dewlit
     public void setRegModeMenu(){
     	slideShow.setEnabled(false);
-    	surveyItem.setEnabled(false);
+//    	surveyItem.setEnabled(false);
     	setSlideSequneceIcon.setEnabled(true);
     	uploadLecture.setEnabled(true);
+    	makeQuiz.setEnabled(true);
     }
     
     public void setLecModeMenu(){
     	slideShow.setEnabled(true);
-    	surveyItem.setEnabled(true);
+//    	surveyItem.setEnabled(true);
     	setSlideSequneceIcon.setEnabled(false);
     	uploadLecture.setEnabled(false);
+    	makeQuiz.setEnabled(false);
     }
     
     
@@ -366,13 +369,16 @@ public class MenuBar extends JMenuBar {
 		menuHolder.addSeparator(VIEW_MENU);
 		slideShow = menuHolder.addAction(c.slideShowAction, VIEW_MENU+"Slide Show");
 		slideShow.setAccelerator(KeyStroke.getKeyStroke("F5"));
-		surveyItem = menuHolder.addAction(c.surveyAction, VIEW_MENU+"Send Survey");
-		surveyItem.setAccelerator(KeyStroke.getKeyStroke("F4"));
+//		surveyItem = menuHolder.addAction(c.surveyAction, VIEW_MENU+"Send Survey");
+//		surveyItem.setAccelerator(KeyStroke.getKeyStroke("F4"));
 		menuHolder.addSeparator(VIEW_MENU);
+		makeQuiz = menuHolder.addAction(c.makeQuiz, VIEW_MENU+"Make Quiz");
+		makeQuiz.setAccelerator(KeyStroke.getKeyStroke("F4"));
 		setSlideSequneceIcon = menuHolder.addAction(c.setSlideSequenceIconAction, VIEW_MENU+"Setting Slide Sequence Icon");
 		setSlideSequneceIcon.setAccelerator(KeyStroke.getKeyStroke("F9"));
 		uploadLecture = menuHolder.addAction(c.uploadLectureAction, VIEW_MENU+"Upload Lecture");
 		uploadLecture.setAccelerator(KeyStroke.getKeyStroke("F10"));
+		
 		menuHolder.addSeparator(VIEW_MENU);
 		
 		

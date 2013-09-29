@@ -32,9 +32,10 @@ public class SlideType extends NodeType{
 	}
 
 	@Override
-	public void forSurveyAct() {
+	public void forQuizAct() {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

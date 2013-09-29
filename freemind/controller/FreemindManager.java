@@ -161,11 +161,15 @@ public class FreemindManager {
 	public void addFileHandler(Logger logger) {
 		
 	    Calendar oCalendar = Calendar.getInstance( );  // 현재 날짜/시간 등의 각종 정보 얻기
-		String curTime =  oCalendar.get(Calendar.YEAR) + "" + (oCalendar.get(Calendar.MONTH) + 1) + "" + oCalendar.get(Calendar.DAY_OF_MONTH) + "" + oCalendar.get(Calendar.HOUR_OF_DAY) + "" + oCalendar.get(Calendar.MINUTE) + "" + oCalendar.get(Calendar.SECOND); 
+		String curTime =  oCalendar.get(Calendar.YEAR) + "" + (oCalendar.get(Calendar.MONTH) + 1) + "" + oCalendar.get(Calendar.DAY_OF_MONTH) + "" + oCalendar.get(Calendar.HOUR_OF_DAY) + "" + oCalendar.get(Calendar.MINUTE) + "" + oCalendar.get(Calendar.SECOND);
+		
+		File logFolder = new File(downPath, "Log");
+		if(!logFolder.exists())
+			logFolder.mkdir();
         try {
             // 파일저장
-            fileHandler = new FileHandler(downPath + File.separator + curTime + "treeze.log");
-            logStrArr.add(downPath + File.separator + curTime + "treeze.log");
+            fileHandler = new FileHandler(downPath + File.separator + "Log" + File.separator + curTime + "treeze.log");
+            logStrArr.add(downPath + File.separator + "Log" + File.separator + curTime + "treeze.log");
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {
@@ -283,12 +287,7 @@ public class FreemindManager {
 	}
 	
 	public void init(){
-		logger.removeHandler(fileHandler);
-		isSlideShowInfo = false;
-		logger.removeHandler(fileHandler);
-		slideShow.resizeImgHashMap.clear();
-		uploadToServer.deleteNaviInfoAll(classId);
-		
+		logger.info("call init");
 		try {
 			if(in != null)
 				in.close();
@@ -299,6 +298,13 @@ public class FreemindManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		logger.removeHandler(fileHandler);
+		if(fileHandler != null)
+			fileHandler.close();
+		isSlideShowInfo = false;
+		slideShow.resizeImgHashMap.clear();
+		uploadToServer.deleteNaviInfoAll(classId);
 	}
 	
 	public Ticket getTicket() {

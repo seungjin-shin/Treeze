@@ -329,8 +329,6 @@ public class FreemindSocket extends Thread {
 						Ticket ticket = tmpTicket.getTicket();
 						Thread addTicketThread = new AddTicketThread(ticket);
 						addTicketThread.start();
-//						fManager.setTicket(ticket);
-//						c.recurAddTicketNode((NodeAdapter) c.getMc().getRootNode());
 						
 						
 					}

@@ -615,214 +615,214 @@ public class UploadToServer {
 	  public void doExeFileUpload() {
 		  
           try {
-        	  StringBody versionBody = new StringBody("3.9", Charset.forName("UTF-8"));
+        	  StringBody versionBody = new StringBody("4.0", Charset.forName("UTF-8"));
 //        	  StringBody userTypeBody = new StringBody("student",
 //						Charset.forName("UTF-8"));
         	  StringBody userTypeBody = new StringBody("professor",
 						Charset.forName("UTF-8"));
         	  
         	  
-//        	  HttpClient httpClient = new DefaultHttpClient();  
-//    		  HttpPost post = new HttpPost("http://" + fManager.SERVERIP + ":8080/treeze/updateVersion");
-//    		  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
-//    		  
-//    		  String str = "";
-//    		  
-//          	  multipart.addPart("userType", userTypeBody);
-//          	  multipart.addPart("version", versionBody);  
-//          	  
-//          	  post.setEntity(multipart);  
-//          	  HttpResponse response = httpClient.execute(post);  
-//          	  HttpEntity resEntity = response.getEntity();
-//          	InputStream inputStream = resEntity.getContent();
-//      	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-//
-//      	  String tmp;
-//      	  
-//    			while((tmp = in.readLine()) != null )
-//    				str += tmp;
-//    			System.out.println(str);
-//          	  EntityUtils.consume(resEntity);
+        	  HttpClient httpClient = new DefaultHttpClient();  
+    		  HttpPost post = new HttpPost("http://" + fManager.SERVERIP + ":8080/treeze/updateVersion");
+    		  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
+    		  
+    		  String str = "";
+    		  
+          	  multipart.addPart("userType", userTypeBody);
+          	  multipart.addPart("version", versionBody);  
+          	  
+          	  post.setEntity(multipart);  
+          	  HttpResponse response = httpClient.execute(post);  
+          	  HttpEntity resEntity = response.getEntity();
+          	InputStream inputStream = resEntity.getContent();
+      	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+      	  String tmp;
+      	  
+    			while((tmp = in.readLine()) != null )
+    				str += tmp;
+    			System.out.println(str);
+          	  EntityUtils.consume(resEntity);
     		
         	  
         	  
         	  
         	  
         	  
-        	  File saveFile;//
-        	  FileBody bin = null;
-        	HttpClient httpClient = new DefaultHttpClient();
-			saveFile = new File("/Users/dewlit/Desktop/professor/professor.exe");
-
-				if (saveFile.exists())
-					bin = new FileBody(saveFile, "UTF-8");
-				
-				HttpPost post = new HttpPost("http://" + SERVERIP
-						+ ":8080/treeze/upload/file");
-
-				
-
-				MultipartEntity multipart = new MultipartEntity(
-						HttpMultipartMode.BROWSER_COMPATIBLE, null,
-						Charset.forName("UTF-8")); // xml, classId, LectureName
-				multipart.addPart("version", versionBody);
-				multipart.addPart("userType", userTypeBody);
-				multipart.addPart("upload", bin);
-
-				post.setEntity(multipart);
-				HttpResponse response = httpClient.execute(post);
-				HttpEntity resEntity = response.getEntity();
-				InputStream inputStream = resEntity.getContent();
-		    	 BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-
-		    	  String str = "";
-		    	  String tmp;
-		    	  
-					while((tmp = in.readLine()) != null )
-						str += tmp;
-				EntityUtils.consume(resEntity);
-
-           System.out.println("postExeFile : " + str);
-           
-     	 httpClient = new DefaultHttpClient();
-			saveFile = new File("/Users/dewlit/Desktop/professor/treeze.cnf");
-
-				if (saveFile.exists())
-					bin = new FileBody(saveFile, "UTF-8");
-				
-			 post = new HttpPost("http://" + SERVERIP
-						+ ":8080/treeze/upload/file");
-
-
-				 multipart = new MultipartEntity(
-						HttpMultipartMode.BROWSER_COMPATIBLE, null,
-						Charset.forName("UTF-8")); // xml, classId, LectureName
-				multipart.addPart("version", versionBody);
-				multipart.addPart("userType", userTypeBody);
-				multipart.addPart("upload", bin);
-
-				post.setEntity(multipart);
-			response = httpClient.execute(post);
-				 resEntity = response.getEntity();
-				 inputStream = resEntity.getContent();
-		    	 in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-
-		    	  
-				EntityUtils.consume(resEntity);
-
-        System.out.println("postExeFile : " + str);
-        
-        httpClient = new DefaultHttpClient();
-		saveFile = new File("/Users/dewlit/Desktop/professor/Resources_ko.properties");
-
-			if (saveFile.exists())
-				bin = new FileBody(saveFile, "UTF-8");
-			
-		 post = new HttpPost("http://" + SERVERIP
-					+ ":8080/treeze/upload/file");
-
-
-			 multipart = new MultipartEntity(
-					HttpMultipartMode.BROWSER_COMPATIBLE, null,
-					Charset.forName("UTF-8")); // xml, classId, LectureName
-			multipart.addPart("version", versionBody);
-			multipart.addPart("userType", userTypeBody);
-			multipart.addPart("upload", bin);
-
-			post.setEntity(multipart);
-		response = httpClient.execute(post);
-			 resEntity = response.getEntity();
-			 inputStream = resEntity.getContent();
-	    	 in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-
-	    	  
-			EntityUtils.consume(resEntity);
-
-    System.out.println("postExeFile : " + str);
-    
-    httpClient = new DefaultHttpClient();
-	saveFile = new File("/Users/dewlit/Desktop/professor/freemind.properties");
-
-		if (saveFile.exists())
-			bin = new FileBody(saveFile, "UTF-8");
-		
-	 post = new HttpPost("http://" + SERVERIP
-				+ ":8080/treeze/upload/file");
-
-
-		 multipart = new MultipartEntity(
-				HttpMultipartMode.BROWSER_COMPATIBLE, null,
-				Charset.forName("UTF-8")); // xml, classId, LectureName
-		multipart.addPart("version", versionBody);
-		multipart.addPart("userType", userTypeBody);
-		multipart.addPart("upload", bin);
-
-		post.setEntity(multipart);
-	response = httpClient.execute(post);
-		 resEntity = response.getEntity();
-		 inputStream = resEntity.getContent();
-    	 in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-
-    	  
-		EntityUtils.consume(resEntity);
-
-System.out.println("postExeFile : " + str);
-
-httpClient = new DefaultHttpClient();
-saveFile = new File("/Users/dewlit/Desktop/professor/mindmap_menus.xml");
-
-	if (saveFile.exists())
-		bin = new FileBody(saveFile, "UTF-8");
-	
- post = new HttpPost("http://" + SERVERIP
-			+ ":8080/treeze/upload/file");
-
-
-	 multipart = new MultipartEntity(
-			HttpMultipartMode.BROWSER_COMPATIBLE, null,
-			Charset.forName("UTF-8")); // xml, classId, LectureName
-	multipart.addPart("version", versionBody);
-	multipart.addPart("userType", userTypeBody);
-	multipart.addPart("upload", bin);
-
-	post.setEntity(multipart);
-response = httpClient.execute(post);
-	 resEntity = response.getEntity();
-	 inputStream = resEntity.getContent();
-	 in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-
-	  
-	EntityUtils.consume(resEntity);
-
-System.out.println("postExeFile : " + str);
-
-httpClient = new DefaultHttpClient();
-saveFile = new File("/Users/dewlit/Desktop/professor/patterns.xml");
-
-	if (saveFile.exists())
-		bin = new FileBody(saveFile, "UTF-8");
-	
- post = new HttpPost("http://" + SERVERIP
-			+ ":8080/treeze/upload/file");
-
-
-	 multipart = new MultipartEntity(
-			HttpMultipartMode.BROWSER_COMPATIBLE, null,
-			Charset.forName("UTF-8")); // xml, classId, LectureName
-	multipart.addPart("version", versionBody);
-	multipart.addPart("userType", userTypeBody);
-	multipart.addPart("upload", bin);
-
-	post.setEntity(multipart);
-response = httpClient.execute(post);
-	 resEntity = response.getEntity();
-	 inputStream = resEntity.getContent();
-	 in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-
-	  
-	EntityUtils.consume(resEntity);
-
-System.out.println("postExeFile : " + str);
+//        	  File saveFile;//
+//        	  FileBody bin = null;
+//        	HttpClient httpClient = new DefaultHttpClient();
+//			saveFile = new File("/Users/dewlit/Desktop/professor/professor.exe");
+//
+//				if (saveFile.exists())
+//					bin = new FileBody(saveFile, "UTF-8");
+//				
+//				HttpPost post = new HttpPost("http://" + SERVERIP
+//						+ ":8080/treeze/upload/file");
+//
+//				
+//
+//				MultipartEntity multipart = new MultipartEntity(
+//						HttpMultipartMode.BROWSER_COMPATIBLE, null,
+//						Charset.forName("UTF-8")); // xml, classId, LectureName
+//				multipart.addPart("version", versionBody);
+//				multipart.addPart("userType", userTypeBody);
+//				multipart.addPart("upload", bin);
+//
+//				post.setEntity(multipart);
+//				HttpResponse response = httpClient.execute(post);
+//				HttpEntity resEntity = response.getEntity();
+//				InputStream inputStream = resEntity.getContent();
+//		    	 BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//
+//		    	  String str = "";
+//		    	  String tmp;
+//		    	  
+//					while((tmp = in.readLine()) != null )
+//						str += tmp;
+//				EntityUtils.consume(resEntity);
+//
+//           System.out.println("postExeFile : " + str);
+//           
+//     	 httpClient = new DefaultHttpClient();
+//			saveFile = new File("/Users/dewlit/Desktop/professor/treeze.cnf");
+//
+//				if (saveFile.exists())
+//					bin = new FileBody(saveFile, "UTF-8");
+//				
+//			 post = new HttpPost("http://" + SERVERIP
+//						+ ":8080/treeze/upload/file");
+//
+//
+//				 multipart = new MultipartEntity(
+//						HttpMultipartMode.BROWSER_COMPATIBLE, null,
+//						Charset.forName("UTF-8")); // xml, classId, LectureName
+//				multipart.addPart("version", versionBody);
+//				multipart.addPart("userType", userTypeBody);
+//				multipart.addPart("upload", bin);
+//
+//				post.setEntity(multipart);
+//			response = httpClient.execute(post);
+//				 resEntity = response.getEntity();
+//				 inputStream = resEntity.getContent();
+//		    	 in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//
+//		    	  
+//				EntityUtils.consume(resEntity);
+//
+//        System.out.println("postExeFile : " + str);
+//        
+//        httpClient = new DefaultHttpClient();
+//		saveFile = new File("/Users/dewlit/Desktop/professor/Resources_ko.properties");
+//
+//			if (saveFile.exists())
+//				bin = new FileBody(saveFile, "UTF-8");
+//			
+//		 post = new HttpPost("http://" + SERVERIP
+//					+ ":8080/treeze/upload/file");
+//
+//
+//			 multipart = new MultipartEntity(
+//					HttpMultipartMode.BROWSER_COMPATIBLE, null,
+//					Charset.forName("UTF-8")); // xml, classId, LectureName
+//			multipart.addPart("version", versionBody);
+//			multipart.addPart("userType", userTypeBody);
+//			multipart.addPart("upload", bin);
+//
+//			post.setEntity(multipart);
+//		response = httpClient.execute(post);
+//			 resEntity = response.getEntity();
+//			 inputStream = resEntity.getContent();
+//	    	 in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//
+//	    	  
+//			EntityUtils.consume(resEntity);
+//
+//    System.out.println("postExeFile : " + str);
+//    
+//    httpClient = new DefaultHttpClient();
+//	saveFile = new File("/Users/dewlit/Desktop/professor/freemind.properties");
+//
+//		if (saveFile.exists())
+//			bin = new FileBody(saveFile, "UTF-8");
+//		
+//	 post = new HttpPost("http://" + SERVERIP
+//				+ ":8080/treeze/upload/file");
+//
+//
+//		 multipart = new MultipartEntity(
+//				HttpMultipartMode.BROWSER_COMPATIBLE, null,
+//				Charset.forName("UTF-8")); // xml, classId, LectureName
+//		multipart.addPart("version", versionBody);
+//		multipart.addPart("userType", userTypeBody);
+//		multipart.addPart("upload", bin);
+//
+//		post.setEntity(multipart);
+//	response = httpClient.execute(post);
+//		 resEntity = response.getEntity();
+//		 inputStream = resEntity.getContent();
+//    	 in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//
+//    	  
+//		EntityUtils.consume(resEntity);
+//
+//System.out.println("postExeFile : " + str);
+//
+//httpClient = new DefaultHttpClient();
+//saveFile = new File("/Users/dewlit/Desktop/professor/mindmap_menus.xml");
+//
+//	if (saveFile.exists())
+//		bin = new FileBody(saveFile, "UTF-8");
+//	
+// post = new HttpPost("http://" + SERVERIP
+//			+ ":8080/treeze/upload/file");
+//
+//
+//	 multipart = new MultipartEntity(
+//			HttpMultipartMode.BROWSER_COMPATIBLE, null,
+//			Charset.forName("UTF-8")); // xml, classId, LectureName
+//	multipart.addPart("version", versionBody);
+//	multipart.addPart("userType", userTypeBody);
+//	multipart.addPart("upload", bin);
+//
+//	post.setEntity(multipart);
+//response = httpClient.execute(post);
+//	 resEntity = response.getEntity();
+//	 inputStream = resEntity.getContent();
+//	 in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//
+//	  
+//	EntityUtils.consume(resEntity);
+//
+//System.out.println("postExeFile : " + str);
+//
+//httpClient = new DefaultHttpClient();
+//saveFile = new File("/Users/dewlit/Desktop/professor/patterns.xml");
+//
+//	if (saveFile.exists())
+//		bin = new FileBody(saveFile, "UTF-8");
+//	
+// post = new HttpPost("http://" + SERVERIP
+//			+ ":8080/treeze/upload/file");
+//
+//
+//	 multipart = new MultipartEntity(
+//			HttpMultipartMode.BROWSER_COMPATIBLE, null,
+//			Charset.forName("UTF-8")); // xml, classId, LectureName
+//	multipart.addPart("version", versionBody);
+//	multipart.addPart("userType", userTypeBody);
+//	multipart.addPart("upload", bin);
+//
+//	post.setEntity(multipart);
+//response = httpClient.execute(post);
+//	 resEntity = response.getEntity();
+//	 inputStream = resEntity.getContent();
+//	 in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//
+//	  
+//	EntityUtils.consume(resEntity);
+//
+//System.out.println("postExeFile : " + str);
 
           }
 		  catch (Exception e) {

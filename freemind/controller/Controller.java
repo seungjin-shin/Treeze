@@ -23,6 +23,7 @@ package freemind.controller;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -58,6 +59,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.AccessControlException;
@@ -232,6 +234,7 @@ public class Controller  implements MapModuleChangeObserver {
     public Action surveyAction;
     public Action setSlideSequenceIconAction;
     public Action uploadLectureAction;
+    public Action makeQuiz;
     private MindMapController mc;
     public NodeAdapter cur;
     public NodeAdapter prev;
@@ -541,7 +544,7 @@ public class Controller  implements MapModuleChangeObserver {
 				else{
 					preStr = rdStr;
 					
-					if(preStr.indexOf("<node") == -1 || preStr.indexOf("NODETYPESTR=\"Question\"") > -1)
+					if(preStr.indexOf("<node") == -1 || preStr.indexOf("NODETYPESTR=\"Question\"") > -1 || preStr.indexOf("NODETYPESTR=\"Quiz\"") > -1)
 						forUploadXmlOw.write(preStr + "\n");
 						
 				}
@@ -562,8 +565,9 @@ public class Controller  implements MapModuleChangeObserver {
 		NodeAdapter forSetID = node;
 		int i;
 		int cnt;
-
-		forSetID.setNodeID(System.nanoTime() + "");
+		
+		if(forSetID.getNodeID().equals(""))
+			forSetID.setNodeID(System.nanoTime() + "");
 		
 		cnt = forSetID.getChildCount();
 
@@ -615,6 +619,40 @@ public class Controller  implements MapModuleChangeObserver {
 			setSequenceIcon();
            }}
     
+    protected class MakeQuiz extends AbstractAction {
+        public MakeQuiz() {
+        	super("Make Quiz"); 
+        }
+        public void actionPerformed(ActionEvent e) {
+        	
+        	NodeAdapter quizNode;
+        	
+        	fManager.getMc().addNew(mc.getRootNode(), MindMapController.NEW_CHILD, null);
+			fManager.getMc().edit.stopEditing();
+			
+			quizNode = (NodeAdapter) mc.getRootNode().getChildAt(mc.getRootNode().getChildCount() - 1);
+
+			quizNode.setText("Quiz");
+						
+			quizNode.setNodeTypeStr("Quiz");
+			quizNode.setNodeID(System.nanoTime() + "");
+			
+			fManager.getMc().nodeChanged(quizNode);
+			
+			try {
+//				Desktop.getDesktop().browse(new java.net.URI("http://localhost:8080/treeze/quiz/makeQuiz?classId=" + fManager.getClassId() + "&nodeId=" + quizNode.getNodeID()));
+				Desktop.getDesktop().browse(new java.net.URI("http://" + fManager.getSERVERIP() +":8080/treeze/quiz/makeQuiz?classId=" + fManager.getClassId() + "&nodeId=" + quizNode.getNodeID()));
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			} catch (URISyntaxException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+        	
+           }  	
+    }
+    
     protected class UploadLectureAction extends AbstractAction {
         public UploadLectureAction() {
         	super("Upload Lecture"); 
@@ -645,15 +683,12 @@ public class Controller  implements MapModuleChangeObserver {
 //    	tmp.setNodeTypeStr("Question");
 //    	fManager.getMc().nodeChanged(tmp);
     	
-    	System.out.println("NodeKeyListener : set QuestionNodeInfo");
-    	
     	//Set ID
 		recurSetUploadXmlID((NodeAdapter) fManager.getMc().getRootNode());
 		
 		//makeXMlFile
 		makeUploadXml();
 			
-		//upload XML
 		setCurFrame();
 		
 		fManager.setLodingValue(0);
@@ -821,14 +856,14 @@ public class Controller  implements MapModuleChangeObserver {
     public NodeAdapter recurGetPrev(NodeAdapter prevNode, NodeAdapter curNode){
    		cur = curNode;
    		
-    	if(prevNode.getNodeTypeStr().equals("Slide") || prevNode.getNodeTypeStr().equals("Survey"))
+    	if(prevNode.getNodeTypeStr().equals("Slide") || prevNode.getNodeTypeStr().equals("Quiz"))
     		prev = prevNode;
     	
     	int i;
 
     	int cnt = curNode.getChildCount();
 
-    	if( (cur.getNodeTypeStr().equals("Slide") || cur.getNodeTypeStr().equals("Survey")) && cur.getPrev() == null && cur.getNext() == null)
+    	if( (cur.getNodeTypeStr().equals("Slide") || cur.getNodeTypeStr().equals("Quiz")) && cur.getPrev() == null && cur.getNext() == null)
     		return prev;
     	
     	for(i = 0; i < cnt; i++){
@@ -843,14 +878,14 @@ public class Controller  implements MapModuleChangeObserver {
     public NodeAdapter recurGetNext(NodeAdapter prevNode, NodeAdapter curNode){
    		cur = curNode;
    		
-    	if(prevNode.getNodeTypeStr().equals("Slide") || prevNode.getNodeTypeStr().equals("Survey"))
+    	if(prevNode.getNodeTypeStr().equals("Slide") || prevNode.getNodeTypeStr().equals("Quiz"))
     		prev = prevNode;
     	
     	int i;
 
     	int cnt = curNode.getChildCount();
     	
-    	if( (cur.getNodeTypeStr().equals("Slide") || cur.getNodeTypeStr().equals("Survey")) && prev.getNext() == null)
+    	if( (cur.getNodeTypeStr().equals("Slide") || cur.getNodeTypeStr().equals("Quiz")) && prev.getNext() == null)
     		return cur;
     	
     	for(i = 0; i < cnt; i++){
@@ -977,6 +1012,7 @@ public class Controller  implements MapModuleChangeObserver {
         surveyAction = new SurveyAction();
         setSlideSequenceIconAction = new SetSlideSequenceIconAction();
         uploadLectureAction = new UploadLectureAction();
+        makeQuiz = new MakeQuiz();
 
         moveToRoot = new MoveToRootAction(this);
 

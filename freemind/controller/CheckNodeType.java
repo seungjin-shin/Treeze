@@ -2,7 +2,7 @@ package freemind.controller;
 
 import freemind.NodeType.QuestionType;
 import freemind.NodeType.SlideType;
-import freemind.NodeType.SurveyType;
+import freemind.NodeType.QuizType;
 import freemind.modes.NodeAdapter;
 
 public class CheckNodeType {
@@ -26,8 +26,8 @@ public class CheckNodeType {
 			else if (nodeChkStr.equals("Question"))
 				forCheckNodeType.setNodeType(new QuestionType(forCheckNodeType,
 						c));
-			else if(nodeChkStr.equals("Survey"))
-				forCheckNodeType.setNodeType(new SurveyType(forCheckNodeType));
+			else if(nodeChkStr.equals("Quiz"))
+				forCheckNodeType.setNodeType(new QuizType(forCheckNodeType));
 		}
 //		mc.addNew(forAddingQuestionNode, MindMapController.NEW_CHILD, null);
 

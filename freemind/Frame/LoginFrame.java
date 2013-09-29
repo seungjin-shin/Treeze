@@ -328,6 +328,13 @@ public class LoginFrame extends JFrame{
 			JFrame pFrame = new ProfileFrame(mc);
 			FreemindManager.getInstance().setProfileFrame(pFrame);
 		}
+		
+////		loginChk = fManager.getUploadToServer().signIn(emailTf.getText(), pwTf.getText());
+////		if (loginChk) {
+//			setVisible(false);
+//			JFrame pFrame = new ProfileFrame(mc);
+//			FreemindManager.getInstance().setProfileFrame(pFrame);
+////		}
 			
 		System.out.println("loginChk" + loginChk);
 	}

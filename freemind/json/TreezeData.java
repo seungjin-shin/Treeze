@@ -8,7 +8,8 @@ public class TreezeData {
 	public static final String NAVI = "navi";
 	public static final String TICKET = "ticket";
     
-	public static final String SURVEY = "survey";
+	public static final String QUIZ = "quiz";
+	
 	public static final String SURVEYVALUE = "surveyValue";
 	public static final String SURVEYRESULT = "surveyResult";
     
