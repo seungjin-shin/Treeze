@@ -57,7 +57,8 @@
         </p>
       </div>
       <button type="button" class="btn btn-info pull-right">채점 결과 저장 </button>
-      <table class="table">
+
+      <table class="table"  border="0" cellpadding="0" cellspacing="0" width="60%" style="table-layout:fixed">
         <thead>
           <tr>
             <th>#</th>

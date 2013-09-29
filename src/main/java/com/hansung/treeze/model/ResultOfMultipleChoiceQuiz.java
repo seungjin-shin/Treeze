@@ -15,11 +15,12 @@ public class ResultOfMultipleChoiceQuiz extends AbstractPersistable<Long> {
 	private Long classId;
 	private String quizId;
 	
-	private Integer countOfexample1;
-	private Integer countOfexample2;
-	private Integer countOfexample3;
-	private Integer countOfexample4;
-	private Integer countOfexample5;
+	private Integer countOfexample1 = new Integer(0);
+	private Integer countOfexample2 = new Integer(0);
+	private Integer countOfexample3 = new Integer(0);
+	private Integer countOfexample4 = new Integer(0);
+	private Integer countOfexample5 = new Integer(0);
+	
 	
 
 	public Long getClassId() {

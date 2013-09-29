@@ -47,6 +47,10 @@
 <input type=button onClick="addQuestion();" value="추가">
 총 시험 시간 : <input type=text size=5 id="examTime">(분 단위 숫자만 입력)
 
+<%
+	String classId = request.getParameter("classId");
+	String nodeId = request.getParameter("nodeId");
+%>
 <table id="qTable">
 	<tbody id='qBody'>
 
@@ -55,26 +59,6 @@
 </table>
 
 <input type=button value="저장하기" id="save" onClick="makeQuiz()">
-
-<!-- <form action="/createQuiz.jsp" method=post id="qForm">
-	<input type=hidden value="" name="classId">
-	<input type=hidden value="" name="nodeId">
-	<input type=hidden value="" name="quizId">
-	<input type=hidden value="" name="type">
-	<input type=hidden value="" name="time">
-	
-	<input type=hidden value="" name="contents">
-
-	<input type=hidden value="" name="answerContents">
-	<input type=hidden value="" name="answerNumber">
-
-	<input type=hidden value="" name="example1">
-	<input type=hidden value="" name="example2">
-	<input type=hidden value="" name="example3">
-	<input type=hidden value="" name="example4">
-	<input type=hidden value="" name="example5">
-
-</form> -->
 
 <input type=hidden value=0 id="qCnt">
 
@@ -96,16 +80,16 @@ function makeQuiz(){
 
 				$.post(makeQuizURI,
 				  {
-				  	classId : "1",
-				  	nodeId : "1",
-				  	quizId : "1",
+				  	classId : <%=classId%>,
+				  	nodeId : <%=nodeId%>,
+				  	quizId : document.getElementById('quizId' + i).value,
 				  	type : "descriptive",
 				  	time : document.getElementById('examTime').value,
 				 	contents : document.getElementById('contents' + i).value,
 					answerContents : document.getElementById('answerContents' + i).value
 				  },
-				  function(data,status){
-				    alert("Data: " + data + "\nStatus: " + status);
+				  function (data,status){
+					  
 				  });
 				
 				// qForm.classId.value = 1;
@@ -118,24 +102,24 @@ function makeQuiz(){
 				// qForm.submit();
 			}
 			else if(type.value == "multipleChoice"){
-					$.post(makeQuizURI,
-				  {
-				  	classId : "1",
-				  	nodeId : "1",
-				  	quizId : "1",
-				  	type : "multipleChoice",
-				  	time : document.getElementById('examTime').value,
-				 	contents : document.getElementById('contents' + i).value,
-					answerNumber : document.getElementById('answerNumber' + i).value,
-					example1 : document.getElementById('example1_' + i).value,
-					example2 : document.getElementById('example2_' + i).value,
-					example3 : document.getElementById('example3_' + i).value,
-					example4 : document.getElementById('example4_' + i).value,
-					example5 : document.getElementById('example5_' + i).value,
-				  },
-				  function(data,status){
-				    alert("Data: " + data + "\nStatus: " + status);
-				  });
+				$.post(makeQuizURI,
+						  {
+							classId : <%=classId%>,
+							nodeId : <%=nodeId%>,
+							quizId : document.getElementById('quizId' + i).value,
+						  	type : "multipleChoice",
+						  	time : document.getElementById('examTime').value,
+						 	contents : document.getElementById('contents' + i).value,
+							answerNumber : document.getElementById('answerNumber' + i).value,
+							example1 : document.getElementById('example1_' + i).value,
+							example2 : document.getElementById('example2_' + i).value,
+							example3 : document.getElementById('example3_' + i).value,
+							example4 : document.getElementById('example4_' + i).value,
+							example5 : document.getElementById('example5_' + i).value
+						  },
+						  function (data,status){
+							  
+						  });
 				}
 				else{
 					alert('type Err');
@@ -146,18 +130,20 @@ function makeQuiz(){
 		if(type == null)
 			alert('Q is not exist.');
 		else
-			alert('sucess save');
+			alert('sucess save.');
 	}
 
 function addQuestion(){
 	var sel = document.getElementById('question').value;
-
+	
 	if(sel == "0")
 		return;
 	else if(sel == "multiple")
 		addMultipleQ();
-	else if(sel == "short")
+	else if(sel == "short"){
 		addShort();
+		
+		}
 	else
 		return;
 
@@ -178,9 +164,11 @@ function addShort(){
 
 	table = document.createElement('table');
 	tr = document.createElement('tr');
+	var d = new Date();
 
 	tr.innerHTML = "문제<input type='text' size='70' id='contents" + qCnt.value + "'>" + 
-					"<input type=hidden value='descriptive' id='type" + qCnt.value + "'>";
+					"<input type=hidden value='descriptive' id='type" + qCnt.value + "'>" + 
+					"<input type=hidden value='" + d.getTime() + "' id='quizId" + qCnt.value + "'>";
 
 	table.appendChild(tr);
 
@@ -209,9 +197,11 @@ function addMultipleQ(){
 
 	table = document.createElement('table');
 	tr = document.createElement('tr');
-
+	var d = new Date();
+	
 	tr.innerHTML = "문제<input type='text' size='70' id='contents" + qCnt.value + "'>" + 
-					"<input type=hidden value='multipleChoice' id='type" + qCnt.value + "'>";
+					"<input type=hidden value='multipleChoice' id='type" + qCnt.value + "'>" + 
+					"<input type=hidden value='" + d.getTime() + "' id='quizId" + qCnt.value + "'>";;
 	table.appendChild(tr);
 
 	tr = document.createElement('tr');

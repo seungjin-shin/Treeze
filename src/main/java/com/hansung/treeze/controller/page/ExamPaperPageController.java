@@ -4,12 +4,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.hansung.treeze.filter.LoginFilter;
+import com.hansung.treeze.model.Quiz;
+import com.hansung.treeze.service.QuizService;
 
 
 
@@ -19,8 +22,12 @@ import com.hansung.treeze.filter.LoginFilter;
 public class ExamPaperPageController {
 
 	
-	@RequestMapping()
-	public String makeQuiz(HttpSession session, ModelMap modelMap) {
+	@Autowired private QuizService quizService;
+
+	
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public String makeQuiz(@RequestParam("classId") Long classId,@RequestParam("nodeId") String nodeId,HttpSession session, ModelMap modelMap) {
 		/*// 로그인된 유저 가져오기
 		User professor = (User)session.getAttribute(LoginFilter.SIGNED_USER);
 		
@@ -35,6 +42,11 @@ public class ExamPaperPageController {
 		
 		modelMap.addAttribute("myLectures", lectures);
 		modelMap.addAttribute("courseCounts", counts);*/
+		
+
+		List<Quiz> quizes = quizService.getQuizes(classId, nodeId);
+		
+		modelMap.addAttribute("quizes", quizes);	
 		return "quiz/examPaper";
 	}
 	
