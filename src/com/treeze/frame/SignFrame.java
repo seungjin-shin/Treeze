@@ -368,7 +368,7 @@ public class SignFrame extends JFrame {
 		
 		if(pwTf.getText().equals(confPwTf.getText())){
 			System.out.println("媛��");
-			SignUpThread signUpThread = new SignUpThread(Integer.parseInt(studIDTf.getText()),pwTf.getText(),emailTf.getText(),userTf.getText(),typeBtnGp.getSelection().getActionCommand());
+			SignUpThread signUpThread = new SignUpThread(studIDTf.getText(),pwTf.getText(),emailTf.getText(),userTf.getText(),typeBtnGp.getSelection().getActionCommand());
 			signUpThread.start();
 			TextDialogue textDialogue = new TextDialogue(this, "Register has been completed!!", true);
 			this.setVisible(false);

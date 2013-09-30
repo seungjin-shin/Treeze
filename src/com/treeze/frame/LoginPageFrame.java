@@ -74,7 +74,6 @@ public class LoginPageFrame extends JFrame{
 	LoginPanel loPanel; 
 	SignPanel sPanel = new SignPanel();
 	RightPanel rPanel = new RightPanel();
-	
 	JTextField emailTf = new HintTextField("e-mail address");;
 	final JTextField pwTf = new HintTextFieldPassword("password");;
 	

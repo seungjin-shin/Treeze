@@ -8,6 +8,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 
+import com.treeze.data.TreezeStaticData;
+
 public abstract class ComponentJPanel extends JPanel {
 	
 	private NoteObject no = new NoteObject();	
@@ -51,8 +53,8 @@ public abstract class ComponentJPanel extends JPanel {
 	}
 	
 	protected  void setRelativeLocation(NoteManager nm) {
-		backgroundWidth = nm.getJpanel().getWidth();
-		backgroundHeight = nm.getJpanel().getHeight();
+		backgroundWidth = TreezeStaticData.PPT_PANEL_WIDTH;
+		backgroundHeight = TreezeStaticData.PPT_PANEL_HEIGHT;
 		
 		int x  = (int) (backgroundWidth*rateX);
 		int y = (int) (backgroundHeight*rateY);
@@ -77,15 +79,15 @@ public abstract class ComponentJPanel extends JPanel {
 		rateY = (double)getY()/(double)backgroundHeight;
 		rateHeight = (double)getHeight()/(double)backgroundHeight;
 		
-		this.backgroundWidth = backgroundWidth;
-		this.backgroundHeight = backgroundHeight;
+		backgroundWidth = TreezeStaticData.PPT_PANEL_WIDTH;
+		backgroundHeight = TreezeStaticData.PPT_PANEL_HEIGHT;
 		
 		
 	}
 	
 	protected void setFeatureByRate(int backgroundWidth, int backgroundHeight) {
-		this.backgroundWidth = backgroundWidth;
-		this.backgroundHeight = backgroundHeight;
+		backgroundWidth = TreezeStaticData.PPT_PANEL_WIDTH;
+		backgroundHeight = TreezeStaticData.PPT_PANEL_HEIGHT;
 		
 		int x = (int)rateX * backgroundWidth;
 		int y = (int)rateY * backgroundWidth;

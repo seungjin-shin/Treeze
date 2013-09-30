@@ -311,7 +311,7 @@ public class TicketFrame extends JPanel {
 			if (ticket.getuserName().equals("교수"))
 				whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
 			else
-				whriterLabel = new JLabel("학생", JLabel.CENTER);
+				whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
 			this.setBackground(Color.WHITE);
 			// this.add(noPanel);
 			this.setLayout(gbl);
@@ -352,7 +352,7 @@ public class TicketFrame extends JPanel {
 			if (ticket.getuserName().equals("교수"))
 				whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
 			else
-				whriterLabel = new JLabel("학생", JLabel.CENTER);
+				whriterLabel = new JLabel(ticket.getuserName(), JLabel.CENTER);
 
 			this.setBackground(Color.WHITE);
 			// this.add(noPanel);

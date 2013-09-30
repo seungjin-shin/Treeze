@@ -995,6 +995,8 @@ public class ProfileFrame extends JFrame {
 
 		}
 
+
+
 		public void resultAddLecture(String result) {
 			if (textDialogue == null)
 				textDialogue = new TextDialogue(ProfileFrame.this, result, true);

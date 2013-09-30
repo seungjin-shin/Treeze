@@ -4,26 +4,38 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
+import com.treeze.data.TreezeStaticData;
+
+import JDIalog.StringDialog;
+
 
 //gson Áß°è³¢ ¿ªÇÒ
 public class StoredNoteObject {
 
-	private ArrayList<LineObject> loList;
-	private ArrayList<FigureObject> foList;
-	private ArrayList<ImageObject> ioList;
-
-	private ArrayList<MemoObj> moList;
-	private ArrayList<PostItObj> piList;
+	private ArrayList<LineObject> loList= new ArrayList<LineObject>();
+	private ArrayList<FigureObject> foList= new ArrayList<FigureObject>();
+	private ArrayList<ImageObject> ioList= new ArrayList<ImageObject>();;
+	 
 	
+	private ArrayList<MemoObj> moList = new ArrayList<MemoObj>();
+	private ArrayList<PostItObj> piList = new ArrayList<PostItObj>();
+	boolean empty = false;
+	public boolean isEmpty() {
+		return empty;
+	}
+
+
+
+	public void setEmpty(boolean empty) {
+		this.empty = empty;
+	}
+
+
+
 	public StoredNoteObject(ArrayList<DrawableObject> drawobjList,
 			ArrayList<ComponentJPanel> componentList) {
 		
-		loList = new ArrayList<LineObject>();
-		foList = new ArrayList<FigureObject>();
-		ioList = new ArrayList<ImageObject>();
 		
-		moList = new ArrayList<MemoObj>();
-		piList = new ArrayList<PostItObj>();
 		
 		for (int i = 0; i < drawobjList.size(); i++) {
 
@@ -60,8 +72,11 @@ public class StoredNoteObject {
 				piList.add(pio);
 			} else if (component instanceof MemoPanel) {
 				MemoPanel mp = (MemoPanel) component;
+				if(mp.getWidth()==0){
+					empty = true;
+				}
 				MemoObj mo = new MemoObj(mp.getX(), mp.getY(), mp.getWidth(),
-						mp.getHeight(),mp.getBackgroundWidth(),mp.getBackgroundHeight(), mp.getText());
+						mp.getHeight(),TreezeStaticData.PPT_PANEL_WIDTH,TreezeStaticData.PPT_PANEL_HEIGHT, mp.getText());
 				moList.add(mo);
 
 			}

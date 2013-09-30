@@ -27,6 +27,7 @@ public class PPTPanel extends JPanel {
 	public static int x2;
 	public static int pressY;
 	public static int y2;
+	boolean isLoad = false;
 
 	private Point draggedExPoint;
 	// 현재 pptPanel 부분
@@ -39,11 +40,11 @@ public class PPTPanel extends JPanel {
 	NoteManager nm;
 
 	MindNode node;
-	
+
 	public String getStoreNoteContents() {
 		return nm.getStoredNote(node.getNodeID());
 	}
-	
+
 	public MindNode getMindNode() {
 		return node;
 	}
@@ -59,10 +60,11 @@ public class PPTPanel extends JPanel {
 	public PPTPanel(MindNode node, MainFrameManager mfm) {
 		// TODO Auto-generated constructor stub
 		super();
-
+		System.out.println("생성생");
 		pptPanel = this;
 		this.node = node;
 		// 처음 초기화
+		isLoad = false;
 		dp = new DrawablePanel(this, (TreezeStaticData.PPT_IMG_PATH + "/"
 				+ node.getImgPath() + ".jpg"));
 		nm = dp.getNoteManager();
@@ -82,7 +84,6 @@ public class PPTPanel extends JPanel {
 		sm.setCurLineMode(StateManager.LINE_MODE_CURVE);
 
 		nm.loadNote(node.getNodeID());
-		
 
 		this.addMouseListener(new MouseListener() {
 
@@ -132,17 +133,18 @@ public class PPTPanel extends JPanel {
 				int clickCount = e.getClickCount();
 
 				if (clickCount == 1) {
-					
-						if (nm.isClickableItem(pressX, pressY) && sm.getCurNoteMode() == StateManager.NOTE_MODE_GRAB) {
 
-							nm.setMoveFlag(pressX, pressY);
-							draggedExPoint = new Point(pressX, pressY);
-						} else {
+					if (nm.isClickableItem(pressX, pressY)
+							&& sm.getCurNoteMode() == StateManager.NOTE_MODE_GRAB) {
 
-							if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
-								nm.initPath();
-							}
-						
+						nm.setMoveFlag(pressX, pressY);
+						draggedExPoint = new Point(pressX, pressY);
+					} else {
+
+						if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
+							nm.initPath();
+						}
+
 					}
 				}
 
@@ -167,7 +169,8 @@ public class PPTPanel extends JPanel {
 
 					if (clickCount == 1) {
 
-						if (nm.isClickableItem(pressX, pressY) && sm.getCurNoteMode() == StateManager.NOTE_MODE_GRAB) {
+						if (nm.isClickableItem(pressX, pressY)
+								&& sm.getCurNoteMode() == StateManager.NOTE_MODE_GRAB) {
 							nm.setClick(pressX, pressY);
 						} else {
 							nm.setUnClicked();
@@ -214,15 +217,14 @@ public class PPTPanel extends JPanel {
 
 						int x = e.getX();
 						int y = e.getY();
-						
-						if(sm.getCurNoteMode() == StateManager.NOTE_MODE_GRAB) {
+
+						if (sm.getCurNoteMode() == StateManager.NOTE_MODE_GRAB) {
 							if (nm.isClickableItem(x, y)) {
 								setCursor(StateManager.moveCursor);
 							} else {
 								setCursor(sm.getCurStateCursor());
 							}
 						}
-
 
 					}
 
@@ -231,7 +233,7 @@ public class PPTPanel extends JPanel {
 						// TODO Auto-generated method stub
 						// pen 모드중은 두개로 구분된다.
 						// curMouseMode = MOUSE_STATE_DRAGGED;
-						
+
 						sm.setCurMouseMode(StateManager.MOUSE_STATE_DRAGGED);
 
 						setCursor(sm.getCurStateCursor());
@@ -244,7 +246,7 @@ public class PPTPanel extends JPanel {
 							if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
 								// shift를 누르고 있으므로 직선을 그린다.
 								if (sm.getCurLineMode() == StateManager.LINE_MODE_STRAIGHT) {
-										System.out.println("asd");
+
 									nm.makeLinePath(
 											new LinePoint(e.getX(), e.getY()),
 											sm.getColor(), sm.getBs());
@@ -265,110 +267,109 @@ public class PPTPanel extends JPanel {
 			}
 		}.start();
 
-		pptPanel.addKeyListener(new KeyListener() {
+	}
 
-			@Override
-			public void keyTyped(KeyEvent e) {
-				
+	public void ModeChangekeyReleased() {
+
+		// TODO Auto-generated method stub
+		// key release 될때
+		if (sm.getCurLineMode() == StateManager.LINE_MODE_STRAIGHT) {
+			// curLineMode = LINE_MODE_CURVE;
+			sm.setCurLineMode(StateManager.LINE_MODE_CURVE);
+		}
+
+	}
+
+	public void ModeChange(int key) {
+
+		// TODO Auto-generated metdehod stub
+
+		int keyCode = key;
+		System.out.println("keycode : " + keyCode);
+
+		if (keyCode == StateManager.KEY_CODE_MODE) {
+			System.out.println("grap");
+//			if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
+//				sm.setCurNoteMode(StateManager.NOTE_MODE_GRAB);
+//				setCursor(Cursor.getDefaultCursor());
+//			} else {
+//				sm.setCurNoteMode(StateManager.NOTE_MODE_PEN);
+//				setCursor(StateManager.blackPenCursor);
+//			}
+			sm.setCurNoteMode(StateManager.NOTE_MODE_GRAB);
+			setCursor(Cursor.getDefaultCursor());
+		}
+
+		else if (keyCode == StateManager.KEY_CODE_DEL) {
+			nm.removeSelectedItem();
+		}
+		else{  //Pen Mode
+//		if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
+			sm.setCurNoteMode(StateManager.NOTE_MODE_PEN);
+			if (keyCode == StateManager.KEY_CODE_SHIFT) {
+
+				sm.setCurLineMode(StateManager.LINE_MODE_STRAIGHT);
 			}
 
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				// key release 될때
-				if (sm.getCurLineMode() == StateManager.LINE_MODE_STRAIGHT) {
-					// curLineMode = LINE_MODE_CURVE;
-					sm.setCurLineMode(StateManager.LINE_MODE_CURVE);
-				}
+			if (keyCode == StateManager.KEY_CODE_ONE) {
 
+				setBlackPen();
+
+			} else if (keyCode == StateManager.KEY_CODE_TWO) {
+
+				setRedPen();
+
+			} else if (keyCode == StateManager.KEY_CODE_THREE) {
+
+				setHighliter();
 			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated metdehod stub
-
-				int keyCode = e.getKeyCode();
-				System.out.println("keycode : " + keyCode);
-				
-				if(keyCode == StateManager.KEY_CODE_MODE) {
-					if(sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
-						sm.setCurNoteMode(StateManager.NOTE_MODE_GRAB);
-						setCursor(Cursor.getDefaultCursor());
-					}else {
-						sm.setCurNoteMode(StateManager.NOTE_MODE_PEN);
-						setCursor(StateManager.blackPenCursor);
-					}
-				}
-
-
-				if (keyCode == StateManager.KEY_CODE_DEL) {
-					nm.removeSelectedItem();
-				}
-
-
-				if (sm.getCurNoteMode() == StateManager.NOTE_MODE_PEN) {
-
-					if (keyCode == StateManager.KEY_CODE_SHIFT) {
-
-						sm.setCurLineMode(StateManager.LINE_MODE_STRAIGHT);
-					}
-
-					if (keyCode == StateManager.KEY_CODE_ONE) {
-
-						setBlackPen();
-
-					} else if (keyCode == StateManager.KEY_CODE_TWO) {
-
-						setRedPen();
-
-					} else if (keyCode == StateManager.KEY_CODE_THREE) {
-
-						setHighliter();
-					}
-				} else if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
-
-					if (keyCode == StateManager.KEY_CODE_ONE) {
-
-						setCursor(StateManager.starCursor);
-						sm.setCurFigureMode(StateManager.FIGURE_TYPE_STAR);
-
-					} else if (keyCode == StateManager.KEY_CODE_TWO) {
-
-						setCursor(StateManager.arrowCursor);
-						sm.setCurFigureMode(StateManager.FIGURE_TYPE_ARROW);
-
-					} else if (keyCode == StateManager.KEY_CODE_THREE) {
-
-						setCursor(StateManager.circleCursor);
-						sm.setCurFigureMode(StateManager.FIGURE_TYPE_CIRCLE);
-
-					} else if (keyCode == StateManager.KEY_CODE_FOUR) {
-
-						setCursor(StateManager.XCursor);
-						sm.setCurFigureMode(StateManager.FIGURE_TYPE_X);
-
-					} else if (keyCode == StateManager.KEY_CODE_FIVE) {
-
-						setCursor(StateManager.recCursor);
-						sm.setCurFigureMode(StateManager.FIGURE_TYPE_REC);
-
-					} else if (keyCode == StateManager.KEY_CODE_SIX) {
-
-						setCursor(StateManager.textCursor);
-						sm.setCurFigureMode(StateManager.FIGURE_TYPE_TEXT);
-
-					}
-				}
-
-			}
-		});
-
+		}
+	//}
+//			else if (sm.getCurNoteMode() == StateManager.NOTE_MODE_FIGURE) {
+//
+//			if (keyCode == StateManager.KEY_CODE_ONE) {
+//
+//				setCursor(StateManager.starCursor);
+//				sm.setCurFigureMode(StateManager.FIGURE_TYPE_STAR);
+//
+//			} else if (keyCode == StateManager.KEY_CODE_TWO) {
+//
+//				setCursor(StateManager.arrowCursor);
+//				sm.setCurFigureMode(StateManager.FIGURE_TYPE_ARROW);
+//
+//			} else if (keyCode == StateManager.KEY_CODE_THREE) {
+//
+//				setCursor(StateManager.circleCursor);
+//				sm.setCurFigureMode(StateManager.FIGURE_TYPE_CIRCLE);
+//
+//			} else if (keyCode == StateManager.KEY_CODE_FOUR) {
+//
+//				setCursor(StateManager.XCursor);
+//				sm.setCurFigureMode(StateManager.FIGURE_TYPE_X);
+//
+//			} else if (keyCode == StateManager.KEY_CODE_FIVE) {
+//
+//				setCursor(StateManager.recCursor);
+//				sm.setCurFigureMode(StateManager.FIGURE_TYPE_REC);
+//
+//			} else if (keyCode == StateManager.KEY_CODE_SIX) {
+//
+//				setCursor(StateManager.textCursor);
+//				sm.setCurFigureMode(StateManager.FIGURE_TYPE_TEXT);
+//
+//			}
+//		}
+		
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		dp.paintComponent(g);
+		if (TreezeStaticData.PPT_PANEL_HEIGHT == 0) {
+			TreezeStaticData.PPT_PANEL_HEIGHT = getHeight();
+			TreezeStaticData.PPT_PANEL_WIDTH = getWidth();
+		}
 
 	}
 
@@ -401,6 +402,14 @@ public class PPTPanel extends JPanel {
 		sm.setBs(new BasicStroke(10));
 		sm.setCurPenMode(StateManager.PEN_MODE_HIGHLIGHTER);
 
+	}
+
+	public boolean isLoad() {
+		return isLoad;
+	}
+
+	public void setLoad(boolean isLoad) {
+		this.isLoad = isLoad;
 	}
 
 }

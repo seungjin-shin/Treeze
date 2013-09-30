@@ -1,14 +1,11 @@
 package com.treeze.data;
 
-
-
 public class Note  {
 
 	private Long classId;
 	private String nodeId;
 	private String contents;
 	private String userEmail;
-	
 	
 	public Long getClassId() {
 		return classId;

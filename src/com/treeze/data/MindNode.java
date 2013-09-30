@@ -3,14 +3,19 @@ package com.treeze.data;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Desktop;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.TextArea;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -20,6 +25,9 @@ import javax.swing.JLabel;
 import org.w3c.dom.Node;
 
 import com.treeze.Abstract.ImgBtn;
+import com.treeze.Abstract.NodeInterface;
+import com.treeze.Abstract.NodeInterfaceNode;
+import com.treeze.downloadthread.DownLoadNote;
 import com.treeze.draw.PPTParentPanel;
 import com.treeze.frame.MindMapMain;
 import com.treeze.frame.TicketFrame;
@@ -29,6 +37,12 @@ public class MindNode {
 	static ClassInfo classinfo;
 	static MindMapMain mindMapMain;
 	static MindNode nowPPTNode;
+	NodeInterface nodeInterface;
+
+	public void setNodeInterface(NodeInterface nodeInterface) {
+		this.nodeInterface = nodeInterface;
+	}
+
 	public static MindNode getNowPPTNode() {
 		return nowPPTNode;
 	}
@@ -126,7 +140,7 @@ public class MindNode {
 
 	int index;
 	int scaleX;
-	
+
 	int scaleY;
 	int absoluteIndex;
 	int locateX;
@@ -140,6 +154,7 @@ public class MindNode {
 	public MindNode() {
 
 	}
+
 	public int getScaleX() {
 		return scaleX;
 	}
@@ -149,7 +164,7 @@ public class MindNode {
 	}
 
 	public MindNode(String nodeID, String str, int x, int y,
-			MindMapMain mindMapMain) { 
+			MindMapMain mindMapMain) {
 		this.nodeStr = str;
 		this.mindMapMain = mindMapMain;
 		this.locateX = x;
@@ -159,97 +174,103 @@ public class MindNode {
 		this.scaleY = NODE_HEIGHT;
 		setendX();
 		//
-		 endX = locateX + scaleX;
+		DownLoadNote downLoadNote = new DownLoadNote(ClassInfo.getInstance()
+				.getClassId() + "", User.getInstance().getUserEmail(), nodeID);
+		downLoadNote.start();
+		endX = locateX + scaleX;
 		middleY = locateY + NODE_HEIGHT / 2;
 		endY = locateY + NODE_HEIGHT;
 		root = this;
 		now = this;
 		ImgIconSet();
-
-//		pptBtn.addMouseListener(new MouseListener() {
-//
-//			@Override
-//			public void mouseReleased(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//
-//			@Override
-//			public void mousePressed(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				h.getContainer().remove(getnode().getPptBtn());
-//				h.getContainer().remove(getnode().getTicketBtn());
-//				h.getContainer().repaint();
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				if (h.getNode() == getnode()) {
-//					h.stop();
-//				}
-//			}
-//
-//			@Override
-//			public void mouseClicked(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				// new PPTFrame(getnode());
-//			}
-//		});
-//		ticketBtn.addMouseListener(new MouseListener() {
-//
-//			@Override
-//			public void mouseReleased(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//
-//			@Override
-//			public void mousePressed(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				h.getContainer().remove(getnode().getPptBtn());
-//				h.getContainer().remove(getnode().getTicketBtn());
-//				h.getContainer().repaint();
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				if (h.getNode() == getnode()) {
-//					h.stop();
-//				}
-//			}
-//
-//			@Override
-//			public void mouseClicked(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				System.out.println(classinfo.getClassName());
-//				// new TicketFrame(getnode(),classinfo);
-//				if (TreezeStaticData.TICKETFRAME != null) {
-//					TreezeStaticData.TICKETFRAME.setVisible(false);
-//					TreezeStaticData.TICKETFRAME.disable();
-//				}
-//				TreezeStaticData.TICKETFRAME = new TicketFrame(getnode(),
-//						classinfo);
-//
-//			}
-//		});
+		nodeInterface = new NodeInterfaceNode();
+		// pptBtn.addMouseListener(new MouseListener() {
+		//
+		// @Override
+		// public void mouseReleased(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// @Override
+		// public void mousePressed(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// @Override
+		// public void mouseExited(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		// h.getContainer().remove(getnode().getPptBtn());
+		// h.getContainer().remove(getnode().getTicketBtn());
+		// h.getContainer().repaint();
+		// }
+		//
+		// @Override
+		// public void mouseEntered(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		// if (h.getNode() == getnode()) {
+		// h.stop();
+		// }
+		// }
+		//
+		// @Override
+		// public void mouseClicked(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		// // new PPTFrame(getnode());
+		// }
+		// });
+		// ticketBtn.addMouseListener(new MouseListener() {
+		//
+		// @Override
+		// public void mouseReleased(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// @Override
+		// public void mousePressed(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// @Override
+		// public void mouseExited(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		// h.getContainer().remove(getnode().getPptBtn());
+		// h.getContainer().remove(getnode().getTicketBtn());
+		// h.getContainer().repaint();
+		// }
+		//
+		// @Override
+		// public void mouseEntered(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		// if (h.getNode() == getnode()) {
+		// h.stop();
+		// }
+		// }
+		//
+		// @Override
+		// public void mouseClicked(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		// System.out.println(classinfo.getClassName());
+		// // new TicketFrame(getnode(),classinfo);
+		// if (TreezeStaticData.TICKETFRAME != null) {
+		// TreezeStaticData.TICKETFRAME.setVisible(false);
+		// TreezeStaticData.TICKETFRAME.disable();
+		// }
+		// TreezeStaticData.TICKETFRAME = new TicketFrame(getnode(),
+		// classinfo);
+		//
+		// }
+		// });
 	}
 
 	public MindNode(MindNode parentNode, String nodeID, String str,
-			String directionstr, String imgPath) { // ��������������		// ��������������		// TODO Auto-generated constructor stub
+			String directionstr, String imgPath) { // �������������� //
+													// �������������� // TODO
+													// Auto-generated
+													// constructor stub
 		nodeStr = str;
 		now.setNext(this);
 		this.setPrev(now);
@@ -265,11 +286,15 @@ public class MindNode {
 		} else {
 			this.direction = 0;
 		}
-		this.scaleX = str.length() * 15;
-		if(scaleX<100){
+		nodeInterface = new NodeInterfaceNode();
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		FontMetrics fm = img.getGraphics().getFontMetrics(nodeBtn.getFont());
+		int width = fm.stringWidth(str);
+		this.scaleX = width + 10;
+		if (scaleX < 100) {
 			this.scaleX = 100;
 		}
-	//	nodeBtn.addMouseListener(new NodeMouseListener());
+		// nodeBtn.addMouseListener(new NodeMouseListener());
 		this.setParentNode(parentNode);
 		setLocate(parentNode);
 		parentNode.childeNodes.add(this);
@@ -279,90 +304,92 @@ public class MindNode {
 		parentNode.ChildCount++;
 		this.paretNodeChildCntAdd();
 		this.endX = this.locateX + scaleX;
-		middleY = locateY +NODE_HEIGHT / 2;
+		middleY = locateY + NODE_HEIGHT / 2;
 		endY = locateY + scaleY;
-		ImgIconSet();
 
-//		pptBtn.addMouseListener(new MouseListener() {
-//
-//			@Override
-//			public void mouseReleased(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//
-//			@Override
-//			public void mousePressed(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				h.getContainer().remove(getnode().getPptBtn());
-//				h.getContainer().remove(getnode().getTicketBtn());
-//				h.getContainer().repaint();
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				if (h.getNode() == getnode()) {
-//					h.stop();
-//				}
-//			}
-//
-//			@Override
-//			public void mouseClicked(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				// new PPTFrame(getnode());
-//			}
-//		});
-//		ticketBtn.addMouseListener(new MouseListener() {
-//
-//			@Override
-//			public void mouseReleased(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//
-//			@Override
-//			public void mousePressed(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				h.getContainer().remove(getnode().getPptBtn());
-//				h.getContainer().remove(getnode().getTicketBtn());
-//				h.getContainer().repaint();
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				if (h.getNode() == getnode()) {
-//					h.stop();
-//				}
-//			}
-//
-//			@Override
-//			public void mouseClicked(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				System.out.println(classinfo.getClassName());
-//				// new TicketFrame(getnode(),classinfo);
-//				if (TreezeStaticData.TICKETFRAME != null) {
-//					TreezeStaticData.TICKETFRAME.setVisible(false);
-//					TreezeStaticData.TICKETFRAME.disable();
-//				}
-//				TreezeStaticData.TICKETFRAME = new TicketFrame(getnode(),
-//						classinfo);
-//
-//			}
-//		});
+		DownLoadNote downLoadNote = new DownLoadNote(ClassInfo.getInstance()
+				.getClassId() + "", User.getInstance().getUserEmail(), nodeID);
+		downLoadNote.start();
+		// pptBtn.addMouseListener(new MouseListener() {
+		//
+		// @Override
+		// public void mouseReleased(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// @Override
+		// public void mousePressed(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// @Override
+		// public void mouseExited(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		// h.getContainer().remove(getnode().getPptBtn());
+		// h.getContainer().remove(getnode().getTicketBtn());
+		// h.getContainer().repaint();
+		// }
+		//
+		// @Override
+		// public void mouseEntered(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		// if (h.getNode() == getnode()) {
+		// h.stop();
+		// }
+		// }
+		//
+		// @Override
+		// public void mouseClicked(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		// // new PPTFrame(getnode());
+		// }
+		// });
+		// ticketBtn.addMouseListener(new MouseListener() {
+		//
+		// @Override
+		// public void mouseReleased(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// @Override
+		// public void mousePressed(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// @Override
+		// public void mouseExited(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		// h.getContainer().remove(getnode().getPptBtn());
+		// h.getContainer().remove(getnode().getTicketBtn());
+		// h.getContainer().repaint();
+		// }
+		//
+		// @Override
+		// public void mouseEntered(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		// if (h.getNode() == getnode()) {
+		// h.stop();
+		// }
+		// }
+		//
+		// @Override
+		// public void mouseClicked(MouseEvent arg0) {
+		// // TODO Auto-generated method stub
+		// System.out.println(classinfo.getClassName());
+		// // new TicketFrame(getnode(),classinfo);
+		// if (TreezeStaticData.TICKETFRAME != null) {
+		// TreezeStaticData.TICKETFRAME.setVisible(false);
+		// TreezeStaticData.TICKETFRAME.disable();
+		// }
+		// TreezeStaticData.TICKETFRAME = new TicketFrame(getnode(),
+		// classinfo);
+		//
+		// }
+		// });
 	}
 
 	// public static void setNav(CurrentPositionOfNav naviInfo) {
@@ -691,7 +718,7 @@ public class MindNode {
 
 	public static MindNode getNodeuseNodeID(MindNode node, String nodeID) {
 		MindNode temp = null;
-		if(node.getNodeID().equals(nodeID)){
+		if (node.getNodeID().equals(nodeID)) {
 			return node;
 		}
 		for (int i = 0; i < node.getChildeNodes().size(); i++) {
@@ -753,7 +780,6 @@ public class MindNode {
 		// TODO Auto-generated method stub
 		MindNode now = node;
 
-
 		now.setPassed(true);
 		MindNode.getNow()
 				.getNodeBtn()
@@ -763,51 +789,51 @@ public class MindNode {
 		MindNode.setNow(now);
 	}
 
-//	class NodeMouseListener implements MouseListener {
-//
-//		public void NodeMouseListener(MouseEvent e) {
-//
-//		}
-//
-//		public void mouseExited(MouseEvent e) {
-//
-//			// h = new HideBtnThread(getnode().getNodeBtn().getParent(),
-//			// getnode());
-//			// h.start();
-//		}
-//
-//		public void mousePressed(MouseEvent e) {
-//
-//		}
-//
-//		public void mouseReleased(MouseEvent e) {
-//		}
-//
-//		public void mouseClicked(MouseEvent e) {
-//			// new PPTFrame();
-//			// new TicketFrame(getnode(),classinfo);
-//			mindMapMain.getMainFrameManager().changeTopPanel(getnode());
-//		}
-//
-//		@Override
-//		public void mouseEntered(MouseEvent arg0) {
-//			// TODO Auto-generated method stub
-//			// nodeBtn.setLayout(null);
-//			//
-//			// System.out.println("占쎈�占�占쏙옙占쏙옙占� + getNodeID());
-//			// getnode().getNodeBtn().getParent().add(getnode().pptBtn);
-//			// getnode().getNodeBtn().getParent().add(getnode().ticketBtn);
-//			// getnode().getNodeBtn().getParent()
-//			// .setComponentZOrder(getnode().pptBtn, 1);
-//			// getnode().getNodeBtn().getParent()
-//			// .setComponentZOrder(getnode().ticketBtn, 2);
-//			// getnode().getNodeBtn().getParent().repaint();
-//			// if (h != null && h.getNode() == getnode()) {
-//			// h.stop();
-//			// }
-//
-//		}
-//	}
+	// class NodeMouseListener implements MouseListener {
+	//
+	// public void NodeMouseListener(MouseEvent e) {
+	//
+	// }
+	//
+	// public void mouseExited(MouseEvent e) {
+	//
+	// // h = new HideBtnThread(getnode().getNodeBtn().getParent(),
+	// // getnode());
+	// // h.start();
+	// }
+	//
+	// public void mousePressed(MouseEvent e) {
+	//
+	// }
+	//
+	// public void mouseReleased(MouseEvent e) {
+	// }
+	//
+	// public void mouseClicked(MouseEvent e) {
+	// // new PPTFrame();
+	// // new TicketFrame(getnode(),classinfo);
+	// mindMapMain.getMainFrameManager().changeTopPanel(getnode());
+	// }
+	//
+	// @Override
+	// public void mouseEntered(MouseEvent arg0) {
+	// // TODO Auto-generated method stub
+	// // nodeBtn.setLayout(null);
+	// //
+	// // System.out.println("占쎈�占�占쏙옙占쏙옙占� + getNodeID());
+	// // getnode().getNodeBtn().getParent().add(getnode().pptBtn);
+	// // getnode().getNodeBtn().getParent().add(getnode().ticketBtn);
+	// // getnode().getNodeBtn().getParent()
+	// // .setComponentZOrder(getnode().pptBtn, 1);
+	// // getnode().getNodeBtn().getParent()
+	// // .setComponentZOrder(getnode().ticketBtn, 2);
+	// // getnode().getNodeBtn().getParent().repaint();
+	// // if (h != null && h.getNode() == getnode()) {
+	// // h.stop();
+	// // }
+	//
+	// }
+	// }
 
 	public class NodeBtn extends ImgBtn {
 
@@ -818,12 +844,35 @@ public class MindNode {
 
 		@Override
 		protected void Action() {
-			// TODO Auto-generated method stub
-			if(!MindNode.getNowPPTNode().equals(getnode()))
-				mindMapMain.getMainFrameManager().changeTopPanel(getnode());
-			
+			nodeInterface.getAction(getnode());
 		}
 
+	}
+
+	public void ChagePanel() {
+		// TODO Auto-generated method stub
+		if (!MindNode.getNowPPTNode().equals(getnode()))
+			mindMapMain.getMainFrameManager().changeTopPanel(getnode());
+	}
+
+	public void StartQuiz() {
+
+		
+
+		User user = User.getInstance();
+		try {
+			 Desktop.getDesktop().browse(new java.net.URI("http://" + TreezeStaticData.IP +":8080/treeze/examPaper?classId=" + classinfo.getClassId()+ "&nodeId=" + nodeID+"&userEmail="+user.getUserEmail()));
+			 
+			//Desktop.getDesktop().browse(new java.net.URI("http://" + TreezeStaticData.IP +":8080/treeze/examPaper?classId=" + "&nodeId="));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} catch (URISyntaxException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
+	
 	}
 
 	class HideBtnThread extends Thread {

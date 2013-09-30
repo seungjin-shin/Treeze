@@ -28,7 +28,6 @@ public class ComponentSizeController {
 	boolean leftFloorChangeSizeFlag;
 	boolean rightFloorChangeSizeFlag;	
 	boolean firstChangeSizeFlag;
-	
 	boolean moveFlag;
 	
 	

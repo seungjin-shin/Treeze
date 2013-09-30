@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -22,6 +23,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
@@ -42,11 +44,13 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.treeze.Abstract.NodeInterfaceQuiz;
 import com.treeze.data.ClassInfo;
 import com.treeze.data.CurrentPositionOfNav;
 import com.treeze.data.JsonTicket;
 import com.treeze.data.MindNode;
 import com.treeze.data.NaviInfo;
+import com.treeze.data.QuizInfo;
 import com.treeze.data.ServerSocket;
 import com.treeze.data.Ticket;
 import com.treeze.data.TreezeData;
@@ -91,6 +95,7 @@ public class MindMapMain extends JPanel {
 		screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		// setTitle(classinfo.getClassName());
 		this.classinfo = classinfo;
+
 		// setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.user = user;
 		MindNode.setClassinfo(classinfo);
@@ -120,13 +125,12 @@ public class MindMapMain extends JPanel {
 
 		this.add(jsp);
 
-		// setSize(screenSize.width, screenSize.height);
-
 		SocketThread socketThread = new SocketThread(classinfo);
 		socketThread.start();
 		GetNaviInfoThread getNaviInfoThread = new GetNaviInfoThread();
 		getNaviInfoThread.start();
 		TreezeStaticData.addFileHandler();
+
 		setVisible(true);
 
 	}
@@ -140,7 +144,7 @@ public class MindMapMain extends JPanel {
 			dimension = getSize();
 			init();
 		}
-		
+
 	}
 
 	public void init() {
@@ -326,6 +330,7 @@ public class MindMapMain extends JPanel {
 			return;
 		MindNode temp = new MindNode(parent, child.NODEID, child.getTEXT(),
 				child.getPOSITION(), child.IMGPATH);
+		if(child.getNODETYPESTR().equals("Quiz")) temp.setNodeInterface(new NodeInterfaceQuiz());
 		nodes.add(temp);
 		if (child.nodes != null)
 			for (int i = 0; i < child.nodes.size(); i++) {
@@ -371,10 +376,6 @@ public class MindMapMain extends JPanel {
 				// user 쨉?占승올��� 쨘쨘?占썩�
 				user.setUserType(User.STUDENT);
 
-				// classInfo 쨉?占승올��� 쨘쨘?占썩�
-				classInfo.setClassName("������");
-
-				// treezeData 쨉?占승올��� 쨘쨘?占썩�
 				treezeData.setDataType("connectionInfo");
 				treezeData.getArgList().add(gson.toJson(user));
 				treezeData.getArgList().add(gson.toJson(classInfo));
@@ -399,7 +400,7 @@ public class MindMapMain extends JPanel {
 					int cnt = is.read(b);
 
 					str = str = new String(b, 0, cnt, "UTF-8");
-					System.out.println("server send : " + str);
+					System.out.println("[From Server] = " + str);
 
 					// 쩔�廓?占승≤㎳￠�몌옙?
 					// Scanner scan = new Scanner(System.in);
@@ -422,7 +423,7 @@ public class MindMapMain extends JPanel {
 				} catch (UnknownHostException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-					
+
 					// TextDialogue t = new TextDialogue(getMainFrameManager(),
 					// "1 "+e1.getMessage(), true);
 					// SocketThread socketThread = new SocketThread(classInfo);
@@ -430,24 +431,27 @@ public class MindMapMain extends JPanel {
 
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
-					TreezeStaticData.logger.info(("[Student Socket IOException] "+e1.getMessage()));
+					TreezeStaticData.logger
+							.info(("[Student Socket IOException] " + e1
+									.getMessage()));
 					e1.printStackTrace();
-					
 
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					// TODO: handle exception
-					
+					TreezeStaticData.logger
+							.info(("[Student Socket IOException] " + e
+									.getMessage()));
 				}
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				TreezeStaticData.logger.info(("[Student Socket IOException] "+e.getMessage()));
+				TreezeStaticData.logger
+						.info(("[Student Socket IOException] " + e.getMessage()));
 				// TextDialogue t = new TextDialogue(getMainFrameManager(),
 				// "3 "+e.getMessage(), true);
-				// SocketThread socketThread = new SocketThread(classInfo);
-				// socketThread.start();
+				SocketThread socketThread = new SocketThread(classInfo);
+				socketThread.start();
 
 			}
 
@@ -537,7 +541,8 @@ public class MindMapMain extends JPanel {
 				node.getTicketBtn().setVisible(true); // New Icon add
 				mainFrameManager.ticketRepaint(node);
 
-			}
+			} else if (jsonResultTreezeData.getDataType().equals(
+					TreezeData.QUIZ)) {}
 
 		}
 	}

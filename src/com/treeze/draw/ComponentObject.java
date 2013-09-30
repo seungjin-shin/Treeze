@@ -10,9 +10,6 @@ public abstract class ComponentObject  {
 	int height;
 	int backgroundWidth;
 	int backgroundHeight;
-	
 	public abstract JComponent makeComponent();
 	
-	
-
 }

@@ -18,7 +18,6 @@ public class MemoObj extends ComponentObject {
 		this.textContent = textContent;
 	}
 
-
 	@Override
 	public ComponentJPanel makeComponent() {
 		// TODO Auto-generated method stub
@@ -26,10 +25,5 @@ public class MemoObj extends ComponentObject {
 		memo.setText(textContent);
 		return memo;
 	}
-
-
-
-
-
 
 }

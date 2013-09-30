@@ -17,8 +17,12 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import JDIalog.StringDialog;
+import JDIalog.TextDialogue;
+
 import com.google.gson.Gson;
 import com.thoughtworks.xstream.io.naming.StaticNameCoder;
+import com.treeze.Module.GetNote;
 import com.treeze.data.ClassInfo;
 import com.treeze.data.JsonTicket;
 import com.treeze.data.MindNode;
@@ -56,6 +60,16 @@ public class NoteManager {
 		if (componentList == null) {
 			componentList = new ArrayList<ComponentJPanel>();
 		}
+		
+		if (componentJPanel.getRateWidth() == 0) {
+			//System.out.println("addCompent");
+			componentJPanel.setRateX(0.1);
+			componentJPanel.setRateY(0.1);
+						componentJPanel.setAlignmentX(100);
+			
+			componentJPanel.setRelativeLocation(this);
+		}
+
 		componentList.add(componentJPanel);
 	}
 
@@ -129,10 +143,11 @@ public class NoteManager {
 		path.setBs(bs);
 		path.setColor(color);
 		// path.getPoints().add(point);
-		for(int i=1; i<path.points.size();i++) // 처음 마지막만 두고 나머지 다지우고 처음과 끝만 이어준다
-		path.points.remove(i);
+		for (int i = 1; i < path.points.size(); i++)
+			// 처음 마지막만 두고 나머지 다지우고 처음과 끝만 이어준다
+			path.points.remove(i);
 		path.points.add(point);
-		
+
 		repaint();
 
 	}
@@ -237,7 +252,11 @@ public class NoteManager {
 	public synchronized void repaint() {
 
 		jpanel.repaint();
-
+		jpanel.setVisible(false);
+		jpanel.setVisible(true);
+		PPTPanel pptPanel = (PPTPanel)jpanel;
+		pptPanel.setLoad(true);
+		
 	}
 
 	protected void addPostIt(int x, int y, int width, int height) {
@@ -300,8 +319,10 @@ public class NoteManager {
 		User user = User.getInstance();
 		ClassInfo ci = ClassInfo.getInstance();
 		System.out.println("[Download Node classInfo] = " + ci.getClassId());
-		new DownLoadNote(ci.getClassId() + "", user.getUserEmail(), nodeId,
-				this).start();
+		//new DownLoadNote(ci.getClassId() + "", user.getUserEmail(), nodeId,
+			//	this).start();
+		GetNote getNote = new GetNote(ci.getClassId() + "", user.getUserEmail(), nodeId,this);
+				//	this);
 
 	}
 
@@ -318,6 +339,8 @@ public class NoteManager {
 	protected String getStoredNote(String nodeId) {
 
 		StoredNoteObject sno = new StoredNoteObject(drawobjList, componentList);
+		if(sno.empty)
+			return null;
 		String noteContent = gson.toJson(sno);
 		return noteContent;
 

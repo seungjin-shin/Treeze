@@ -229,7 +229,7 @@ public class MemoPanel extends ComponentJPanel {
 
 
 		// TODO Auto-generated method stub
-		System.out.println("[textAreaChangeSize]");
+	
 		if(getClickPanel()==null)
 		{
 			return;
@@ -245,7 +245,7 @@ public class MemoPanel extends ComponentJPanel {
 			return;
 		}
 
-
+		
 			textArea.setSize(textArea.getPreferredSize());
 			csc.setSize(textAreaDimention.width
 					+ textArea.getFont().getSize() + TEXTAREA_MARGIN,
@@ -306,7 +306,7 @@ public class MemoPanel extends ComponentJPanel {
 		// jpanel.setVisible(true);
 		//
 		// jpanel.repaint();
-		System.out.println("addToPanel");
+		
 		ptPanel = (PPTPanel) jpanel;
 		this.nm = nm;
 
