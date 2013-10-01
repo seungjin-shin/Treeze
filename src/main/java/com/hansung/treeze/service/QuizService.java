@@ -10,7 +10,5 @@ public interface QuizService {
 	Quiz saveQuiz(Quiz quiz);
 	void deleteQuiz(Quiz quiz);
 	List<Quiz> getQuizes(Long classId,String nodeId);
-	public Quiz getQuiz(Long classId, String nodeId);
-	
-
+	public Quiz getQuiz(Long classId, String quizId);
 }

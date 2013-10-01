@@ -21,13 +21,15 @@ public class ResultOfQuiz extends AbstractPersistable<Long> {
 	public static String DESCRIPTIVE = "descriptive";
 	public static String MULTIPLECHOICE = "multipleChoice";
 	
+	
+	
 	@Column(columnDefinition="LONGTEXT") 
 	private String answerContents;
-	private Boolean answerNumber1;
-	private Boolean answerNumber2;
-	private Boolean answerNumber3;
-	private Boolean answerNumber4;
-	private Boolean answerNumber5;
+	private Boolean answerNumber1 = false;
+	private Boolean answerNumber2 = false;
+	private Boolean answerNumber3 = false;
+	private Boolean answerNumber4 = false;
+	private Boolean answerNumber5 = false;
 	
 	
 	public Long getClassId() {

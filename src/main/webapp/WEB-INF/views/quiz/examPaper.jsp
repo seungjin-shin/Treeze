@@ -27,20 +27,87 @@
 <script src="${pageContext.request.contextPath}/resources/assets/js/jquery-1.10.2.min.js">
 </script>
 
+<% String classId = request.getParameter("classId"); 
+%>
+
+<script>
+var serverTimeURI = "/treeze/getServerTime";
+var limitTimeURI = "/treeze/getTimer?classId=" + <%=classId%>;
+serverTime = 0;
+limitServerTime = 0;
+//sHour = 0;
+//var sMin = 0;
+lHour = 0;
+lMin = 0;
+
+$.get(serverTimeURI,
+        function(data,status){
+      	 serverTime = data.split("a");
+      	sHour = serverTime[0];
+      	var sMin = serverTime[1];
+      	alert(sHour + "dd" + sMin);
+      	
+        });
+
+$.get(limitTimeURI,
+        function(data,status){
+      	 limitServerTime = data.Timer.endTime.split("a");
+      	lHour = limitServerTime[0];
+      	lMin = limitServerTime[1];
+        });
+
+resultMin = 0;
+resultHour = 10;
+resultSec = 0;
+
+alert( sHour + "dd" + sMin + "dd" + lHour + "dd" + lMin);
+
+
+if(parseInt(lMin) - parseInt(sMin) >= 0){
+	resultMin = parseInt(lMin) - parseInt(sMin);
+	resultHour = parseInt(lHour) - parseInt(sHour);
+}
+else{
+	resultMin = parseInt(lMin) + 60 - parseInt(sMin);
+	resultHour = parseInt(lHour) - 1 - parseInt(sHour);
+}
+
+//alert(parseInt(resultHour) + "dd" + parseInt(resultMin) + "dd" + resultSec);
+
+</script>
+
 <body>
 
 <br>
+<center><table >
+		<tr>
+			<font size=5 color="red"><b>남은 시간</b></font>
+		</tr>
+		<tr style="font-size:15pt;">
+			<td id="qHour">0</td><td>:</td>
+			<td id="qMin">10</td><td>:</td>
+			<td id="qSec">0</td>
+		</tr>
+	</table>
+	</center>
+<br>
+
+<script>
+document.getElementById('qHour').innerHTML = resultHour;
+document.getElementById('qMin').innerHTML = resultMin;
+document.getElementById('qSec').innerHTML = resultSec;
+</script>
 <%@ page language="java" contentType="text/html; charset=UTF-8" import="java.util.List"
     pageEncoding="UTF-8"%>
     <%@ page import="com.hansung.treeze.model.Quiz" %> 
     
  	<%
- 		String classId = request.getParameter("classId");
  		String nodeId = request.getParameter("nodeId");
  		String userEmail = request.getParameter("userEmail");
  	
 		List<Quiz> quizes = (List<Quiz>)request.getAttribute("quizes");
  		int qCnt = 0;
+ 		int qTime = Integer.parseInt(quizes.get(0).getTime());
 		for(Quiz s : quizes) {
 			if(s.getType().equals("descriptive")){
 				%>
@@ -115,7 +182,7 @@
   <br>
 
   <script>
-
+  
   function sendAnswer(){
   var type = null;
  var resultURI = "/treeze/createResultOfQuiz";
@@ -178,8 +245,11 @@
     }
     if(type == null)
       alert('Q is not exist.');
-    else
-      alert('sucess submit.');
+    else{
+      alert('Sucess submit.\nClose browser.');
+      window.open('','_self','');
+	  window.close();
+    }
   }
 
 
@@ -194,9 +264,57 @@
    else
     return;
   }
+  
+  setInterval("decSec()", 1000);
+  
+  function decSec(){
+		var sec = document.getElementById('qSec');
+		var min = document.getElementById('qMin');
+		var hour = document.getElementById('qHour');
+		
+		curSec = sec.innerHTML;
+		curMin = min.innerHTML;
+		curHour = hour.innerHTML;
+		
+		if(curSec == "0"){
+			curMin = parseInt(curMin) - 1;
+			sec.innerHTML = 59;
+			///pause(1000);
+			
+			if(min.innerHTML == "0"){
+				curHour = parseInt(curHour) - 1;
+				hour.innerHTML = curHour;
+				min.innerHTML = 59;
+			}
+			else{
+				min.innerHTML = curMin;	
+			}
+			
+		}
+		else{
+			curSec = parseInt(curSec) - 1;
+			sec.innerHTML = curSec;
+		}
+		
+		if(sec.innerHTML == "0" && min.innerHTML == "0" && hour.innerHTML == "0")
+			sendAnswer();
+		
+	}
+
+	function pause(milliSec){
+		var now = new Date();
+		var exitTime = now.getTime() + milliSec;
+
+		while(true){
+			now = new Date();
+			if(now.getTime() > exitTime)
+				return;
+		}
+	}
+  
+  
 
   </script>
-
 
 
 

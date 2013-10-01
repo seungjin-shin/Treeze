@@ -115,8 +115,5 @@ public class Quiz extends AbstractPersistable<Long> {
 		this.quizId = quizId;
 	}
 
-	
-	
-	
 
 }

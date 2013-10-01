@@ -129,8 +129,10 @@ function makeQuiz(){
 		}
 		if(type == null)
 			alert('Q is not exist.');
-		else
-			alert('sucess save.');
+		else{
+			alert('Sucess save.\nClose browser.');
+			closeBrowser();
+		}
 	}
 
 function addQuestion(){
@@ -244,6 +246,10 @@ function addMultipleQ(){
 	qBody.appendChild(addTr);
 }
 
+function closeBrowser(){
+	  window.open('','_self','');
+	  window.close();
+}
 
 
 

@@ -17,7 +17,43 @@ import com.hansung.treeze.filter.LoginFilter;
 @RequestMapping("/quiz")
 //@SessionAttributes(LoginFilter.SIGNED_USER)
 public class QuizPageController {
-
+	
+	@RequestMapping("waitingQuiz")
+	public String waitingQuiz(HttpSession session, ModelMap modelMap) {
+		/*// 로그인된 유저 가져오기
+		User professor = (User)session.getAttribute(LoginFilter.SIGNED_USER);
+		
+		// 교수의 강의 목록 가져오기
+		List<Lecture> lectures = lectureService.findMyLectures(professor.getUserEmail());
+		
+		long[] counts = new long[lectures.size()];
+		for(int i = 0 ; i < lectures.size(); i++) {
+			counts[i] = courseService.count(lectures.get(i));
+		}
+		
+		
+		modelMap.addAttribute("myLectures", lectures);
+		modelMap.addAttribute("courseCounts", counts);*/
+		return "quiz/waitingQuiz";
+	}
+	@RequestMapping("endedQuiz")
+	public String endedQuiz(HttpSession session, ModelMap modelMap) {
+		/*// 로그인된 유저 가져오기
+		User professor = (User)session.getAttribute(LoginFilter.SIGNED_USER);
+		
+		// 교수의 강의 목록 가져오기
+		List<Lecture> lectures = lectureService.findMyLectures(professor.getUserEmail());
+		
+		long[] counts = new long[lectures.size()];
+		for(int i = 0 ; i < lectures.size(); i++) {
+			counts[i] = courseService.count(lectures.get(i));
+		}
+		
+		
+		modelMap.addAttribute("myLectures", lectures);
+		modelMap.addAttribute("courseCounts", counts);*/
+		return "quiz/endedQuiz";
+	}
 	
 	@RequestMapping("makeQuiz")
 	public String makeQuiz(HttpSession session, ModelMap modelMap) {

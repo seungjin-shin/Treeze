@@ -20,7 +20,6 @@ public class QuizController {
 	
 	@RequestMapping(value="/createQuiz", method=RequestMethod.POST)
 	public String createQuiz(Quiz model, ModelMap map) {
-		
 		Quiz quiz = quizService.saveQuiz(model);
 
 		map.put("result", "success");
@@ -43,4 +42,11 @@ public class QuizController {
 		return "jsonView";	
 	}
 	
+	@RequestMapping(value="/getQuiz", method=RequestMethod.GET)
+	public String getQuizTime(@RequestParam("classId") Long classId, @RequestParam("nodeId") String nodeId, ModelMap map) {
+
+		
+		map.put("Quiz", quizService.getQuizes(classId, nodeId).get(0));
+		return "jsonView";	
+	}
 }

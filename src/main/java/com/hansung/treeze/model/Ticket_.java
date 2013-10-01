@@ -5,6 +5,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 
 @StaticMetamodel(Ticket.class) 
 public class Ticket_ {
+	
 	public static volatile SingularAttribute<Ticket, Long> ticketId;
 	public static volatile SingularAttribute<Ticket, Long> classId;
 	public static volatile SingularAttribute<Ticket, String> parentNodeId;
