@@ -126,7 +126,7 @@ public class SlideShow {
 					break;
 				}
 				else{
-					cur.getNodeType().forQuizAct(); // 설문 보내는 곳 
+//					cur.getNodeType().forQuizAct(); // 설문 보내는 곳 
 					cur = cur.getNext();
 					continue;
 				}
@@ -156,7 +156,7 @@ public class SlideShow {
 					break;
 				}
 				else{
-					cur.getNodeType().forQuizAct(); // 설문 보내는곳 
+//					cur.getNodeType().forQuizAct(); // 설문 보내는곳 
 					cur = cur.getPrev();
 					continue;
 				}

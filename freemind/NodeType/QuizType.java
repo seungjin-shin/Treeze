@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 
+import freemind.Frame.StartQuizFrame;
+import freemind.controller.FreeMindPopupMenu;
 import freemind.controller.FreemindLectureManager;
 import freemind.controller.FreemindManager;
 import freemind.controller.LectureInfo;
@@ -29,15 +31,32 @@ public class QuizType extends NodeType{
 	
 	@Override
 	public void act() {
-		try {
-			Desktop.getDesktop().browse(new java.net.URI("http://" + FreemindManager.getInstance().getSERVERIP() +":8080/treeze/examPaper?classId=" + FreemindManager.getInstance().getClassId() + "&nodeId=" + node.getNodeID()));
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		} catch (URISyntaxException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+//		try {
+//			Desktop.getDesktop().browse(new java.net.URI("http://" + FreemindManager.getInstance().getSERVERIP() +":8080/treeze/examPaper?classId=" + FreemindManager.getInstance().getClassId() + "&nodeId=" + node.getNodeID()));
+//		} catch (IOException e2) {
+//			// TODO Auto-generated catch block
+//			e2.printStackTrace();
+//		} catch (URISyntaxException e2) {
+//			// TODO Auto-generated catch block
+//			e2.printStackTrace();
+//		}
+		FreemindManager fManager = FreemindManager.getInstance();
+		boolean didQuizChk = false;
+		
+		fManager.getUploadToServer().setCurFrame(fManager.getFreemindMainFrame());
+		
+		didQuizChk = fManager.getUploadToServer().getStartChk(fManager.getClassId());
+		
+		 
+
+		if(didQuizChk){// result
+			
 		}
+		else{
+			String time = FreemindManager.getInstance().getUploadToServer().getLimitTime(node.getNodeID(), FreemindManager.getInstance().getClassId());
+			new StartQuizFrame(time);
+		}
+		
 	}
 
 	@Override
@@ -45,6 +64,9 @@ public class QuizType extends NodeType{
 		return this;
 	}
 
+	//	public static boolean start = false;
+	//	public static String endTime;
+	
 	@Override
 	public void forQuizAct() {
 		System.out.println("Survey func");

@@ -33,12 +33,15 @@ import com.google.gson.Gson;
 import freemind.Frame.TextDialogue;
 import freemind.controller.FreemindManager;
 import freemind.controller.SlideData;
+import freemind.json.ArrayQuiz;
 import freemind.json.ArrayUser;
 import freemind.json.ArrayVersion;
 import freemind.json.ClassInfo;
 import freemind.json.Lecture;
 import freemind.json.NaviInfo;
+import freemind.json.Quiz;
 import freemind.json.Ticket;
+import freemind.json.Timer;
 import freemind.json.TreezeData;
 import freemind.json.User;
 import freemind.json.Version;
@@ -982,6 +985,154 @@ public class UploadToServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	  }
+	  
+	  public String getLimitTime(String nodeId, int classId){
+		  HttpClient httpClient = new DefaultHttpClient();
+	       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/getQuiz?classId=" + classId + "&nodeId=" + nodeId);
+	       String str = "";
+		try {
+			HttpResponse response = httpClient.execute(get);
+			
+			HttpEntity resEntity = response.getEntity();
+			
+			InputStream inputStream = resEntity.getContent();
+	    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+	    	  
+	    	  String tmp;
+	    	  
+				while((tmp = in.readLine()) != null )
+					str += tmp;
+				
+				System.out.println("getLimitTime : " + str);
+				
+				Gson gson = new Gson();
+				Quiz Quiz = null;
+
+//				Quiz = gson.fromJson(str, Quiz.class);
+				
+				ArrayQuiz arrayQuiz = gson.fromJson(str, ArrayQuiz.class);
+				Quiz = arrayQuiz.getQuiz();
+
+				EntityUtils.consume(resEntity);
+				
+				if(Quiz.getTime() != null){
+					return Quiz.getTime();
+				}
+				else{
+					new TextDialogue(getCurFrame(), "Fail set limit time.", true);
+					return "";
+				}
+				
+				
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			new TextDialogue(getCurFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
+		}
+		return "";
+	  }
+	  
+	  public boolean getStartChk(int classId){
+		  HttpClient httpClient = new DefaultHttpClient();
+	       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/getTimer?classId=" + classId);
+	       String str = "";
+		try {
+			HttpResponse response = httpClient.execute(get);
+			
+			HttpEntity resEntity = response.getEntity();
+			
+			InputStream inputStream = resEntity.getContent();
+	    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+	    	  
+	    	  String tmp;
+	    	  
+				while((tmp = in.readLine()) != null )
+					str += tmp;
+				
+				System.out.println("getTimer : " + str);
+				
+				Gson gson = new Gson();
+				Timer timer = gson.fromJson(str, Timer.class);
+				
+				EntityUtils.consume(resEntity);
+				
+				if(timer.getStart()){
+					return true;
+				}
+				else{
+					return false;
+				}
+				
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			new TextDialogue(getCurFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
+		}
+		return false;
+	  }
+	  public void timerPost(int classId, boolean bool, String endTime) {
+          try {
+        		HttpClient httpClient = new DefaultHttpClient();
+        	  HttpPost post = new HttpPost("http://" + SERVERIP + ":8080/treeze/createTimer");
+        	  MultipartEntity multipart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
+        	  
+        	  StringBody classIdBody = new StringBody(classId + "", Charset.forName("UTF-8"));
+        	  StringBody startBody = new StringBody(bool + "", Charset.forName("UTF-8"));
+        	  StringBody endTimeBody = new StringBody(endTime, Charset.forName("UTF-8"));
+           
+        	  multipart.addPart("classId", classIdBody);  
+        	  multipart.addPart("start", startBody);
+        	  multipart.addPart("endTime", endTimeBody);
+
+        	  post.setEntity(multipart);  
+        	  HttpResponse response = httpClient.execute(post);  
+        	  HttpEntity resEntity = response.getEntity();
+        	  EntityUtils.consume(resEntity);
+        	  System.out.println("postTimer");
+          }catch(Exception e){
+        	  new TextDialogue(getCurFrame(), "Server down, Program end", true);
+  			e.printStackTrace();
+  			System.exit(0);
+          }
+	  }
+	  
+	  public String getServerTime(){
+		  HttpClient httpClient = new DefaultHttpClient();
+	       HttpGet get = new HttpGet("http://" + SERVERIP + ":8080/treeze/getServerTime");
+	       String str = "";
+		try {
+			HttpResponse response = httpClient.execute(get);
+			
+			HttpEntity resEntity = response.getEntity();
+			
+			InputStream inputStream = resEntity.getContent();
+	    	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+	    	  
+	    	  String tmp;
+	    	  
+				while((tmp = in.readLine()) != null )
+					str += tmp;
+				
+				System.out.println("getTimer : " + str);
+				
+				EntityUtils.consume(resEntity);
+				
+				return str;
+				
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			new TextDialogue(getCurFrame(), "Server down, Program end", true);
+			e.printStackTrace();
+			System.exit(0);
+		}
+		return "";
 	  }
 	  
 }

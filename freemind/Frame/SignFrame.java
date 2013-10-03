@@ -335,7 +335,7 @@ public class SignFrame extends JFrame {
 		}
 		
 		User signUser = new User();
-		signUser.setIdentificationNumber(Integer.parseInt(studIDTf.getText()));
+		signUser.setIdentificationNumber(studIDTf.getText());
 		signUser.setPassword(pwTf.getText());
 		signUser.setUserEmail(emailTf.getText());
 		signUser.setUserName(userTf.getText());
