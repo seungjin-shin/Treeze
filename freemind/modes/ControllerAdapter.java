@@ -780,7 +780,7 @@ public abstract class ControllerAdapter implements ModeController {
              try {
                     
 //                     result = imageWriter.writeImage(pDDocument, imageFormat, "", 1, endOfPages, destFilePrefix, BufferedImage.TYPE_INT_RGB, 190);
-                     result = writeImage(pDDocument, imageFormat, "", 1, endOfPages, destFilePrefix, BufferedImage.TYPE_INT_RGB, 190);
+                     result = writeImage(pDDocument, imageFormat, "", 1, endOfPages, destFilePrefix, BufferedImage.TYPE_INT_RGB, 128);
                      pDDocument.close();       
              } catch (IOException ioe) {
                     

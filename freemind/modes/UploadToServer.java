@@ -98,12 +98,23 @@ public class UploadToServer {
 				post.setEntity(multipart);
 				HttpResponse response = httpClient.execute(post);
 				HttpEntity resEntity = response.getEntity();
-				EntityUtils.consume(resEntity);
+				
+				InputStream inputStream = resEntity.getContent();
+			  	  BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+			  	  String str = "";
+			  	  String tmp;
+			  	  
+						while((tmp = in.readLine()) != null )
+							str += tmp;
+			      	  
+			      	EntityUtils.consume(resEntity);
+			      	  System.out.println("postImg : " + str);
+				
 			}
 			
 			fManager.setLodingValue(100);
 
-           System.out.println("postXmlImg");
        }catch(Exception e){
     	   new TextDialogue(getCurFrame(), "Server down, Program end", true);
 			e.printStackTrace();

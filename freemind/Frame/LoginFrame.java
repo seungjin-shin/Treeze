@@ -322,19 +322,19 @@ public class LoginFrame extends JFrame{
 	public void pushLoginBtn(){
 		boolean loginChk = false;
 		fManager.getUploadToServer().setCurFrame(this);
-		loginChk = fManager.getUploadToServer().signIn(emailTf.getText(), pwTf.getText());
-		if (loginChk) {
-			setVisible(false);
-			JFrame pFrame = new ProfileFrame(mc);
-			FreemindManager.getInstance().setProfileFrame(pFrame);
-		}
-		
-////		loginChk = fManager.getUploadToServer().signIn(emailTf.getText(), pwTf.getText());
-////		if (loginChk) {
+//		loginChk = fManager.getUploadToServer().signIn(emailTf.getText(), pwTf.getText());
+//		if (loginChk) {
 //			setVisible(false);
 //			JFrame pFrame = new ProfileFrame(mc);
 //			FreemindManager.getInstance().setProfileFrame(pFrame);
-////		}
+//		}
+		
+//		loginChk = fManager.getUploadToServer().signIn(emailTf.getText(), pwTf.getText());
+//		if (loginChk) {
+			setVisible(false);
+			JFrame pFrame = new ProfileFrame(mc);
+			FreemindManager.getInstance().setProfileFrame(pFrame);
+//		}
 			
 		System.out.println("loginChk" + loginChk);
 	}

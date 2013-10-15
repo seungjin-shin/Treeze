@@ -31,31 +31,22 @@ public class QuizType extends NodeType{
 	
 	@Override
 	public void act() {
-//		try {
-//			Desktop.getDesktop().browse(new java.net.URI("http://" + FreemindManager.getInstance().getSERVERIP() +":8080/treeze/examPaper?classId=" + FreemindManager.getInstance().getClassId() + "&nodeId=" + node.getNodeID()));
-//		} catch (IOException e2) {
-//			// TODO Auto-generated catch block
-//			e2.printStackTrace();
-//		} catch (URISyntaxException e2) {
-//			// TODO Auto-generated catch block
-//			e2.printStackTrace();
+//		FreemindManager fManager = FreemindManager.getInstance();
+//		boolean didQuizChk = false;
+//		
+//		fManager.getUploadToServer().setCurFrame(fManager.getFreemindMainFrame());
+//		
+//		didQuizChk = fManager.getUploadToServer().getStartChk(fManager.getClassId());
+//		
+//		 
+//
+//		if(didQuizChk){// result
+//			
 //		}
-		FreemindManager fManager = FreemindManager.getInstance();
-		boolean didQuizChk = false;
-		
-		fManager.getUploadToServer().setCurFrame(fManager.getFreemindMainFrame());
-		
-		didQuizChk = fManager.getUploadToServer().getStartChk(fManager.getClassId());
-		
-		 
-
-		if(didQuizChk){// result
-			
-		}
-		else{
-			String time = FreemindManager.getInstance().getUploadToServer().getLimitTime(node.getNodeID(), FreemindManager.getInstance().getClassId());
-			new StartQuizFrame(time);
-		}
+//		else{
+//			String time = FreemindManager.getInstance().getUploadToServer().getLimitTime(node.getNodeID(), FreemindManager.getInstance().getClassId());
+//			new StartQuizFrame(time);
+//		}
 		
 	}
 
