@@ -172,7 +172,7 @@ public class SlideShow {
 	public void show() {
 		// TODO Auto-generated method stub
 		if(focus.getImgPath() != null){
-			imgFrame.setCurrentImage();
+//			imgFrame.setCurrentImage();
 			imgFrame.show();
 			imgFrame.repaint();
 		}
@@ -242,34 +242,34 @@ public class SlideShow {
 		@Override
 		public void paint(Graphics g) {
 			// TODO Auto-generated method stub
-//			ImageIcon imgIcon;
-//			
-//			Image img = new ImageIcon(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId(), slideShow.getfocus().getImgPath() + ".jpg").getImage();
-//			
+			ImageIcon imgIcon;
+			
+			Image img;// = new ImageIcon(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId(), slideShow.getfocus().getImgPath() + ".jpg").getImage();
+			
 //			imgIcon = fManager.makeResizedImageIcon((int)xsize, (int)ysize, img);
-//			BufferedImage i = null;
-//			try {
-//					i = ImageIO.read(new File(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId(), slideShow.getfocus().getImgPath() + ".jpg")); 
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} 
-//			
-////			i.get
-//			
-//			Image img = i.getScaledInstance((int)xsize, (int)ysize,
-//					Image.SCALE_DEFAULT); // 사이즈 변경
-//			
-////			ImageIcon tmpIcon = fManager.makeResizedImageIcon((int)xsize, (int)ysize, img);
-//			
-//			g.drawImage(img, 0, 0, this);
+			BufferedImage i = null;
+			try {
+					i = ImageIO.read(new File(fManager.getDownPath() + System.getProperty("file.separator") + fManager.getClassId(), slideShow.getfocus().getImgPath() + ".jpg")); 
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			
+//			i.get
+			
+			img = i.getScaledInstance((int)xsize, (int)ysize,
+					Image.SCALE_DEFAULT); // 사이즈 변경
+			
+//			ImageIcon tmpIcon = fManager.makeResizedImageIcon((int)xsize, (int)ysize, img);
+			
+			g.drawImage(img, 0, 0, this);
 //			g.drawImage(tmpIcon.getImage(), 0, 0, this); // 이미지 그리기. 좌표 수정
-			g.drawImage(curImage, 0, 0, this);
+//			g.drawImage(curImage, 0, 0, this);
 		}
 		
-		public void setCurrentImage(){
-			curImage = resizeImgHashMap.get(focus.getImgPath());
-		}
+//		public void setCurrentImage(){
+//			curImage = resizeImgHashMap.get(focus.getImgPath());
+//		}
 	}
 	
 	

@@ -1203,9 +1203,9 @@ public class ProfileFrame extends JFrame {
 
 		fManager.getC().setSlideShowInfo();
 
-		Thread setResizeImgThread = new SetResizeImgThread();
-		setResizeImgThread.start();
-
+//		Thread setResizeImgThread = new SetResizeImgThread();
+//		setResizeImgThread.start();
+		
 		Gson gson = new Gson();
 		User user = new User();
 		// ClassInfo classInfo = new ClassInfo();

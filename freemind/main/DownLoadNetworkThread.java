@@ -93,6 +93,7 @@ public class DownLoadNetworkThread extends Thread {
 
 						fileOutput.close();
 					}
+					fManager.setSlideShowInfo(true);
 					//networkHandler.sendMessage(msg);
 					return;
 				} 

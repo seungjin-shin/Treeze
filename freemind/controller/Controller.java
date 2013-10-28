@@ -756,7 +756,7 @@ public class Controller  implements MapModuleChangeObserver {
 																// set
 				recurSetSlideShowInfo((NodeAdapter) root.getChildAt(i));
 			}
-			System.out.println("Controller : set slideShowInfo");
+			System.out.println("Controller : set slideShowInfo - nodeType");
 		} else {
 			System.out.println("Controller : only root");
 			return;
