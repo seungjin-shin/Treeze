@@ -39,7 +39,9 @@ public class ExamPaperPageController {
 			counts[i] = courseService.count(lectures.get(i));
 		}
 		
-		
+		*/
+		System.out.println("asdfasdfffffffffffffffffffff");
+		/*
 		modelMap.addAttribute("myLectures", lectures);
 		modelMap.addAttribute("courseCounts", counts);*/
 		

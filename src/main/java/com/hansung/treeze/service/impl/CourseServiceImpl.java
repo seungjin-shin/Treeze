@@ -1,5 +1,7 @@
 package com.hansung.treeze.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public Object findMyCourses(String studentEmail) {
+	public List<Course> findMyCourses(String studentEmail) {
 		// TODO Auto-generated method stub
 		return courseRepository.findAll(Specifications
 				.where(CourseSpecifications.isMyCourse(studentEmail)));

@@ -50,7 +50,7 @@ CHAKRA.slider = function(){
 	$.supersized({
 		// Functionality
 		slideshow               :   1,			// Slideshow on/off
-		autoplay				:	1,			// Slideshow starts playing automatically
+		autoplay				:	0,			// Slideshow starts playing automatically
 		start_slide             :   1,			// Start slide (0 is random)
 		stop_loop				:	0,			// Pauses slideshow on last slide
 		random					: 	0,			// Randomize slide order (Ignores start slide)
@@ -77,10 +77,12 @@ CHAKRA.slider = function(){
 		thumb_links				:	0,			// Individual thumb links for each slide
 		thumbnail_navigation    :   0,			// Thumbnail navigation
 		slides 					:  	[			// Slideshow Images
-											{image : '_include/img/slider-images/image01.jpg', title : '<div class="slide-content">Chakra</div>', thumb : '', url : ''},
-											{image : '_include/img/slider-images/image02.jpg', title : '<div class="slide-content">Responsive Design</div>', thumb : '', url : ''},
-											{image : '_include/img/slider-images/image03.jpg', title : '<div class="slide-content">FullScreen Gallery</div>', thumb : '', url : ''},
-											{image : '_include/img/slider-images/image04.jpg', title : '<div class="slide-content">Showcase Your Work</div>', thumb : '', url : ''}  
+											{image : '../resources/_include/img/slider-images/image01.jpg', title : '', thumb : '', url : ''},
+											{image : '../resources/_include/img/slider-images/image02.jpg', title : '', thumb : '', url : ''},
+											{image : '../resources/_include/img/slider-images/image03.jpg', title : '', thumb : '', url : ''},
+											{image : '../resources/_include/img/slider-images/image04.jpg', title : '', thumb : '', url : ''},
+											{image : '../resources/_include/img/slider-images/image04.jpg', title : '', thumb : '', url : ''},
+											{image : '../resources/_include/img/slider-images/image04.jpg', title : '', thumb : '', url : ''}  
 									],
 									
 		// Theme Options			   
@@ -452,7 +454,7 @@ CHAKRA.map = function(){
 			
 			var map = new google.maps.Map(document.getElementById($map_id), options);
 		
-			var image = '_include/img/marker.png';
+			var image = '../resources/_include/img/marker.png';
 			var marker = new google.maps.Marker({
 				position: latlng,
 				map: map,
@@ -488,7 +490,8 @@ $(document).ready(function(){
 	Modernizr.load([
 	{
 		test: Modernizr.placeholder,
-		nope: '_include/js/placeholder.js', 
+		/*nope: '_include/js/placeholder.js'*/
+		nope: '../resources/_include/js/placeholder.js', 
 		complete : function() {
 				if (!Modernizr.placeholder) {
 						Placeholders.init({

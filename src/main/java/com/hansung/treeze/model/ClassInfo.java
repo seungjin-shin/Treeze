@@ -20,6 +20,7 @@ public class ClassInfo extends AbstractPersistable<Long>{
 	private int port;
 	private Long lectureId;
 	private String professorEmail;
+	private Boolean uploaded = false;
 	
 	public String getProfessorEmail() {
 		return professorEmail;
@@ -56,5 +57,11 @@ public class ClassInfo extends AbstractPersistable<Long>{
 	}
 	public void setLectureId(Long lectureId) {
 		this.lectureId = lectureId;
+	}
+	public Boolean getUploaded() {
+		return uploaded;
+	}
+	public void setUploaded(Boolean uploaded) {
+		this.uploaded = uploaded;
 	}
 }

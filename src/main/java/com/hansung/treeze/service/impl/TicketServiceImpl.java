@@ -1,5 +1,7 @@
 package com.hansung.treeze.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,7 @@ public class TicketServiceImpl implements TicketService{
 	}
 
 	@Override
-	public Object getTickets(Long classId, String parentNodeId) {
+	public List<Ticket>  getTickets(Long classId, String parentNodeId) {
 		// TODO Auto-generated method stub
 		//Specifications<Ticket> spec = Specifications.where(TicketSpecifications.isclassId(classId);
 		
@@ -28,7 +30,7 @@ public class TicketServiceImpl implements TicketService{
 	}
 	
 	@Override
-	public Object getAllTickets(Long classId) {
+	public List<Ticket>  getAllTickets(Long classId) {
 		// TODO Auto-generated method stub
 		//Specifications<Ticket> spec = Specifications.where(TicketSpecifications.isclassId(classId);
 		
@@ -44,7 +46,7 @@ public class TicketServiceImpl implements TicketService{
 	}
 
 	@Override
-	public Object getMyTickets(Long classId, String userEmail) {
+	public List<Ticket>  getMyTickets(Long classId, String userEmail) {
 		// TODO Auto-generated method stub
 		return ticketRepository.findAll(TicketSpecifications.isTicketsOnParentNodeId(classId,userEmail));
 	}

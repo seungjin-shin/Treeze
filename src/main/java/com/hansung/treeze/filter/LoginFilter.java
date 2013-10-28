@@ -58,16 +58,16 @@ public class LoginFilter implements Filter {
 			logger.info("로그인이 필요함");
 			String contextPath = req.getContextPath();
 			
-			res.sendRedirect(String.format("%s/interaction/signin?before=%s", contextPath, req.getRequestURI()));
+			res.sendRedirect(String.format("%s/treeze/signin?before=%s", contextPath, req.getRequestURI()));
 		}
 	}
 	
 	public void init(FilterConfig fConfig) throws ServletException {
 		ignoreUrlSet = new HashSet<String>();
 		
-		ignoreUrlSet.add(CONTEXT_PATH + "/interaction/signin");
-		ignoreUrlSet.add(CONTEXT_PATH + "/interaction/signout");
-		ignoreUrlSet.add(CONTEXT_PATH + "/interaction");
-		ignoreUrlSet.add(CONTEXT_PATH + "/interaction/");
+		ignoreUrlSet.add(CONTEXT_PATH + "/treezing/signin");
+		ignoreUrlSet.add(CONTEXT_PATH + "/treezing/signout");
+		ignoreUrlSet.add(CONTEXT_PATH + "/treezing");
+		ignoreUrlSet.add(CONTEXT_PATH + "/treezing/");
 	}
 }

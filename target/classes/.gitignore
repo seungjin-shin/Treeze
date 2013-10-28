@@ -1,3 +1,7 @@
-/.DS_Store
 /META-INF
 /com
+/SocketController.class
+/WebSocketServer.class
+/WebSocketServerHandler.class
+/WebSocketServerIndexPage.class
+/WebSocketServerInitializer.class

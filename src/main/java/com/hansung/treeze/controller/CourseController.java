@@ -32,7 +32,7 @@ public class CourseController {
 
 		return "false";
 	}
-
+	
 	@RequestMapping(value = "/deleteCourse", method = RequestMethod.POST)
 	public String deleteCourse(Course model, ModelMap map) {
 
