@@ -112,8 +112,8 @@ public class MainpageAjaxController {
 		List<Course> courses = null;
 
 		boolean already = false;
-		ArrayList<Course> alreadyCourses = new ArrayList<Course>();
 		
+		ArrayList<Course> alreadyCourses = new ArrayList<Course>();
 		ArrayList<Course> successCourses = new ArrayList<Course>();
 		
 		courses = courseService.findMyCourses(student.getUserEmail());

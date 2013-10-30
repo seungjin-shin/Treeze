@@ -26,6 +26,7 @@
 	<!-- Bootstrap -->
 	<link href="${pageContext.request.contextPath}/resources/_include/css/bootstrap.min.css" rel="stylesheet">
 
+
 	<!-- Main Style -->
 	<link href="${pageContext.request.contextPath}/resources/_include/css/main.css" rel="stylesheet">
 
@@ -199,8 +200,6 @@
 
 			//add_lecture
 			
-
-
 			$("#add_lecture").click(function() {
 				var $lecture_tbody = $("#lecture_tbody");
 				var lecture_size = $lecture_tbody.children().size();
@@ -222,16 +221,14 @@
 				console.log(lecture_ids);
 
 				$.post( "${pageContext.request.contextPath}/ajax/addCourse", { lectureIdList: lecture_ids}, function( data ) {
-										
+
 					//var $data = $(data);
 					$html_body=$("#html_body");
-					$html_body.append(data)
-
+					$html_body.append(data);
 					$("#course_add_confirm_btn").click(function() {
 						$("#lecture_dialog").attr({"style":"visibility:hidden"});			
 
 					});
-
 					
 				});	
 
@@ -337,6 +334,23 @@
 
 						<a class="btn btn-warning pull-right" style="margin-left:10px" href="addMypage.html">수강 취소</a>
 						<a id="add_lecture" class="btn btn-info pull-right" style="margin-left:10px" >수강 신청</a>
+						<!-- Button to trigger modal -->
+						<a href="#myModal" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
+
+						<!-- Modal -->
+						<div id="myModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+								<h3 id="myModalLabel">Modal header</h3>
+							</div>
+							<div class="modal-body">
+								<p>One fine body…</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+								<button class="btn btn-primary">Save changes</button>
+							</div>
+						</div>
 
 						<table class="table table-hover">
 							<thead>
@@ -691,7 +705,10 @@
 <script src="${pageContext.request.contextPath}/resources/_include/js/modules/exporting.js"></script>
 
 <script src="https://maps.googleapis.com/maps/api/js?sensor=true"></script> <!-- Google Map API -->
-<script src="${pageContext.request.contextPath}/resources/_include/js/bootstrap.min.js"></script> <!-- Bootstrap -->
+
+<script src="${pageContext.request.contextPath}/resources/_include/js/bootstrap-min.js"></script> <!-- Bootstrap -->
+
+
 <script src="${pageContext.request.contextPath}/resources/_include/js/supersized.3.2.7.min.js"></script> <!-- Slider -->
 <script src="${pageContext.request.contextPath}/resources/_include/js/waypoints.js"></script> <!-- WayPoints -->
 <script src="${pageContext.request.contextPath}/resources/_include/js/waypoints-sticky.js"></script> <!-- Waypoints for Header -->

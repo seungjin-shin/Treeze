@@ -30,6 +30,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.google.gson.Gson;
 import com.hansung.treeze.filter.LoginFilter;
@@ -258,6 +259,9 @@ public class TreezingPageController {
 					model.setViewName(url);
 					model.getModelMap().addAttribute(LoginFilter.SIGNED_USER, user);
 					
+					if (null != before) model.setView(new RedirectView(before));
+					else model.setView(new RedirectView("professor"));
+					
 				} else if (user.getUserType().equals(User.STUDENT)) {
 					url = "treezing/studentTreeze";
 					
@@ -277,8 +281,11 @@ public class TreezingPageController {
 					List<Ticket> tickets = (List<Ticket>) ticketService.getTickets(
 							new Long(10), "246305717490589");
 					model.getModelMap().addAttribute("tickets", tickets);
+					
+					if (null != before) model.setView(new RedirectView(before));
+					else model.setView(new RedirectView("student"));
 				}
-
+				
 				return model;
 			}
 			// password가 맞지 않는 경우

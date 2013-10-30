@@ -58,7 +58,7 @@ public class LoginFilter implements Filter {
 			logger.info("로그인이 필요함");
 			String contextPath = req.getContextPath();
 			
-			res.sendRedirect(String.format("%s/treeze/signin?before=%s", contextPath, req.getRequestURI()));
+			res.sendRedirect(String.format("%s/treezing/signin?before=%s", contextPath, req.getRequestURI()));
 		}
 	}
 	
